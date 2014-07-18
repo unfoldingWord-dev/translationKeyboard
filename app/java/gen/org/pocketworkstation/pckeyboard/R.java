@@ -1076,6 +1076,9 @@ containing a value of this type.
  no translation found for settings_key_modes:0 (8549888726962891527) 
  no translation found for settings_key_modes:1 (881280041213210923) 
  no translation found for settings_key_modes:2 (7317310620171067848) 
+ no translation found for settings_key_modes:0 (8549888726962891527) 
+ no translation found for settings_key_modes:1 (881280041213210923) 
+ no translation found for settings_key_modes:2 (7317310620171067848) 
          */
         public static final int bigram_suggestion=0x7f0800ed;
         /**  Description for auto completion 
@@ -1116,6 +1119,8 @@ containing a value of this type.
  <string name="english_ime_settings" msgid="6661589557206947774">"Настройки на клавиатурата на Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Teclat Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Configuració del teclat d\'Android"</string> 
+ <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
+ <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Klávesnice Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Nastavení klávesnice Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Android-tastatur"</string> 
@@ -1502,6 +1507,7 @@ containing a value of this type.
  Symbols that are sentence separators, for purposes of making it hug the last sentence. 
  Symbols that are sentence separators, for purposes of making it hug the last sentence. 
  Symbols that are sentence separators, for purposes of making it hug the last sentence. 
+ Symbols that are sentence separators, for purposes of making it hug the last sentence. 
          */
         public static final int sentence_separators=0x7f0800b5;
         /**  Always hide the settings key 
@@ -1535,6 +1541,7 @@ containing a value of this type.
         public static final int subtype_mode_keyboard=0x7f08013e;
         public static final int subtype_mode_voice=0x7f08013f;
         /**  Symbols that are suggested between words 
+ Symbols that are suggested between words 
  Symbols that are suggested between words 
          */
         public static final int suggested_punctuations=0x7f0800b7;
@@ -1729,6 +1736,7 @@ containing a value of this type.
          */
         public static final int voice_working=0x7f08010d;
         /**  Symbols that are commonly considered word separators in this language 
+ Symbols that are commonly considered word separators in this language 
  Symbols that are commonly considered word separators in this language 
  Symbols that are commonly considered word separators in this language 
  Symbols that are commonly considered word separators in this language 
