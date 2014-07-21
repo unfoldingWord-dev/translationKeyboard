@@ -1129,7 +1129,7 @@ containing a value of this type.
  <string name="english_ime_settings" msgid="6661589557206947774">"Android-Tastatureinstellungen"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Πληκτρολόγιο Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Ρυθμίσεις πληκτρολογίου Android"</string> 
- <string name="english_ime_name" msgid="7252517407088836577">"Classical Arabic Keyboard"</string> 
+ <string name="english_ime_name" msgid="7252517407088836577">"Translation Keyboard"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Android keyboard settings"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Teclado de Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Ajustes del teclado de Android"</string> 
