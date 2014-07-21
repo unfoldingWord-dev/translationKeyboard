@@ -500,7 +500,7 @@ public class LatinIME extends InputMethodService implements
             PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
             //PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
             
-            String title = "Show Classical Arabic Keyboard";
+            String title = "Show Translation Keyboard Keyboard";
             String body = "Select this to open the keyboard. Disable in settings.";
             
             notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;

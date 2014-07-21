@@ -19,9 +19,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title for Latin keyboard  -->
-    <string name="english_ime_name">Classical Arabic</string>
+    <string name="english_ime_name">Translation Keyboard</string>
     <!-- Title for Latin keyboard settings activity / dialog -->
-    <string name="english_ime_settings">Settings for Classical Arabic</string>
+    <string name="english_ime_settings">Settings for Translation Keyboard</string>
     <!-- Title for Latin keyboard input options dialog -->
     <string name="english_ime_input_options">Input options</string>
 
@@ -626,13 +626,13 @@
     <string name="main_setup_input_lang">Input languages</string>
     <string name="main_body"><Data>
       <![CDATA["
-        <h2>Enabling Classical Arabic Keyboard</h2>
+        <h2>Enabling Translation Keyboard Keyboard</h2>
         
         
         <h3>Add the keyboard to the system's input method list:</h3>
         <blockquote>
           <p>&#8226; Open the system input settings configuration by pressing the <b>Enable Keyboard</b> button above.</p>
-          <p>&#8226; Find <i>Classical Arabic</i> in the input method list, tap the checkmark to switch it on.</p>
+          <p>&#8226; Find <i>Translation Keyboard</i> in the input method list, tap the checkmark to switch it on.</p>
           <p>&#8226; Acknowledge the warning shown by the system. The system always shows this message when enabling a third-party input method.</p>
           <p>&#8226; Press the <i>Back</i> button to return to this page.</p>
         </blockquote>
@@ -640,7 +640,7 @@
         <h3>Choose the currently active input method:</h3>
         <blockquote>
           <p>&#8226; Press the <b>Set input method</b> button above.</p>
-          <p>&#8226; Select <i>Classical Arabic</i> from the list.</p>
+          <p>&#8226; Select <i>Translation Keyboard</i> from the list.</p>
         </blockquote>
 
         <h3>Optional: Select input languages:</h3>
