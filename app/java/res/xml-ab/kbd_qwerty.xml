@@ -32,18 +32,18 @@
         android:rowEdgeFlags="top"
     >
         <Key
-            android:keyLabel="ض"
+            android:keyLabel="A"
             android:popupKeyboard="@xml/kbd_popup_template"
-            android:popupCharacters="1ًٌٍَُِّْ"
+            android:popupCharacters="0"
             android:keyEdgeFlags="left" />
         <Key
             android:keyLabel="ص"
             android:popupKeyboard="@xml/kbd_popup_template"
-            android:popupCharacters="2" />
+            android:popupCharacters="0" />
         <Key
             android:keyLabel="ق"
             android:popupKeyboard="@xml/kbd_popup_template"
-            android:popupCharacters="3" />
+            android:popupCharacters="0" />
         <Key
             android:keyLabel="ف"
             android:popupKeyboard="@xml/kbd_popup_template"
@@ -76,7 +76,7 @@
     </Row>
     <Row>
         <Key
-            android:keyLabel="ش"
+            android:keyLabel="A"
             android:popupKeyboard="@xml/kbd_popup_template"
             android:popupCharacters=""
             android:keyEdgeFlags="left" />
@@ -120,7 +120,7 @@
     </Row>
     <Row>
         <Key
-            android:keyLabel="ظ"
+            android:keyLabel="A"
             android:popupKeyboard="@xml/kbd_popup_template"
             android:popupCharacters="؟،؛"
             android:keyEdgeFlags="left" />
