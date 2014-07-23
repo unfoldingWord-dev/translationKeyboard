@@ -1227,148 +1227,244 @@ containing a value of this type.
          */
         public static final int hit_correction_summary=0x7f0800d4;
         public static final int key_ab01_alt=0x7f080097;
+        /**  z 
+         */
         public static final int key_ab01_main=0x7f080095;
         public static final int key_ab01_shift=0x7f080096;
         public static final int key_ab02_alt=0x7f08009a;
+        /**  x 
+         */
         public static final int key_ab02_main=0x7f080098;
         public static final int key_ab02_shift=0x7f080099;
         public static final int key_ab03_alt=0x7f08009d;
+        /**  c 
+         */
         public static final int key_ab03_main=0x7f08009b;
         public static final int key_ab03_shift=0x7f08009c;
         public static final int key_ab04_alt=0x7f0800a0;
+        /**  v 
+         */
         public static final int key_ab04_main=0x7f08009e;
         public static final int key_ab04_shift=0x7f08009f;
         public static final int key_ab05_alt=0x7f0800a3;
+        /**  b 
+         */
         public static final int key_ab05_main=0x7f0800a1;
         public static final int key_ab05_shift=0x7f0800a2;
         public static final int key_ab06_alt=0x7f0800a6;
+        /**  n 
+         */
         public static final int key_ab06_main=0x7f0800a4;
         public static final int key_ab06_shift=0x7f0800a5;
         public static final int key_ab07_alt=0x7f0800a9;
+        /**  m 
+         */
         public static final int key_ab07_main=0x7f0800a7;
         public static final int key_ab07_shift=0x7f0800a8;
         public static final int key_ab08_alt=0x7f0800ac;
+        /**  , 
+         */
         public static final int key_ab08_main=0x7f0800aa;
         public static final int key_ab08_shift=0x7f0800ab;
         public static final int key_ab09_alt=0x7f0800af;
+        /**  . 
+         */
         public static final int key_ab09_main=0x7f0800ad;
         public static final int key_ab09_shift=0x7f0800ae;
         public static final int key_ab10_alt=0x7f0800b2;
+        /**  / 
+         */
         public static final int key_ab10_main=0x7f0800b0;
         public static final int key_ab10_shift=0x7f0800b1;
         public static final int key_ac01_alt=0x7f080073;
+        /**  a 
+         */
         public static final int key_ac01_main=0x7f080071;
         public static final int key_ac01_shift=0x7f080072;
         public static final int key_ac02_alt=0x7f080076;
+        /**  s 
+         */
         public static final int key_ac02_main=0x7f080074;
         public static final int key_ac02_shift=0x7f080075;
         public static final int key_ac03_alt=0x7f080079;
+        /**  d 
+         */
         public static final int key_ac03_main=0x7f080077;
         public static final int key_ac03_shift=0x7f080078;
         public static final int key_ac04_alt=0x7f08007c;
+        /**  f 
+         */
         public static final int key_ac04_main=0x7f08007a;
         public static final int key_ac04_shift=0x7f08007b;
         public static final int key_ac05_alt=0x7f08007f;
+        /**  g 
+         */
         public static final int key_ac05_main=0x7f08007d;
         public static final int key_ac05_shift=0x7f08007e;
         public static final int key_ac06_alt=0x7f080082;
+        /**  h 
+         */
         public static final int key_ac06_main=0x7f080080;
         public static final int key_ac06_shift=0x7f080081;
         public static final int key_ac07_alt=0x7f080085;
+        /**  j 
+         */
         public static final int key_ac07_main=0x7f080083;
         public static final int key_ac07_shift=0x7f080084;
         public static final int key_ac08_alt=0x7f080088;
+        /**  k 
+         */
         public static final int key_ac08_main=0x7f080086;
         public static final int key_ac08_shift=0x7f080087;
         public static final int key_ac09_alt=0x7f08008b;
+        /**  l 
+         */
         public static final int key_ac09_main=0x7f080089;
         public static final int key_ac09_shift=0x7f08008a;
         public static final int key_ac10_alt=0x7f08008e;
+        /**  ; 
+         */
         public static final int key_ac10_main=0x7f08008c;
         public static final int key_ac10_shift=0x7f08008d;
         public static final int key_ac11_alt=0x7f080091;
+        /**  ' 
+         */
         public static final int key_ac11_main=0x7f08008f;
         public static final int key_ac11_shift=0x7f080090;
         public static final int key_ad01_alt=0x7f08004c;
+        /**  q 
+         */
         public static final int key_ad01_main=0x7f08004a;
         public static final int key_ad01_shift=0x7f08004b;
         public static final int key_ad02_alt=0x7f08004f;
+        /**  w 
+         */
         public static final int key_ad02_main=0x7f08004d;
         public static final int key_ad02_shift=0x7f08004e;
         public static final int key_ad03_alt=0x7f080052;
+        /**  e 
+         */
         public static final int key_ad03_main=0x7f080050;
         public static final int key_ad03_shift=0x7f080051;
         public static final int key_ad04_alt=0x7f080055;
+        /**  r 
+         */
         public static final int key_ad04_main=0x7f080053;
         public static final int key_ad04_shift=0x7f080054;
         public static final int key_ad05_alt=0x7f080058;
+        /**  t 
+         */
         public static final int key_ad05_main=0x7f080056;
         public static final int key_ad05_shift=0x7f080057;
         public static final int key_ad06_alt=0x7f08005b;
+        /**  y 
+         */
         public static final int key_ad06_main=0x7f080059;
         public static final int key_ad06_shift=0x7f08005a;
         public static final int key_ad07_alt=0x7f08005e;
+        /**  u 
+         */
         public static final int key_ad07_main=0x7f08005c;
         public static final int key_ad07_shift=0x7f08005d;
         public static final int key_ad08_alt=0x7f080061;
+        /**  i 
+         */
         public static final int key_ad08_main=0x7f08005f;
         public static final int key_ad08_shift=0x7f080060;
         public static final int key_ad09_alt=0x7f080064;
+        /**  o 
+         */
         public static final int key_ad09_main=0x7f080062;
         public static final int key_ad09_shift=0x7f080063;
         public static final int key_ad10_alt=0x7f080067;
+        /**  p 
+         */
         public static final int key_ad10_main=0x7f080065;
         public static final int key_ad10_shift=0x7f080066;
         public static final int key_ad11_alt=0x7f08006a;
+        /**  [ 
+         */
         public static final int key_ad11_main=0x7f080068;
         public static final int key_ad11_shift=0x7f080069;
         public static final int key_ad12_alt=0x7f08006d;
+        /**  ] 
+         */
         public static final int key_ad12_main=0x7f08006b;
         public static final int key_ad12_shift=0x7f08006c;
         public static final int key_ae01_alt=0x7f080028;
+        /**  1 
+         */
         public static final int key_ae01_main=0x7f080026;
         public static final int key_ae01_shift=0x7f080027;
         public static final int key_ae02_alt=0x7f08002b;
+        /**  2 
+         */
         public static final int key_ae02_main=0x7f080029;
         public static final int key_ae02_shift=0x7f08002a;
         public static final int key_ae03_alt=0x7f08002e;
+        /**  3 
+         */
         public static final int key_ae03_main=0x7f08002c;
         public static final int key_ae03_shift=0x7f08002d;
         public static final int key_ae04_alt=0x7f080031;
+        /**  4 
+         */
         public static final int key_ae04_main=0x7f08002f;
         public static final int key_ae04_shift=0x7f080030;
         public static final int key_ae05_alt=0x7f080034;
+        /**  5 
+         */
         public static final int key_ae05_main=0x7f080032;
         public static final int key_ae05_shift=0x7f080033;
         public static final int key_ae06_alt=0x7f080037;
+        /**  6 
+         */
         public static final int key_ae06_main=0x7f080035;
         public static final int key_ae06_shift=0x7f080036;
         public static final int key_ae07_alt=0x7f08003a;
+        /**  7 
+         */
         public static final int key_ae07_main=0x7f080038;
         public static final int key_ae07_shift=0x7f080039;
         public static final int key_ae08_alt=0x7f08003d;
+        /**  8 
+         */
         public static final int key_ae08_main=0x7f08003b;
         public static final int key_ae08_shift=0x7f08003c;
         public static final int key_ae09_alt=0x7f080040;
+        /**  9 
+         */
         public static final int key_ae09_main=0x7f08003e;
         public static final int key_ae09_shift=0x7f08003f;
         public static final int key_ae10_alt=0x7f080043;
+        /**  0 
+         */
         public static final int key_ae10_main=0x7f080041;
         public static final int key_ae10_shift=0x7f080042;
         public static final int key_ae11_alt=0x7f080046;
+        /**  - 
+         */
         public static final int key_ae11_main=0x7f080044;
         public static final int key_ae11_shift=0x7f080045;
         public static final int key_ae12_alt=0x7f080049;
+        /**  = 
+         */
         public static final int key_ae12_main=0x7f080047;
         public static final int key_ae12_shift=0x7f080048;
         public static final int key_bksl_alt=0x7f080070;
+        /**  \ 
+         */
         public static final int key_bksl_main=0x7f08006e;
         public static final int key_bksl_shift=0x7f08006f;
         public static final int key_lsgt_alt=0x7f080094;
+        /**  huh? 
+         */
         public static final int key_lsgt_main=0x7f080092;
         public static final int key_lsgt_shift=0x7f080093;
         public static final int key_space_shift=0x7f0800b3;
         public static final int key_tlde_alt=0x7f080025;
+        /**  ` 
+         */
         public static final int key_tlde_main=0x7f080023;
         public static final int key_tlde_shift=0x7f080024;
         /**  Description for keyboard theme switcher 
