@@ -109,6 +109,8 @@ public class InputLanguageSelection extends PreferenceActivity {
             return "Slovenčina (QWERTY)";
         } else if (lang.equals("ru") && country.equals("PH")) {
             return "Русский (Phonetic)";
+        } else if (lang.equals("ab")) {
+            return "Classical Arabic";
         } else {
             return LanguageSwitcher.toTitleCase(l.getDisplayName(l));
         }
