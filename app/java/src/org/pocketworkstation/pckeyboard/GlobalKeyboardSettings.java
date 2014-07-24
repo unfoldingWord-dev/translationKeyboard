@@ -42,7 +42,7 @@ public final class GlobalKeyboardSettings {
     //
     // Read by LatinIME
     public String suggestedPunctuation = "!?,.";
-    public int keyboardModePortrait = 0;
+    public int keyboardModePortrait = 2;
     public int keyboardModeLandscape = 2;
     public boolean compactModeEnabled = false;
     public int chordingCtrlKey = 0;
@@ -119,21 +119,22 @@ public final class GlobalKeyboardSettings {
 
     public void initPrefs(SharedPreferences prefs, Resources resources) {
         final Resources res = resources;
-
+        
         addBooleanPref("pref_compact_mode_enabled", new BooleanPref() {
+        	
             public void set(boolean val) { compactModeEnabled = val; Log.i(TAG, "Setting compactModeEnabled to " + val); }
             public boolean getDefault() { return res.getBoolean(R.bool.default_compact_mode_enabled); }
             public int getFlags() { return FLAG_PREF_RESET_MODE_OVERRIDE; }
         });
 
         addStringPref("pref_keyboard_mode_portrait", new StringPref() {
-            public void set(String val) { keyboardModePortrait = Integer.valueOf(val); }
-            public String getDefault() { return res.getString(R.string.default_keyboard_mode_portrait); }
+            public void set(String val) { System.out.println("Value" + val); keyboardModePortrait = Integer.valueOf(val); }
+            public String getDefault() { return "Value 2";}//res.getString(R.string.default_keyboard_mode_portrait); }
             public int getFlags() { return FLAG_PREF_RESET_KEYBOARDS | FLAG_PREF_RESET_MODE_OVERRIDE; }
         });
 
         addStringPref("pref_keyboard_mode_landscape", new StringPref() {
-            public void set(String val) { keyboardModeLandscape = Integer.valueOf(val); }
+            public void set(String val) {keyboardModeLandscape = Integer.valueOf(val); }
             public String getDefault() { return res.getString(R.string.default_keyboard_mode_landscape); }
             public int getFlags() { return FLAG_PREF_RESET_KEYBOARDS | FLAG_PREF_RESET_MODE_OVERRIDE; }
         });
@@ -234,6 +235,7 @@ public final class GlobalKeyboardSettings {
     }
     
     public void sharedPreferenceChanged(SharedPreferences prefs, String key) {
+    	
         boolean found = false;
         mCurrentFlags = FLAG_PREF_NONE;
         BooleanPref bPref = mBoolPrefs.get(key);
