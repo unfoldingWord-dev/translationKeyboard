@@ -1115,12 +1115,12 @@ containing a value of this type.
         /**  Title for Latin keyboard input options dialog 
  <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
- <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
- <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Клавиатура на Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Настройки на клавиатурата на Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Teclat Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Configuració del teclat d\'Android"</string> 
+ <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
+ <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Klávesnice Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Nastavení klávesnice Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Android-tastatur"</string> 
@@ -1875,6 +1875,7 @@ containing a value of this type.
         public static final int prefs_feedback=0x7f05001a;
         public static final int prefs_for_debug=0x7f05001b;
         public static final int prefs_view=0x7f05001c;
+        public static final int testkbd_full_fn=0x7f05001d;
     }
     public static final class styleable {
         /** Attributes that can be used with a Keyboard.
