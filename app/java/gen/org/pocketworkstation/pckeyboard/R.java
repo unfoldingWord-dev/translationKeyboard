@@ -1115,12 +1115,12 @@ containing a value of this type.
         /**  Title for Latin keyboard input options dialog 
  <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
+ <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
+ <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Клавиатура на Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Настройки на клавиатурата на Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Teclat Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Configuració del teclat d\'Android"</string> 
- <string name="english_ime_name" msgid="7252517407088836577">"لوحة مفاتيح Android"</string> 
- <string name="english_ime_settings" msgid="6661589557206947774">"إعدادات لوحة مفاتيح Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Klávesnice Android"</string> 
  <string name="english_ime_settings" msgid="6661589557206947774">"Nastavení klávesnice Android"</string> 
  <string name="english_ime_name" msgid="7252517407088836577">"Android-tastatur"</string> 
