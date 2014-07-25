@@ -55,7 +55,7 @@
     <string name="key_ae05_alt">5&#x665;%</string>
 
 	<!-- 6 -->
-    <string name="key_ae06_main">&#x6f6;</string>
+    <string name="key_ae06_main">&#x666;</string>
     <string name="key_ae06_shift">&#x610;</string>
     <string name="key_ae06_alt">6&#x666;^</string>
 
@@ -82,7 +82,7 @@
 	<!-- - -->
     <string name="key_ae11_main">&#x623;</string>
     <string name="key_ae11_shift">&#x651;</string>
-    <string name="key_ae11_alt">-_</string>
+    <string name="key_ae11_alt">-&#x2212;</string>
 
 	<!-- = -->
     <string name="key_ae12_main">&#x624;</string>
@@ -113,7 +113,7 @@
 	<!-- t -->
     <string name="key_ad05_main">&#x62a;</string>
     <string name="key_ad05_shift">&#x679;</string>
-    <string name="key_ad05_alt">&#x655;&#2122;</string>
+    <string name="key_ad05_alt">&#x655;&#x2122;</string>
 
 	<!-- y -->
     <string name="key_ad06_main">&#x6d2;</string>
@@ -123,12 +123,12 @@
 	<!-- u -->
     <string name="key_ad07_main">&#x621;</string>
     <string name="key_ad07_shift">&#x657;</string>
-    <string name="key_ad07_alt">&#x626;&#xfdf1;</string>
+    <string name="key_ad07_alt">&#x626;</string>
 
 	<!-- i -->
     <string name="key_ad08_main">&#x6cc;</string>
     <string name="key_ad08_shift">&#x670;</string>
-    <string name="key_ad08_alt">&#x6e7;&#xfdf0;</string>
+    <string name="key_ad08_alt">&#x6e7;</string>
 
 	<!-- o -->
     <string name="key_ad09_main">&#x6c1;</string>
@@ -137,17 +137,17 @@
 
 	<!-- p -->
     <string name="key_ad10_main">&#x67e;</string>
-    <string name="key_ad10_shift">&#x619;</string>
+    <string name="key_ad10_shift">&#x64f;;</string>
     <string name="key_ad10_alt">٪&#x00A3;</string>
 
 	<!-- [ -->
     <string name="key_ad11_main">[</string>
-    <string name="key_ad11_shift">&#x66c;</string>
+    <string name="key_ad11_shift">&#x2018;;</string>
     <string name="key_ad11_alt">&#xfd3e;{</string>
 
 	<!-- ] -->
     <string name="key_ad12_main">]</string>
-    <string name="key_ad12_shift">&#x60c;</string>
+    <string name="key_ad12_shift">&#x2019;</string>
     <string name="key_ad12_alt">&#xfd3f;}</string>
 
 	<!-- \ -->
@@ -163,8 +163,8 @@
 
 	<!-- s -->
     <string name="key_ac02_main">&#x633;</string>
-    <string name="key_ac02_shift">ٍ&#x635;</string>
-    <string name="key_ac02_alt">&#x603;&#xfdf5;</string>
+    <string name="key_ac02_shift">ٍص</string>
+    <string name="key_ac02_alt">&#x603;</string>
 
 	<!-- d -->
     <string name="key_ac03_main">&#x62f;</string>
@@ -188,7 +188,7 @@
 
 	<!-- j -->
     <string name="key_ac07_main">&#x62c;</string>
-    <string name="key_ac07_shift">&#x62c;</string>
+    <string name="key_ac07_shift">&#x636;</string>
     <string name="key_ac07_alt">ﷻ&#x00BE;</string>
 
 	<!-- k -->
@@ -235,12 +235,12 @@
 	<!-- v -->
     <string name="key_ab04_main">&#x637;</string>
     <string name="key_ab04_shift">&#x638;</string>
-	<string name="key_ab04_alt">&#x615;&#x00A9;</string>
+	<string name="key_ab04_alt">&#x615;</string>
 
 	<!-- b -->
     <string name="key_ab05_main">&#x628;</string>
     <string name="key_ab05_shift"></string>
-    <string name="key_ab05_alt">﷽&#x66e;</string>
+    <string name="key_ab05_alt">&#x66e;</string>
 
 	<!-- n -->
     <string name="key_ab06_main">&#x646;</string>
@@ -250,17 +250,17 @@
 	<!-- m -->
     <string name="key_ab07_main">&#x645;</string>
     <string name="key_ab07_shift">&#x625;</string>
-    <string name="key_ab07_alt">&#xfdf4;&#2715;</string>
+    <string name="key_ab07_alt">&#x2715;</string>
 
 	<!-- , -->
     <string name="key_ab08_main">&#x60c;</string>
-    <string name="key_ab08_shift">&#x61a;</string>
+    <string name="key_ab08_shift">&#xfe7a;</string>
     <string name="key_ab08_alt">&lt;</string>
 
 	<!-- . -->
     <string name="key_ab09_main">.</string>
-    <string name="key_ab09_shift">&#x618;</string>
-    <string name="key_ab09_alt">&gt;</string>
+    <string name="key_ab09_shift">&#x64e;</string>
+    <string name="key_ab09_alt"></string>
 
 	<!-- / -->
     <string name="key_ab10_main">/</string>

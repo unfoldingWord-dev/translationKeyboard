@@ -1457,7 +1457,7 @@ containing a value of this type.
         public static final int key_bksl_main=0x7f08006e;
         public static final int key_bksl_shift=0x7f08006f;
         public static final int key_lsgt_alt=0x7f080094;
-        /**  huh? 
+        /**  shift 
          */
         public static final int key_lsgt_main=0x7f080092;
         public static final int key_lsgt_shift=0x7f080093;
