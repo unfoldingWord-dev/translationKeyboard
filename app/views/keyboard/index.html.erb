@@ -1,0 +1,49 @@
+
+<div class="keyboard">
+<% row_pos = -1 %>
+<% @key_positions.each do |key_position| %>
+    <% offset_class = "" %>
+    <% if row_pos != key_position.row_index %>
+       <% row_pos = key_position.row_index %>
+       <% if @key_positions.first != key_position %>
+    </div>
+       <% end %>
+       <% keys_in_row = @key_positions.where(row_index: row_pos)
+          offset = (14 - keys_in_row.count) / 2
+          offset_class = "col-xs-offset-" << offset.to_s
+        %>
+    <div class="row">
+    <% end %>
+      <div class="col-xs-1 <%= offset_class %>">
+        <button type="button" class="btn btn-default default-key">
+          <%# display default key that has no modifier options %>
+          <% if key_position.characters.where(modmask: 0).exists? %>
+          <%= intToHtmlHex(key_position.characters.where(modmask: 0).first.unicode_character.utf8hex) %>
+          <% end %>
+        </button>
+        <% if key_position.characters.where(modmask: 0).exists? %>
+        <span class="default-char"><%= intToHtmlHex(key_position.characters.where(modmask: "0".to_i(2)).first.unicode_character.utf8hex) %></span>
+        <% end %>
+        <%# display shift key that uses the first bit modifier option %>
+        <% if key_position.characters.where("modmask & ? > 0", "1".to_i(2)).exists? %>
+        <span class="shift"><%= intToHtmlHex(key_position.characters.where("modmask & ? > 0", "1".to_i(2)).first.unicode_character.utf8hex) %></span>
+        <% end %>
+        <%# check for long press modifier that uses the second bit modifier option %>
+        <% if key_position.characters.where('modmask & ? > 0', "10".to_i(2)).exists? %>
+            <button class="long btn-warning">!</button>
+            <span class="long-press">
+                <ul class="list-inline">
+                  <% @longPressCharacters = key_position.characters.where("modmask & ? > 0", "10".to_i(2)).order(sortnumber: :asc) %>
+                  <% @longPressCharacters.each do |longPressCharacter| %>
+                    <li><button type="button" class="btn btn-default"><%= intToHtmlHex(longPressCharacter.unicode_character.utf8hex) %></button></li>
+                  <% end %>
+                </ul>
+		    </span>
+        <% end %>
+      </div>
+      <% if @key_positions.last == key_position  %>
+         <% row_pos = key_position.row_index %>
+    </div>
+    <% end %>
+<% end %>
+

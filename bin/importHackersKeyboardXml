@@ -1,0 +1,142 @@
+#!/usr/bin/env ruby
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require File.expand_path('../../config/environment',  __FILE__)
+require File.expand_path('../../config/boot',  __FILE__)
+require APP_PATH
+# set Rails.env here if desired
+Rails.env = 'development'
+Rails.application.require_environment!
+
+Dir.chdir("S:/Web/Ruby/keyboard_app/hacker_keyboard_data/")
+print(Dir.pwd)
+
+Dir.entries('.').each do|f|
+  if f.index("values-") != nil
+    puts " #{f}"
+    if File.exists?("#{f}/donottranslate-keymap.xml")
+      donottranslate_file = File.open("#{f}/donottranslate-keymap.xml")
+      doc = Nokogiri::XML(donottranslate_file)
+      donottranslate_file.close
+      #puts "#{doc}"
+      #Keyboard.create({name: 'French (fr)'})
+      start_index = f.index("-")+1
+      locale = f[start_index..f.length]
+      if locale.index("-") == nil
+        keyboard_to_add = Keyboard.find_or_create_by({name: "(#{locale})"})
+        @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 5 Row"), name: "(#{locale}) Android 5 Row" })
+      else
+        locale_start_index = locale.index("-")
+        first_locale = locale[0..locale_start_index-1]
+        second_locale = locale[locale_start_index+1..locale.length]
+        keyboard_to_add = Keyboard.find_or_create_by({name: "(#{first_locale})"})
+        @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 5 Row"), name: "(#{locale}) Android 5 Row" })
+      end
+
+      @row_num = 0
+      @column_num = -1
+
+      doc.xpath("//string").each do |node|
+
+        if node.xpath("@name").first.value.index("_main") != nil || node.xpath("@name").first.value.index("_shift") != nil || node.xpath("@name").first.value.index("_alt") != nil
+          if node.xpath("@name").first.value.index("key_ae") != nil || node.xpath("@name").first.value.index("key_ad") != nil || node.xpath("@name").first.value.index("key_ad") != nil || node.xpath("@name").first.value.index("key_ac") != nil || node.xpath("@name").first.value.index("key_ab") != nil
+
+            if node.xpath("@name").first.value.index("_main") != nil
+              mod_mask = '0'.to_i(2)
+            end
+
+            if node.xpath("@name").first.value.index("_shift") != nil
+              mod_mask = '1'.to_i(2)
+            end
+
+            if node.xpath("@name").first.value.index("_alt") != nil
+              mod_mask = '10'.to_i(2)
+            end
+
+            if mod_mask == '0'.to_i(2)
+              @column_num += 1
+            end
+
+            current_row_num = @row_num
+            if node.xpath("@name").first.value.index("key_ae") != nil
+              @row_num = 0
+            end
+
+            if node.xpath("@name").first.value.index("key_ad") != nil
+              @row_num = 1
+            end
+
+            if node.xpath("@name").first.value.index("key_ac") != nil
+              @row_num = 2
+            end
+
+            if node.xpath("@name").first.value.index("key_ab") != nil
+              @row_num = 3
+            end
+
+            if current_row_num != @row_num
+              print("new row\n")
+              @column_num = 0
+            end
+
+            if node.inner_html.to_s != ''
+              string_node = CGI.unescapeHTML(node.inner_html)
+
+              the_key_position = KeyPosition.where(column_index: @column_num, row_index: @row_num, keyboard_variant: @the_keyboard_variant)
+              if the_key_position.last.nil?
+                the_key_position = KeyPosition.create({column_index: @column_num, row_index:@row_num, percent_width:1, keyboard_variant:@the_keyboard_variant})
+              else
+                the_key_position = the_key_position.first
+              end
+
+              if node.xpath("@name").first.value.index("_alt") != nil
+                if string_node.index("@string") != 0
+                  print("long_press\n")
+                  string_node.split("").each do |a_char|
+                    unicode_character_to_add = UnicodeCharacter.find_or_create_by( {utf8hex:a_char.ord})
+                    character_to_add = Character.find_or_create_by({modmask: mod_mask, sortnumber:1, unicode_character: unicode_character_to_add, key_position: the_key_position})
+                    print(a_char.ord.to_s << a_char << "\n")
+                  end
+                else
+                  if File.exists?("#{f}/donottranslate-altchars.xml")
+                    altchars_file = File.open("#{f}/donottranslate-altchars.xml")
+                    alt_chars_doc = Nokogiri::XML(altchars_file)
+                    altchars_file.close
+                    alt_char_string_search = string_node[8..string_node.length]
+                    alt_chars_doc.xpath("//string").each do |node_altchar|
+                      if node_altchar.xpath("@name").first.value.index(alt_char_string_search)
+                        string_node_altchar = CGI.unescapeHTML(node_altchar.inner_html)
+                        string_node_altchar.split("").each do |a_char_alt|
+                          unicode_character_to_add_alt = UnicodeCharacter.find_or_create_by( {utf8hex:a_char_alt.ord})
+                          character_to_add_alt = Character.find_or_create_by({modmask: mod_mask, sortnumber:1, unicode_character: unicode_character_to_add_alt, key_position: the_key_position})
+                          print(a_char_alt.ord.to_s << a_char_alt << "\n")
+                        end
+                      end
+                    end
+                  end
+                end
+              else
+                print("main or shift\n")
+                unicode_character_to_add = UnicodeCharacter.find_or_create_by( {utf8hex:string_node.ord})
+
+                character_to_add = Character.find_or_create_by({modmask: mod_mask, sortnumber:1, unicode_character: unicode_character_to_add, key_position: the_key_position})
+
+                print(string_node.ord.to_s << string_node << "\n")
+              end
+
+
+
+            end
+
+          end
+        end
+
+      end
+
+
+    end
+  end
+end
+
+
+

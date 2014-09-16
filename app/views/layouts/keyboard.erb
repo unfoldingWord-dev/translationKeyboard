@@ -1,0 +1,44 @@
+<% content_for :content do %>
+<div class="container">
+
+  <div class="page-header">
+    <h1>Translation Keyboard</h1>
+  </div>
+
+  <h3><%= @selected_keyboard_variant.name %></h3>
+
+  <div class="row">
+    <div class="col-xs-2">
+      Load a Different Keyboard
+    </div>
+    <div class="col-xs-5 col-xs-offset-1">
+      <%= grouped_collection_select(:selected_keyboard_variant, :id, @all_keyboards, :keyboard_variants, :name, :id, :name) %>
+    </div>
+
+
+  </div>
+
+
+  <div class="type-area">
+
+    <textarea style="width:100%;" class="type-area-textarea"></textarea>
+
+  </div>
+
+ <%= yield %>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-1">
+      <button type="button" class="btn btn-default shift-btn" data-char="">SHIFT</button>
+    </div>
+    <div class="col-xs-5 col-xs-offset-1">
+      <button style="width:100%;" type="button" class="btn btn-default" data-char=" ">SPACE</button>
+    </div>
+    <div class="col-xs-2 col-xs-offset-2">
+      <button type="button" class="btn btn-default shift-btn" data-char="">SHIFT</button>
+    </div>
+  </div>
+
+</div>
+<% end %>
+<%= render template: "layouts/application" %>
