@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="org.pocketworkstation.pckeyboard" android:versionName="0.5.0" android:versionCode="10">
+        package="org.distantshoresmedia.translationkeyboard" android:versionName="0.5.0" android:versionCode="10">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
@@ -12,14 +12,14 @@
 
     <application android:label="@string/english_ime_name"
             android:allowBackup="true"
-            android:backupAgent="LatinIMEBackupAgent"
+            android:backupAgent="com.distantshoresmedia.translationkeyboard.LatinIMEBackupAgent"
             android:restoreAnyVersion="true"
             android:hardwareAccelerated="false"
             android:killAfterRestore="false" 
             android:logo="@drawable/icon"
             android:icon="@drawable/icon">
 
-        <service android:name="LatinIME"
+        <service android:name="com.distantshoresmedia.translationkeyboard.LatinIME"
                 android:label="@string/english_ime_name"
                 android:permission="android.permission.BIND_INPUT_METHOD"
                 android:logo="@drawable/icon"
@@ -31,26 +31,26 @@
             <meta-data android:name="android.view.im" android:resource="@xml/method" />
         </service>
 
-        <activity android:name="Main" android:label="Translation Keyboard">
+        <activity android:name="com.distantshoresmedia.translationkeyboard.Main" android:label="Translation Keyboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name="LatinIMESettings" android:label="@string/english_ime_settings">
+        <activity android:name="com.distantshoresmedia.translationkeyboard.LatinIMESettings" android:label="@string/english_ime_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
 
-        <activity android:name="LatinIMEDebugSettings" android:label="@string/english_ime_debug_settings">
+        <activity android:name="com.distantshoresmedia.translationkeyboard.LatinIMEDebugSettings" android:label="@string/english_ime_debug_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
 
-        <activity android:name="InputLanguageSelection"
+        <activity android:name="com.distantshoresmedia.translationkeyboard.InputLanguageSelection"
                 android:label="@string/language_selection_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -59,7 +59,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="PrefScreenActions"
+        <activity android:name="com.distantshoresmedia.translationkeyboard.PrefScreenActions"
                 android:label="@string/pref_screen_actions_title"
             	android:logo="@drawable/icon"
             	android:icon="@drawable/icon">
@@ -70,7 +70,7 @@
             </intent-filter>
         </activity>
             
-        <activity android:name="PrefScreenView"
+        <activity android:name="com.distantshoresmedia.translationkeyboard.PrefScreenView"
                 android:label="@string/pref_screen_actions_title"
             	android:logo="@drawable/icon"
             	android:icon="@drawable/icon">
@@ -81,7 +81,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="PrefScreenFeedback"
+        <activity android:name="com.distantshoresmedia.translationkeyboard.PrefScreenFeedback"
                 android:label="@string/pref_screen_feedback_title"
                 android:logo="@drawable/icon"
             	android:icon="@drawable/icon">
