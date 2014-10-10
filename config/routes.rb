@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+
+
+
+  get 'dashboard/index'
+
+  devise_for :users
   get 'keyboard/index'
   get 'keyboard/get_keyboard_variant/:keyboard_variant_id', to: 'keyboard#get_keyboard_variant'
 
@@ -10,7 +16,9 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'dashboard#index'
+
+  resources :key_position
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

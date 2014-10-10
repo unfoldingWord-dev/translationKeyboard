@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require_tree .
 //= require bootstrap
+//= require edit_key
 
 jQuery(function($){
 
@@ -27,7 +28,10 @@ jQuery(function($){
         } else {
             newText = $(this).html();
         }
-        $(".type-area-textarea").val(currentText + newText.trim());
+        if(newText != " "){
+            newText = newText.trim()
+        }
+        $(".type-area-textarea").val(currentText + newText);
     };
     /*
     $(".shift-btn").mousedown(function(){
@@ -45,13 +49,13 @@ jQuery(function($){
     */
     $(".shift-btn").click(function(){
         if(!$(this).hasClass("btn-danger")){
-            $(".keyboard .row .col-xs-1 > .btn").each(function(){
+            $(".keyboard .row .col-xs-1 > .default-key").each(function(){
                 var shiftChar = $(this).parent().find(".shift").text();
                 $(this).text(shiftChar);
             });
             $(".shift-btn").addClass("btn-danger");
         } else {
-            $(".keyboard .row .col-xs-1 > .btn").each(function(){
+            $(".keyboard .row .col-xs-1 > .default-key").each(function(){
                 var defaultChar = $(this).parent().find(".default-char").text();
                 $(this).text(defaultChar);
             });
@@ -71,10 +75,30 @@ jQuery(function($){
         }).parent().delegate(".popover .btn", "click", btnClick);
     });
 
-    $(".btn:not(.shift-btn)").click(btnClick);
+    $(".keypress:not(.shift-btn)").click(btnClick);
 
     $("#selected_keyboard_variant_id").change(function(){
         window.location = "/keyboard/get_keyboard_variant/" + $(this).val();
-    })
+    });
+
+    $(".edit-key-btn").hide();
+
+    $(".edit-keyboard").click(function(event){
+        event.preventDefault();
+        if($(this).hasClass("btn-primary")){
+           $(this).removeClass("btn-primary");
+           $(this).addClass("btn-success");
+           $(this).text("Done");
+           $(".edit-key-btn").show();
+       } else {
+           $(this).removeClass("btn-success");
+           $(this).addClass("btn-primary");
+           $(this).text("Edit Keyboard");
+           $(".edit-key-btn").hide();
+       }
+        return false;
+    });
+
+
 
 });

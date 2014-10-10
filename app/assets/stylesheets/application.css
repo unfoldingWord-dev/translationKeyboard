@@ -14,7 +14,41 @@
  *= require_self
  *= require bootstrap.css
  *= require bootstrap-theme.css
+ *= require signin.css
  */
+
+
+.gravatar {
+    margin:0.2em;
+    width:40px;
+    height:40px;
+}
+
+.login-icon {
+    margin:0 auto;
+ }
+
+.session-links {
+    margin:1em 0;
+}
+
+.session-links a {
+
+    margin:0.3em 0;
+}
+
+.navbar-brand {
+    background:url('tk-icons/Icon-48.png') no-repeat center center;
+    text-indent:-9999em;
+    width:77px;
+    height:50px;
+    display:block;
+}
+.login-icon, .login-icon img {
+    width:125px;
+}
+
+
 
 h4 {
     margin-top: 25px;
@@ -25,6 +59,16 @@ h4 {
 .row .row {
     margin-top: 10px;
     margin-bottom: 0;
+}
+body.keyboard > .container {
+    margin-top:2em;
+    border-color:#ddd;
+    background: #fff;
+    border-width:1px;
+    border-radius: 4px;
+}
+.keyboard-edit-btn {
+    margin-top:0.4em;
 }
 [class*="col-"] {
     /*padding-top: 15px;
@@ -53,4 +97,7 @@ hr {
 }
 .default-key {
     width:100%;
+}
+.edit-key-btn {
+    display:none;
 }

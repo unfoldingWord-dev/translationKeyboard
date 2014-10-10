@@ -15,7 +15,7 @@
     <div class="row">
     <% end %>
       <div class="col-xs-1 <%= offset_class %>">
-        <button type="button" class="btn btn-default default-key">
+        <button type="button" class="btn btn-default default-key keypress">
           <%# display default key that has no modifier options %>
           <% if key_position.characters.where(modmask: 0).exists? %>
           <%= intToHtmlHex(key_position.characters.where(modmask: 0).first.unicode_character.utf8hex) %>
@@ -28,6 +28,7 @@
         <% if key_position.characters.where("modmask & ? > 0", "1".to_i(2)).exists? %>
         <span class="shift"><%= intToHtmlHex(key_position.characters.where("modmask & ? > 0", "1".to_i(2)).first.unicode_character.utf8hex) %></span>
         <% end %>
+
         <%# check for long press modifier that uses the second bit modifier option %>
         <% if key_position.characters.where('modmask & ? > 0', "10".to_i(2)).exists? %>
             <button class="long btn-warning">!</button>
@@ -35,15 +36,24 @@
                 <ul class="list-inline">
                   <% @longPressCharacters = key_position.characters.where("modmask & ? > 0", "10".to_i(2)).order(sortnumber: :asc) %>
                   <% @longPressCharacters.each do |longPressCharacter| %>
-                    <li><button type="button" class="btn btn-default"><%= intToHtmlHex(longPressCharacter.unicode_character.utf8hex) %></button></li>
+                    <li><button type="button" class="btn btn-default keypress"><%= intToHtmlHex(longPressCharacter.unicode_character.utf8hex) %></button></li>
                   <% end %>
                 </ul>
 		    </span>
         <% end %>
+        <div class="edit-key-btn">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#key_edit_modal_<%= key_position.id %>">
+          <span class="glyphicon glyphicon-edit"></span>
+        </button>
+        </div>
       </div>
       <% if @key_positions.last == key_position  %>
          <% row_pos = key_position.row_index %>
     </div>
     <% end %>
+
+      <%= render 'modals/key_edit', key_position: key_position %>
+
 <% end %>
+
 

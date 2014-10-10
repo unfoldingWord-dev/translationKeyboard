@@ -1,0 +1,19 @@
+
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <h2 class="form-signin-heading">Sign up</h2>
+    <%= devise_error_messages! %>
+
+  <%= f.email_field :email, autofocus: true, class: "form-control", :placeholder => "Email Address" %>
+
+  <%= f.password_field :password, autocomplete: "off", class: "form-control", :placeholder => "Password" %>
+  <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %>
+
+  <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", :placeholder => "Password Confirmation" %>
+
+    <%= content_tag :button, :type => :submit, :class => "btn btn-lg btn-primary btn-block" do %>
+        Sign Up
+    <% end %>
+<% end %>
+
+<%= render "devise/shared/links" %>

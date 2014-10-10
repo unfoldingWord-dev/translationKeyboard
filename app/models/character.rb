@@ -3,8 +3,6 @@
 # Table name: characters
 #
 #  id              :integer          not null, primary key
-#  englishDesc     :string(255)
-#  utf8hex         :string(255)
 #  modmask         :integer
 #  sortnumber      :integer
 #  created_at      :datetime
@@ -15,4 +13,18 @@
 class Character < ActiveRecord::Base
 	belongs_to :key_position
   belongs_to :unicode_character
+
+  def utf8hex
+    unicode_character.utf8hex.to_s(16)
+  end
+
+  def character_char
+    unicode_character.utf8hex.chr
+  end
+
+  def uft8HexHtml
+    hexedInt = unicode_character.utf8hex.to_s(16)
+    "&\#x#{hexedInt};".html_safe
+  end
+
 end

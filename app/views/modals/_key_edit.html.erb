@@ -1,0 +1,57 @@
+
+
+<div id="key_edit_modal_<%= key_position.id %>" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Key Edit</h4>
+      </div>
+      <div class="modal-body">
+
+        <%= form_for key_position, html: {class: 'key_position_form'}, remote: true do |f| %>
+
+
+            <% key_position.characters.each do |character| %>
+                <div class="chars">
+                <%= f.fields_for character, index: character.id do |character_form| %>
+
+                <div class="row">
+                  <div class="col-xs-14 text-center">
+                    <b>
+                <% if character.modmask == 0 %>
+                        Default Character
+                <% elsif character.modmask == 1 %>
+                        Shift Character
+                <% elsif character.modmask == 2 %>
+                        Long Press Characters
+                <% end %>
+                      </b>
+                   </div>
+                 </div>
+
+                    <div class="row">
+                      <div class="col-xs-7">Character</div>
+                      <div class="col-xs-7"><%= character_form.text_field :uft8HexHtml, class: "single-char", :maxlength => 1 %></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-xs-7">UTF-8 Hex</div>
+                      <div class="col-xs-7"><%= character_form.text_field :utf8hex, class: "single-utf8hex", :maxlength => 6 %></div>
+                    </div>
+
+                <% end %>
+                </div>
+            <% end %>
+        <% end %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+        <a href="http://unicode-table.com/" target="_blank" class="btn btn-info find-unicode-chars">Search for Characters</a>
+        <button type="button" class="btn btn-primary save-key" data-keypos="<%= key_position.id %>">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
