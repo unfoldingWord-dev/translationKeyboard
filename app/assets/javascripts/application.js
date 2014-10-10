@@ -17,7 +17,7 @@
 //= require bootstrap
 //= require edit_key
 
-jQuery(function($){
+ready = function(){
 
     var btnClick = function(){
 
@@ -101,4 +101,7 @@ jQuery(function($){
 
 
 
-});
+};
+
+jQuery(document).ready(ready);
+jQuery(document).on('page:load', ready);
