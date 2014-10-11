@@ -2,7 +2,7 @@
  * Created by simeon on 10/10/14.
  */
 
-jQuery(function($) {
+readyNewKeyboard = function() {
 
 
     $(".new-keyboard-save").click(function(){
@@ -11,4 +11,8 @@ jQuery(function($) {
     });
 
 
-});
+};
+
+
+jQuery(document).ready(readyNewKeyboard);
+jQuery(document).on('page:load', readyNewKeyboard);

@@ -18,13 +18,13 @@ class KeyboardController < ApplicationController
                                                     name: new_keyboard.name << ' ' << the_keyboard_type.name }])
 
     the_keyboard_type.keyboard_type_default_key_positions.each do |default_key_pos|
-      @i = 0
-      until @i >= default_key_pos.col_count do
-        new_key_pos = KeyPosition.create([{row_index: default_key_pos.row_index, column_index:@i, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
+      increment = 0
+      until increment >= default_key_pos.col_count do
+        new_key_pos = KeyPosition.create([{row_index: default_key_pos.row_index, column_index:increment, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
         unicode_char = UnicodeCharacter.find_or_create_by(utf8hex:'30'.hex)
         new_characters = Character.create([{modmask: '0'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first},
                                            {modmask: '1'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first}])
-        @i += 1
+        increment += 1
       end
 
     end

@@ -107,9 +107,10 @@
 <%= content_for?(:content) ? yield(:content) : yield %>
 <% if user_signed_in? %>
 </div>
+    <%= render "modals/key_new" %>
 <% end %>
 
-<%= render "modals/key_new" %>
+
 
 </body>
 </html>

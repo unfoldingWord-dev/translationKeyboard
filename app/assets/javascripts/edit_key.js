@@ -1,6 +1,6 @@
 
 
-jQuery(function($) {
+readyEditKey = function() {
     $(".single-char").keyup(function(){
        var utf8Elem = $(this).parent().parent().parent().find(".single-utf8hex");
        if($(this).val().length==1){
@@ -24,4 +24,7 @@ jQuery(function($) {
     });
 
     $(".edit-key-btn").hide();
-});
+};
+
+jQuery(document).ready(readyEditKey);
+jQuery(document).on('page:load', readyEditKey);
