@@ -1,0 +1,56 @@
+<div id="key_new_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Create New Keyboard</h4>
+      </div>
+      <div class="modal-body">
+
+        <%= form_for new_keyboard, url: {action:'create'}, html: {class: 'new_keyboard_form'},remote: true do |f| %>
+
+            <div class="row">
+                <div class="col-xs-14">
+                    <%= f.text_field :name, class: "form-control", :placeholder => "Keyboard Name" %>
+                </div>
+            </div>
+            <% #languages_array = ISO::Language.all %>
+            <% languages_array = LanguageList::COMMON_LANGUAGES %>
+            <div class="row">
+              <div class="col-xs-7">
+                ISO <b>LANGUAGE</b> Code
+              </div>
+              <div class="col-xs-7">
+            <%= select_tag "keyboard[iso_language]", options_from_collection_for_select(languages_array.collect, 'iso_639_1', 'iso_and_name' ), class: "form-control selectpicker" %>
+              </div>
+            </div>
+            <% countries_array = Country.all %>
+            <div class="row">
+              <div class="col-xs-7">
+                ISO <b>REGION</b> Code
+              </div>
+              <div class="col-xs-7">
+                <%= select_tag "keyboard[iso_region]", options_from_collection_for_select(countries_array, :last, :first), class: "form-control selectpicker" %>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-7">
+                Keyboard Type
+              </div>
+              <div class="col-xs-7">
+                <%= select_tag "keyboard_type_id", options_from_collection_for_select(KeyboardType.all, :id, :name), class: "form-control selectpicker" %>
+              </div>
+            </div>
+
+        <% end %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary new-keyboard-save" >Go</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

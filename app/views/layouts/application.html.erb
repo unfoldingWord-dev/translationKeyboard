@@ -36,7 +36,7 @@
                 <% if item_count == 0  %>
                     <ul class="list-unstyled col-md-4">
                 <%
-
+                    all = ISO::Language.all
                    end %>
                 <% iso_language = ISO::Language.find(lang.iso_language)
                   if !iso_language.nil?
@@ -61,7 +61,7 @@
           </ul>
         </li>
         <li>
-          <button type="button" class="btn btn-primary navbar-btn">Create New Keyboard</button>
+          <button type="button" class="btn btn-primary navbar-btn create-keyboard" data-toggle="modal" data-target="#key_new_modal">Create New Keyboard</button>
         </li>
       </ul>
 
@@ -108,6 +108,8 @@
 <% if user_signed_in? %>
 </div>
 <% end %>
+
+<%= render "modals/key_new" %>
 
 </body>
 </html>

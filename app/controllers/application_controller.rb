@@ -19,4 +19,9 @@ class ApplicationController < ActionController::Base
     Keyboard.all.count / 3
   end
 
+  helper_method :new_keyboard
+  def new_keyboard
+    Keyboard.new
+  end
+
 end

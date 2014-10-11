@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   root 'dashboard#index'
 
   resources :key_position
+  resources :keyboard
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

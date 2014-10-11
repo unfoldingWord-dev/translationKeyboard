@@ -8,6 +8,16 @@
 
 keyboardTypes = KeyboardType.create([{name: 'Android 4 Row'}, {name: 'Android 5 Row'}])
 
+KeyboardTypeDefaultKeyPosition.create([{row_index: 0, col_count: 10, keyboard_type: keyboardTypes.first},
+                                       {row_index: 1, col_count: 9, keyboard_type: keyboardTypes.first},
+                                       {row_index: 2, col_count: 8, keyboard_type: keyboardTypes.first},
+                                       {row_index: 3, col_count: 7, keyboard_type: keyboardTypes.first},
+                                       {row_index: 0, col_count: 10, keyboard_type: keyboardTypes.last},
+                                       {row_index: 1, col_count: 9, keyboard_type: keyboardTypes.last},
+                                       {row_index: 2, col_count: 8, keyboard_type: keyboardTypes.last},
+                                       {row_index: 3, col_count: 7, keyboard_type: keyboardTypes.last},
+                                       {row_index: 4, col_count: 7, keyboard_type: keyboardTypes.last}])
+
 aKeyboard = Keyboard.create([{name: 'English (en)'}])
 
 aKeyboardVariant = KeyboardVariant.create([{keyboard: aKeyboard.first, keyboard_type: keyboardTypes.first, name: "English (en-US) Android 4 Row" }])

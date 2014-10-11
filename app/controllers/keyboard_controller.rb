@@ -11,6 +11,32 @@ class KeyboardController < ApplicationController
     redirect_to "/keyboard/get_keyboard_variant/#{@selected_keyboard_variant.id}"
   end
 
+  def create
+    new_keyboard = Keyboard.create(keyboard_params)
+    the_keyboard_type = KeyboardType.find(params[:keyboard_type_id])
+    new_keyboard_variant = KeyboardVariant.create([{keyboard: new_keyboard, keyboard_type: the_keyboard_type,
+                                                    name: new_keyboard.name << ' ' << the_keyboard_type.name }])
+
+    the_keyboard_type.keyboard_type_default_key_positions.each do |default_key_pos|
+      @i = 0
+      until @i >= default_key_pos.col_count do
+        new_key_pos = KeyPosition.create([{row_index: default_key_pos.row_index, column_index:@i, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
+        unicode_char = UnicodeCharacter.find_or_create_by(utf8hex:'30'.hex)
+        new_characters = Character.create([{modmask: '0'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first},
+                                           {modmask: '1'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first}])
+        @i += 1
+      end
+
+    end
+
+    respond_to do |format|
+      format.html #update.html.erb
+      format.json { render json: new_keyboard, status: :created, location: new_keyboard_variant}
+      format.js {render :json => new_keyboard_variant}
+    end
+
+   end
+
   def edit
   
   end
@@ -35,6 +61,10 @@ class KeyboardController < ApplicationController
 
   def get_new_key_position
     @new_key_position = KeyPosition.where(keyboard_variant: @selected_keyboard_variant).order(:row_index, column_index: :asc).first
+  end
+
+  def keyboard_params
+    params.require(:keyboard).permit(:name, :iso_language, :iso_region)
   end
 
 end

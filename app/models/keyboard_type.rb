@@ -10,4 +10,5 @@
 
 class KeyboardType < ActiveRecord::Base
   has_many :keyboard_variants
+  has_many :keyboard_type_default_key_positions
 end

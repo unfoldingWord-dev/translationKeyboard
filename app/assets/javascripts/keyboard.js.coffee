@@ -9,3 +9,12 @@ $(document).ready ->
 
   ).on "ajax:error", (e, xhr, status, error) ->
     $(".key_position_form").append "<p>ERROR</p>"
+
+$(document).ready ->
+    $(".new_keyboard_form").on("ajax:success", (e, data, status, xhr) ->
+      objData = $.parseJSON( data )
+      window.location.href = "/keyboard/get_keyboard_variant/" + objData[0].id
+      $(".new_keyboard_form").append xhr.responseText ->
+
+    ).on "ajax:error", (e, xhr, status, error) ->
+    $(".new_keyboard_form").append "<p>ERROR</p>"

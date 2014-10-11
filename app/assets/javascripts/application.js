@@ -15,7 +15,9 @@
 //= require turbolinks
 //= require_tree .
 //= require bootstrap
+//= require bootstrap-select.min
 //= require edit_key
+//= require new_keyboard
 
 ready = function(){
 
