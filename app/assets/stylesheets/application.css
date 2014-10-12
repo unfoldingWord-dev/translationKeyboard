@@ -16,6 +16,7 @@
  *= require bootstrap-theme.css
  *= require signin.css
  *= require bootstrap-select.min
+ *= require icomoon.css
  */
 
 
@@ -61,7 +62,8 @@ h4 {
     margin-top: 10px;
     margin-bottom: 0;
 }
-body.keyboard > .container {
+body.keyboard > .container,
+body.dashboard > .container{
     margin-top:2em;
     border-color:#ddd;
     background: #fff;

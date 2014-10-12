@@ -13,7 +13,7 @@ $(document).ready ->
 $(document).ready ->
     $(".new_keyboard_form").on("ajax:success", (e, data, status, xhr) ->
       objData = $.parseJSON( data )
-      window.location.href = "/keyboard/get_keyboard_variant/" + objData[0].id
+      window.location.href = "/keyboard/variant/" + objData[0].id
       $(".new_keyboard_form").append xhr.responseText ->
 
     ).on "ajax:error", (e, xhr, status, error) ->

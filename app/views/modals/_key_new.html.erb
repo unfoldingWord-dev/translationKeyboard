@@ -22,7 +22,8 @@
                 ISO <b>LANGUAGE</b> Code
               </div>
               <div class="col-xs-7">
-            <%= select_tag "keyboard[iso_language]", options_from_collection_for_select(languages_array.collect, 'iso_639_1', 'iso_and_name' ), class: "form-control selectpicker" %>
+            <%= select_tag "keyboard[iso_language]", options_from_collection_for_select(languages_array.collect, 'iso_639_1', 'iso_and_name' ),
+                           class: "form-control selectpicker", :data => {:'live-search' => 'true'} %>
               </div>
             </div>
             <% countries_array = Country.all %>
@@ -31,7 +32,8 @@
                 ISO <b>REGION</b> Code
               </div>
               <div class="col-xs-7">
-                <%= select_tag "keyboard[iso_region]", options_from_collection_for_select(countries_array, :last, :first), class: "form-control selectpicker" %>
+                <%= select_tag "keyboard[iso_region]", options_from_collection_for_select(countries_array, :last, :first),
+                               class: "form-control selectpicker", :data => {:'live-search' => 'true'} %>
               </div>
             </div>
 
@@ -40,7 +42,8 @@
                 Keyboard Type
               </div>
               <div class="col-xs-7">
-                <%= select_tag "keyboard_type_id", options_from_collection_for_select(KeyboardType.all, :id, :name), class: "form-control selectpicker" %>
+                <%= select_tag "keyboard_type_id", options_from_collection_for_select_with_data(KeyboardType.all, :id, :name,
+                                                       nil, {:icon => :icon_class} ), class: "form-control selectpicker" %>
               </div>
             </div>
 

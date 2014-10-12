@@ -2,11 +2,14 @@ Rails.application.routes.draw do
 
 
 
+  get 'language/index'
+
   get 'dashboard/index'
 
   devise_for :users
   get 'keyboard/index'
-  get 'keyboard/get_keyboard_variant/:keyboard_variant_id', to: 'keyboard#get_keyboard_variant'
+  get 'language/:iso_language', to: 'language#index', as: :language
+  get 'keyboard/variant/:keyboard_variant_id', to: 'keyboard#variant', as: :keyboard_variant
 
   get 'keyboard_convertor/convert'
 

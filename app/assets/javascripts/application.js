@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require_tree .
 //= require bootstrap
 //= require bootstrap-select.min
@@ -80,7 +79,7 @@ ready = function(){
     $(".keypress:not(.shift-btn)").click(btnClick);
 
     $("#selected_keyboard_variant_id").change(function(){
-        window.location = "/keyboard/get_keyboard_variant/" + $(this).val();
+        window.location = "/keyboard/variant/" + $(this).val();
     });
 
     $(".edit-key-btn").hide();

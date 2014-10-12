@@ -1,2 +1,40 @@
+
+
 <h1>Dashboard</h1>
-<p>Content goes here</p>
+
+<div class="row">
+  <div class="col-md-8">
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">Recently Updated Keyboards</div>
+
+      <table class="table table-striped">
+        <thead>
+            <tr>
+              <td></td>
+              <th>Language</th>
+              <th>Region</th>
+              <th>Type</th>
+              <th>Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+<% @recently_added_keyboards.each do |keyboard| %>
+        <tr>
+          <td><%= link_to 'View', keyboard_variant_path(keyboard.id), class: "btn btn-primary btn-xs" %></td>
+          <td><%= link_to keyboard.keyboard.language_name + ' ('+ keyboard.keyboard.iso_language + ')', language_path(keyboard.keyboard.iso_language) %></td>
+          <td><%= keyboard.keyboard.region_name %> (<%= keyboard.keyboard.iso_region %>)</td>
+          <td><span class="<%= keyboard.keyboard_type.icon_class%>"></span> <%= keyboard.keyboard_type.name %></td>
+          <td><%= keyboard.updated_at.to_formatted_s(:month_day_year) %></td>
+        </tr>
+<% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-7">
+
+    </div>
+
+</div>
+

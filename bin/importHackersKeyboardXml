@@ -28,7 +28,7 @@ Dir.entries('.').each do|f|
       else
         locale_start_index = locale.index("-")
         first_locale = locale[0..locale_start_index-1]
-        second_locale = locale[locale_start_index+1..locale.length]
+        second_locale = locale[locale_start_index+2..locale.length]
         keyboard_to_add = Keyboard.find_or_create_by({name: "#{locale}", iso_language: "#{first_locale}", iso_region: "#{second_locale}"})
         @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 5 Row"), name: "Android 5 Row" })
       end
@@ -123,9 +123,6 @@ Dir.entries('.').each do|f|
 
                 print(string_node.ord.to_s << string_node << "\n")
               end
-
-
-
             end
 
           end

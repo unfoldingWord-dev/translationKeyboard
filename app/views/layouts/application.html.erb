@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>KeyboardApp</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= controller.controller_name %>">
@@ -28,23 +28,25 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Languages<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li>
-              <div class="row" style="width: 600px;">
+            <li style="width:700px;">
+              <div class="row" style="width: 100%;padding:0 0 0 1em;">
              <% item_count = 0 %>
              <% total_item_count = 1 %>
-            <% get_all_languages.each do |lang| %>
+            <% get_all_languages_distinct.each do |lang| %>
                 <% if item_count == 0  %>
                     <ul class="list-unstyled col-md-4">
                 <%
                     all = ISO::Language.all
                    end %>
-                <% iso_language = ISO::Language.find(lang.iso_language)
+                <% iso_language = LanguageList::LanguageInfo.find(lang.iso_language)
                   if !iso_language.nil?
-                   iso_name = iso_language.code
+                   iso_code = iso_language.iso_639_1
+                   iso_name = iso_language.name.to_s + ' (' + iso_code + ')'
                 else
-                   iso_name = lang.name
+                   iso_name = lang.iso_language
+                   iso_code = lang.iso_language
                 end%>
-                <li><%= link_to iso_name, keyboard_index_path %></li>
+                <li><%= link_to iso_name , language_path(iso_language: iso_code) %></li>
                     <% if item_count == languages_per_column || total_item_count == languages_count %>
                         </ul>
                     <%
@@ -103,14 +105,14 @@
 
 <% if user_signed_in? %>
 <div class="container">
-<%end %>
+<% end %>
 <%= content_for?(:content) ? yield(:content) : yield %>
 <% if user_signed_in? %>
 </div>
-    <%= render "modals/key_new" %>
+
+<%= render "modals/key_new" %>
+
 <% end %>
-
-
 
 </body>
 </html>

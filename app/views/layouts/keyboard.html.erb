@@ -5,6 +5,7 @@
     <div class="col-xs-7">
   <h3><%= @parent_keyboard.name %> (<%= @parent_keyboard.iso_language %>-<%= @parent_keyboard.iso_region %>)</h3>
   <h4><%= @selected_keyboard_variant.name %></h4>
+  <h5><%= image_tag @selected_keyboard_variant.keyboard_type.icon_path %></h5>
     </div>
     <div class="col-xs-7 keyboard-edit-btn">
     <button type="button" class="btn btn-primary pull-right edit-keyboard">Edit Keyboard</button>
@@ -18,7 +19,8 @@
       Load a Different Keyboard
     </div>
     <div class="col-xs-5">
-      <%= grouped_collection_select(:selected_keyboard_variant, :id, @all_keyboards, :keyboard_variants, :name, :id, :name) %>
+      <%= grouped_collection_select(:selected_keyboard_variant, :id, @parent_keyboard_list, :keyboard_variants,
+                                    :name, :id, :name, {}, {class: 'form-control selectpicker'}) %>
     </div>
 
 

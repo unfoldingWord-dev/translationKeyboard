@@ -6,19 +6,31 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-keyboardTypes = KeyboardType.create([{name: 'Android 4 Row'}, {name: 'Android 5 Row'}])
+keyboardTypes = KeyboardType.create([{name: 'Android 4 Row', os: 'Android'}, {name: 'Android 5 Row', os:'Android'}, {name:'iOS iPhone', os:'Apple', os_variant:'iPhone'}])
 
-KeyboardTypeDefaultKeyPosition.create([{row_index: 0, col_count: 10, keyboard_type: keyboardTypes.first},
-                                       {row_index: 1, col_count: 9, keyboard_type: keyboardTypes.first},
-                                       {row_index: 2, col_count: 8, keyboard_type: keyboardTypes.first},
-                                       {row_index: 3, col_count: 7, keyboard_type: keyboardTypes.first},
-                                       {row_index: 0, col_count: 10, keyboard_type: keyboardTypes.last},
-                                       {row_index: 1, col_count: 9, keyboard_type: keyboardTypes.last},
-                                       {row_index: 2, col_count: 8, keyboard_type: keyboardTypes.last},
-                                       {row_index: 3, col_count: 7, keyboard_type: keyboardTypes.last},
-                                       {row_index: 4, col_count: 7, keyboard_type: keyboardTypes.last}])
+keyboardTypes.each do |kt|
 
-aKeyboard = Keyboard.create([{name: 'English (en)'}])
+  if kt.name == 'Android 4 Row'
+
+  KeyboardTypeDefaultKeyPosition.create([{row_index: 0, col_count: 10, keyboard_type:kt},
+                                         {row_index: 1, col_count: 9, keyboard_type:kt},
+                                         {row_index: 2, col_count: 8, keyboard_type: kt},
+                                         {row_index: 3, col_count: 7, keyboard_type: kt}])
+  elsif kt.name == 'Android 5 Row'
+  KeyboardTypeDefaultKeyPosition.create([{row_index: 0, col_count: 10, keyboard_type: kt},
+                                         {row_index: 1, col_count: 9, keyboard_type: kt},
+                                         {row_index: 2, col_count: 8, keyboard_type: kt},
+                                         {row_index: 3, col_count: 7, keyboard_type: kt},
+                                         {row_index: 4, col_count: 7, keyboard_type: kt}])
+  else
+    KeyboardTypeDefaultKeyPosition.create([{row_index: 0, col_count: 10, keyboard_type: kt},
+                                           {row_index: 1, col_count: 9, keyboard_type: kt},
+                                           {row_index: 2, col_count: 7, keyboard_type: kt}])
+
+  end
+end
+
+aKeyboard = Keyboard.create([{name: 'English (en)', iso_language: 'en', iso_region: 'US' }])
 
 aKeyboardVariant = KeyboardVariant.create([{keyboard: aKeyboard.first, keyboard_type: keyboardTypes.first, name: "English (en-US) Android 4 Row" }])
 

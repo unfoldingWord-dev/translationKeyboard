@@ -12,7 +12,11 @@ class KeyboardController < ApplicationController
   end
 
   def create
-    new_keyboard = Keyboard.create(keyboard_params)
+    if Keyboard.where(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region]).nil?
+      new_keyboard = Keyboard.create(keyboard_params)
+    else
+      new_keyboard = Keyboard.find_by(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region])
+    end
     the_keyboard_type = KeyboardType.find(params[:keyboard_type_id])
     new_keyboard_variant = KeyboardVariant.create([{keyboard: new_keyboard, keyboard_type: the_keyboard_type,
                                                     name: new_keyboard.name << ' ' << the_keyboard_type.name }])
@@ -37,13 +41,16 @@ class KeyboardController < ApplicationController
 
    end
 
+
+
   def edit
   
   end
-  def get_keyboard_variant
+  def variant
     get_all_keyboards
     @selected_keyboard_variant = KeyboardVariant.find(params[:keyboard_variant_id])
     @parent_keyboard = @selected_keyboard_variant.keyboard
+    @parent_keyboard_list = Keyboard.where(id: @parent_keyboard.id)
     set_key_positions
 
     render "keyboard/index"
@@ -52,7 +59,7 @@ class KeyboardController < ApplicationController
 
   private
   def get_all_keyboards
-    @all_keyboards = Keyboard.all
+    @all_keyboards = Keyboard.all.group("iso_language, id").order(:iso_language)
   end
 
   def set_key_positions

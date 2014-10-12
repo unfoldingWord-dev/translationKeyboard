@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
     Keyboard.all
   end
 
+  helper_method :get_all_languages_distinct
+  def get_all_languages_distinct
+    Keyboard.select(:iso_language).order(:iso_language).uniq
+  end
+
   helper_method :languages_count
   def languages_count
     Keyboard.all.count

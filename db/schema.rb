@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141011024218) do
+ActiveRecord::Schema.define(version: 20141011181745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 20141011024218) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "os"
+    t.string   "os_variant"
   end
 
   create_table "keyboard_variants", force: true do |t|
