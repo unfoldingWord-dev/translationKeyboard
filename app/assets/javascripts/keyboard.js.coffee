@@ -17,4 +17,4 @@ $(document).ready ->
       $(".new_keyboard_form").append xhr.responseText ->
 
     ).on "ajax:error", (e, xhr, status, error) ->
-    $(".new_keyboard_form").append "<p>ERROR</p>"
+      $(".new_keyboard_form").append "<p>E</p>"
