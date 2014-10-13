@@ -1,28 +1,29 @@
-== README
+Translation Keyboard 1.0
+--
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A GUI interface to build your own keyboard that can be deployed to a mobile device.
 
-Things you may want to cover:
+###Contributing
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+**Minimum Ruby Version**: 1.9.3p545
+**Minimum Rails Version**: 4.1.5
+**Database**: PostgresSQL 9.3
+**IDE**: Anything you want, even just a text editor. RubyMine is the best IDE I have found.
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+###Setup
+
+If you are familiar with writing Rails code there should not really be anything out of the ordinary to set this up app.
+
+If your Rails environment is setup you should be able to run the following commands and then be up and running
+
+1. bundle install
+2. rake db:load
+
+That's it!
+
+###Import Hackers Keyboard Files
+
+In the bin folder there is a file called importHackersKeyboardXml. Change the directory path on line 11 to point to the directory on your local machine and then run the script by typing ruby importHackersKeyboardXml.
+
+Running this will automatically import all of the keyboards contained in the hacker_keyboard_data folder
