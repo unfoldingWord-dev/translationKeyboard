@@ -5,10 +5,10 @@ A GUI interface to build your own keyboard that can be deployed to a mobile devi
 
 ###Contributing
 
-**Minimum Ruby Version**: 1.9.3p545
-**Minimum Rails Version**: 4.1.5
-**Database**: PostgresSQL 9.3
-**IDE**: Anything you want, even just a text editor. RubyMine is the best IDE I have found.
+* **Minimum Ruby Version**: 1.9.3p545
+* **Minimum Rails Version**: 4.1.5
+* **Database**: PostgresSQL 9.3
+* **IDE**: Anything you want, even just a text editor. RubyMine is the best IDE I have found.
 
 
 ###Setup
