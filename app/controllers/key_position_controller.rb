@@ -14,6 +14,9 @@ class KeyPositionController < ApplicationController
       character_to_update = @characters.find(k)
       utf8Value = v['utf8hex'].hex
       associated_unicode_record = UnicodeCharacter.where(utf8hex: utf8Value).first
+      if associated_unicode_record.nil?
+        associated_unicode_record = UnicodeCharacter.create({englishDesc:"", utf8hex: utf8Value})
+      end
       character_to_update.unicode_character_id = associated_unicode_record.id
       character_to_update.save
     end

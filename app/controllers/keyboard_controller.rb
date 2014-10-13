@@ -8,18 +8,18 @@ class KeyboardController < ApplicationController
     @parent_keyboard = @selected_keyboard_variant.keyboard
     set_key_positions
     get_new_key_position
-    redirect_to "/keyboard/get_keyboard_variant/#{@selected_keyboard_variant.id}"
+    redirect_to "/keyboard/variant/#{@selected_keyboard_variant.id}"
   end
 
   def create
-    if Keyboard.where(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region]).nil?
+    if Keyboard.where(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region]).count < 1
       new_keyboard = Keyboard.create(keyboard_params)
     else
       new_keyboard = Keyboard.find_by(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region])
     end
     the_keyboard_type = KeyboardType.find(params[:keyboard_type_id])
     new_keyboard_variant = KeyboardVariant.create([{keyboard: new_keyboard, keyboard_type: the_keyboard_type,
-                                                    name: new_keyboard.name << ' ' << the_keyboard_type.name }])
+                                                    name: new_keyboard.name + ' ' + the_keyboard_type.name }])
 
     the_keyboard_type.keyboard_type_default_key_positions.each do |default_key_pos|
       increment = 0
