@@ -16,12 +16,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :languages_count
   def languages_count
-    Keyboard.all.count
+    get_all_languages_distinct.count
   end
 
   helper_method :languages_per_column
   def languages_per_column
-    Keyboard.all.count / 3
+    get_all_languages_distinct.count / 3
   end
 
   helper_method :new_keyboard

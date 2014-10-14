@@ -11,39 +11,51 @@
       <div class="modal-body">
 
         <%= form_for key_position, html: {class: 'key_position_form'}, remote: true do |f| %>
+            <div class="panel-group" id="accordion" >
+              <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="panel-title"><a href="#collapse_key_information_<%= key_position.id %>" data-toggle="collapse">Key Information</a></h4></div>
+            <div id="collapse_key_information_<%= key_position.id %>" class="panel-collapse collapse">
+              <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-1">&nbsp;</div>
+                    <div class="col-xs-6"><b>Row Index:</b> <%= key_position.row_index %></div>
+                    <div class="col-xs-6"><b>Column Index:</b> <%= key_position.column_index %></div>
+                <div class="col-xs-1">&nbsp;</div>
+            </div>
+            </div>
+            </div>
+            </div>
 
-
-            <% key_position.characters.each do |character| %>
+            <% key_position.get_characters_sorted_by_modmask.each.with_index(1) do |character, i| %>
                 <div class="chars">
                 <%= f.fields_for character, index: character.id do |character_form| %>
+                      <% if character.modmask != 2 # don't show long press characters here %>
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a href="#collapse_key_char_<%= key_position.id %>-<%= character.modmask %>" data-toggle="collapse">
+                              <% if character.modmask == 0 %>
+                                  Default Character
+                              <% elsif character.modmask == 1 %>
+                                  Shift Character
+                              <% end %>
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapse_key_char_<%= key_position.id %>-<%= character.modmask %>" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <%= render 'modals/key_edit_char_block', character_form: character_form %>
 
-                <div class="row">
-                  <div class="col-xs-14 text-center">
-                    <b>
-                <% if character.modmask == 0 %>
-                        Default Character
-                <% elsif character.modmask == 1 %>
-                        Shift Character
-                <% elsif character.modmask == 2 %>
-                        Long Press Characters
-                <% end %>
-                      </b>
-                   </div>
-                 </div>
-
-                    <div class="row">
-                      <div class="col-xs-7">Character</div>
-                      <div class="col-xs-7"><%= character_form.text_field :uft8HexHtml, class: "single-char", :maxlength => 1 %></div>
+                        </div>
+                        </div>
                     </div>
+                    <% else %>
 
-                    <div class="row">
-                      <div class="col-xs-7">UTF-8 Hex</div>
-                      <div class="col-xs-7"><%= character_form.text_field :utf8hex, class: "single-utf8hex", :maxlength => 6 %></div>
-                    </div>
-
+                    <% end %>
                 <% end %>
                 </div>
             <% end %>
+              </div>
         <% end %>
 
       </div>

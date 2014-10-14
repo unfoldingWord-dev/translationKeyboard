@@ -14,23 +14,27 @@
 //= require jquery_ujs
 //= require_tree .
 //= require bootstrap
-//= require bootstrap-select.min
+//= require bootstrap-select
 //= require edit_key
 //= require new_keyboard
 
 ready = function(){
 
-    var btnClick = function(){
+    var btnClick = function() {
 
         var currentText = $(".type-area-textarea").val();
         var newText;
-        if($(this).attr("data-char")){
+        if ($(this).attr("data-char")) {
             newText = $(this).attr("data-char");
         } else {
             newText = $(this).html();
         }
-        if(newText != " "){
+
+        if (newText != " ") {
             newText = newText.trim()
+        }
+        if (newText == "&nbsp;") {
+            return; // do nothing
         }
         $(".type-area-textarea").val(currentText + newText);
     };
@@ -86,16 +90,29 @@ ready = function(){
 
     $(".edit-keyboard").click(function(event){
         event.preventDefault();
+        $(".keypress:not(.shift-btn)").unbind("click");
         if($(this).hasClass("btn-primary")){
            $(this).removeClass("btn-primary");
            $(this).addClass("btn-success");
            $(this).text("Done");
-           $(".edit-key-btn").show();
+           $(".shift-space-row").hide();
+           $(".type-area").hide();
+           $(".long").hide();
+           $(".keypress:not(.shift-btn)").removeClass('btn-default');
+           $(".keypress:not(.shift-btn)").addClass('btn-info');
+           $(".keypress:not(.shift-btn)").click(function(){
+               $($(this).data("target")).modal('show');
+           });
        } else {
            $(this).removeClass("btn-success");
            $(this).addClass("btn-primary");
            $(this).text("Edit Keyboard");
-           $(".edit-key-btn").hide();
+           $(".shift-space-row").show();
+           $(".type-area").show();
+           $(".long").show();
+           $(".keypress:not(.shift-btn)").addClass('btn-default');
+           $(".keypress:not(.shift-btn)").removeClass('btn-info');
+           $(".keypress:not(.shift-btn)").click(btnClick);
        }
         return false;
     });

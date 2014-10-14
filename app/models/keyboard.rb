@@ -16,7 +16,20 @@ class Keyboard < ActiveRecord::Base
   end
 
   def language_iso_639_1
-    language_iso_obj.iso_639_1
+    if language_iso_obj.nil?
+      iso_language
+    else
+      language_iso_obj.iso_639_1
+    end
+  end
+
+  # @return [string]
+  def language_name_and_iso_639_1
+    if language_iso_obj.nil?
+      iso_language
+    else
+      language_name.to_s + ' (' + language_iso_639_1 + ')'
+    end
   end
 
   def language_iso_639_3
@@ -30,6 +43,8 @@ class Keyboard < ActiveRecord::Base
   def region_name
     region_obj.name
   end
+
+
 
   def region_obj
     if iso_region == '00'

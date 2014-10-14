@@ -14,4 +14,9 @@
 class KeyPosition < ActiveRecord::Base
 	has_many :characters
 	belongs_to :keyboard_variant
+
+  def get_characters_sorted_by_modmask
+    characters.order(:modmask)
+  end
+
 end

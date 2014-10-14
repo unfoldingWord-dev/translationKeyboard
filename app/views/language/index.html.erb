@@ -31,7 +31,7 @@
                    <% a_keyboard.keyboard_variants.each do |a_keyboard_variant| %>
                     <div class="row">
                        <div class="col-xs-2">
-                         <%= image_tag a_keyboard_variant.keyboard_type.icon_path %>
+                         <span style="font-size:24px;" class="glyphicon <%= a_keyboard_variant.keyboard_type.icon_class %>"></span>
                        </div>
                       <div class="col-xs-4">
                         <%= a_keyboard_variant.keyboard_type.name %>

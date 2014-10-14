@@ -35,18 +35,8 @@
             <% get_all_languages_distinct.each do |lang| %>
                 <% if item_count == 0  %>
                     <ul class="list-unstyled col-md-4">
-                <%
-                    all = ISO::Language.all
-                   end %>
-                <% iso_language = LanguageList::LanguageInfo.find(lang.iso_language)
-                  if !iso_language.nil?
-                   iso_code = iso_language.iso_639_1
-                   iso_name = iso_language.name.to_s + ' (' + iso_code + ')'
-                else
-                   iso_name = lang.iso_language
-                   iso_code = lang.iso_language
-                end%>
-                <li><%= link_to iso_name , language_path(iso_language: iso_code) %></li>
+                <% end %>
+                <li><%= link_to lang.language_name_and_iso_639_1, language_path(iso_language: lang.language_iso_639_1) %></li>
                     <% if item_count == languages_per_column || total_item_count == languages_count %>
                         </ul>
                     <%

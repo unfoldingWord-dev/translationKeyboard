@@ -15,7 +15,7 @@
     <div class="row">
     <% end %>
       <div class="col-xs-1 <%= offset_class %>">
-        <button type="button" class="btn btn-default default-key keypress">
+        <button type="button" class="btn btn-default default-key keypress" data-target="#key_edit_modal_<%= key_position.id %>">
           <%# display default key that has no modifier options %>
           <% if key_position.characters.where(modmask: 0).exists? %>
           <%= intToHtmlHex(key_position.characters.where(modmask: 0).first.unicode_character.utf8hex) %>
@@ -41,11 +41,7 @@
                 </ul>
 		    </span>
         <% end %>
-        <div class="edit-key-btn">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#key_edit_modal_<%= key_position.id %>">
-          <span class="glyphicon glyphicon-edit"></span>
-        </button>
-        </div>
+
       </div>
       <% if @key_positions.last == key_position  %>
          <% row_pos = key_position.row_index %>

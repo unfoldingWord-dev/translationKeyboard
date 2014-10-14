@@ -25,7 +25,7 @@ class KeyboardController < ApplicationController
       increment = 0
       until increment >= default_key_pos.col_count do
         new_key_pos = KeyPosition.create([{row_index: default_key_pos.row_index, column_index:increment, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
-        unicode_char = UnicodeCharacter.find_or_create_by(utf8hex:'30'.hex)
+        unicode_char = UnicodeCharacter.find_or_create_by(utf8hex:'20'.hex)
         new_characters = Character.create([{modmask: '0'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first},
                                            {modmask: '1'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first}])
         increment += 1
