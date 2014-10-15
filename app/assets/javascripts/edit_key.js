@@ -1,22 +1,8 @@
 
 
 readyEditKey = function() {
-    $(".single-char").keyup(function(){
-       var utf8Elem = $(this).parent().parent().parent().find(".single-utf8hex");
-       if($(this).val().length==1){
-           utf8Elem.val($(this).val().charCodeAt(0).toString(16));
-       } else {
-           utf8Elem.val("");
-       }
-    });
-    $(".single-utf8hex").keyup(function(){
-        var singleChar = $(this).parent().parent().parent().find(".single-char");
-        if($(this).val().length<=6 && $(this).val().length>0){
-            singleChar.val(String.fromCharCode(parseInt($(this).val(), 16)));
-        } else {
-            singleChar.val("");
-        }
-    });
+    $(".single-char").keyup(singleCharKeyUp);
+    $(".single-utf8hex").keyup(singleUtf8KeyUp);
 
     $(".save-key").click(function(){
         $(this).addClass("disabled");
@@ -24,7 +10,46 @@ readyEditKey = function() {
     });
 
     $(".edit-key-btn").hide();
+
+    $(".delete-key-char").click(deleteChar);
+
+    $(".add-character-btn").click(function(){
+        var addBtn = $(this);
+        $.get( "/characters/new_block", function( data ) {
+            addBtn.parent().parent().before( data );
+            addBtn.parent().parent().parent().find(".single-char").unbind("keyup");
+            addBtn.parent().parent().parent().find(".single-utf8hex").unbind("keyup");
+            addBtn.parent().parent().parent().find(".delete-key-char").unbind("click");
+            addBtn.parent().parent().parent().find(".single-char").keyup(singleCharKeyUp);
+            addBtn.parent().parent().parent().find(".single-utf8hex").keyup(singleUtf8KeyUp);
+            addBtn.parent().parent().parent().find(".delete-key-char").click(deleteChar);
+            //alert( "Load was performed." );
+        });
+
+    })
 };
+
+function singleCharKeyUp(){
+    var utf8Elem = $(this).parent().parent().parent().find(".single-utf8hex");
+    if($(this).val().length==1){
+        utf8Elem.val($(this).val().charCodeAt(0).toString(16));
+    } else {
+        utf8Elem.val("");
+    }
+}
+
+function singleUtf8KeyUp(){
+    var singleChar = $(this).parent().parent().parent().find(".single-char");
+    if($(this).val().length<=6 && $(this).val().length>0){
+        singleChar.val(String.fromCharCode(parseInt($(this).val(), 16)));
+    } else {
+        singleChar.val("");
+    }
+}
+
+function deleteChar(){
+    $(this).parent().parent().parent().remove();
+}
 
 jQuery(document).ready(readyEditKey);
 jQuery(document).on('page:load', readyEditKey);

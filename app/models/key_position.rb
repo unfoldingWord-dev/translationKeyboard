@@ -19,4 +19,8 @@ class KeyPosition < ActiveRecord::Base
     characters.order(:modmask)
   end
 
+  def get_longpress_characters
+    characters.where(modmask: 2)
+  end
+
 end

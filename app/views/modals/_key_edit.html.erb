@@ -25,8 +25,7 @@
             </div>
             </div>
             </div>
-
-            <% key_position.get_characters_sorted_by_modmask.each.with_index(1) do |character, i| %>
+              <% key_position.get_characters_sorted_by_modmask.each.with_index(1) do |character, i| %>
                 <div class="chars">
                 <%= f.fields_for character, index: character.id do |character_form| %>
                       <% if character.modmask != 2 # don't show long press characters here %>
@@ -44,17 +43,43 @@
                         </div>
                         <div id="collapse_key_char_<%= key_position.id %>-<%= character.modmask %>" class="panel-collapse collapse in">
                         <div class="panel-body">
-                            <%= render 'modals/key_edit_char_block', character_form: character_form %>
+                            <%= render 'modals/key_edit_char_block', character_form: character_form, character: character %>
 
                         </div>
                         </div>
                     </div>
-                    <% else %>
 
-                    <% end %>
+                <% end %>
                 <% end %>
                 </div>
             <% end %>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a href="#collapse_key_char_longpress_<%= key_position.row_index %>_<%= key_position.column_index %>" data-toggle="collapse">
+                      Long Press Character(s)
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapse_key_char_longpress_<%= key_position.row_index %>_<%= key_position.column_index %>" class="panel-collapse collapse in">
+                  <div class="panel-body">
+              <% key_position.get_longpress_characters.each.with_index(1) do |character, i| %>
+                    <%= f.fields_for character, index: character.id do |character_form| %>
+                        <%= render 'modals/key_edit_char_block', character_form: character_form, character: character %>
+                    <% end %>
+              <% end %>
+                   <div class="row">
+                     <div class="col-md-7"></div>
+                     <div class="col-md-7">
+                       <button type="button" class="btn btn-primary pull-right btn-sm add-character-btn">
+                         <span class="glyphicon glyphicon-plus-sign"></span>
+                         Longpress Character
+                       </button>
+                     </div>
+                   </div>
+                  </div>
+                </div>
+              </div>
               </div>
         <% end %>
 
