@@ -81,7 +81,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     };
 
     private static final String[] KBD_5_ROW = {
-        "ar-rCL", "ar", "bg", "cs", "cs_QY", "da", "de", "el", "en", "en_DV", "en_GB",
+        "ar-rCL", "ar", "bg", "bu", "cs", "cs_QY", "da", "de", "el", "en", "en_DV", "en_GB",
         "es", "es_LA", "fa", "fi", "fr", "fr_CA", "he", "hr", "hu", "hu_QY",
         "hy", "it", "iw", "lo", "nb", "pt_PT", "ro", "ru", "ru_PH", "si",
         "sk", "sk_QY", "sl", "sr", "sv", "ta", "th", "tr", "uk"
@@ -113,7 +113,9 @@ public class InputLanguageSelection extends PreferenceActivity {
             return "Русский (Phonetic)";
         } else if (lang.equals("ar")&& country.equals("CL")) {
             return "ar-classical";
-        } else {
+        } else if(lang.equals("bu")){
+        	return "Burmese";
+        }else {
             return LanguageSwitcher.toTitleCase(l.getDisplayName(l));
         }
     }
