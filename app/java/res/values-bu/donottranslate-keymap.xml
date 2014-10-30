@@ -26,46 +26,46 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<!-- ` -->
     <string name="key_tlde_main"> </string>
-    <string name="key_tlde_shift">&#x100E;</string>
+    <string name="key_tlde_shift">&#4162;</string>
 
 	<!-- 1 -->
-    <string name="key_ae01_main">&#x1041;</string>
+    <string name="key_ae01_main">၁</string>
     <string name="key_ae01_shift">!</string>
 
 	<!-- 2 -->
-    <string name="key_ae02_main">&#x1042;</string>
+    <string name="key_ae02_main">၂</string>
     <string name="key_ae02_shift">\@</string>
 
 	<!-- 3 -->
-    <string name="key_ae03_main">&#x1043;</string>
+    <string name="key_ae03_main">၃</string>
     <string name="key_ae03_shift">&#x1014;</string>
 
 	<!-- 4 -->
-    <string name="key_ae04_main">&#x1044;</string>
+    <string name="key_ae04_main">&#4164;</string>
     <string name="key_ae04_shift">$;</string>
 
 	<!-- 5 -->
-    <string name="key_ae05_main">&#x1045;</string>
+    <string name="key_ae05_main">&#4165;</string>
     <string name="key_ae05_shift">%</string>
 
 	<!-- 6 -->
-    <string name="key_ae06_main">&#x1046;</string>
+    <string name="key_ae06_main">&#4166;</string>
     <string name="key_ae06_shift">/</string>
 
 	<!-- 7 -->
-    <string name="key_ae07_main">&#x1047;</string>
+    <string name="key_ae07_main">&#4167;</string>
     <string name="key_ae07_shift">&#x101b;</string>
 
 	<!-- 8 -->
-    <string name="key_ae08_main">&#x1048;</string>
+    <string name="key_ae08_main">&#4168;</string>
     <string name="key_ae08_shift">*</string>
 
 	<!-- 9 -->
-    <string name="key_ae09_main">&#x1049;</string>
+    <string name="key_ae09_main">&#4169;</string>
     <string name="key_ae09_shift">(</string>
 
 	<!-- 0 -->
-    <string name="key_ae10_main">&#x1040;</string>
+    <string name="key_ae10_main">&#4160;</string>
     <string name="key_ae10_shift">)</string>
 
 	<!-- - -->
@@ -78,43 +78,43 @@
 
 
 	<!-- q -->
-    <string name="key_ad01_main">&#x1006;</string>
+    <string name="key_ad01_main">&#x107A;</string>
     <string name="key_ad01_shift"> </string>
 
 	<!-- w -->
-    <string name="key_ad02_main">&#x1010;</string>
+    <string name="key_ad02_main">&#x4132;</string>
     <string name="key_ad02_shift">&#x1040;</string>
 
 	<!-- e -->
-    <string name="key_ad03_main">&#x1014;</string>
+    <string name="key_ad03_main">&#x1024;</string>
     <string name="key_ad03_shift">&#x1023;</string>
 
 	<!-- r -->
-    <string name="key_ad04_main">&#x1013;</string>
+    <string name="key_ad04_main">a</string>
     <string name="key_ad04_shift"> </string>
 
 	<!-- t -->
-    <string name="key_ad05_main">&#x1021;</string>
+    <string name="key_ad05_main">ဤ</string>
     <string name="key_ad05_shift">&#x1024;</string>
 
 	<!-- y -->
-    <string name="key_ad06_main">&#x1051;</string>
+    <string name="key_ad06_main">ၚ</string>
     <string name="key_ad06_shift">&#x104c;</string>
 
 	<!-- u -->
-    <string name="key_ad07_main">&#x1000;</string>
+    <string name="key_ad07_main">ၺ</string>
     <string name="key_ad07_shift">&#x1009;</string>
 
 	<!-- i -->
-    <string name="key_ad08_main">&#x1004;</string>
+    <string name="key_ad08_main">ၺ</string>
     <string name="key_ad08_shift">&#x104d;</string>
 
 	<!-- o -->
-    <string name="key_ad09_main">&#x101a;</string>
+    <string name="key_ad09_main">&#4218;</string>
     <string name="key_ad09_shift">&#x103f;</string>
 
 	<!-- p -->
-    <string name="key_ad10_main">&#x1005;</string>
+    <string name="key_ad10_main">&#x4218;</string>
     <string name="key_ad10_shift">&#x100f;</string>
 
 	<!-- [ -->

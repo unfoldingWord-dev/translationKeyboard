@@ -48,10 +48,11 @@ public class InputLanguageSelection extends PreferenceActivity {
     // Languages for which auto-caps should be disabled
     public static final Set<String> NOCAPS_LANGUAGES = new HashSet<String>();
     static {
+    	NOCAPS_LANGUAGES.add("ar");
     	NOCAPS_LANGUAGES.add("ar-rCL");
-        NOCAPS_LANGUAGES.add("ar");
         NOCAPS_LANGUAGES.add("iw");
         NOCAPS_LANGUAGES.add("th");
+        NOCAPS_LANGUAGES.add("bu");
     }
 
     // Languages which should not use dead key logic. The modifier is entered after the base character.
@@ -61,6 +62,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         NODEADKEY_LANGUAGES.add("ar-rCL");
         NODEADKEY_LANGUAGES.add("iw"); // TODO: currently no niqqud in the keymap?
         NODEADKEY_LANGUAGES.add("th");
+        NODEADKEY_LANGUAGES.add("bu");
     }
 
     // Languages which should not auto-add space after completions
@@ -72,7 +74,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     // Run the GetLanguages.sh script to update the following lists based on
     // the available keyboard resources and dictionaries.
     private static final String[] KBD_LOCALIZATIONS = {
-        "ar-rCL", "ar", "bg", "ca", "cs", "cs_QY", "da", "de", "el", "en", "en_DV",
+        "ar-rCL", "ar", "bg", "bu", "ca", "cs", "cs_QY", "da", "de", "el", "en", "en_DV",
         "en_GB", "es", "es_LA", "es_US", "fa", "fi", "fr", "fr_CA", "he",
         "hr", "hu", "hu_QY", "hy", "in", "it", "iw", "ja", "ka", "ko",
         "lo", "lt", "lv", "nb", "nl", "pl", "pt", "pt_PT", "rm", "ro",
@@ -113,8 +115,8 @@ public class InputLanguageSelection extends PreferenceActivity {
             return "Русский (Phonetic)";
         } else if (lang.equals("ar")&& country.equals("CL")) {
             return "ar-classical";
-        } else if(lang.equals("bu")){
-        	return "Burmese";
+        }else if (lang.equals("bu")) {
+            return "Burmese";
         }else {
             return LanguageSwitcher.toTitleCase(l.getDisplayName(l));
         }
