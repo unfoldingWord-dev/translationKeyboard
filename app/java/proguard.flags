@@ -1,8 +1,8 @@
--keep class org.pocketworkstation.pckeyboard.BinaryDictionary {
+-keep class org.distantshoresmedia.translationkeyboard.BinaryDictionary {
   int mDictLength;
   <init>(...); 
 }
 
--keep class org.pocketworkstation.pckeyboard.Suggest {
+-keep class org.distantshoresmedia.translationkeyboard.Suggest {
   <init>(...);
 }
