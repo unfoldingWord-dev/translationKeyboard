@@ -222,7 +222,9 @@ public class Keyboard {
             mode = a.getResourceId(R.styleable.Keyboard_Row_keyboardMode,
                     0);
             extension = a.getBoolean(R.styleable.Keyboard_Row_extension, false);
+           
 
+            
             if (parent.mLayoutRows >= 5) {
                 boolean isTop = (extension || parent.mRowCount - parent.mExtensionRowCount <= 0);
                 float topScale = LatinIME.sKeyboardSettings.topRowScale;
@@ -385,7 +387,7 @@ public class Keyboard {
 
             TypedArray a = res.obtainAttributes(Xml.asAttributeSet(parser),
                     R.styleable.Keyboard);
-
+           
             realWidth = getDimensionOrFraction(a,
                     R.styleable.Keyboard_keyWidth,
                     keyboard.mDisplayWidth, parent.defaultWidth);
