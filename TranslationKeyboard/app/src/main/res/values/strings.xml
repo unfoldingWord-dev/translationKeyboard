@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Translation Keyboard</string>
+    <string name="hint_add_to_dictionary">Add</string>
+</resources>
