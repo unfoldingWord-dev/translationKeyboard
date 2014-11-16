@@ -1,9 +1,17 @@
-package org.distantshoresmedia.model;
+package distantshoresmedia.org.model;
 
 /**
  * Created by Fechner on 11/7/14.
  */
 public class BaseDataClass {
+
+    private BaseDataClass parent;
+    public void setParent(BaseDataClass parent){
+        this.parent = parent;
+    }
+    public BaseDataClass getParent(){
+        return this.parent;
+    }
 
     private int uid;
     public void setUid(int uid) {

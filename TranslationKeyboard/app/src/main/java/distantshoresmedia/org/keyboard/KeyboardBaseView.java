@@ -32,10 +32,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
-import org.distantshoresmedia.translationkeyboard.Keyboard.Key;
-
-import org.distantshoresmedia.translationkeyboard.R;
-
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -59,6 +55,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.WeakHashMap;
 
+import distantshoresmedia.org.keyboard.UIHandler;
+import distantshoresmedia.org.keyboard.UIHandlerInterface;
+import distantshoresmedia.org.keyboard.PointerTracker;
+
+
 /**
  * A view that renders a virtual {@link LatinKeyboard}. It handles rendering of keys and
  * detecting key presses and touch movements.
@@ -74,93 +75,11 @@ import java.util.WeakHashMap;
  * @attr ref R.styleable#LatinKeyboardBaseView_verticalCorrection
  * @attr ref R.styleable#LatinKeyboardBaseView_popupLayout
  */
-public class LatinKeyboardBaseView extends View implements PointerTracker.UIProxy {
+public class KeyboardBaseView extends View implements PointerTracker.UIProxy, UIHandlerInterface {
     private static final String TAG = "HK/LatinKeyboardBaseView";
     private static final boolean DEBUG = false;
 
     public static final int NOT_A_TOUCH_COORDINATE = -1;
-
-    public interface OnKeyboardActionListener {
-
-        /**
-         * Called when the user presses a key. This is sent before the
-         * {@link #onKey} is called. For keys that repeat, this is only
-         * called once.
-         *
-         * @param primaryCode
-         *            the unicode of the key being pressed. If the touch is
-         *            not on a valid key, the value will be zero.
-         */
-        void onPress(int primaryCode);
-
-        /**
-         * Called when the user releases a key. This is sent after the
-         * {@link #onKey} is called. For keys that repeat, this is only
-         * called once.
-         *
-         * @param primaryCode
-         *            the code of the key that was released
-         */
-        void onRelease(int primaryCode);
-
-        /**
-         * Send a key press to the listener.
-         *
-         * @param primaryCode
-         *            this is the key that was pressed
-         * @param keyCodes
-         *            the codes for all the possible alternative keys with
-         *            the primary code being the first. If the primary key
-         *            code is a single character such as an alphabet or
-         *            number or symbol, the alternatives will include other
-         *            characters that may be on the same key or adjacent
-         *            keys. These codes are useful to correct for
-         *            accidental presses of a key adjacent to the intended
-         *            key.
-         * @param x
-         *            x-coordinate pixel of touched event. If onKey is not called by onTouchEvent,
-         *            the value should be NOT_A_TOUCH_COORDINATE.
-         * @param y
-         *            y-coordinate pixel of touched event. If onKey is not called by onTouchEvent,
-         *            the value should be NOT_A_TOUCH_COORDINATE.
-         */
-        void onKey(int primaryCode, int[] keyCodes, int x, int y);
-
-        /**
-         * Sends a sequence of characters to the listener.
-         *
-         * @param text
-         *            the sequence of characters to be displayed.
-         */
-        void onText(CharSequence text);
-
-        /**
-         * Called when user released a finger outside any key.
-         */
-        void onCancel();
-
-        /**
-         * Called when the user quickly moves the finger from right to
-         * left.
-         */
-        boolean swipeLeft();
-
-        /**
-         * Called when the user quickly moves the finger from left to
-         * right.
-         */
-        boolean swipeRight();
-
-        /**
-         * Called when the user quickly moves the finger from up to down.
-         */
-        boolean swipeDown();
-
-        /**
-         * Called when the user quickly moves the finger from down to up.
-         */
-        boolean swipeUp();
-    }
 
     // Timing constants
     private final int mKeyRepeatInterval;
@@ -214,7 +133,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
     // Popup mini keyboard
     protected PopupWindow mMiniKeyboardPopup;
-    protected LatinKeyboardBaseView mMiniKeyboard;
+    protected KeyboardBaseView mMiniKeyboard;
     protected View mMiniKeyboardContainer;
     protected View mMiniKeyboardParent;
     protected boolean mMiniKeyboardVisible;
@@ -273,154 +192,8 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
     /* package */ static Method sSetRenderMode;
     private static int sPrevRenderMode = -1;
 
-    private final UIHandler mHandler = new UIHandler();
+    private final UIHandler mHandler = new UIHandler(this);
 
-    class UIHandler extends Handler {
-        private static final int MSG_POPUP_PREVIEW = 1;
-        private static final int MSG_DISMISS_PREVIEW = 2;
-        private static final int MSG_REPEAT_KEY = 3;
-        private static final int MSG_LONGPRESS_KEY = 4;
-
-        private boolean mInKeyRepeat;
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_POPUP_PREVIEW:
-                    showKey(msg.arg1, (PointerTracker)msg.obj);
-                    break;
-                case MSG_DISMISS_PREVIEW:
-                    mPreviewPopup.dismiss();
-                    break;
-                case MSG_REPEAT_KEY: {
-                    final PointerTracker tracker = (PointerTracker)msg.obj;
-                    tracker.repeatKey(msg.arg1);
-                    startKeyRepeatTimer(mKeyRepeatInterval, msg.arg1, tracker);
-                    break;
-                }
-                case MSG_LONGPRESS_KEY: {
-                    final PointerTracker tracker = (PointerTracker)msg.obj;
-                    openPopupIfRequired(msg.arg1, tracker);
-                    break;
-                }
-            }
-        }
-
-        public void popupPreview(long delay, int keyIndex, PointerTracker tracker) {
-            removeMessages(MSG_POPUP_PREVIEW);
-            if (mPreviewPopup.isShowing() && mPreviewText.getVisibility() == VISIBLE) {
-                // Show right away, if it's already visible and finger is moving around
-                showKey(keyIndex, tracker);
-            } else {
-                sendMessageDelayed(obtainMessage(MSG_POPUP_PREVIEW, keyIndex, 0, tracker),
-                        delay);
-            }
-        }
-
-        public void cancelPopupPreview() {
-            removeMessages(MSG_POPUP_PREVIEW);
-        }
-
-        public void dismissPreview(long delay) {
-            if (mPreviewPopup.isShowing()) {
-                sendMessageDelayed(obtainMessage(MSG_DISMISS_PREVIEW), delay);
-            }
-        }
-
-        public void cancelDismissPreview() {
-            removeMessages(MSG_DISMISS_PREVIEW);
-        }
-
-        public void startKeyRepeatTimer(long delay, int keyIndex, PointerTracker tracker) {
-            mInKeyRepeat = true;
-            sendMessageDelayed(obtainMessage(MSG_REPEAT_KEY, keyIndex, 0, tracker), delay);
-        }
-
-        public void cancelKeyRepeatTimer() {
-            mInKeyRepeat = false;
-            removeMessages(MSG_REPEAT_KEY);
-        }
-
-        public boolean isInKeyRepeat() {
-            return mInKeyRepeat;
-        }
-
-        public void startLongPressTimer(long delay, int keyIndex, PointerTracker tracker) {
-            removeMessages(MSG_LONGPRESS_KEY);
-            sendMessageDelayed(obtainMessage(MSG_LONGPRESS_KEY, keyIndex, 0, tracker), delay);
-        }
-
-        public void cancelLongPressTimer() {
-            removeMessages(MSG_LONGPRESS_KEY);
-        }
-
-        public void cancelKeyTimers() {
-            cancelKeyRepeatTimer();
-            cancelLongPressTimer();
-        }
-
-        public void cancelAllMessages() {
-            cancelKeyTimers();
-            cancelPopupPreview();
-            cancelDismissPreview();
-        }
-    }
-
-    static class PointerQueue {
-        private LinkedList<PointerTracker> mQueue = new LinkedList<PointerTracker>();
-
-        public void add(PointerTracker tracker) {
-            mQueue.add(tracker);
-        }
-
-        public int lastIndexOf(PointerTracker tracker) {
-            LinkedList<PointerTracker> queue = mQueue;
-            for (int index = queue.size() - 1; index >= 0; index--) {
-                PointerTracker t = queue.get(index);
-                if (t == tracker)
-                    return index;
-            }
-            return -1;
-        }
-
-        public void releaseAllPointersOlderThan(PointerTracker tracker, long eventTime) {
-            LinkedList<PointerTracker> queue = mQueue;
-            int oldestPos = 0;
-            for (PointerTracker t = queue.get(oldestPos); t != tracker; t = queue.get(oldestPos)) {
-                if (t.isModifier()) {
-                    oldestPos++;
-                } else {
-                    t.onUpEvent(t.getLastX(), t.getLastY(), eventTime);
-                    t.setAlreadyProcessed();
-                    queue.remove(oldestPos);
-                }
-            }
-        }
-
-        public void releaseAllPointersExcept(PointerTracker tracker, long eventTime) {
-            for (PointerTracker t : mQueue) {
-                if (t == tracker)
-                    continue;
-                t.onUpEvent(t.getLastX(), t.getLastY(), eventTime);
-                t.setAlreadyProcessed();
-            }
-            mQueue.clear();
-            if (tracker != null)
-                mQueue.add(tracker);
-        }
-
-        public void remove(PointerTracker tracker) {
-            mQueue.remove(tracker);
-        }
-
-        public boolean isInSlidingKeyInput() {
-            for (final PointerTracker tracker : mQueue) {
-                if (tracker.isInSlidingKeyInput())
-                    return true;
-            }
-            return false;
-        }
-    }
 
     static {
         initCompatibility();
@@ -454,11 +227,11 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         }
     }
     
-    public LatinKeyboardBaseView(Context context, AttributeSet attrs) {
+    public KeyboardBaseView(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.keyboardViewStyle);
     }
 
-    public LatinKeyboardBaseView(Context context, AttributeSet attrs, int defStyle) {
+    public KeyboardBaseView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         Log.i(TAG, "Creating new LatinKeyboardBaseView " + this);
@@ -1170,84 +943,6 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         }
     }
 
-    private void showKey(final int keyIndex, PointerTracker tracker) {
-        Key key = tracker.getKey(keyIndex);
-        if (key == null)
-            return;
-        //Log.i(TAG, "showKey() for " + this);
-        // Should not draw hint icon in key preview
-        Drawable icon = key.icon;
-        if (icon != null && !shouldDrawLabelAndIcon(key)) {
-            mPreviewText.setCompoundDrawables(null, null, null,
-                    key.iconPreview != null ? key.iconPreview : icon);
-            mPreviewText.setText(null);
-        } else {
-            mPreviewText.setCompoundDrawables(null, null, null, null);
-            mPreviewText.setText(key.getCaseLabel());
-            if (key.label.length() > 1 && key.codes.length < 2) {
-                mPreviewText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mKeyTextSize);
-                mPreviewText.setTypeface(Typeface.DEFAULT_BOLD);
-            } else {
-                mPreviewText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mPreviewTextSizeLarge);
-                mPreviewText.setTypeface(mKeyTextStyle);
-            }
-        }
-        mPreviewText.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        int popupWidth = Math.max(mPreviewText.getMeasuredWidth(), key.width
-                + mPreviewText.getPaddingLeft() + mPreviewText.getPaddingRight());
-        final int popupHeight = mPreviewHeight;
-        LayoutParams lp = mPreviewText.getLayoutParams();
-        if (lp != null) {
-            lp.width = popupWidth;
-            lp.height = popupHeight;
-        }
-
-        int popupPreviewX = key.x - (popupWidth - key.width) / 2;
-        int popupPreviewY = key.y - popupHeight + mPreviewOffset;
-
-        mHandler.cancelDismissPreview();
-        if (mOffsetInWindow == null) {
-            mOffsetInWindow = new int[2];
-            getLocationInWindow(mOffsetInWindow);
-            mOffsetInWindow[0] += mPopupPreviewOffsetX; // Offset may be zero
-            mOffsetInWindow[1] += mPopupPreviewOffsetY; // Offset may be zero
-            int[] windowLocation = new int[2];
-            getLocationOnScreen(windowLocation);
-            mWindowY = windowLocation[1];
-        }
-        // Set the preview background state.
-        // Retrieve and cache the popup keyboard if any.
-        boolean hasPopup = (getLongPressKeyboard(key) != null);
-        // Set background manually, the StateListDrawable doesn't work.
-        mPreviewText.setBackgroundDrawable(getResources().getDrawable(hasPopup ? R.drawable.keyboard_key_feedback_more_background : R.drawable.keyboard_key_feedback_background));
-        popupPreviewX += mOffsetInWindow[0];
-        popupPreviewY += mOffsetInWindow[1];
-
-        // If the popup cannot be shown above the key, put it on the side
-        if (popupPreviewY + mWindowY < 0) {
-            // If the key you're pressing is on the left side of the keyboard, show the popup on
-            // the right, offset by enough to see at least one key to the left/right.
-            if (key.x + key.width <= getWidth() / 2) {
-                popupPreviewX += (int) (key.width * 2.5);
-            } else {
-                popupPreviewX -= (int) (key.width * 2.5);
-            }
-            popupPreviewY += popupHeight;
-        }
-
-        if (mPreviewPopup.isShowing()) {
-            mPreviewPopup.update(popupPreviewX, popupPreviewY, popupWidth, popupHeight);
-        } else {
-            mPreviewPopup.setWidth(popupWidth);
-            mPreviewPopup.setHeight(popupHeight);
-            mPreviewPopup.showAtLocation(mMiniKeyboardParent, Gravity.NO_GRAVITY,
-                    popupPreviewX, popupPreviewY);
-        }
-        // Record popup preview position to display mini-keyboard later at the same positon
-        mPopupPreviewDisplayedY = popupPreviewY;
-        mPreviewText.setVisibility(VISIBLE);
-    }
 
     /**
      * Requests a redraw of the entire keyboard. Calling {@link #invalidate} is not sufficient
@@ -1280,27 +975,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
                 key.x + key.width + getPaddingLeft(), key.y + key.height + getPaddingTop());
     }
 
-    private boolean openPopupIfRequired(int keyIndex, PointerTracker tracker) {
-        // Check if we have a popup layout specified first.
-        if (mPopupLayout == 0) {
-            return false;
-        }
 
-        Key popupKey = tracker.getKey(keyIndex);
-        if (popupKey == null)
-            return false;
-        if (tracker.isInSlidingKeyInput())
-            return false;
-        boolean result = onLongPress(popupKey);
-        if (result) {
-            dismissKeyPreview();
-            mMiniKeyboardTrackerId = tracker.mPointerId;
-            // Mark this tracker "already processed" and remove it from the pointer queue
-            tracker.setAlreadyProcessed();
-            mPointerQueue.remove(tracker);
-        }
-        return result;
-    }
 
     private void inflateMiniKeyboardContainer() {
         //Log.i(TAG, "inflateMiniKeyboardContainer(), mPopupLayout=" + mPopupLayout + " from " + this);
@@ -1309,7 +984,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         View container = inflater.inflate(mPopupLayout, null);
 
         mMiniKeyboard =
-                (LatinKeyboardBaseView)container.findViewById(R.id.LatinKeyboardBaseView);
+                (KeyboardBaseView)container.findViewById(R.id.LatinKeyboardBaseView);
         mMiniKeyboard.setOnKeyboardActionListener(new OnKeyboardActionListener() {
             public void onKey(int primaryCode, int[] keyCodes, int x, int y) {
                 mKeyboardActionListener.onKey(primaryCode, keyCodes, x, y);
@@ -1780,4 +1455,133 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         }
         return false;
     }
+
+
+
+    /* UIHandlerInterface*/
+
+    public boolean popupIsShowing(){
+        return mPreviewPopup.isShowing();
+    }
+    public int getKeyRepeatInterval(){
+        return mKeyRepeatInterval;
+    }
+    public void distmissPopupPreview(){
+        mPreviewPopup.dismiss();
+    }
+
+    public boolean previewTextIsVisible(){
+
+        if(mPreviewText.getVisibility() == VISIBLE){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void showKey(final int keyIndex, PointerTracker tracker) {
+
+        Key key = tracker.getKey(keyIndex);
+        if (key == null)
+            return;
+        //Log.i(TAG, "showKey() for " + this);
+        // Should not draw hint icon in key preview
+        Drawable icon = key.icon;
+        if (icon != null && !shouldDrawLabelAndIcon(key)) {
+            mPreviewText.setCompoundDrawables(null, null, null,
+                    key.iconPreview != null ? key.iconPreview : icon);
+            mPreviewText.setText(null);
+        } else {
+            mPreviewText.setCompoundDrawables(null, null, null, null);
+            mPreviewText.setText(key.getCaseLabel());
+            if (key.label.length() > 1 && key.codes.length < 2) {
+                mPreviewText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mKeyTextSize);
+                mPreviewText.setTypeface(Typeface.DEFAULT_BOLD);
+            } else {
+                mPreviewText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mPreviewTextSizeLarge);
+                mPreviewText.setTypeface(mKeyTextStyle);
+            }
+        }
+        mPreviewText.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        int popupWidth = Math.max(mPreviewText.getMeasuredWidth(), key.width
+                + mPreviewText.getPaddingLeft() + mPreviewText.getPaddingRight());
+        final int popupHeight = mPreviewHeight;
+        LayoutParams lp = mPreviewText.getLayoutParams();
+        if (lp != null) {
+            lp.width = popupWidth;
+            lp.height = popupHeight;
+        }
+
+        int popupPreviewX = key.x - (popupWidth - key.width) / 2;
+        int popupPreviewY = key.y - popupHeight + mPreviewOffset;
+
+        mHandler.cancelDismissPreview();
+        if (mOffsetInWindow == null) {
+            mOffsetInWindow = new int[2];
+            getLocationInWindow(mOffsetInWindow);
+            mOffsetInWindow[0] += mPopupPreviewOffsetX; // Offset may be zero
+            mOffsetInWindow[1] += mPopupPreviewOffsetY; // Offset may be zero
+            int[] windowLocation = new int[2];
+            getLocationOnScreen(windowLocation);
+            mWindowY = windowLocation[1];
+        }
+        // Set the preview background state.
+        // Retrieve and cache the popup keyboard if any.
+        boolean hasPopup = (getLongPressKeyboard(key) != null);
+        // Set background manually, the StateListDrawable doesn't work.
+        mPreviewText.setBackgroundDrawable(getResources().getDrawable(hasPopup ? R.drawable.keyboard_key_feedback_more_background : R.drawable.keyboard_key_feedback_background));
+        popupPreviewX += mOffsetInWindow[0];
+        popupPreviewY += mOffsetInWindow[1];
+
+        // If the popup cannot be shown above the key, put it on the side
+        if (popupPreviewY + mWindowY < 0) {
+            // If the key you're pressing is on the left side of the keyboard, show the popup on
+            // the right, offset by enough to see at least one key to the left/right.
+            if (key.x + key.width <= getWidth() / 2) {
+                popupPreviewX += (int) (key.width * 2.5);
+            } else {
+                popupPreviewX -= (int) (key.width * 2.5);
+            }
+            popupPreviewY += popupHeight;
+        }
+
+        if (mPreviewPopup.isShowing()) {
+            mPreviewPopup.update(popupPreviewX, popupPreviewY, popupWidth, popupHeight);
+        } else {
+            mPreviewPopup.setWidth(popupWidth);
+            mPreviewPopup.setHeight(popupHeight);
+            mPreviewPopup.showAtLocation(mMiniKeyboardParent, Gravity.NO_GRAVITY,
+                    popupPreviewX, popupPreviewY);
+        }
+        // Record popup preview position to display mini-keyboard later at the same positon
+        mPopupPreviewDisplayedY = popupPreviewY;
+        mPreviewText.setVisibility(VISIBLE);
+    }
+
+    private boolean openPopupIfRequired(int keyIndex, PointerTracker tracker) {
+
+        // Check if we have a popup layout specified first.
+        if (mPopupLayout == 0) {
+            return false;
+        }
+
+        Key popupKey = tracker.getKey(keyIndex);
+        if (popupKey == null)
+            return false;
+        if (tracker.isInSlidingKeyInput())
+            return false;
+        boolean result = onLongPress(popupKey);
+        if (result) {
+            dismissKeyPreview();
+            mMiniKeyboardTrackerId = tracker.mPointerId;
+            // Mark this tracker "already processed" and remove it from the pointer queue
+            tracker.setAlreadyProcessed();
+            mPointerQueue.remove(tracker);
+        }
+        return result;
+    }
+
+    /* end interface methods */
 }
