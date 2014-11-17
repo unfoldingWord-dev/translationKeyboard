@@ -53,6 +53,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         NOCAPS_LANGUAGES.add("iw");
         NOCAPS_LANGUAGES.add("th");
         NOCAPS_LANGUAGES.add("bu");
+        NOCAPS_LANGUAGES.add("ne-NP");
     }
 
     // Languages which should not use dead key logic. The modifier is entered after the base character.
@@ -63,6 +64,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         NODEADKEY_LANGUAGES.add("iw"); // TODO: currently no niqqud in the keymap?
         NODEADKEY_LANGUAGES.add("th");
         NODEADKEY_LANGUAGES.add("bu");
+        NODEADKEY_LANGUAGES.add("ne-NP");
     }
 
     // Languages which should not auto-add space after completions
@@ -77,7 +79,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         "ar-rCL", "ar", "bg", "bu", "ca", "cs", "cs_QY", "da", "de", "el", "en", "en_DV",
         "en_GB", "es", "es_LA", "es_US", "fa", "fi", "fr", "fr_CA", "he",
         "hr", "hu", "hu_QY", "hy", "in", "it", "iw", "ja", "ka", "ko",
-        "lo", "lt", "lv", "nb", "nl", "pl", "pt", "pt_PT", "rm", "ro",
+        "lo", "lt", "lv", "nb", "ne-NP", "nl", "pl", "pt", "pt_PT", "rm", "ro",
         "ru", "ru_PH", "si", "sk", "sk_QY", "sl", "sr", "sv", "ta", "th",
         "tl", "tr", "uk", "vi", "zh_CN", "zh_TW"
     };
@@ -85,7 +87,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     private static final String[] KBD_5_ROW = {
         "ar-rCL", "ar", "bg", "bu", "cs", "cs_QY", "da", "de", "el", "en", "en_DV", "en_GB",
         "es", "es_LA", "fa", "fi", "fr", "fr_CA", "he", "hr", "hu", "hu_QY",
-        "hy", "it", "iw", "lo", "nb", "pt_PT", "ro", "ru", "ru_PH", "si",
+        "hy", "it", "iw", "lo", "nb", "ne-NP","pt_PT", "ro", "ru", "ru_PH", "si",
         "sk", "sk_QY", "sl", "sr", "sv", "ta", "th", "tr", "uk"
     };
 
@@ -117,6 +119,8 @@ public class InputLanguageSelection extends PreferenceActivity {
             return "ar-classical";
         }else if (lang.equals("bu")) {
             return "Burmese";
+        }else if (lang.equals("ne")){
+        	return "Devanagari";
         }else {
             return LanguageSwitcher.toTitleCase(l.getDisplayName(l));
         }
