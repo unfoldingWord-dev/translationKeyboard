@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="org.distantshoresmedia.translationkeyboard" android:versionName="0.5.2" android:versionCode="12">
+        package="org.distantshoresmedia.translationkeyboard" android:versionName="0.5.3" android:versionCode="13">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
