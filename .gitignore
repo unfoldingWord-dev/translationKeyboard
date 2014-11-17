@@ -2,3 +2,5 @@ out
 .idea
 .metadata
 app/java/bin
+TranslationKeyboard/app/build
+TranslationKeyboard/build
