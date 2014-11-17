@@ -3,6 +3,8 @@
 
 package distantshoresmedia.org.model;
 
+import com.google.common.collect.ObjectArrays;
+
 import java.util.ArrayList;
 
 import distantshoresmedia.org.model.*;
@@ -45,11 +47,11 @@ public class KeyPosition extends BaseDataClass {
 		return keyboardVariantID;
 	}
 
-    public ArrayList<Character> characters = new ArrayList<Character>();
-    public void setCharacters(ArrayList<Character> characters){
+    public Character[] characters;
+    public void setCharacters(Character[] characters){
         this.characters = characters;
     }
-    public ArrayList<Character> getCharacters(){
+    public Character[] getCharacters(){
         return this.characters;
     }
 
@@ -61,4 +63,28 @@ public class KeyPosition extends BaseDataClass {
         this.keyboardVariantID = keyboardVariantID;
     }
 
+
+    public ArrayList<String[]> getCharacterStrings(){
+
+        ArrayList<String[]> charStrings = new ArrayList<String[]>();
+
+        for(Character foo : this.characters){
+            charStrings.add(foo.getCharacterAsString());
+        }
+        return charStrings;
+    }
+
+    public int[] getCharacterCodes(){
+
+        int[] charCodes = new int[0];
+
+        for(Character foo : this.characters){
+
+            int[] codes = foo.getCharacterCodes();
+
+            charCodes = ObjectArrays.concat(codes, charCodes, int.class);
+
+        }
+    return charCodes;
+    }
 }

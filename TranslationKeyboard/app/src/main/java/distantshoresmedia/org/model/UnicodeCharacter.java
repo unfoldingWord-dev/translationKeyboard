@@ -30,4 +30,8 @@ public class UnicodeCharacter extends BaseDataClass {
         this.utf8Hex = utf8Hex;
         this.englishDesc = englishDesc;
     }
+
+    public int getCode(){
+        return 0;
+    }
 }

@@ -112,10 +112,10 @@ public class KeyboardBaseView extends View implements PointerTracker.UIProxy, UI
     // Main keyboard
     private Keyboard mKeyboard;
     private Key[] mKeys;
-    // TODO this attribute should be gotten from Keyboard.
+    // TODO this attribute should be gotten from BaseKeyboard.
     private int mKeyboardVerticalGap;
 
-    // Key preview popup
+    // KeyboardKeyConfig preview popup
     protected TextView mPreviewText;
     protected PopupWindow mPreviewPopup;
     protected int mPreviewTextSizeLarge;
@@ -1292,7 +1292,7 @@ public class KeyboardBaseView extends View implements PointerTracker.UIProxy, UI
                 return true;
             }
             final PointerTracker tracker = getPointerTracker(id);
-            // Key repeating timer will be canceled if 2 or more keys are in action, and current
+            // KeyboardKeyConfig repeating timer will be canceled if 2 or more keys are in action, and current
             // event (UP or DOWN) is non-modifier key.
             if (pointerCount > 1 && !tracker.isModifier()) {
                 mHandler.cancelKeyRepeatTimer();

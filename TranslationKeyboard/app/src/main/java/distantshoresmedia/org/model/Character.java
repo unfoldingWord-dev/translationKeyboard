@@ -45,11 +45,11 @@ public class Character extends BaseDataClass {
 		return keyPositionID;
 	}
 
-    public ArrayList<UnicodeCharacter> unicodeCharacters = new ArrayList<UnicodeCharacter>();
-    public void setUnicodeCharacters(ArrayList<UnicodeCharacter> characters){
+    public UnicodeCharacter[] unicodeCharacters;
+    public void setUnicodeCharacters(UnicodeCharacter[] characters){
         this.unicodeCharacters = unicodeCharacters;
     }
-    public ArrayList<UnicodeCharacter> getUnicodeCharacters(){
+    public UnicodeCharacter[] getUnicodeCharacters(){
         return this.unicodeCharacters;
     }
 
@@ -59,5 +59,29 @@ public class Character extends BaseDataClass {
         this.modMask = modMask;
         this.sortNumber = sortNumber;
         this.keyPositionID = keyPositionID;
+    }
+
+    public String[] getCharacterAsString(){
+
+        String[] characters = new String[unicodeCharacters.length];
+
+        int i = 0;
+        for(UnicodeCharacter uniChar : this.unicodeCharacters){
+            characters[i++] = uniChar.getEnglishDesc();
+        }
+
+        return characters;
+    }
+
+    public int[] getCharacterCodes(){
+
+        int[] codes = new int[unicodeCharacters.length];
+
+        int i = 0;
+        for(UnicodeCharacter uniChar : this.unicodeCharacters){
+            codes[i++] = uniChar.getCode();
+        }
+
+        return codes;
     }
 }

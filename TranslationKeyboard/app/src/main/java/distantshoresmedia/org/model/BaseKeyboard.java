@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import distantshoresmedia.org.model.*;
 
-public class Keyboard extends BaseDataClass {
+public class BaseKeyboard extends BaseDataClass {
 
 
 	private String isoLanguage;
@@ -44,7 +44,7 @@ public class Keyboard extends BaseDataClass {
         return this.keyboardVariants;
     }
 
-    public Keyboard(int uid, int created, int updated, String isoLanguage, String name, String isoRegion){
+    public BaseKeyboard(int uid, int created, int updated, String isoLanguage, String name, String isoRegion){
         super(uid, created, updated);
         this.isoLanguage = isoLanguage;
         this.name = name;

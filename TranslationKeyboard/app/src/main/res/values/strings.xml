@@ -20,6 +20,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title for Latin keyboard  -->
     <string name="english_ime_name">Translation Keyboard</string>
+	<string name="app_name">Translation Keyboard</string>
     <!-- Title for Latin keyboard settings activity / dialog -->
     <string name="english_ime_settings">Settings for Translation Keyboard</string>
     <!-- Title for Latin keyboard input options dialog -->
@@ -603,7 +604,7 @@
         <item>Add upper: 3 &#x21d2; #³, e &#x21d2; Eé</item>
         <item>Add self: 3 &#x21d2; 3#³, e &#x21d2; eEé</item>
     </string-array>
-    <!--  The values are a bitmap, keep in sync with Keyboard.java -->
+    <!--  The values are a bitmap, keep in sync with BaseKeyboard.java -->
     <string-array name="popup_content_values">
         <item>256</item>
         <item>768</item>
