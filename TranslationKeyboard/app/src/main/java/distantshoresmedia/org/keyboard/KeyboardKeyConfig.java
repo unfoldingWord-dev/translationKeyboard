@@ -1,23 +1,16 @@
 package distantshoresmedia.org.keyboard;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.util.Xml;
 
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
-import distantshoresmedia.org.keyboard.KeyboardKeyConfigInterface;
-import distantshoresmedia.org.keyboard.KeySizeOptions;
 import distantshoresmedia.org.model.KeyPosition;
-
+import distantshoresmedia.org.translationkeyboard.R;
 
 /**
  * Class for describing the position and characteristics of a single key in the keyboardConfig.
@@ -38,50 +31,32 @@ import distantshoresmedia.org.model.KeyPosition;
  */
 public class KeyboardKeyConfig {
 
-
+    /** Options for keeping track of screen orientation*/
     private KeySizeOptions keyOptions;
+
     /**
-     * All the key codes (unicode or custom code) that this key could generate, zero'th
-     * being the most important.
+     * All the key codes (unicode or custom code) that this key could generate,
+     * organized in the same way as the below lists
      */
     public int[] codes;
 
-    /** Labels to display */
-    public CharSequence[] labelCharacterList;
+    /** Label text to display */
+    public CharSequence[][] labelCharacterList;
 
     /** Actual text to write when key is pressed **/
-    public CharSequence[] textCharacterList;
+    public CharSequence[][] textCharacterList;
 
     /** Icon to display instead of a label. Icon takes precedence over a label */
     public Drawable icon;
     /** Preview version of the icon, for the preview popup */
     public Drawable iconPreview;
 
-    /** Whether this key is sticky, i.e., a toggle key */
-    public boolean sticky;
+    /** The current state of this key */
+    public KeyState state;
 
-    /** The current pressed state of this key */
-    public boolean pressed;
-    /** If this is a sticky key, is it on or locked? */
-    public boolean on;
-    public boolean locked;
+    /** The Type of key */
+    public KeyType keyType;
 
-    public boolean popupReversed;
-    public boolean isCursor;
-    public String hint; // Set by LatinKeyboardBaseView
-    public String altHint; // Set by LatinKeyboardBaseView
-
-    /**
-     * Flags that specify the anchoring to edges of the keyboardConfig for detecting touch events
-     * that are just out of the boundary of the key. This is a bit mask of
-     * {@link org.distantshoresmedia.translationkeyboard.KeyboardConfig#EDGE_LEFT}, {@link org.distantshoresmedia.translationkeyboard.KeyboardConfig#EDGE_RIGHT}, {@link org.distantshoresmedia.translationkeyboard.KeyboardConfig#EDGE_TOP} and
-     * {@link org.distantshoresmedia.translationkeyboard.KeyboardConfig#EDGE_BOTTOM}.
-     */
-    public int edgeFlags;
-    /** Whether this is a modifier key, such as Shift or Alt */
-    public boolean modifier;
-    /** The keyboardConfig that this key belongs to */
-    private KeyboardKeyConfigInterface configInterface;
     /**
      * If this key pops up a mini keyboardConfig, this is the resource id for the XML layout for that
      * keyboardConfig.
@@ -90,64 +65,19 @@ public class KeyboardKeyConfig {
     /** Whether this key repeats itself when held down */
     public boolean repeatable;
     /** Is the shifted character the uppercase equivalent of the unshifted one? */
-    private boolean isSimpleUppercase;
-    /** Is the shifted character a distinct uppercase char that's different from the shifted char? */
-    private boolean isDistinctUppercase;
 
-    private final static int[] KEY_STATE_NORMAL_ON = {
-            android.R.attr.state_checkable,
-            android.R.attr.state_checked
-    };
-
-    private final static int[] KEY_STATE_PRESSED_ON = {
-            android.R.attr.state_pressed,
-            android.R.attr.state_checkable,
-            android.R.attr.state_checked
-    };
-
-    private final static int[] KEY_STATE_NORMAL_LOCK = {
-            android.R.attr.state_active,
-            android.R.attr.state_checkable,
-            android.R.attr.state_checked
-    };
-
-    private final static int[] KEY_STATE_PRESSED_LOCK = {
-            android.R.attr.state_active,
-            android.R.attr.state_pressed,
-            android.R.attr.state_checkable,
-            android.R.attr.state_checked
-    };
-
-    private final static int[] KEY_STATE_NORMAL_OFF = {
-            android.R.attr.state_checkable
-    };
-
-    private final static int[] KEY_STATE_PRESSED_OFF = {
-            android.R.attr.state_pressed,
-            android.R.attr.state_checkable
-    };
-
-    private final static int[] KEY_STATE_NORMAL = {
-    };
-
-    private final static int[] KEY_STATE_PRESSED = {
-            android.R.attr.state_pressed
-    };
 
     /** Create an empty key with no attributes. */
-    public KeyboardKeyConfig(KeyboardKeyConfigInterface configInterface, KeySizeOptions options) {
-        this.configInterface = configInterface;
+    public KeyboardKeyConfig(KeySizeOptions options) {
+
         this.keyOptions = options;
-
-
     }
 
-    /** Create a key with the given top-left coordinate and extract its attributes from
-     * the XML parser.
+    /** Create a key with the given options Data and options
      * @param res resources associated with the caller's context
      */
-    public KeyboardKeyConfig(Resources res, KeyboardKeyConfigInterface configInterface, KeySizeOptions options, KeyPosition key, XmlResourceParser parser) {
-        this(configInterface, options);
+    public KeyboardKeyConfig(Resources res, KeySizeOptions options, KeyPosition key, XmlResourceParser parser) {
+        this(options);
         this.keyOptions = options;
 
         this.codes = key.getCharacterCodes();
@@ -163,13 +93,6 @@ public class KeyboardKeyConfig {
                 R.styleable.Keyboard_Key_popupKeyboard, 0);
         repeatable = a.getBoolean(
                 R.styleable.Keyboard_Key_isRepeatable, false);
-        modifier = a.getBoolean(
-                R.styleable.Keyboard_Key_isModifier, false);
-        sticky = a.getBoolean(
-                R.styleable.Keyboard_Key_isSticky, false);
-        isCursor = a.getBoolean(
-                R.styleable.Keyboard_Key_isCursor, false);
-
         icon = a.getDrawable(
                 R.styleable.Keyboard_Key_keyIcon);
         if (icon != null) {
@@ -198,131 +121,27 @@ public class KeyboardKeyConfig {
         return Math.round((this.keyOptions.horizontalGap));
     }
 
-                               public boolean isDeadKey() {
-        if (codes == null || codes.length < 1) return false;
-        return Character.getType(codes[0]) == Character.NON_SPACING_MARK;
-    }
 
+    private String getKeyStringForState(KeyState state) {
+        int stateNumber = KeyState.getNumberForKeyState(state);
 
-    private String getPopupKeyboardContent(boolean isShiftCaps, boolean isShifted, boolean addExtra) {
-        int mainChar = getPrimaryCode(false, false);
-        int shiftChar = getPrimaryCode(false, true);
-        int capsChar = getPrimaryCode(true, true);
-
-        // Remove duplicates
-        if (shiftChar == mainChar) shiftChar = 0;
-        if (capsChar == shiftChar || capsChar == mainChar) capsChar = 0;
-
-        int popupLen = (popupCharacters == null) ? 0 : popupCharacters.length();
-        StringBuilder popup = new StringBuilder(popupLen);
-        for (int i = 0; i < popupLen; ++i) {
-            char c = popupCharacters.charAt(i);
-            if (isShifted || isShiftCaps) {
-                String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
-                if (upper.length() == 1) c = upper.charAt(0);
-            }
-
-            if (c == mainChar || c == shiftChar || c == capsChar) continue;
-            popup.append(c);
+        if(stateNumber < 1){
+            stateNumber = 0;
         }
-
-        if (addExtra) {
-            StringBuilder extra = new StringBuilder(3 + popup.length());
-            int flags = LatinIME.sKeyboardSettings.popupKeyboardFlags;
-            if ((flags & POPUP_ADD_SELF) != 0) {
-                // if shifted, add unshifted key to extra, and vice versa
-                if (isDistinctUppercase && isShiftCaps) {
-                    if (capsChar > 0) { extra.append((char) capsChar); capsChar = 0; }
-                } else if (isShifted) {
-                    if (shiftChar > 0) { extra.append((char) shiftChar); shiftChar = 0; }
-                } else {
-                    if (mainChar > 0) { extra.append((char) mainChar); mainChar = 0; }
-                }
-            }
-
-            if ((flags & POPUP_ADD_CASE) != 0) {
-                // if shifted, add unshifted key to popup, and vice versa
-                if (isDistinctUppercase && isShiftCaps) {
-                    if (mainChar > 0) { extra.append((char) mainChar); mainChar = 0; }
-                    if (shiftChar > 0) { extra.append((char) shiftChar); shiftChar = 0; }
-                } else if (isShifted) {
-                    if (mainChar > 0) { extra.append((char) mainChar); mainChar = 0; }
-                    if (capsChar > 0) { extra.append((char) capsChar); capsChar = 0; }
-                } else {
-                    if (shiftChar > 0) { extra.append((char) shiftChar); shiftChar = 0; }
-                    if (capsChar > 0) { extra.append((char) capsChar); capsChar = 0; }
-                }
-            }
-
-            if (!isSimpleUppercase && (flags & POPUP_ADD_SHIFT) != 0) {
-                // if shifted, add unshifted key to popup, and vice versa
-                if (isShifted) {
-                    if (mainChar > 0) { extra.append((char) mainChar); mainChar = 0; }
-                } else {
-                    if (shiftChar > 0) { extra.append((char) shiftChar); shiftChar = 0; }
-                }
-            }
-
-            extra.append(popup);
-            return extra.toString();
-        }
-
-        return popup.toString();
-    }
-
-    public org.distantshoresmedia.translationkeyboard.KeyboardConfig getPopupKeyboard(Context context, int padding) {
-        if (popupCharacters == null) {
-            if (popupResId != 0) {
-                return new org.distantshoresmedia.translationkeyboard.KeyboardConfig(context, keyboardConfig.mDefaultHeight, popupResId);
-            } else {
-                if (modifier) return null; // Space, Return etc.
-            }
-        }
-
-        if ((LatinIME.sKeyboardSettings.popupKeyboardFlags & POPUP_DISABLE) != 0) return null;
-
-        String popup = getPopupKeyboardContent(keyboardConfig.isShiftCaps(), keyboardConfig.isShifted(isSimpleUppercase), true);
-        //Log.i(TAG, "getPopupKeyboard: popup='" + popup + "' for " + this);
-        if (popup.length() > 0) {
-            int resId = popupResId;
-            if (resId == 0) resId = R.xml.kbd_popup_template;
-            return new org.distantshoresmedia.translationkeyboard.KeyboardConfig(context, keyboardConfig.mDefaultHeight, resId, popup, popupReversed, -1, padding);
-        } else {
-            return null;
-        }
+        String labelString = labelCharacterList[stateNumber].toString();
+        return labelString;
     }
 
     public String getHintLabel(boolean wantAscii, boolean wantAll) {
-        if (hint == null) {
-            hint = "";
-            if (shiftLabel != null && !isSimpleUppercase) {
-                char c = shiftLabel.charAt(0);
-                if (wantAll || wantAscii && is7BitAscii(c)) {
-                    hint = Character.toString(c);
-                }
-            }
-        }
-        return hint;
+        return getKeyStringForState(KeyState.SHIFT);
     }
 
     public String getAltHintLabel(boolean wantAscii, boolean wantAll) {
-        if (altHint == null) {
-            altHint = "";
-            String popup = getPopupKeyboardContent(false, false, false);
-            if (popup.length() > 0) {
-                char c = popup.charAt(0);
-                if (wantAll || wantAscii && is7BitAscii(c)) {
-                    altHint = Character.toString(c);
-                }
-            }
-        }
-        return altHint;
+        String hint = getKeyStringForState(KeyState.LONG_PRESSED);
+        return (hint.length() > 0)? hint.substring(0, 1) : "";
     }
 
-    private static boolean is7BitAscii(char c) {
-        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) return false;
-        return c >= 32 && c < 127;
-    }
+
 
     /**
      * Informs the key that it has been pressed, in case it needs to change its appearance or
@@ -330,7 +149,7 @@ public class KeyboardKeyConfig {
      * @see #onReleased(boolean)
      */
     public void onPressed() {
-        pressed = !pressed;
+       this.state = KeyState.PRESSED;
     }
 
     /**
@@ -339,7 +158,7 @@ public class KeyboardKeyConfig {
      * @see #onPressed()
      */
     public void onReleased(boolean inside) {
-        pressed = !pressed;
+        this.state = KeyState.UNPRESSED;
     }
 
     int[] parseCSV(String value) {
@@ -358,7 +177,7 @@ public class KeyboardKeyConfig {
             try {
                 values[count++] = Integer.parseInt(st.nextToken());
             } catch (NumberFormatException nfe) {
-                Log.e(TAG, "Error parsing keycodes " + value);
+                Log.e(this.getClass().toString(), "Error parsing keycodes " + value);
             }
         }
         return values;
@@ -373,18 +192,8 @@ public class KeyboardKeyConfig {
      * the key.
      */
     public boolean isInside(int x, int y) {
-        boolean leftEdge = (edgeFlags & EDGE_LEFT) > 0;
-        boolean rightEdge = (edgeFlags & EDGE_RIGHT) > 0;
-        boolean topEdge = (edgeFlags & EDGE_TOP) > 0;
-        boolean bottomEdge = (edgeFlags & EDGE_BOTTOM) > 0;
-        if ((x >= this.x || (leftEdge && x <= this.x + this.width))
-                && (x < this.x + this.width || (rightEdge && x >= this.x))
-                && (y >= this.y || (topEdge && y <= this.y + this.height))
-                && (y < this.y + this.height || (bottomEdge && y >= this.y))) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return this.keyOptions.isInside(x, y);
     }
 
     /**
@@ -394,8 +203,8 @@ public class KeyboardKeyConfig {
      * @return the square of the distance of the point from the center of the key
      */
     public int squaredDistanceFrom(int x, int y) {
-        int xDist = this.x + width / 2 - x;
-        int yDist = this.y + height / 2 - y;
+        int xDist = Math.round(this.keyOptions.x + this.keyOptions.centerX());
+        int yDist = Math.round(this.keyOptions.y + this.keyOptions.centerY());
         return xDist * xDist + yDist * yDist;
     }
 
@@ -405,53 +214,24 @@ public class KeyboardKeyConfig {
      * @see android.graphics.drawable.StateListDrawable#setState(int[])
      */
     public int[] getCurrentDrawableState() {
-        int[] states = KEY_STATE_NORMAL;
-
-        if (locked) {
-            if (pressed) {
-                states = KEY_STATE_PRESSED_LOCK;
-            } else {
-                states = KEY_STATE_NORMAL_LOCK;
-            }
-        } else if (on) {
-            if (pressed) {
-                states = KEY_STATE_PRESSED_ON;
-            } else {
-                states = KEY_STATE_NORMAL_ON;
-            }
-        } else {
-            if (sticky) {
-                if (pressed) {
-                    states = KEY_STATE_PRESSED_OFF;
-                } else {
-                    states = KEY_STATE_NORMAL_OFF;
-                }
-            } else {
-                if (pressed) {
-                    states = KEY_STATE_PRESSED;
-                }
-            }
-        }
-        return states;
+        return KeyboardHelper.getButtonStateForKeyState(this.state, this.keyType);
     }
 
     public String toString() {
-        int code = (codes != null && codes.length > 0) ? codes[0] : 0;
-        String edges = (
-                ((edgeFlags & org.distantshoresmedia.translationkeyboard.KeyboardConfig.EDGE_LEFT) != 0 ? "L" : "-") +
-                        ((edgeFlags & org.distantshoresmedia.translationkeyboard.KeyboardConfig.EDGE_RIGHT) != 0 ? "R" : "-") +
-                        ((edgeFlags & org.distantshoresmedia.translationkeyboard.KeyboardConfig.EDGE_TOP) != 0 ? "T" : "-") +
-                        ((edgeFlags & org.distantshoresmedia.translationkeyboard.KeyboardConfig.EDGE_BOTTOM) != 0 ? "B" : "-"));
-        return "KeyDebugFIXME(label=" + label +
-                (shiftLabel != null ? " shift=" + shiftLabel : "") +
-                (capsLabel != null ? " caps=" + capsLabel : "") +
-                (text != null ? " text=" + text : "" ) +
-                " code=" + code +
-                (code <= 0 || Character.isWhitespace(code) ? "" : ":'" + (char)code + "'" ) +
-                " x=" + x + ".." + (x+width) + " y=" + y + ".." + (y+height) +
-                " edgeFlags=" + edges +
-                (popupCharacters != null ? " pop=" + popupCharacters : "" ) +
-                " res=" + popupResId +
-                ")";
+
+        String characters = "";
+        String codeString = "[";
+
+        for (CharSequence[] sequence : this.textCharacterList) {
+            characters = characters + " [" +sequence.toString() + "]";
+        }
+
+        for(int i : this.codes){
+            codeString = codeString + " " + i;
+        }
+        codeString = codeString + "]";
+
+        return this.getClass().toString() + "keyOptions: " + this.keyOptions.toString() + " characters: " + characters + " Codes: " + codeString;
+
     }
 }

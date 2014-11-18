@@ -21,6 +21,7 @@
     <!-- Title for Latin keyboard  -->
     <string name="english_ime_name">Translation Keyboard</string>
 	<string name="app_name">Translation Keyboard</string>
+	<string name="title_activity_main">Translation Keyboard</string>
     <!-- Title for Latin keyboard settings activity / dialog -->
     <string name="english_ime_settings">Settings for Translation Keyboard</string>
     <!-- Title for Latin keyboard input options dialog -->

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.distantshoresmedia.translationkeyboard;
+package distantshoresmedia.org.keyboard;
 
 import org.distantshoresmedia.translationkeyboard.R;
 import org.xmlpull.v1.XmlPullParserException;
