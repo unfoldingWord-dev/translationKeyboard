@@ -121,21 +121,29 @@ public class KeyboardKeyConfig {
         return Math.round((this.keyOptions.horizontalGap));
     }
 
-
+    /** gets the string for the desired state. if there is not value for that state, returns the default value*/
     private String getKeyStringForState(KeyState state) {
         int stateNumber = KeyState.getNumberForKeyState(state);
 
-        if(stateNumber < 1){
+        if(stateNumber < 0){
             stateNumber = 0;
         }
-        String labelString = labelCharacterList[stateNumber].toString();
+        String labelString;
+        if(labelCharacterList[stateNumber]) {
+            labelString = labelCharacterList[stateNumber].toString();
+        }
+        else{
+            labelString = labelCharacterList[0].toString();
+        }
         return labelString;
     }
 
-    public String getHintLabel(boolean wantAscii, boolean wantAll) {
+    /** Currently returns the shift value for shift*/
+    public String getHintLabel() {
         return getKeyStringForState(KeyState.SHIFT);
     }
 
+    /** Currently returns the values for long press.*/
     public String getAltHintLabel(boolean wantAscii, boolean wantAll) {
         String hint = getKeyStringForState(KeyState.LONG_PRESSED);
         return (hint.length() > 0)? hint.substring(0, 1) : "";
@@ -146,7 +154,7 @@ public class KeyboardKeyConfig {
     /**
      * Informs the key that it has been pressed, in case it needs to change its appearance or
      * state.
-     * @see #onReleased(boolean)
+     * @see #onReleased()
      */
     public void onPressed() {
        this.state = KeyState.PRESSED;
@@ -154,13 +162,13 @@ public class KeyboardKeyConfig {
 
     /**
      * Changes the pressed state of the key. Sticky key indicators are handled explicitly elsewhere.
-     * @param inside whether the finger was released inside the key
      * @see #onPressed()
      */
-    public void onReleased(boolean inside) {
+    public void onReleased() {
         this.state = KeyState.UNPRESSED;
     }
 
+    /** not sure what this is for*/
     int[] parseCSV(String value) {
         int count = 0;
         int lastIndex = 0;
@@ -197,6 +205,7 @@ public class KeyboardKeyConfig {
     }
 
     /**
+     * Not sure what this is used for currently??
      * Returns the square of the distance between the center of the key and the given point.
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
