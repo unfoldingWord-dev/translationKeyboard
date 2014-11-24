@@ -76,9 +76,9 @@ public class LatinKeyboard extends Keyboard {
     private final Context mContext;
     private int mMode;
     // Whether this keyboard has voice icon on it
-    private boolean mHasVoiceButton;
+    private final boolean mHasVoiceButton = false;
     // Whether voice icon is enabled at all
-    private boolean mVoiceEnabled;
+    private final boolean mVoiceEnabled = false;
     private final boolean mIsAlphaKeyboard;
     private final boolean mIsAlphaFullKeyboard;
     private final boolean mIsFnFullKeyboard;
@@ -272,8 +272,8 @@ public class LatinKeyboard extends Keyboard {
     }
 
     public void setVoiceMode(boolean hasVoiceButton, boolean hasVoice) {
-        mHasVoiceButton = hasVoiceButton;
-        mVoiceEnabled = hasVoice;
+        // mHasVoiceButton = hasVoiceButton;
+        // mVoiceEnabled = hasVoice;
         updateDynamicKeys();
     }
 
@@ -309,22 +309,22 @@ public class LatinKeyboard extends Keyboard {
                 setNonMicF1Key(mF1Key, "@", R.xml.popup_at);
             } else {
                 if (mVoiceEnabled && mHasVoiceButton) {
-                    setMicF1Key(mF1Key);
+                    //setMicF1Key(mF1Key);
                 } else {
                     setNonMicF1Key(mF1Key, ",", R.xml.popup_comma);
                 }
             }
         } else if (mIsAlphaFullKeyboard) {
         	if (mVoiceEnabled && mHasVoiceButton) {
-        		setMicF1Key(mF1Key);
+        		//setMicF1Key(mF1Key);
         	} else {
         		setSettingsF1Key(mF1Key);
         	}
         } else if (mIsFnFullKeyboard) {
-    		setMicF1Key(mF1Key);        	
+    		//setMicF1Key(mF1Key);        	
         } else {  // Symbols keyboard
             if (mVoiceEnabled && mHasVoiceButton) {
-                setMicF1Key(mF1Key);
+                //setMicF1Key(mF1Key);
             } else {
                 setNonMicF1Key(mF1Key, ",", R.xml.popup_comma);
             }
@@ -348,7 +348,7 @@ public class LatinKeyboard extends Keyboard {
         }
         key.label = null;
         key.shiftLabel = null;
-        key.codes = new int[] { LatinKeyboardView.KEYCODE_VOICE };
+        // key.codes = new int[] { LatinKeyboardView.KEYCODE_VOICE };
         key.icon = micWithSettingsHintDrawable;
         key.iconPreview = mMicPreviewIcon;
     }
