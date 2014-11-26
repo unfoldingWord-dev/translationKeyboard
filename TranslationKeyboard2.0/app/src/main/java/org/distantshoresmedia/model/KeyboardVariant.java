@@ -3,60 +3,45 @@
 
 package org.distantshoresmedia.model;
 
-import java.util.ArrayList;
+public class KeyboardVariant {
+	private java.lang.String created_at;
 
-import org.distantshoresmedia.model.*;
+ 	public void setCreated_at(java.lang.String created_at) {
+		this.created_at = created_at;
+	}
 
-public class KeyboardVariant extends BaseDataClass {
+	public java.lang.String getCreated_at() {
+		return created_at;
+	}
 
+	private java.lang.String name;
 
-	private String name;
- 	public void setName(String name) {
+ 	public void setName(java.lang.String name) {
 		this.name = name;
 	}
-	public String getName() {
+
+	public java.lang.String getName() {
 		return name;
 	}
 
+	private KeyCharacter[][] keys;
 
-	private int keyboardID;
- 	public void setKeyboardID(int keyboardID) {
-		this.keyboardID = keyboardID;
-	}
-	public int getKeyboardID() {
-		return keyboardID;
+ 	public void setKeys(KeyCharacter[][] keys) {
+		this.keys = keys;
 	}
 
-
-	private int keyboardTypeID;
- 	public void setKeyboardTypeID(int keyboardTypeID) {
-		this.keyboardTypeID = keyboardTypeID;
-	}
-	public int getKeyboardTypeID() {
-		return keyboardTypeID;
+	public KeyCharacter[][] getKeys() {
+		return this.keys;
 	}
 
-    public ArrayList<KeyboardType> keyboardTypes = new ArrayList<KeyboardType>();
-    public void setKeyboardTypes(ArrayList<KeyboardType> keyboardTypes){
-        this.keyboardTypes = keyboardTypes;
-    }
-    public ArrayList<KeyboardType> getKeyboardTypes(){
-        return this.keyboardTypes;
-    }
+	private java.lang.String updated_at;
 
-    public ArrayList<KeyPosition> keyPositions = new ArrayList<KeyPosition>();
-    public void setKeyPositions(ArrayList<KeyPosition> keyPositions){
-        this.keyPositions = keyPositions;
-    }
-    public ArrayList<KeyPosition> getKeyPositions(){
-        return this.keyPositions;
-    }
+ 	public void setUpdated_at(java.lang.String updated_at) {
+		this.updated_at = updated_at;
+	}
 
+	public java.lang.String getUpdated_at() {
+		return updated_at;
+	}
 
-    public KeyboardVariant(int uid, int created, int updated, int keyboardID, String name, int keyboardTypeID){
-        super(uid, created, updated);
-        this.keyboardID = keyboardID;
-        this.name = name;
-        this.keyboardTypeID = keyboardTypeID;
-    }
 }

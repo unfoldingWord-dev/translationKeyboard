@@ -3,51 +3,75 @@
 
 package org.distantshoresmedia.model;
 
-import java.util.ArrayList;
+public class BaseKeyboard {
+	private java.lang.String iso_language;
 
-import org.distantshoresmedia.model.*;
-
-public class BaseKeyboard extends BaseDataClass {
-
-
-	private String isoLanguage;
- 	public void setIsoLanguage(String isoLanguage) {
-		this.isoLanguage = isoLanguage;
-	}
-	public String getIsoLanguage() {
-		return isoLanguage;
+ 	public void setIso_language(java.lang.String iso_language) {
+		this.iso_language = iso_language;
 	}
 
-
-	private String name;
- 	public void setName(String name) {
-		this.name = name;
-	}
-	public String getName() {
-		return name;
+	public java.lang.String getIso_language() {
+		return iso_language;
 	}
 
+	private java.lang.String created_at;
 
-	private String isoRegion;
- 	public void setIsoRegion(String isoRegion) {
-		this.isoRegion = isoRegion;
-	}
-	public String getIsoRegion() {
-		return isoRegion;
+ 	public void setCreated_at(java.lang.String created_at) {
+		this.created_at = created_at;
 	}
 
-    public ArrayList<KeyboardVariant> keyboardVariants = new ArrayList<KeyboardVariant>();
-    public void setKeyboardVariants(ArrayList<KeyboardVariant> keyboardVariants){
-        this.keyboardVariants = keyboardVariants;
-    }
-    public ArrayList<KeyboardVariant> getKeyboardVariants(){
-        return this.keyboardVariants;
-    }
+	public java.lang.String getCreated_at() {
+		return created_at;
+	}
 
-    public BaseKeyboard(int uid, int created, int updated, String isoLanguage, String name, String isoRegion){
-        super(uid, created, updated);
-        this.isoLanguage = isoLanguage;
-        this.name = name;
-        this.isoRegion = isoRegion;
-    }
+	private java.lang.String iso_region;
+
+ 	public void setIso_region(java.lang.String iso_region) {
+		this.iso_region = iso_region;
+	}
+
+	public java.lang.String getIso_region() {
+		return iso_region;
+	}
+
+	private java.lang.Integer keyboard_id;
+
+ 	public void setKeyboard_id(java.lang.Integer keyboard_id) {
+		this.keyboard_id = keyboard_id;
+	}
+
+	public java.lang.Integer getKeyboard_id() {
+		return keyboard_id;
+	}
+
+	private KeyboardVariant[] keyboardVariants;
+
+ 	public void setKeyboardVariants(KeyboardVariant[] keyboard_variants) {
+		this.keyboardVariants = keyboard_variants;
+	}
+
+	public KeyboardVariant[] getKeyboardVariants() {
+		return keyboardVariants;
+	}
+
+	private java.lang.String keyboard_name;
+
+ 	public void setKeyboard_name(java.lang.String keyboard_name) {
+		this.keyboard_name = keyboard_name;
+	}
+
+	public java.lang.String getKeyboard_name() {
+		return keyboard_name;
+	}
+
+	private java.lang.String updated_at;
+
+ 	public void setUpdated_at(java.lang.String updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	public java.lang.String getUpdated_at() {
+		return updated_at;
+	}
+
 }

@@ -3,88 +3,25 @@
 
 package org.distantshoresmedia.model;
 
-//import com.google.common.collect.ObjectArrays;
+public class KeyPosition {
+	private KeyCharacter[] characters;
 
-import java.util.ArrayList;
-
-import org.distantshoresmedia.model.*;
-
-public class KeyPosition extends BaseDataClass {
-
-
-	private float percentWidth;
- 	public void setPercentWidth(float percentWidth) {
-		this.percentWidth = percentWidth;
-	}
-	public float getPercentWidth() {
-		return percentWidth;
+ 	public void setCharacters(KeyCharacter[] characters) {
+		this.characters = characters;
 	}
 
-
-    private int columnindex;
- 	public void setColumnindex(int columnindex) {
-		this.columnindex = columnindex;
-	}
-	public int getColumnindex() {
-		return columnindex;
+	public KeyCharacter[] getCharacters() {
+		return characters;
 	}
 
+	private java.lang.Integer percent_width;
 
-	private int rowIndex;
- 	public void setRowIndex(int rowIndex) {
-		this.rowIndex = rowIndex;
-	}
-	public int getRowIndex() {
-		return rowIndex;
+ 	public void setPercent_width(java.lang.Integer percent_width) {
+		this.percent_width = percent_width;
 	}
 
-
-	private int keyboardVariantID;
- 	public void setKeyboardVariantID(int keyboardVariantID) {
-		this.keyboardVariantID = keyboardVariantID;
-	}
-	public int getKeyboardVariantID() {
-		return keyboardVariantID;
+	public java.lang.Integer getPercent_width() {
+		return percent_width;
 	}
 
-    public Character[] characters;
-    public void setCharacters(Character[] characters){
-        this.characters = characters;
-    }
-    public Character[] getCharacters(){
-        return this.characters;
-    }
-
-    public KeyPosition(int uid, int created, int updated, float percentWidth, int rowIndex, int columnindex, int keyboardVariantID){
-        super(uid, created, updated);
-        this.percentWidth = percentWidth;
-        this.rowIndex = rowIndex;
-        this.columnindex = columnindex;
-        this.keyboardVariantID = keyboardVariantID;
-    }
-
-
-    public ArrayList<String[]> getCharacterStrings(){
-
-        ArrayList<String[]> charStrings = new ArrayList<String[]>();
-
-        for(Character foo : this.characters){
-            charStrings.add(foo.getCharacterAsString());
-        }
-        return charStrings;
-    }
-
-    public int[] getCharacterCodes(){
-
-        int[] charCodes = new int[0];
-
-        for(Character foo : this.characters){
-
-            int[] codes = foo.getCharacterCodes();
-
-//            charCodes = ObjectArrays.concat(codes, charCodes, int.class);
-
-        }
-    return charCodes;
-    }
 }
