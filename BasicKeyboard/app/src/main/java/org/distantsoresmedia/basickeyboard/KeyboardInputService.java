@@ -49,7 +49,7 @@ public class KeyboardInputService extends InputMethodService
      * This boolean indicates the optional example code for performing
      * processing of hard keys in addition to regular text generation
      * from on-screen interaction.  It would be used for input methods that
-     * perform language translations (such as converting text entered on 
+     * perform language translations (such as converting text entered on
      * a QWERTY keyboard to Chinese), but may not be used for input methods
      * that are primarily intended to be used for on-screen text entry.
      */
@@ -57,10 +57,9 @@ public class KeyboardInputService extends InputMethodService
 
     private InputMethodManager mInputMethodManager;
 
-    private LatinKeyboardView mInputView;
-    private CandidateView mCandidateView;
+    private BasicKeyboardView mInputView;
     private CompletionInfo[] mCompletions;
-    
+
     private StringBuilder mComposing = new StringBuilder();
     private boolean mPredictionOn;
     private boolean mCompletionOn;
@@ -68,15 +67,15 @@ public class KeyboardInputService extends InputMethodService
     private boolean mCapsLock;
     private long mLastShiftTime;
     private long mMetaState;
-    
-    private LatinKeyboard mSymbolsKeyboard;
-    private LatinKeyboard mSymbolsShiftedKeyboard;
-    private LatinKeyboard mQwertyKeyboard;
-    
-    private LatinKeyboard mCurKeyboard;
-    
+
+    private BasicKeyboard mSymbolsKeyboard;
+    private BasicKeyboard mSymbolsShiftedKeyboard;
+    private BasicKeyboard mQwertyKeyboard;
+
+    private BasicKeyboard mCurKeyboard;
+
     private String mWordSeparators;
-    
+
     /**
      * Main initialization of the input method component.  Be sure to call
      * to super class.
@@ -86,7 +85,7 @@ public class KeyboardInputService extends InputMethodService
         mInputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         mWordSeparators = getResources().getString(R.string.word_separators);
     }
-    
+
     /**
      * This is the point where you can do all of your UI initialization.  It
      * is called after creation and any configuration change.
@@ -100,9 +99,9 @@ public class KeyboardInputService extends InputMethodService
             if (displayWidth == mLastDisplayWidth) return;
             mLastDisplayWidth = displayWidth;
         }
-        mQwertyKeyboard = new LatinKeyboard(this, R.xml.qwerty);
-        mSymbolsKeyboard = new LatinKeyboard(this, R.xml.symbols);
-        mSymbolsShiftedKeyboard = new LatinKeyboard(this, R.xml.symbols_shift);
+        mQwertyKeyboard = new BasicKeyboard(this, R.xml.qwerty);
+        mSymbolsKeyboard = new BasicKeyboard(this, R.xml.symbols);
+        mSymbolsShiftedKeyboard = new BasicKeyboard(this, R.xml.symbols_shift);
     }
     
     /**
@@ -112,7 +111,7 @@ public class KeyboardInputService extends InputMethodService
      * a configuration change.
      */
     @Override public View onCreateInputView() {
-        mInputView = (LatinKeyboardView) getLayoutInflater().inflate(
+        mInputView = (BasicKeyboardView) getLayoutInflater().inflate(
                 R.layout.input, null);
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setKeyboard(mQwertyKeyboard);
@@ -123,11 +122,9 @@ public class KeyboardInputService extends InputMethodService
      * Called by the framework when your view for showing candidates needs to
      * be generated, like {@link #onCreateInputView}.
      */
-    @Override public View onCreateCandidatesView() {
-        mCandidateView = new CandidateView(this);
-        mCandidateView.setService(this);
-        return mCandidateView;
-    }
+//    @Override public View onCreateCandidatesView() {
+
+//    }
 
     /**
      * This is the main point where we do our initialization of the input method
@@ -512,7 +509,7 @@ public class KeyboardInputService extends InputMethodService
         } else if (primaryCode == Keyboard.KEYCODE_CANCEL) {
             handleClose();
             return;
-        } else if (primaryCode == LatinKeyboardView.KEYCODE_OPTIONS) {
+        } else if (primaryCode == BasicKeyboardView.KEYCODE_OPTIONS) {
             // Show a menu or somethin'
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
                 && mInputView != null) {
@@ -567,9 +564,9 @@ public class KeyboardInputService extends InputMethodService
         } else if (isExtractViewShown()) {
             setCandidatesViewShown(true);
         }
-        if (mCandidateView != null) {
-            mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
-        }
+//        if (mCandidateView != null) {
+//            mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
+//        }
     }
     
     private void handleBackspace() {
@@ -660,9 +657,9 @@ public class KeyboardInputService extends InputMethodService
                 && index < mCompletions.length) {
             CompletionInfo ci = mCompletions[index];
             getCurrentInputConnection().commitCompletion(ci);
-            if (mCandidateView != null) {
-                mCandidateView.clear();
-            }
+//            if (mCandidateView != null) {
+//                mCandidateView.clear();
+//            }
             updateShiftKeyState(getCurrentInputEditorInfo());
         } else if (mComposing.length() > 0) {
             // If we were generating candidate suggestions for the current
