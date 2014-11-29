@@ -3,6 +3,11 @@
 
 package org.distantshoresmedia.model;
 
+import android.util.JsonReader;
+import android.util.JsonWriter;
+
+import org.json.JSONArray;
+
 public class KeyPosition {
 	private KeyCharacter[] characters;
 
@@ -23,5 +28,6 @@ public class KeyPosition {
 	public java.lang.Integer getPercent_width() {
 		return percent_width;
 	}
+
 
 }
