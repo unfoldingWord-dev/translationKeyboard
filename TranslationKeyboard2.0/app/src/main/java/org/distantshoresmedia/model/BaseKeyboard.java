@@ -3,75 +3,117 @@
 
 package org.distantshoresmedia.model;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class BaseKeyboard {
-	private java.lang.String iso_language;
 
- 	public void setIso_language(java.lang.String iso_language) {
-		this.iso_language = iso_language;
+    final private String kUIDKey = "keyboard_id";
+    final private String kKeyboardNameKey = "keyboard_name";
+    final private String kCreatedKey = "created_at";
+    final private String kUpdatedKey = "updated_at";
+    final private String kIsoRegionKey = "iso_region";
+    final private String kIsoLanguageKey = "iso_language";
+    final private String kKeybaordVariantKey = "keyboard_variants";
+
+
+    private Integer keyboardId;
+    public void setKeyboardId(Integer keyboardId) {
+        this.keyboardId = keyboardId;
+    }
+    public Integer getKeyboardId() {
+        return keyboardId;
+    }
+
+    private String keyboardName;
+    public void setKeyboardName(String keyboardName) {
+        this.keyboardName = keyboardName;
+    }
+    public String getKeyboardName() {
+        return keyboardName;
+    }
+
+    private Integer createdAt;
+    public void setCreatedAt(Integer createdAt) {
+        this.createdAt = createdAt;
+    }
+    public Integer getCreatedAt() {
+        return createdAt;
+    }
+
+    private Integer updatedAt;
+    public void setUpdatedAt(Integer updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    public Integer getUpdatedAt() {
+        return updatedAt;
+    }
+
+    private String isoRegion;
+    public void setIsoRegion(String isoRegion) {
+        this.isoRegion = isoRegion;
+    }
+    public String getIsoRegion() {
+        return isoRegion;
+    }
+
+	private String isoLanguage;
+ 	public void setIsoLanguage(String isoLanguage) {
+		this.isoLanguage = isoLanguage;
 	}
-
-	public java.lang.String getIso_language() {
-		return iso_language;
-	}
-
-	private java.lang.String created_at;
-
- 	public void setCreated_at(java.lang.String created_at) {
-		this.created_at = created_at;
-	}
-
-	public java.lang.String getCreated_at() {
-		return created_at;
-	}
-
-	private java.lang.String iso_region;
-
- 	public void setIso_region(java.lang.String iso_region) {
-		this.iso_region = iso_region;
-	}
-
-	public java.lang.String getIso_region() {
-		return iso_region;
-	}
-
-	private java.lang.Integer keyboard_id;
-
- 	public void setKeyboard_id(java.lang.Integer keyboard_id) {
-		this.keyboard_id = keyboard_id;
-	}
-
-	public java.lang.Integer getKeyboard_id() {
-		return keyboard_id;
+	public String getIsoLanguage() {
+		return isoLanguage;
 	}
 
 	private KeyboardVariant[] keyboardVariants;
-
- 	public void setKeyboardVariants(KeyboardVariant[] keyboard_variants) {
-		this.keyboardVariants = keyboard_variants;
+ 	public void setKeyboardVariants(KeyboardVariant[] keyboardVariants) {
+		this.keyboardVariants = keyboardVariants;
 	}
-
 	public KeyboardVariant[] getKeyboardVariants() {
 		return keyboardVariants;
 	}
 
-	private java.lang.String keyboard_name;
 
- 	public void setKeyboard_name(java.lang.String keyboard_name) {
-		this.keyboard_name = keyboard_name;
-	}
+    public BaseKeyboard(Integer id, String name, Integer created, Integer updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
+        this.keyboardId = id;
+        this.keyboardName = name;
+        this.createdAt = created;
+        this.updatedAt = updated;
+        this.isoRegion = isoRegion;
+        this.isoLanguage = isoLanguage;
+        this.keyboardVariants = variants;
+    }
 
-	public java.lang.String getKeyboard_name() {
-		return keyboard_name;
-	}
 
-	private java.lang.String updated_at;
+    public BaseKeyboard getKeyboardFromJsonObject(JSONObject jsonObj){
 
- 	public void setUpdated_at(java.lang.String updated_at) {
-		this.updated_at = updated_at;
-	}
+        try {
+            int id = jsonObj.getInt(kUIDKey);
+            String name = jsonObj.getString(kKeyboardNameKey);
+            int created = jsonObj.getInt(kCreatedKey);
+            int updated = jsonObj.getInt(kUpdatedKey);
+            String isoRegion = jsonObj.getString(kIsoRegionKey);
+            String isoLanguage = jsonObj.getString(kIsoLanguageKey);
 
-	public java.lang.String getUpdated_at() {
-		return updated_at;
-	}
+            JSONArray rows = jsonObj.getJSONArray(kKeybaordVariantKey);
+            KeyboardVariant[] variants = new KeyboardVariant[rows.length()];
 
+            for(int i = 0; i < rows.length(); i++) {
+                JSONObject rowObj = rows.getJSONObject(i);
+
+                variants[i] = KeyboardVariant.getKeyboardFromJsonObject(rowObj);
+            }
+
+            BaseKeyboard keyboard = new BaseKeyboard(id, name, created, updated, isoRegion, isoLanguage, variants);
+
+            return  keyboard;
+        }
+
+        catch (JSONException e) {
+            System.out.println("JSONException: " + e.toString());
+            return null;
+        }
+    }
 }

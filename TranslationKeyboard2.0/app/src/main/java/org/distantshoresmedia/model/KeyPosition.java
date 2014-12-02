@@ -7,27 +7,75 @@ import android.util.JsonReader;
 import android.util.JsonWriter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class KeyPosition {
-	private KeyCharacter[] characters;
 
+    static final private String kPercentWidthKey = "percent_width";
+    static final private String kCharactersKey = "characters";
+
+    private double percentWidth;
+    public void setPercentWidth(double percentWidth) {
+        this.percentWidth = percentWidth;
+    }
+    public double getPercentWidth() {
+        return percentWidth;
+    }
+
+	private KeyCharacter[] characters;
  	public void setCharacters(KeyCharacter[] characters) {
 		this.characters = characters;
 	}
-
 	public KeyCharacter[] getCharacters() {
 		return characters;
 	}
 
-	private java.lang.Integer percent_width;
+    private int row;
+    public int getRow() {
+        return row;
+    }
+    public void setRow(int row) {
+        this.row = row;
+    }
 
- 	public void setPercent_width(java.lang.Integer percent_width) {
-		this.percent_width = percent_width;
-	}
+    private int column;
+    public void setColumn(int columns) {
+        this.column = column;
+    }
+    public int getColumn() {
+        return column;
+    }
 
-	public java.lang.Integer getPercent_width() {
-		return percent_width;
-	}
+    public KeyPosition(double percentWidth, KeyCharacter[] characters, int row, int column){
+        this.percentWidth = percentWidth;
+        this.characters = characters;
+        this.row = row;
+        this.column = column;
+    }
 
 
+    static public KeyPosition getKeyboardFromJsonObject(JSONObject jsonObj, int row, int column){
+
+        try {
+            double width = jsonObj.getDouble(kPercentWidthKey);
+            JSONArray jsonChars = jsonObj.getJSONArray(kCharactersKey);
+
+            KeyCharacter[] characters = new KeyCharacter[jsonChars.length()];
+
+            for(int i = 0; i < jsonChars.length(); i++){
+
+                JSONObject character = jsonChars.getJSONObject(i);
+                characters[i] = KeyCharacter.getCharacterFromJsonObject(character);
+            }
+
+            KeyPosition position = new KeyPosition(width, characters, row, column);
+            return position;
+        }
+
+        catch (JSONException e) {
+            System.out.println("JSONException: " + e.toString());
+            return null;
+        }
+    }
 }

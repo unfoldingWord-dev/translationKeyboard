@@ -3,45 +3,101 @@
 
 package org.distantshoresmedia.model;
 
+import android.inputmethodservice.Keyboard;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class KeyboardVariant {
-	private java.lang.String created_at;
 
- 	public void setCreated_at(java.lang.String created_at) {
-		this.created_at = created_at;
+    static final private String kNameKey = "name";
+    static final private String kCreatedKey = "created_at";
+    static final private String kUpdatedKey = "updated_at";
+    static final private String kKeyboardPositionRowKey = "key_position_rows";
+    static final private String kKeyboardPositionCollumnKey = "key_position_columns";
+
+    private String name;
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+
+	private Integer createdAt;
+ 	public void setCreatedAt(Integer createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Integer getCreatedAt() {
+		return createdAt;
 	}
 
-	public java.lang.String getCreated_at() {
-		return created_at;
-	}
+    private Integer updatedAt;
+    public void setUpdatedAt(Integer updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    public Integer getUpdatedAt() {
+        return updatedAt;
+    }
 
-	private java.lang.String name;
-
- 	public void setName(java.lang.String name) {
-		this.name = name;
-	}
-
-	public java.lang.String getName() {
-		return name;
-	}
-
-	private KeyCharacter[][] keys;
-
- 	public void setKeys(KeyCharacter[][] keys) {
+	private KeyPosition[] keys;
+ 	public void setKeys(KeyPosition[] keys) {
 		this.keys = keys;
 	}
-
-	public KeyCharacter[][] getKeys() {
+	public KeyPosition[] getKeys() {
 		return this.keys;
 	}
 
-	private java.lang.String updated_at;
+    public KeyboardVariant(String name, Integer created, Integer updated, KeyPosition[] keys){
+        this.name = name;
+        this.createdAt = created;
+        this.updatedAt = updated;
+        this.keys = keys;
+    }
 
- 	public void setUpdated_at(java.lang.String updated_at) {
-		this.updated_at = updated_at;
-	}
+    static public KeyboardVariant getKeyboardFromJsonObject(JSONObject jsonObj){
 
-	public java.lang.String getUpdated_at() {
-		return updated_at;
-	}
+        try {
+            // basic elements
+            String name = jsonObj.getString(kNameKey);
+            int created = jsonObj.getInt(kCreatedKey);
+            int updated = jsonObj.getInt(kUpdatedKey);
 
+            // Get an arraylist of keypositions based on the JSON
+            JSONArray rows = jsonObj.getJSONArray(kKeyboardPositionRowKey);
+            ArrayList<KeyPosition> positions = new ArrayList<KeyPosition>();
+
+            int total = 0;
+
+            for(int i = 0; i < rows.length(); i++){
+                JSONObject rowObj = rows.getJSONObject(i);
+                JSONArray columns = rowObj.getJSONArray(kKeyboardPositionCollumnKey);
+
+                for(int j = 0; j < columns.length(); j++){
+                    JSONObject colObj = columns.getJSONObject(j);
+                    positions.set(total++, KeyPosition.getKeyboardFromJsonObject(colObj, i, j));
+                }
+            }
+
+            // make an array of key positions
+            KeyPosition[] finalPositionsArray = new KeyPosition[total];
+
+            int index = 0;
+            for(KeyPosition position : positions){
+                finalPositionsArray[index++] = position;
+            }
+
+            KeyboardVariant finalVariant = new KeyboardVariant(name, created, updated, finalPositionsArray);
+
+            return finalVariant;
+        }
+
+        catch (JSONException e) {
+            System.out.println("JSONException: " + e.toString());
+            return null;
+        }
+    }
 }

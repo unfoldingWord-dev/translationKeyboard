@@ -23,6 +23,8 @@ import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.view.inputmethod.EditorInfo;
 
+import org.distantshoresmedia.translationkeyboard20.R;
+
 import java.util.List;
 
 public class BasicKeyboard extends Keyboard {
@@ -57,16 +59,16 @@ public class BasicKeyboard extends Keyboard {
 
     public List<Key> getKeys() {
         List<Key> keys = super.getKeys();
-//        for (Key key : keys){
-//            System.out.print("Key:");
-//            try {
-//                System.out.println(key.label.charAt(0));
-//            }catch (NullPointerException exception){
-//                System.out.println("error! Code" + key.codes[0]);
-//            }
-//
-//
-//        }
+        for (Key key : keys){
+            System.out.print("Key: ");
+            try {
+                System.out.println(key.label.charAt(0));
+            }catch (NullPointerException exception){
+                System.out.println("error! Code: " + key.codes[0]);
+            }
+
+
+        }
 
         return keys;
     }
@@ -113,7 +115,7 @@ public class BasicKeyboard extends Keyboard {
         }
     }
 
-    static class BasicKey extends Keyboard.Key {
+    static public class BasicKey extends Keyboard.Key {
         
         public BasicKey(Resources res, Keyboard.Row parent, int x, int y, XmlResourceParser parser) {
             super(res, parent, x, y, parser);
@@ -129,4 +131,7 @@ public class BasicKeyboard extends Keyboard {
         }
     }
 
+    public boolean setShifted(boolean shiftState) {
+        return super.setShifted(shiftState);
+    }
 }

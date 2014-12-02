@@ -19,6 +19,8 @@ package org.distantshoresmedia.basickeyboard;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import org.distantshoresmedia.translationkeyboard20.R;
 //import com.android.inputmethodcommon.InputMethodSettingsFragment;
 
 /**

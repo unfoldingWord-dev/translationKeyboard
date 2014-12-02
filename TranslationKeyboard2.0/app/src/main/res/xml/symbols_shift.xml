@@ -52,9 +52,14 @@
     </Row>
     
     <Row>
-        <Key android:codes="-1" android:keyIcon="@drawable/sym_keyboard_shift"
-                android:keyWidth="15%p" android:isModifier="true"
-                android:isSticky="true" android:keyEdgeFlags="left"/>
+        <Key 	
+			android:codes="-1" 
+			android:keyIcon="@drawable/sym_keyboard_shift"
+			android:iconPreview="@drawable/sym_keyboard_feedback_shift"
+            android:keyWidth="15%p" 
+			android:isModifier="true"
+            android:isSticky="true" 
+			android:keyEdgeFlags="left"/>
         <Key android:codes="161" android:keyLabel="¡" />
         <Key android:codes="60" android:keyLabel="&lt;"/>
         <Key android:codes="62" android:keyLabel="&gt;"/>

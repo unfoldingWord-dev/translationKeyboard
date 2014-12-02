@@ -31,6 +31,8 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
+import org.distantshoresmedia.translationkeyboard20.R;
+
 import java.util.ArrayList;
 import java.util.List;
 

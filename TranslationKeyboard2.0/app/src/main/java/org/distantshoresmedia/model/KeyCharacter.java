@@ -3,25 +3,51 @@
 
 package org.distantshoresmedia.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class KeyCharacter {
-	private java.lang.String[] utf8hex;
 
- 	public void setUtf8hex(java.lang.String[] utf8hex) {
-		this.utf8hex = utf8hex;
+    static final private String kModeMaskKey = "modmask";
+    static final private String utf8HexKey = "utf8hex";
+
+	private String[] utf8hexes;
+ 	public void setUtf8hex(String[] utf8hexes) {
+		this.utf8hexes = utf8hexes;
+	}
+	public String[] getUtf8hex() {
+		return utf8hexes;
 	}
 
-	public java.lang.String[] getUtf8hex() {
-		return utf8hex;
+	private Integer modMask;
+ 	public void setModmask(int modMask) {
+		this.modMask = modMask;
+	}
+	public Integer getModmask() {
+		return modMask;
 	}
 
-	private java.lang.Integer modmask;
 
- 	public void setModmask(java.lang.Integer modmask) {
-		this.modmask = modmask;
-	}
+    public KeyCharacter(Integer modMask, String[] utf8hexes){
+        this.utf8hexes = utf8hexes;
+        this.modMask = modMask;
+    }
 
-	public java.lang.Integer getModmask() {
-		return modmask;
-	}
 
+    static public KeyCharacter getCharacterFromJsonObject(JSONObject jsonObj){
+
+        try {
+            int mask = jsonObj.getInt(kModeMaskKey);
+            String hexes = jsonObj.getString(utf8HexKey);
+
+            String[] parts = hexes.split(";");
+            KeyCharacter newChar = new KeyCharacter(mask, parts);
+            return newChar;
+        }
+
+        catch (JSONException e) {
+            System.out.println("Json Excepetion; " + e.toString());
+            return null;
+        }
+    }
 }
