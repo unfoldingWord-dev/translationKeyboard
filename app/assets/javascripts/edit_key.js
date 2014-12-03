@@ -1,8 +1,8 @@
 
 
 readyEditKey = function() {
-    $(".single-char").keyup(singleCharKeyUp);
-    $(".single-utf8hex").keyup(singleUtf8KeyUp);
+    $(".single-char").on('input', singleCharKeyUp);
+    $(".single-utf8hex").on('input', singleUtf8KeyUp);
 
     $(".save-key").click(function(){
         $(this).addClass("disabled");
@@ -17,11 +17,11 @@ readyEditKey = function() {
         var addBtn = $(this);
         $.get( "/characters/new_block", function( data ) {
             addBtn.parent().parent().before( data );
-            addBtn.parent().parent().parent().find(".single-char").unbind("keyup");
-            addBtn.parent().parent().parent().find(".single-utf8hex").unbind("keyup");
+            addBtn.parent().parent().parent().find(".single-char").unbind("on");
+            addBtn.parent().parent().parent().find(".single-utf8hex").unbind("on");
             addBtn.parent().parent().parent().find(".delete-key-char").unbind("click");
-            addBtn.parent().parent().parent().find(".single-char").keyup(singleCharKeyUp);
-            addBtn.parent().parent().parent().find(".single-utf8hex").keyup(singleUtf8KeyUp);
+            addBtn.parent().parent().parent().find(".single-char").on('input', singleCharKeyUp);
+            addBtn.parent().parent().parent().find(".single-utf8hex").on('input', singleUtf8KeyUp);
             addBtn.parent().parent().parent().find(".delete-key-char").click(deleteChar);
             //alert( "Load was performed." );
         });

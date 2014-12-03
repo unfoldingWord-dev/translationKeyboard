@@ -5,7 +5,7 @@
 $(document).ready ->
   $(".key_position_form").on("ajax:success", (e, data, status, xhr) ->
     location.reload()
-    $(".key_position_form").append xhr.responseText ->
+    
 
   ).on "ajax:error", (e, xhr, status, error) ->
     $(".key_position_form").append "<p>ERROR</p>"

@@ -14,4 +14,30 @@ class KeyboardVariant < ActiveRecord::Base
 	has_many :key_positions
 	belongs_to :keyboard
   belongs_to :keyboard_type
+
+	def key_position_rows
+
+		ordered_key_positions = KeyPosition.where(keyboard_variant_id: self.id).order(row_index: :asc, column_index: :asc)
+
+		key_position_rows = Array.new
+		key_position_columns = Array.new
+
+		row_index = ordered_key_positions.first.row_index
+		column_index = ordered_key_positions.first.column_index
+
+		ordered_key_positions.each do |key_position|
+			if key_position.row_index == row_index
+				key_position_columns.push(key_position)
+			else
+				key_position_rows.push(key_position_columns)
+				key_position_columns = Array.new
+				row_index = key_position.row_index
+        key_position_columns.push(key_position)
+			end
+		end
+
+		key_position_rows
+
+	end
+
 end

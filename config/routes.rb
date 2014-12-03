@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-
+  apipie
 
   get 'language/index'
 
@@ -25,6 +25,12 @@ Rails.application.routes.draw do
 
   resources :key_position
   resources :keyboard
+
+  namespace :api do
+    namespace :v1 do
+      resources :keyboard
+    end
+  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
