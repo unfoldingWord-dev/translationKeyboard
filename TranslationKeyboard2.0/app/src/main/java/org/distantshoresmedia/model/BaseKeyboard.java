@@ -8,15 +8,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class BaseKeyboard {
 
-    final private String kUIDKey = "keyboard_id";
-    final private String kKeyboardNameKey = "keyboard_name";
-    final private String kCreatedKey = "created_at";
-    final private String kUpdatedKey = "updated_at";
-    final private String kIsoRegionKey = "iso_region";
-    final private String kIsoLanguageKey = "iso_language";
-    final private String kKeybaordVariantKey = "keyboard_variants";
+    static final private String kUIDKey = "keyboard_id";
+    static final private String kKeyboardNameKey = "keyboard_name";
+    static final private String kCreatedKey = "created_at";
+    static final private String kUpdatedKey = "updated_at";
+    static final private String kIsoRegionKey = "iso_region";
+    static final private String kIsoLanguageKey = "iso_language";
+    static final private String kKeybaordVariantKey = "keyboard_variants";
 
 
     private Integer keyboardId;
@@ -35,19 +37,19 @@ public class BaseKeyboard {
         return keyboardName;
     }
 
-    private Integer createdAt;
-    public void setCreatedAt(Integer createdAt) {
+    private String createdAt;
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-    public Integer getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    private Integer updatedAt;
-    public void setUpdatedAt(Integer updatedAt) {
+    private String updatedAt;
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-    public Integer getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
@@ -76,7 +78,7 @@ public class BaseKeyboard {
 	}
 
 
-    public BaseKeyboard(Integer id, String name, Integer created, Integer updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
+    public BaseKeyboard(Integer id, String name, String created, String updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
         this.keyboardId = id;
         this.keyboardName = name;
         this.createdAt = created;
@@ -87,13 +89,14 @@ public class BaseKeyboard {
     }
 
 
-    public BaseKeyboard getKeyboardFromJsonObject(JSONObject jsonObj){
+    static public BaseKeyboard getKeyboardFromJsonObject(JSONObject jsonObj){
 
+        System.out.println("Got to BaseKeyboard");
         try {
             int id = jsonObj.getInt(kUIDKey);
             String name = jsonObj.getString(kKeyboardNameKey);
-            int created = jsonObj.getInt(kCreatedKey);
-            int updated = jsonObj.getInt(kUpdatedKey);
+            String created = jsonObj.getString(kCreatedKey);
+            String updated = jsonObj.getString(kUpdatedKey);
             String isoRegion = jsonObj.getString(kIsoRegionKey);
             String isoLanguage = jsonObj.getString(kIsoLanguageKey);
 
@@ -112,8 +115,21 @@ public class BaseKeyboard {
         }
 
         catch (JSONException e) {
-            System.out.println("JSONException: " + e.toString());
+            System.out.println("BaseKeyboard JSONException: " + e.toString());
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "BaseKeyboard{" +
+                "keyboardId=" + keyboardId +
+                ", keyboardName='" + keyboardName + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", isoRegion='" + isoRegion + '\'' +
+                ", isoLanguage='" + isoLanguage + '\'' +
+                ", keyboardVariants=" + Arrays.toString(keyboardVariants) +
+                '}';
     }
 }

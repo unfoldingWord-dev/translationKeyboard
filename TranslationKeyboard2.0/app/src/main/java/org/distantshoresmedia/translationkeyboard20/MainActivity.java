@@ -1,17 +1,32 @@
 package org.distantshoresmedia.translationkeyboard20;
 
-import android.support.v7.app.ActionBarActivity;
+import org.json.JSONArray;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+public class MainActivity extends Activity {
+    //URL to get JSON Array
 
-public class MainActivity extends ActionBarActivity {
-
+    //JSON Node Names
+    private static final String TAG_USER = "user";
+    private static final String TAG_ID = "id";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_EMAIL = "email";
+    JSONArray user = null;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Creating new JSON Parser
+
+        KeyboardDownloader downloader = new KeyboardDownloader();
+
+        downloader.downloadKeyboards(this.getApplicationContext());
+
     }
 
 

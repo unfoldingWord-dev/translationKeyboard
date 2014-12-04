@@ -9,6 +9,8 @@ import android.inputmethodservice.Keyboard;
 import org.distantshoresmedia.basickeyboard.BasicKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
 
+import java.util.List;
+
 /**
  * Created by Fechner on 12/1/14.
  */
@@ -68,6 +70,23 @@ public class TKKeyboard extends BasicKeyboard{
             }
         }
         return shifted;
+    }
+
+    public List<Key> getKeys() {
+        List<Key> keys = super.getKeys();
+        for (Key key : keys) {
+            System.out.print("Key: ");
+            try {
+                System.out.println(key.label.charAt(0));
+            } catch (NullPointerException exception) {
+                System.out.println("error! Code: " + key.codes[0]);
+            }
+        }
+        return keys;
+    }
+
+    public void setSpaceIcon(final Drawable icon) {
+        super.setSpaceIcon(icon);
     }
 
 }

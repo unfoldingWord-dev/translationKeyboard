@@ -6,10 +6,12 @@ package org.distantshoresmedia.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class KeyCharacter {
 
     static final private String kModeMaskKey = "modmask";
-    static final private String utf8HexKey = "utf8hex";
+    static final private String kUtf8HexKey = "utf8hex";
 
 	private String[] utf8hexes;
  	public void setUtf8hex(String[] utf8hexes) {
@@ -36,9 +38,11 @@ public class KeyCharacter {
 
     static public KeyCharacter getCharacterFromJsonObject(JSONObject jsonObj){
 
+        System.out.println("Got to KeyCharacter");
+
         try {
             int mask = jsonObj.getInt(kModeMaskKey);
-            String hexes = jsonObj.getString(utf8HexKey);
+            String hexes = jsonObj.getString(kUtf8HexKey);
 
             String[] parts = hexes.split(";");
             KeyCharacter newChar = new KeyCharacter(mask, parts);
@@ -46,8 +50,16 @@ public class KeyCharacter {
         }
 
         catch (JSONException e) {
-            System.out.println("Json Excepetion; " + e.toString());
+            System.out.println(" KeyCharacter JsonExcepetion; " + e.toString());
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "KeyCharacter{" +
+                "utf8hexes=" + Arrays.toString(utf8hexes) +
+                ", modMask=" + modMask +
+                '}';
     }
 }

@@ -1,129 +1,185 @@
 package org.distantshoresmedia.translationkeyboard20;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.distantshoresmedia.model.BaseKeyboard;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by Fechner on 11/28/14.
  */
 public class KeyboardDownloader {
 
-    static public void getJSON(){
+    static final String kBaseURL = "http://remote.actsmedia.com/api/";
+    static final String kVersionUrlTag = "v1/";
+    static final String kKeyboardUrlTag = "keyboard/";
 
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpost = new HttpPost("http://www.impaxis-securities.com/securities/cours-actions/cours.json");
-        httpost.setHeader("Accept", "application/json");
-        httpost.setHeader("Content-type", "application/json");
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String response;
-        try {
-            response = httpClient.execute(httpost, responseHandler);
-            JSONArray arr = new JSONArray(response);
-            int arrLength = arr.length();
-            if(arrLength > 0)
-            {
-                for(int i = 0; i < arrLength; i++)
-                {
-                    JSONObject item = arr.getJSONObject(i);
-                    String code = item.getString("code");
-                    String coursjour = item.getString("coursjour");
-                    String variation = item.getString("variation");
-                    //Either insert to a DB or add to an array list and return it
+    static final String kIdTag = "id";
+
+    private Context context;
+
+    ArrayList<BaseKeyboard> keyboards = new ArrayList<BaseKeyboard>();
+
+
+//    public JSONObject keyboards;
+
+
+    public void downloadKeyboards(Context context) {
+        this.context = context;
+        getJSONFromUrl(this.context, getKeyboardUrl("1"));
+    }
+
+    static public String getKeyboardUrl() {
+        return kBaseURL + kVersionUrlTag + kKeyboardUrlTag;
+    }
+
+    static public String getKeyboardUrl(String keyboardKey) {
+        return kBaseURL + kVersionUrlTag + kKeyboardUrlTag + keyboardKey;
+    }
+
+    public void parseJSONString(String json){
+
+        try{
+            JSONObject jObject = new JSONObject(json);
+            JSONArray keysArray = jObject.getJSONArray("keyboards");
+
+            if(keysArray != null){
+                parseKeyboardsInfo(keysArray);
+            }
+        }
+        catch (JSONException e){
+            try{
+                JSONObject jObject = new JSONObject(json);
+                String jArray = jObject.getString("keyboard_id");
+
+                if(jArray.length() > 0){
+                    parseKeyboardType(jObject);
+                }
+            }
+            catch (JSONException ex) {
+                System.out.println(" JSONException: " + ex.toString());
+            }
+        }
+    }
+
+    public void parseKeyboardsInfo(JSONArray keyboardsArray){
+
+//        System.out.println("KeysInfo: " + keyboardsArray.toString());
+
+        for(int i = 0; i < keyboardsArray.length(); i++){
+            try {
+                JSONObject board = keyboardsArray.getJSONObject(i);
+                Integer keyboardID = board.getInt(kIdTag);
+                getJSONFromUrl(this.context, getKeyboardUrl(keyboardID.toString()));
+            }
+            catch (JSONException e) {
+                System.out.println(" JSONException: " + e.toString());
+            }
+        }
+    }
+
+    public void parseKeyboardType(JSONObject keyObj){
+
+//        System.out.println("KeysInfo: " + keyObj.toString());
+        BaseKeyboard newKeyboard = BaseKeyboard.getKeyboardFromJsonObject(keyObj);
+
+        System.out.println("Keyboard: " + newKeyboard.toString());
+    }
+
+
+    public void getJSONFromUrl(Context context, String url) {
+
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            new DownloadWebpageTask().execute(url);
+        }else{
+            System.out.println("Network Error");
+        }
+    }
+
+    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                return downloadUrl(params[0]);
+            } catch (IOException e) {
+                return "Unable to retrieve web page. URL may be invalid.";
+            }
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            System.out.println("Result: " + result);
+            parseJSONString(result);
+        }
+
+        private String downloadUrl(String myUrl) throws IOException {
+            InputStream is = null;
+            // Only display the first 500 characters of the retrieved
+            // web page content.
+            int len = 500000;
+
+            try {
+                URL url = new URL(myUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                // Starts the query
+                conn.connect();
+                int response = conn.getResponseCode();
+                Log.d("Network", "The response is: " + response);
+                is = conn.getInputStream();
+
+                // Convert the InputStream into a string
+                String contentAsString = readIt(is, len);
+
+                return contentAsString;
+
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
+            } finally {
+                if (is != null) {
+                    is.close();
                 }
             }
         }
-        catch (ClientProtocolException e) {
-            //Issue with web server
-        }
-        catch (IOException e) {
-            //Issue with request
-        }
-        catch (JSONException e) {
-            //ISSUE Parsing JSON from site
+
+        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+            Reader reader = null;
+            reader = new InputStreamReader(stream, "UTF-8");
+            char[] buffer = new char[len];
+            reader.read(buffer);
+            return new String(buffer);
         }
     }
 }
-
-//DefaultHttpClient   httpclient = new DefaultHttpClient(new BasicHttpParams());
-//HttpPost httppost = new HttpPost(http://someJSONUrl/jsonWebService);
-//// Depends on your web service
-//        httppost.setHeader("Content-type", "application/json");
-//
-//        InputStream inputStream = null;
-//        String result = null;
-//        try {
-//        HttpResponse response = httpclient.execute(httppost);
-//        HttpEntity entity = response.getEntity();
-//
-//        inputStream = entity.getContent();
-//        // json is UTF-8 by default
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-//        StringBuilder sb = new StringBuilder();
-//
-//        String line = null;
-//        while ((line = reader.readLine()) != null)
-//        {
-//        sb.append(line + "\n");
-//        }
-//        result = sb.toString();
-//        } catch (Exception e) {
-//        // Oops
-//        }
-//        finally {
-//        try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
-//        }
-
-//public class ImageManager {
-//
-//    private final String PATH = "/data/data/com.helloandroid.imagedownloader/";  //put the downloaded file here
-//
-//
-//    public void DownloadFromUrl(String imageURL, String fileName) {  //this is the downloader method
-//        try {
-//            URL url = new URL("http://yoursite.com/&quot; + imageURL); //you can write here any link
-//                    File file = new File(fileName);
-//
-//            long startTime = System.currentTimeMillis();
-//            Log.d("ImageManager", "download begining");
-//            Log.d("ImageManager", "download url:" + url);
-//            Log.d("ImageManager", "downloaded file name:" + fileName);
-//                        /* Open a connection to that URL. */
-//            URLConnection ucon = url.openConnection();
-//
-//                        /*
-//                         * Define InputStreams to read from the URLConnection.
-//                         */
-//            InputStream is = ucon.getInputStream();
-//            BufferedInputStream bis = new BufferedInputStream(is);
-//
-//                        /*
-//                         * Read bytes to the Buffer until there is nothing more to read(-1).
-//                         */
-//            ByteArrayBuffer baf = new ByteArrayBuffer(50);
-//            int current = 0;
-//            while ((current = bis.read()) != -1) {
-//                baf.append((byte) current);
-//            }
-//
-//                        /* Convert the Bytes read to a String. */
-//            FileOutputStream fos = new FileOutputStream(file);
-//            fos.write(baf.toByteArray());
-//            fos.close();
-//            Log.d("ImageManager", "download ready in"
-//                    + ((System.currentTimeMillis() - startTime) / 1000)
-//                    + " sec");
-//
-//        } catch (IOException e) {
-//            Log.d("ImageManager", "Error: " + e);
-//        }
-//
-//    }
-//}

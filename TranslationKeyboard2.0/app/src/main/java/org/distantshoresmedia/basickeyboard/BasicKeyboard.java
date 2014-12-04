@@ -59,16 +59,16 @@ public class BasicKeyboard extends Keyboard {
 
     public List<Key> getKeys() {
         List<Key> keys = super.getKeys();
-        for (Key key : keys){
-            System.out.print("Key: ");
-            try {
-                System.out.println(key.label.charAt(0));
-            }catch (NullPointerException exception){
-                System.out.println("error! Code: " + key.codes[0]);
-            }
-
-
-        }
+//        for (Key key : keys){
+//            System.out.print("Key: ");
+//            try {
+//                System.out.println(key.label.charAt(0));
+//            }catch (NullPointerException exception){
+//                System.out.println("error! Code: " + key.codes[0]);
+//            }
+//
+//
+//        }
 
         return keys;
     }
@@ -109,7 +109,7 @@ public class BasicKeyboard extends Keyboard {
         }
     }
 
-    void setSpaceIcon(final Drawable icon) {
+    public void setSpaceIcon(final Drawable icon) {
         if (mSpaceKey != null) {
             mSpaceKey.icon = icon;
         }

@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class KeyboardVariant {
 
@@ -27,19 +28,19 @@ public class KeyboardVariant {
         return name;
     }
 
-	private Integer createdAt;
- 	public void setCreatedAt(Integer createdAt) {
+	private String createdAt;
+ 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-	public Integer getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-    private Integer updatedAt;
-    public void setUpdatedAt(Integer updatedAt) {
+    private String updatedAt;
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-    public Integer getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
@@ -51,7 +52,7 @@ public class KeyboardVariant {
 		return this.keys;
 	}
 
-    public KeyboardVariant(String name, Integer created, Integer updated, KeyPosition[] keys){
+    public KeyboardVariant(String name, String created, String updated, KeyPosition[] keys){
         this.name = name;
         this.createdAt = created;
         this.updatedAt = updated;
@@ -60,11 +61,13 @@ public class KeyboardVariant {
 
     static public KeyboardVariant getKeyboardFromJsonObject(JSONObject jsonObj){
 
+        System.out.println("Got to KeyboardVariant");
+
         try {
             // basic elements
             String name = jsonObj.getString(kNameKey);
-            int created = jsonObj.getInt(kCreatedKey);
-            int updated = jsonObj.getInt(kUpdatedKey);
+            String created = jsonObj.getString(kCreatedKey);
+            String updated = jsonObj.getString(kUpdatedKey);
 
             // Get an arraylist of keypositions based on the JSON
             JSONArray rows = jsonObj.getJSONArray(kKeyboardPositionRowKey);
@@ -75,10 +78,12 @@ public class KeyboardVariant {
             for(int i = 0; i < rows.length(); i++){
                 JSONObject rowObj = rows.getJSONObject(i);
                 JSONArray columns = rowObj.getJSONArray(kKeyboardPositionCollumnKey);
-
-                for(int j = 0; j < columns.length(); j++){
-                    JSONObject colObj = columns.getJSONObject(j);
-                    positions.set(total++, KeyPosition.getKeyboardFromJsonObject(colObj, i, j));
+                if(columns.length() > 0) {
+                    for (int j = 0; j < columns.length(); j++) {
+                        JSONObject colObj = columns.getJSONObject(j);
+                        positions.add(i + j, KeyPosition.getKeyboardFromJsonObject(colObj));
+                        total++;
+                    }
                 }
             }
 
@@ -96,8 +101,18 @@ public class KeyboardVariant {
         }
 
         catch (JSONException e) {
-            System.out.println("JSONException: " + e.toString());
+            System.out.println("KeyboardVariant JSONException: " + e.toString());
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "KeyboardVariant{" +
+                "name='" + name + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", keys=" + Arrays.toString(keys) +
+                '}';
     }
 }

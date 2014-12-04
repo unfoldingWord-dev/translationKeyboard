@@ -10,9 +10,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class KeyPosition {
 
     static final private String kPercentWidthKey = "percent_width";
+    static final private String kRowIndexKey = "row_index";
+    static final private String kCollumnIndexKey= "column_index";
     static final private String kCharactersKey = "characters";
 
     private double percentWidth;
@@ -55,10 +59,15 @@ public class KeyPosition {
     }
 
 
-    static public KeyPosition getKeyboardFromJsonObject(JSONObject jsonObj, int row, int column){
+    static public KeyPosition getKeyboardFromJsonObject(JSONObject jsonObj){
+
+        System.out.println("Got to KeyPosition");
 
         try {
             double width = jsonObj.getDouble(kPercentWidthKey);
+            int column = jsonObj.getInt(kRowIndexKey);
+            int row = jsonObj.getInt(kCollumnIndexKey);
+
             JSONArray jsonChars = jsonObj.getJSONArray(kCharactersKey);
 
             KeyCharacter[] characters = new KeyCharacter[jsonChars.length()];
@@ -74,8 +83,18 @@ public class KeyPosition {
         }
 
         catch (JSONException e) {
-            System.out.println("JSONException: " + e.toString());
+            System.out.println("KeyPosition JSONException: " + e.toString());
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "KeyPosition{" +
+                "percentWidth=" + percentWidth +
+                ", characters=" + Arrays.toString(characters) +
+                ", row=" + row +
+                ", column=" + column +
+                '}';
     }
 }

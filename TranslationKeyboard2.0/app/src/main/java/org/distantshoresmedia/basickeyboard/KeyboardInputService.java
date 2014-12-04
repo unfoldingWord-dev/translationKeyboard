@@ -38,7 +38,7 @@ import java.util.List;
 
 /**
  * Example of writing an input method for a soft keyboard.  This code is
- * focused on simplicity over completeness, so it should in no way be considered
+// * focused on simplicity over completeness, so it should in no way be considered
  * to be a complete soft keyboard implementation.  Its purpose is to provide
  * a basic example for how you would get started writing an input method, to
  * be fleshed out as appropriate.
@@ -251,8 +251,8 @@ public class KeyboardInputService extends InputMethodService
         // Apply the selected keyboard to the input view.
         mInputView.setKeyboard(mCurKeyboard);
         mInputView.closing();
-        final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
-        mInputView.setSubtypeOnSpaceKey(subtype);
+//        final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
+//        mInputView.setSubtypeOnSpaceKey(subtype);
     }
 
     @Override
