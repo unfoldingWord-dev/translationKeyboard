@@ -40,4 +40,12 @@ class KeyboardVariant < ActiveRecord::Base
 
 	end
 
+	def created_at_epoch
+		created_at.to_f
+	end
+
+	def updated_at_epoch
+		updated_at.to_f
+	end
+
 end

@@ -22,6 +22,8 @@ class KeyPositionController < ApplicationController
 
         character_to_update.unicode_character_id = associated_unicode_record.id
         character_to_update.save
+        @a_key_position.keyboard_variant.touch
+        @a_key_position.keyboard_variant.keyboard.touch
       end
     end
 

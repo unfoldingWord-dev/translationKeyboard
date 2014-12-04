@@ -44,7 +44,13 @@ class Keyboard < ActiveRecord::Base
     region_obj.name
   end
 
+  def created_at_epoch
+    created_at.to_f
+  end
 
+  def updated_at_epoch
+    updated_at.to_f
+  end
 
   def region_obj
     if iso_region == '00'
