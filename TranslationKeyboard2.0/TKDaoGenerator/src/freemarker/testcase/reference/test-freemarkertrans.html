@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>FreeMarker: Java Transformation Test</title>
+</head>
+<body bgcolor="#ffffff">
+
+<p>A simple test follows:</p>
+
+<p>Hello, world!</p>
+
+<pre>&lt;p&gt;Let's begin with a simple model:&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">message</font><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Cool, now get into the first model. This implements a scalar, list, and
+hash as a single class. Let's try some tests...&lt;/p&gt;
+
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Now as a list...&lt;/p&gt;
+
+<font color="#0000ff">&lt;foreach</font> <font color="#804040">item</font> <font color="#ff8000">in</font> <font color="#804040">data</font><font color="#0000ff">&gt;</font><font color="#0000ff">${</font><font color="#804040">item</font><font color="#0000ff">}</font>&lt;br /&gt;
+<font color="#0000ff">&lt;/foreach&gt;</font>
+
+&lt;p&gt;Index into a list...&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#ff0000">1</font> <b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;List size is: <font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">size</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;List size is: <font color="#0000ff">${</font><font color="#804040">data</font><b>[</b><font color="#808080">"size"</font><b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Now, again, as a hash. First using dot notation, then using [] notation:&lt;/p&gt;
+
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">selftest</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b><font color="#808080">"selftest"</font><b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Now for the tricky stuff... use a model to index into another model...&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">test</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#804040">test</font> <b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">self</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#804040">self</font> <b>+</b> <font color="#808080">"test"</font> <b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Same thing, this time a List index...&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">zero</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#804040">zero</font> <b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#804040">zero</font> <b>+</b> <font color="#ff0000">1</font> <b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Now, do the same recursively...&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">model2</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">model2</font><b>(</b> <font color="#808080">"test"</font> <b>)</b><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">model2</font><b>(</b> <font color="#804040">data</font>, <font color="#804040">data</font><b>.</b><font color="#804040">selftest</font>, <font color="#804040">message</font> <b>)</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Does this really not work?&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#ff0000">10</font> <b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#ff0000">10</font> <b>].</b><font color="#804040">selftest</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b> <font color="#ff0000">10</font> <b>].</b><font color="#804040">message</font><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;(Again, with Hashes)&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">nesting1</font><b>.</b><font color="#804040">nested</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">nesting1</font><b>.</b><font color="#804040">nested</font><b>.</b><font color="#804040">selftest</font><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b><font color="#808080">"nesting1"</font><b>].</b><font color="#804040">nested</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b><font color="#808080">"nesting1"</font><b>].</b><font color="#804040">nested</font><b>[</b><font color="#808080">"selftest"</font><b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>[</b><font color="#808080">"nesting1"</font><b>][</b><font color="#808080">"nested"</font><b>][</b><font color="#808080">"selftest"</font><b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;As I suspected! (Manual on Expressions needs updating.)&lt;/p&gt;
+
+&lt;p&gt;Second test on list size&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">one</font><b>.</b><font color="#804040">size</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">one</font><b>[</b><font color="#808080">"size"</font><b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+&lt;p&gt;Third test on list size&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">two</font><b>.</b><font color="#804040">size</font><font color="#0000ff">}</font>&lt;/p&gt;
+&lt;p&gt;<font color="#0000ff">${</font><font color="#804040">data</font><b>.</b><font color="#804040">two</font><b>[</b><font color="#808080">"size"</font><b>]</b><font color="#0000ff">}</font>&lt;/p&gt;
+
+</pre></body>
+</html>

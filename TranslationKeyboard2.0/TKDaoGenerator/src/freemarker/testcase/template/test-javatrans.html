@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>FreeMarker: Java Transformation Test</title>
+</head>
+<body bgcolor="#ffffff">
+
+<p>A simple test follows:</p>
+
+<p>${message}</p>
+
+<transform javaToHtml><noparse>
+package guestbook;
+
+import freemarker.template.*;
+import java.util.Date;
+import java.util.TimeZone;
+import java.text.DateFormat;
+
+public class GuestbookEntryTM implements TemplateHashModel {
+
+    private GuestbookEntry entry;
+
+    private SimpleScalar date;
+    private SimpleScalar name;
+    private SimpleScalar message;
+
+    public GuestbookEntryTM(GuestbookEntry entry) {
+        this.entry = entry;
+    }
+
+    public TemplateModel get(String key) throws TemplateModelException {
+        if (key.equals("date")) {
+            return getDate();
+        } else if (key.equals("name")) {
+            return getName();
+        } else if (key.equals("message")) {
+            return getMessage();
+        } else {
+            return null;
+        }
+    }
+
+    private TemplateModel getDate() {
+        if (date == null) {
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
+                                                                   DateFormat.LONG);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            date = new SimpleScalar(dateFormat.format(entry.getDate()));
+        }
+        return date;
+    }
+
+    private TemplateModel getName() {
+        if (name == null) {
+            name = new SimpleScalar(entry.getName());
+        }
+        return name;
+    }
+
+    private TemplateModel getMessage() {
+        if (message == null) {
+            message = new SimpleScalar(entry.getMessage());
+        }
+        return message;
+    }
+
+    public boolean isEmpty() throws TemplateModelException {
+        return (entry == null);
+    }
+}
+
+</noparse></transform>
+
+</body>
+</html>

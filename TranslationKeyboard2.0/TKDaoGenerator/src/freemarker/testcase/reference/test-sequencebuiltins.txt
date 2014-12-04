@@ -1,0 +1,73 @@
+
+Size 0
+
+Sorting scalars:
+----------------
+
+String order:
+- aardvark
+- Barbara
+- beetroot
+- whale
+- zeppelin
+
+First: aardvark
+Last: zeppelin
+Size 5
+
+Numerical order:
+- -324
+- -34
+- 0
+- 0.1
+- 0.11
+- 1
+- 5
+- 111
+- 123
+- 543
+
+First: -324
+Last: 543
+Size 10
+
+Sorting hashes:
+---------------
+
+Order by name:
+- aardvark: 30
+- Barbara: 53
+- beetroot: 0.3
+- whale: 2000
+- zeppelin: -200
+
+Order by weight:
+- zeppelin: -200
+- beetroot: 0.3
+- aardvark: 30
+- Barbara: 53
+- whale: 2000
+
+Reverse:
+--------
+
+Order by weight desc:
+- whale: 2000
+- Barbara: 53
+- aardvark: 30
+- beetroot: 0.3
+- zeppelin: -200
+
+Order by weight desc desc:
+- zeppelin: -200
+- beetroot: 0.3
+- aardvark: 30
+- Barbara: 53
+- whale: 2000
+
+Order by weight desc desc desc:
+- whale: 2000
+- Barbara: 53
+- aardvark: 30
+- beetroot: 0.3
+- zeppelin: -200

@@ -1,0 +1,9 @@
+<#macro test foo>
+  Test ${foo}.
+  Email: ${mail}
+  <#if .main.mail?exists>
+    Email in the root: ${.main.mail}
+  </#if>
+</#macro>
+
+<#assign mail = "jsmith@acme.com">
