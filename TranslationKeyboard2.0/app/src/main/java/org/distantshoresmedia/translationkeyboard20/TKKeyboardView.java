@@ -12,6 +12,7 @@ import org.distantshoresmedia.basickeyboard.BasicKeyboardView;
  */
 public class TKKeyboardView extends BasicKeyboardView {
 
+    static final int KEYCODE_OPTIONS = -100;
     private TKKeyboard mKeyboard;
 
     public TKKeyboardView(Context context, AttributeSet attrs) {

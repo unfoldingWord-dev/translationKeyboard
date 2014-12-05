@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import de.greenrobot.dao.DaoException;
+
 public class BaseKeyboard {
 
     static final private String kUIDKey = "keyboard_id";
@@ -20,21 +22,25 @@ public class BaseKeyboard {
     static final private String kIsoLanguageKey = "iso_language";
     static final private String kKeybaordVariantKey = "keyboard_variants";
 
+    private transient DaoSession daoSession;
 
-    private Integer keyboardId;
-    public void setKeyboardId(Integer keyboardId) {
-        this.keyboardId = keyboardId;
+    /** Used for active entity operations. */
+    private transient BaseKeyboardDao myDao;
+
+    private long id;
+    public void setId(Integer id) {
+        this.id = id;
     }
-    public Integer getKeyboardId() {
-        return keyboardId;
+    public long getId() {
+        return id;
     }
 
-    private String keyboardName;
-    public void setKeyboardName(String keyboardName) {
-        this.keyboardName = keyboardName;
+    private String Name;
+    public void setName(String name) {
+        this.Name = name;
     }
-    public String getKeyboardName() {
-        return keyboardName;
+    public String getName() {
+        return Name;
     }
 
     private String createdAt;
@@ -78,9 +84,9 @@ public class BaseKeyboard {
 	}
 
 
-    public BaseKeyboard(Integer id, String name, String created, String updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
-        this.keyboardId = id;
-        this.keyboardName = name;
+    public BaseKeyboard(long id, String name, String created, String updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
+        this.id = id;
+        this.Name = name;
         this.createdAt = created;
         this.updatedAt = updated;
         this.isoRegion = isoRegion;
@@ -123,13 +129,49 @@ public class BaseKeyboard {
     @Override
     public String toString() {
         return "BaseKeyboard{" +
-                "keyboardId=" + keyboardId +
-                ", keyboardName='" + keyboardName + '\'' +
+                "Id=" + id +
+                ", Name='" + Name + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", isoRegion='" + isoRegion + '\'' +
                 ", isoLanguage='" + isoLanguage + '\'' +
                 ", keyboardVariants=" + Arrays.toString(keyboardVariants) +
                 '}';
+    }
+
+
+    /** called by internal mechanisms, do not call yourself. */
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getBaseKeyboardDao() : null;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetVariants() {
+//        KeyboardVariant = null;
+    }
+
+    /** Convenient call for {@link (Object)}. Entity must attached to an entity context. */
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /** Convenient call for {@link(Object)}. Entity must attached to an entity context. */
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** Convenient call for {@link(Object)}. Entity must attached to an entity context. */
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
     }
 }

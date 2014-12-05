@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.greenrobot.dao.DaoException;
+
 public class KeyboardVariant {
 
     static final private String kNameKey = "name";
@@ -19,6 +21,20 @@ public class KeyboardVariant {
     static final private String kUpdatedKey = "updated_at";
     static final private String kKeyboardPositionRowKey = "key_position_rows";
     static final private String kKeyboardPositionCollumnKey = "key_position_columns";
+
+    private transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    private transient KeyboardVariantDao myDao;
+
+
+    private Long id;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     private String name;
     public void setName(String name) {
@@ -114,5 +130,40 @@ public class KeyboardVariant {
                 ", updatedAt=" + updatedAt +
                 ", keys=" + Arrays.toString(keys) +
                 '}';
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getKeyboardVariantDao() : null;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetPositions() {
+//        KeyboardVariant = null;
+    }
+
+    /** Convenient call for {@link (Object)}. Entity must attached to an entity context. */
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+//        myDao.delete(this);
+    }
+
+    /** Convenient call for {@link(Object)}. Entity must attached to an entity context. */
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+//        myDao.update(this);
+    }
+
+    /** Convenient call for {@link(Object)}. Entity must attached to an entity context. */
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+//        myDao.refresh(this);
     }
 }

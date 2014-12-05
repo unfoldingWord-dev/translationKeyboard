@@ -46,7 +46,7 @@ import java.util.List;
 public class KeyboardInputService extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
     static final boolean DEBUG = false;
-    
+
     /**
      * This boolean indicates the optional example code for performing
      * processing of hard keys in addition to regular text generation
@@ -75,6 +75,12 @@ public class KeyboardInputService extends InputMethodService
     private BasicKeyboard mQwertyKeyboard;
 
     private BasicKeyboard mCurKeyboard;
+    public BasicKeyboard getMCurKeyboard() {
+        return mCurKeyboard;
+    }
+    public void setMCurKeyboard(BasicKeyboard mCurKeyboard) {
+        this.mCurKeyboard = mCurKeyboard;
+    }
 
     private String mWordSeparators;
 
@@ -105,7 +111,7 @@ public class KeyboardInputService extends InputMethodService
         mSymbolsKeyboard = new BasicKeyboard(this, R.xml.symbols);
         mSymbolsShiftedKeyboard = new BasicKeyboard(this, R.xml.symbols_shift);
     }
-    
+
     /**
      * Called by the framework when your view for creating input needs to
      * be generated.  This will be called the first time your input method
@@ -136,21 +142,21 @@ public class KeyboardInputService extends InputMethodService
      */
     @Override public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
-        
+
         // Reset our state.  We want to do this even if restarting, because
         // the underlying state of the text editor could have changed in any way.
         mComposing.setLength(0);
         updateCandidates();
-        
+
         if (!restarting) {
             // Clear shift states.
             mMetaState = 0;
         }
-        
+
         mPredictionOn = false;
         mCompletionOn = false;
         mCompletions = null;
-        
+
         // We are now going to initialize our state based on the type of
         // text being edited.
         switch (attribute.inputType & InputType.TYPE_MASK_CLASS) {
@@ -160,13 +166,13 @@ public class KeyboardInputService extends InputMethodService
                 // no extra features.
                 mCurKeyboard = mSymbolsKeyboard;
                 break;
-                
+
             case InputType.TYPE_CLASS_PHONE:
                 // Phones will also default to the symbols keyboard, though
                 // often you will want to have a dedicated phone keyboard.
                 mCurKeyboard = mSymbolsKeyboard;
                 break;
-                
+
             case InputType.TYPE_CLASS_TEXT:
                 // This is general text editing.  We will default to the
                 // normal alphabetic keyboard, and assume that we should
@@ -174,7 +180,7 @@ public class KeyboardInputService extends InputMethodService
                 // user types).
                 mCurKeyboard = mQwertyKeyboard;
                 mPredictionOn = true;
-                
+
                 // We now look for a few special variations of text that will
                 // modify our behavior.
                 int variation = attribute.inputType & InputType.TYPE_MASK_VARIATION;
@@ -184,7 +190,7 @@ public class KeyboardInputService extends InputMethodService
                     // when they are entering a password.
                     mPredictionOn = false;
                 }
-                
+
                 if (variation == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                         || variation == InputType.TYPE_TEXT_VARIATION_URI
                         || variation == InputType.TYPE_TEXT_VARIATION_FILTER) {
@@ -192,7 +198,7 @@ public class KeyboardInputService extends InputMethodService
                     // or URIs.
                     mPredictionOn = false;
                 }
-                
+
                 if ((attribute.inputType & InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE) != 0) {
                     // If this is an auto-complete text view, then our predictions
                     // will not be shown and instead we will allow the editor
@@ -202,13 +208,13 @@ public class KeyboardInputService extends InputMethodService
                     mPredictionOn = false;
                     mCompletionOn = isFullscreenMode();
                 }
-                
+
                 // We also want to look at the current state of the editor
                 // to decide whether our alphabetic keyboard should start out
                 // shifted.
                 updateShiftKeyState(attribute);
                 break;
-                
+
             default:
                 // For all unknown input types, default to the alphabetic
                 // keyboard with no special features.
@@ -216,8 +222,8 @@ public class KeyboardInputService extends InputMethodService
                 updateShiftKeyState(attribute);
         }
 
-        this.mCurKeyboard.getKeys();
-        
+        this.getMCurKeyboard().getKeys();
+
         // Update the label on the enter key, depending on what the application
         // says it will do.
         mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
@@ -229,23 +235,23 @@ public class KeyboardInputService extends InputMethodService
      */
     @Override public void onFinishInput() {
         super.onFinishInput();
-        
+
         // Clear current composing text and candidates.
         mComposing.setLength(0);
         updateCandidates();
-        
+
         // We only hide the candidates window when finishing input on
         // a particular editor, to avoid popping the underlying application
         // up and down if the user is entering text into the bottom of
         // its window.
         setCandidatesViewShown(false);
-        
+
         mCurKeyboard = mQwertyKeyboard;
         if (mInputView != null) {
             mInputView.closing();
         }
     }
-    
+
     @Override public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
         // Apply the selected keyboard to the input view.
@@ -268,7 +274,7 @@ public class KeyboardInputService extends InputMethodService
             int candidatesStart, int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
                 candidatesStart, candidatesEnd);
-        
+
         // If the current selection in the text view changes, we should
         // clear whatever candidate text we have.
         if (mComposing.length() > 0 && (newSelStart != candidatesEnd
@@ -295,7 +301,7 @@ public class KeyboardInputService extends InputMethodService
                 setSuggestions(null, false, false);
                 return;
             }
-            
+
             List<String> stringList = new ArrayList<String>();
             for (int i = 0; i < completions.length; i++) {
                 CompletionInfo ci = completions[i];
@@ -304,7 +310,7 @@ public class KeyboardInputService extends InputMethodService
             setSuggestions(stringList, true, true);
         }
     }
-    
+
     /**
      * This translates incoming hard key events in to edit operations on an
      * InputConnection.  It is only needed when using the
@@ -319,14 +325,14 @@ public class KeyboardInputService extends InputMethodService
         if (c == 0 || ic == null) {
             return false;
         }
-        
+
         boolean dead = false;
 
         if ((c & KeyCharacterMap.COMBINING_ACCENT) != 0) {
             dead = true;
             c = c & KeyCharacterMap.COMBINING_ACCENT_MASK;
         }
-        
+
         if (mComposing.length() > 0) {
             char accent = mComposing.charAt(mComposing.length() -1 );
             int composed = KeyEvent.getDeadChar(accent, c);
@@ -336,12 +342,12 @@ public class KeyboardInputService extends InputMethodService
                 mComposing.setLength(mComposing.length()-1);
             }
         }
-        
+
         onKey(c, null);
-        
+
         return true;
     }
-    
+
     /**
      * Use this to monitor key events being delivered to the application.
      * We get first crack at them, and can either resume them or let them
@@ -360,7 +366,7 @@ public class KeyboardInputService extends InputMethodService
                     }
                 }
                 break;
-                
+
             case KeyEvent.KEYCODE_DEL:
                 // Special handling of the delete key: if we currently are
                 // composing text for the user, we want to modify that instead
@@ -370,11 +376,11 @@ public class KeyboardInputService extends InputMethodService
                     return true;
                 }
                 break;
-                
+
             case KeyEvent.KEYCODE_ENTER:
                 // Let the underlying text editor always handle these.
                 return false;
-                
+
             default:
                 // For all other keys, if we want to do transformations on
                 // text being entered with a hard keyboard, we need to process
@@ -405,7 +411,7 @@ public class KeyboardInputService extends InputMethodService
                     }
                 }
         }
-        
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -424,7 +430,7 @@ public class KeyboardInputService extends InputMethodService
                         keyCode, event);
             }
         }
-        
+
         return super.onKeyUp(keyCode, event);
     }
 
@@ -444,7 +450,7 @@ public class KeyboardInputService extends InputMethodService
      * editor state.
      */
     private void updateShiftKeyState(EditorInfo attr) {
-        if (attr != null 
+        if (attr != null
                 && mInputView != null && mQwertyKeyboard == mInputView.getKeyboard()) {
             int caps = 0;
             EditorInfo ei = getCurrentInputEditorInfo();
@@ -454,7 +460,7 @@ public class KeyboardInputService extends InputMethodService
             mInputView.setShifted(mCapsLock || caps != 0);
         }
     }
-    
+
     /**
      * Helper to determine if a given character code is alphabetic.
      */
@@ -465,7 +471,7 @@ public class KeyboardInputService extends InputMethodService
             return false;
         }
     }
-    
+
     /**
      * Helper to send a key down / key up pair to the current editor.
      */
@@ -475,7 +481,7 @@ public class KeyboardInputService extends InputMethodService
         getCurrentInputConnection().sendKeyEvent(
                 new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
     }
-    
+
     /**
      * Helper to send a character to the editor as raw key events.
      */
@@ -558,7 +564,7 @@ public class KeyboardInputService extends InputMethodService
             }
         }
     }
-    
+
     public void setSuggestions(List<String> suggestions, boolean completions,
             boolean typedWordValid) {
         if (suggestions != null && suggestions.size() > 0) {
@@ -570,7 +576,7 @@ public class KeyboardInputService extends InputMethodService
 //            mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
 //        }
     }
-    
+
     private void handleBackspace() {
         final int length = mComposing.length();
         if (length > 1) {
@@ -591,7 +597,7 @@ public class KeyboardInputService extends InputMethodService
         if (mInputView == null) {
             return;
         }
-        
+
         Keyboard currentKeyboard = mInputView.getKeyboard();
         if (mQwertyKeyboard == currentKeyboard) {
             // Alphabet keyboard
@@ -607,7 +613,7 @@ public class KeyboardInputService extends InputMethodService
             mSymbolsKeyboard.setShifted(false);
         }
     }
-    
+
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         if (isInputViewShown()) {
             if (mInputView.isShifted()) {
@@ -640,11 +646,11 @@ public class KeyboardInputService extends InputMethodService
             mLastShiftTime = now;
         }
     }
-    
+
     private String getWordSeparators() {
         return mWordSeparators;
     }
-    
+
     public boolean isWordSeparator(int code) {
         String separators = getWordSeparators();
         return separators.contains(String.valueOf((char)code));
@@ -653,7 +659,7 @@ public class KeyboardInputService extends InputMethodService
     public void pickDefaultCandidate() {
         pickSuggestionManually(0);
     }
-    
+
     public void pickSuggestionManually(int index) {
         if (mCompletionOn && mCompletions != null && index >= 0
                 && index < mCompletions.length) {
@@ -670,13 +676,13 @@ public class KeyboardInputService extends InputMethodService
             commitTyped(getCurrentInputConnection());
         }
     }
-    
+
     public void swipeRight() {
         if (mCompletionOn) {
             pickDefaultCandidate();
         }
     }
-    
+
     public void swipeLeft() {
         handleBackspace();
     }
@@ -687,10 +693,10 @@ public class KeyboardInputService extends InputMethodService
 
     public void swipeUp() {
     }
-    
+
     public void onPress(int primaryCode) {
     }
-    
+
     public void onRelease(int primaryCode) {
     }
 }

@@ -115,8 +115,46 @@ public class BasicKeyboard extends Keyboard {
         }
     }
 
+    public static class BasicRow extends Keyboard.Row {
+
+        /** Default width of a key in this row. */
+        public int defaultWidth;
+        /** Default height of a key in this row. */
+        public int defaultHeight;
+        /** Default horizontal gap between keys in this row. */
+        public int defaultHorizontalGap;
+        /** Vertical gap following this row. */
+        public int verticalGap;
+
+        /**
+         * Edge flags for this row of keys. Possible values that can be assigned are
+         * {@link Keyboard#EDGE_TOP EDGE_TOP} and {@link Keyboard#EDGE_BOTTOM EDGE_BOTTOM}
+         */
+        public int rowEdgeFlags;
+
+        private BasicKeyboard parent;
+
+        public BasicRow(BasicKeyboard parent) {
+            super(parent);
+            this.parent = parent;
+        }
+    }
+
     static public class BasicKey extends Keyboard.Key {
-        
+
+        private BasicKeyboard keyboard;
+
+
+        public BasicKey(BasicRow parent) {
+            super(parent);
+            keyboard = parent.parent;
+            height = parent.defaultHeight;
+            width = parent.defaultWidth;
+            gap = parent.defaultHorizontalGap;
+            edgeFlags = parent.rowEdgeFlags;
+        }
+
+
         public BasicKey(Resources res, Keyboard.Row parent, int x, int y, XmlResourceParser parser) {
             super(res, parent, x, y, parser);
         }
