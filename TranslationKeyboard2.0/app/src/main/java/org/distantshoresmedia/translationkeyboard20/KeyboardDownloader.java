@@ -42,13 +42,14 @@ public class KeyboardDownloader {
 
     private Context context;
 
-    ArrayList<BaseKeyboard> keyboards = new ArrayList<BaseKeyboard>();
+    static public ArrayList<BaseKeyboard> keyboards = new ArrayList<BaseKeyboard>();
 
 
 //    public JSONObject keyboards;
 
 
     public void downloadKeyboards(Context context) {
+        System.out.println("Will Download");
         this.context = context;
         getJSONFromUrl(this.context, getKeyboardUrl("1"));
     }
@@ -106,7 +107,7 @@ public class KeyboardDownloader {
 
 //        System.out.println("KeysInfo: " + keyObj.toString());
         BaseKeyboard newKeyboard = BaseKeyboard.getKeyboardFromJsonObject(keyObj);
-
+        keyboards.add(newKeyboard);
         System.out.println("Keyboard: " + newKeyboard.toString());
     }
 

@@ -60,15 +60,15 @@ public class KeyboardVariant {
         return updatedAt;
     }
 
-	private KeyPosition[] keys;
- 	public void setKeys(KeyPosition[] keys) {
-		this.keys = keys;
-	}
-	public KeyPosition[] getKeys() {
-		return this.keys;
-	}
+	private ArrayList<KeyPosition[]> keys;
+// 	public void setKeys(KeyPosition[] keys) {
+//		this.keys = keys;
+//	}
+	public KeyPosition[] getKeysAtIndex(int index) {
+        return this.keys.get(index);
+    }
 
-    public KeyboardVariant(String name, String created, String updated, KeyPosition[] keys){
+    public KeyboardVariant(String name, String created, String updated, ArrayList<KeyPosition[]> keys){
         this.name = name;
         this.createdAt = created;
         this.updatedAt = updated;
@@ -87,31 +87,28 @@ public class KeyboardVariant {
 
             // Get an arraylist of keypositions based on the JSON
             JSONArray rows = jsonObj.getJSONArray(kKeyboardPositionRowKey);
-            ArrayList<KeyPosition> positions = new ArrayList<KeyPosition>();
+            ArrayList<KeyPosition[]> positions = new ArrayList<KeyPosition[]>();
 
             int total = 0;
 
             for(int i = 0; i < rows.length(); i++){
                 JSONObject rowObj = rows.getJSONObject(i);
                 JSONArray columns = rowObj.getJSONArray(kKeyboardPositionCollumnKey);
+
+                KeyPosition[] row = new KeyPosition[columns.length()];
+
                 if(columns.length() > 0) {
                     for (int j = 0; j < columns.length(); j++) {
                         JSONObject colObj = columns.getJSONObject(j);
-                        positions.add(i + j, KeyPosition.getKeyboardFromJsonObject(colObj));
+                        row[j] = KeyPosition.getKeyboardFromJsonObject(colObj, i, j);
                         total++;
                     }
                 }
+                positions.add(i, row);
             }
 
-            // make an array of key positions
-            KeyPosition[] finalPositionsArray = new KeyPosition[total];
 
-            int index = 0;
-            for(KeyPosition position : positions){
-                finalPositionsArray[index++] = position;
-            }
-
-            KeyboardVariant finalVariant = new KeyboardVariant(name, created, updated, finalPositionsArray);
+            KeyboardVariant finalVariant = new KeyboardVariant(name, created, updated, positions);
 
             return finalVariant;
         }
@@ -125,10 +122,13 @@ public class KeyboardVariant {
     @Override
     public String toString() {
         return "KeyboardVariant{" +
-                "name='" + name + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", keys=" + Arrays.toString(keys) +
+                "daoSession=" + daoSession +
+                ", myDao=" + myDao +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", keys=" + keys +
                 '}';
     }
 

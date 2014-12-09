@@ -31,7 +31,7 @@ public class BasicKeyboard extends Keyboard {
 
     private Key mEnterKey;
     private Key mSpaceKey;
-    
+
     public BasicKeyboard(Context context, int xmlLayoutResId) {
         super(context, xmlLayoutResId);
     }
@@ -42,7 +42,7 @@ public class BasicKeyboard extends Keyboard {
     }
 
     @Override
-    protected Key createKeyFromXml(Resources res, Row parent, int x, int y, 
+    protected Key createKeyFromXml(Resources res, Row parent, int x, int y,
             XmlResourceParser parser) {
         Key key = new BasicKey(res, parent, x, y, parser);
         if (key.codes[0] == 10) {
@@ -137,6 +137,9 @@ public class BasicKeyboard extends Keyboard {
         public BasicRow(BasicKeyboard parent) {
             super(parent);
             this.parent = parent;
+        }
+        public BasicRow(Resources res, BasicKeyboard parent, XmlResourceParser parser) {
+            super(res, parent, parser);
         }
     }
 

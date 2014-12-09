@@ -13,7 +13,7 @@ import de.greenrobot.dao.DaoException;
 public class KeyCharacter {
 
     static final private String kModeMaskKey = "modmask";
-    static final private String kUtf8HexKey = "utf8hex";
+    static final private String kUnicodeValue = "unicode";
 
     private transient DaoSession daoSession;
 
@@ -36,11 +36,11 @@ public class KeyCharacter {
         return name;
     }
 
-	private String[] utf8hexes;
- 	public void setUtf8hex(String[] utf8hexes) {
+	private int[] utf8hexes;
+ 	public void setUtf8hex(int[] utf8hexes) {
 		this.utf8hexes = utf8hexes;
 	}
-	public String[] getUtf8hex() {
+	public int[] getUtf8hex() {
 		return utf8hexes;
 	}
 
@@ -53,7 +53,7 @@ public class KeyCharacter {
 	}
 
 
-    public KeyCharacter(Integer modMask, String[] utf8hexes){
+    public KeyCharacter(Integer modMask, int[] utf8hexes){
         this.utf8hexes = utf8hexes;
         this.modMask = modMask;
     }
@@ -65,10 +65,10 @@ public class KeyCharacter {
 
         try {
             int mask = jsonObj.getInt(kModeMaskKey);
-            String hexes = jsonObj.getString(kUtf8HexKey);
+            int[] hexes = {jsonObj.getInt(kUnicodeValue)};
 
-            String[] parts = hexes.split(";");
-            KeyCharacter newChar = new KeyCharacter(mask, parts);
+//            String[] parts = hexes.split(";");
+            KeyCharacter newChar = new KeyCharacter(mask, hexes);
             return newChar;
         }
 
@@ -81,7 +81,9 @@ public class KeyCharacter {
     @Override
     public String toString() {
         return "KeyCharacter{" +
-                "utf8hexes=" + Arrays.toString(utf8hexes) +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", utf8hexes=" + Arrays.toString(utf8hexes) +
                 ", modMask=" + modMask +
                 '}';
     }

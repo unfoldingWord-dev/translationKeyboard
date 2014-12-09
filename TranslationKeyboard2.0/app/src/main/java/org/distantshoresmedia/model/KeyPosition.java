@@ -17,8 +17,6 @@ import de.greenrobot.dao.DaoException;
 public class KeyPosition {
 
     static final private String kPercentWidthKey = "percent_width";
-    static final private String kRowIndexKey = "row_index";
-    static final private String kCollumnIndexKey= "column_index";
     static final private String kCharactersKey = "characters";
 
     private transient DaoSession daoSession;
@@ -82,14 +80,12 @@ public class KeyPosition {
     }
 
 
-    static public KeyPosition getKeyboardFromJsonObject(JSONObject jsonObj){
+    static public KeyPosition getKeyboardFromJsonObject(JSONObject jsonObj, int row, int column){
 
 //        System.out.println("Got to KeyPosition");
 
         try {
             double width = jsonObj.getDouble(kPercentWidthKey);
-            int column = jsonObj.getInt(kRowIndexKey);
-            int row = jsonObj.getInt(kCollumnIndexKey);
 
             JSONArray jsonChars = jsonObj.getJSONArray(kCharactersKey);
 

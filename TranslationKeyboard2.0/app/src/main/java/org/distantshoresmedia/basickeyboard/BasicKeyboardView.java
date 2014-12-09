@@ -25,6 +25,8 @@ import android.view.inputmethod.InputMethodSubtype;
 
 public class BasicKeyboardView extends KeyboardView {
 
+    private BasicKeyboard mKeyboard;
+
     static final int KEYCODE_OPTIONS = -100;
 
     public BasicKeyboardView(Context context, AttributeSet attrs) {
@@ -46,8 +48,12 @@ public class BasicKeyboardView extends KeyboardView {
     }
 
     void setSubtypeOnSpaceKey(final InputMethodSubtype subtype) {
-        final BasicKeyboard keyboard = (BasicKeyboard)getKeyboard();
+        final BasicKeyboard keyboard = getKeyboard();
         keyboard.setSpaceIcon(getResources().getDrawable(subtype.getIconResId()));
         invalidateAllKeys();
+    }
+    @Override
+    public BasicKeyboard getKeyboard() {
+        return mKeyboard;
     }
 }

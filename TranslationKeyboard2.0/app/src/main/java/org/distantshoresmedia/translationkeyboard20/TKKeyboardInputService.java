@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodSubtype;
 import org.distantshoresmedia.basickeyboard.BasicKeyboard;
 import org.distantshoresmedia.basickeyboard.BasicKeyboardView;
 import org.distantshoresmedia.basickeyboard.KeyboardInputService;
+import org.distantshoresmedia.model.BaseKeyboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +88,15 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
             if (displayWidth == mLastDisplayWidth) return;
             mLastDisplayWidth = displayWidth;
         }
-        mQwertyKeyboard = new TKKeyboard(this, R.xml.qwerty);
-        mSymbolsKeyboard = new TKKeyboard(this, R.xml.symbols);
-        mSymbolsShiftedKeyboard = new TKKeyboard(this, R.xml.symbols_shift);
+
+        if(! KeyboardDownloader.keyboards.isEmpty()) {
+            System.out.println("Got here");
+            BaseKeyboard desiredKeyboard = KeyboardDownloader.keyboards.get(0);
+
+            mQwertyKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
+            mSymbolsKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
+            mSymbolsShiftedKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
+        }
     }
 
     /**
@@ -99,6 +106,13 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
      * a configuration change.
      */
     @Override public View onCreateInputView() {
+
+        BaseKeyboard desiredKeyboard = KeyboardDownloader.keyboards.get(0);
+
+        mQwertyKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
+        mSymbolsKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
+        mSymbolsShiftedKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
+
         mInputView = (BasicKeyboardView) getLayoutInflater().inflate(
                 R.layout.input, null);
         mInputView.setOnKeyboardActionListener(this);
