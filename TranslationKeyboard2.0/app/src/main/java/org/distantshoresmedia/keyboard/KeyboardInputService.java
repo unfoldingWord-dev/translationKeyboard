@@ -58,22 +58,22 @@ public class KeyboardInputService extends InputMethodService
 
     private InputMethodManager mInputMethodManager;
 
-    protected TKKeyboardView mInputView;
+    private TKKeyboardView mInputView;
     private CompletionInfo[] mCompletions;
 
     private StringBuilder mComposing = new StringBuilder();
     private boolean mPredictionOn;
     private boolean mCompletionOn;
-    protected int mLastDisplayWidth;
+    private int mLastDisplayWidth;
     private boolean mCapsLock;
     private long mLastShiftTime;
     private long mMetaState;
 
-    protected Keyboard mSymbolsKeyboard;
-    protected Keyboard mSymbolsShiftedKeyboard;
-    protected Keyboard mQwertyKeyboard;
+    private Keyboard mSymbolsKeyboard;
+    private Keyboard mSymbolsShiftedKeyboard;
+    private Keyboard mQwertyKeyboard;
 
-    protected Keyboard mCurKeyboard;
+    private Keyboard mCurKeyboard;
 
     private String mWordSeparators;
 

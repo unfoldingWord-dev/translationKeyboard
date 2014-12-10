@@ -26,17 +26,17 @@ import java.util.List;
  * Created by Fechner on 11/25/14.
  */
 public class TKKeyboardInputService extends KeyboardInputService implements KeyboardView.OnKeyboardActionListener {
-    static final boolean DEBUG = false;
+//    static final boolean DEBUG = false;
 
-    private KeyboardVariant variant = null;
-
-    private KeyboardVariant getVariant() {
-        if(variant == null){
-            BaseKeyboard desiredKeyboard = KeyboardDownloader.keyboards.get(0);
-            variant = desiredKeyboard.getKeyboardVariants()[0];
-        }
-        return variant;
-    }
+//    private KeyboardVariant variant = null;
+//
+//    private KeyboardVariant getVariant() {
+//        if(variant == null){
+//            BaseKeyboard desiredKeyboard = KeyboardDownloader.keyboards.get(0);
+//            variant = desiredKeyboard.getKeyboardVariants()[0];
+//        }
+//        return variant;
+//    }
 
     /**
      * Main initialization of the input method component.  Be sure to call
@@ -46,36 +46,36 @@ public class TKKeyboardInputService extends KeyboardInputService implements Keyb
         super.onCreate();
     }
 
-    @Override public View onCreateInputView() {
+//    @Override public View onCreateInputView() {
+//        return super.onCreateInputView();
+//        createKeyboards();
+//
+//        mInputView = (TKKeyboardView) getLayoutInflater().inflate(
+//                R.layout.input, null);
+//        mInputView.setOnKeyboardActionListener(this);
+//        mInputView.setKeyboard(mQwertyKeyboard);
+//        return mInputView;
 
-        createKeyboards();
+//    }
 
-        mInputView = (TKKeyboardView) getLayoutInflater().inflate(
-                R.layout.input, null);
-        mInputView.setOnKeyboardActionListener(this);
-        mInputView.setKeyboard(mQwertyKeyboard);
-        return mInputView;
+//    @Override public void onInitializeInterface() {
+//
+//        if (mQwertyKeyboard != null) {
+//            // Configuration changes can happen after the keyboard gets recreated,
+//            // so we need to be able to re-build the keyboards if the available
+//            // space has changed.
+//            int displayWidth = getMaxWidth();
+//            if (displayWidth == mLastDisplayWidth) return;
+//            mLastDisplayWidth = displayWidth;
+//        }
+//        createKeyboards();
+//    }
 
-    }
-
-    @Override public void onInitializeInterface() {
-
-        if (mQwertyKeyboard != null) {
-            // Configuration changes can happen after the keyboard gets recreated,
-            // so we need to be able to re-build the keyboards if the available
-            // space has changed.
-            int displayWidth = getMaxWidth();
-            if (displayWidth == mLastDisplayWidth) return;
-            mLastDisplayWidth = displayWidth;
-        }
-        createKeyboards();
-    }
-
-    private void createKeyboards(){
-
-        mQwertyKeyboard = new Keyboard(this, R.xml.keyboard_template_5row, 0, getVariant(), 0);
-        mSymbolsKeyboard = new Keyboard(this, R.xml.keyboard_template_5row, 0, getVariant(), 1);
-    }
+//    private void createKeyboards(){
+//
+//        mQwertyKeyboard = new Keyboard(this.getApplicationContext(), R.xml.keyboard_template_5row, 0, getVariant(), 0);
+//        mSymbolsKeyboard = new Keyboard(this.getApplicationContext(), R.xml.keyboard_template_5row, 0, getVariant(), 1);
+//    }
 }
 
 

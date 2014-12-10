@@ -395,7 +395,7 @@ public class Keyboard {
                     R.styleable.Keyboard_Key_isModifier, false);
             sticky = a.getBoolean(
                     R.styleable.Keyboard_Key_isSticky, false);
-//            edgeFlags = a.getInt(com.android.internal.R.styleable.Keyboard_Key_keyEdgeFlags, 0);
+            edgeFlags = 0;//a.getInt(R.Keyboard_Key_keyEdgeFlags, 0);
             edgeFlags |= parent.rowEdgeFlags;
 
             icon = a.getDrawable(
@@ -408,6 +408,10 @@ public class Keyboard {
 
             if (codes == null && !TextUtils.isEmpty(label)) {
                 codes = new int[] { label.charAt(0) };
+            }
+            else if(codes == null){
+                int value = parser.getAttributeIntValue("http://schemas.android.com/apk/res/android", "codes", 0);
+                codes = new int[] {value};
             }
             a.recycle();
         }
@@ -645,11 +649,6 @@ public class Keyboard {
         mKeys = new ArrayList<Key>();
         mModifierKeys = new ArrayList<Key>();
         mKeyboardMode = 0;
-
-        int x = 0;
-        int y = 0;
-        mTotalWidth = 0;
-
         loadKeyboard(context, context.getResources().getXml(layoutTemplateResId), keyboard, keyboardTypeIndex);
 
     }
@@ -866,7 +865,7 @@ public class Keyboard {
                     } else if (TAG_KEY.equals(tag)) {
                         inKey = true;
                         key = createKeyFromXml(res, currentRow, x, y, parser);
-
+                        System.out.println("Code: " + key.codes[0]);
                         switch (key.codes[0]) {
                             case START_ROW_VALUE: {
                                 hasClosedRow = false;
@@ -1009,7 +1008,7 @@ public class Keyboard {
                         inKey = true;
                         key = createKeyFromXml(res, currentRow, x, y, parser);
                         mKeys.add(key);
-                        if (key.codes.length > 0 && key.codes[0] == KEYCODE_SHIFT) {
+                        if (key.codes[0] == KEYCODE_SHIFT) {
                             // Find available shift key slot and put this shift key in it
                             for (int i = 0; i < mShiftKeys.length; i++) {
                                 if (mShiftKeys[i] == null) {
@@ -1047,6 +1046,7 @@ public class Keyboard {
             Log.e(TAG, "Parse error:" + e);
             e.printStackTrace();
         }
+
         mTotalHeight = y - mDefaultVerticalGap;
     }
 
