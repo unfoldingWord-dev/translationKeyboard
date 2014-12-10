@@ -1,7 +1,23 @@
-package org.distantshoresmedia.translationkeyboard20;
+/*
+ * Copyright (C) 2008-2009 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package org.distantshoresmedia.keyboard;
 
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
@@ -14,18 +30,20 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
-import org.distantshoresmedia.basickeyboard.BasicKeyboard;
-import org.distantshoresmedia.basickeyboard.BasicKeyboardView;
-import org.distantshoresmedia.basickeyboard.KeyboardInputService;
-import org.distantshoresmedia.model.BaseKeyboard;
+import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Fechner on 11/25/14.
+ * Example of writing an input method for a soft keyboard.  This code is
+ * focused on simplicity over completeness, so it should in no way be considered
+ * to be a complete soft keyboard implementation.  Its purpose is to provide
+ * a basic example for how you would get started writing an input method, to
+ * be fleshed out as appropriate.
  */
-public class TKKeyboardInputService extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
+public class KeyboardInputService extends InputMethodService
+        implements KeyboardView.OnKeyboardActionListener {
     static final boolean DEBUG = false;
 
     /**
@@ -40,28 +58,22 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
 
     private InputMethodManager mInputMethodManager;
 
-    private BasicKeyboardView mInputView;
+    protected TKKeyboardView mInputView;
     private CompletionInfo[] mCompletions;
 
     private StringBuilder mComposing = new StringBuilder();
     private boolean mPredictionOn;
     private boolean mCompletionOn;
-    private int mLastDisplayWidth;
+    protected int mLastDisplayWidth;
     private boolean mCapsLock;
     private long mLastShiftTime;
     private long mMetaState;
 
-    private TKKeyboard mSymbolsKeyboard;
-    private TKKeyboard mSymbolsShiftedKeyboard;
-    private TKKeyboard mQwertyKeyboard;
+    protected Keyboard mSymbolsKeyboard;
+    protected Keyboard mSymbolsShiftedKeyboard;
+    protected Keyboard mQwertyKeyboard;
 
-    private TKKeyboard mCurKeyboard;
-    public TKKeyboard getMCurKeyboard() {
-        return mCurKeyboard;
-    }
-    public void setMCurKeyboard(TKKeyboard mCurKeyboard) {
-        this.mCurKeyboard = mCurKeyboard;
-    }
+    protected Keyboard mCurKeyboard;
 
     private String mWordSeparators;
 
@@ -88,15 +100,9 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
             if (displayWidth == mLastDisplayWidth) return;
             mLastDisplayWidth = displayWidth;
         }
-
-        if(! KeyboardDownloader.keyboards.isEmpty()) {
-            System.out.println("Got here");
-            BaseKeyboard desiredKeyboard = KeyboardDownloader.keyboards.get(0);
-
-            mQwertyKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
-            mSymbolsKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
-            mSymbolsShiftedKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
-        }
+        mQwertyKeyboard = new Keyboard(this, R.xml.qwerty);
+        mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
+        mSymbolsShiftedKeyboard = new Keyboard(this, R.xml.symbols_shift);
     }
 
     /**
@@ -106,14 +112,7 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
      * a configuration change.
      */
     @Override public View onCreateInputView() {
-
-        BaseKeyboard desiredKeyboard = KeyboardDownloader.keyboards.get(0);
-
-        mQwertyKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
-        mSymbolsKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
-        mSymbolsShiftedKeyboard = new TKKeyboard(this, R.xml.keyboard_template_4row, 0, desiredKeyboard);
-
-        mInputView = (BasicKeyboardView) getLayoutInflater().inflate(
+        mInputView = (TKKeyboardView) getLayoutInflater().inflate(
                 R.layout.input, null);
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setKeyboard(mQwertyKeyboard);
@@ -216,11 +215,11 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
                 updateShiftKeyState(attribute);
         }
 
-        this.getMCurKeyboard().getKeys();
+        this.mCurKeyboard.getKeys();
 
         // Update the label on the enter key, depending on what the application
         // says it will do.
-        mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
+//        mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
     }
 
     /**
@@ -251,13 +250,13 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
         // Apply the selected keyboard to the input view.
         mInputView.setKeyboard(mCurKeyboard);
         mInputView.closing();
-//        final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
-//        mInputView.setSubtypeOnSpaceKey(subtype);
+        final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
+        mInputView.setSubtypeOnSpaceKey(subtype);
     }
 
     @Override
     public void onCurrentInputMethodSubtypeChanged(InputMethodSubtype subtype) {
-//        mInputView.setSubtypeOnSpaceKey(subtype);
+        mInputView.setSubtypeOnSpaceKey(subtype);
     }
 
     /**
@@ -445,7 +444,7 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
      */
     private void updateShiftKeyState(EditorInfo attr) {
         if (attr != null
-                && mInputView != null && mQwertyKeyboard == mInputView.getKeyboard()) {
+                && mInputView != null && mQwertyKeyboard == mInputView.getMKeyboard()) {
             int caps = 0;
             EditorInfo ei = getCurrentInputEditorInfo();
             if (ei != null && ei.inputType != InputType.TYPE_NULL) {
@@ -515,7 +514,7 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
             // Show a menu or somethin'
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
                 && mInputView != null) {
-            Keyboard current = mInputView.getKeyboard();
+            Keyboard current = mInputView.getMKeyboard();
             if (current == mSymbolsKeyboard || current == mSymbolsShiftedKeyboard) {
                 current = mQwertyKeyboard;
             } else {
@@ -592,7 +591,7 @@ public class TKKeyboardInputService extends InputMethodService implements Keyboa
             return;
         }
 
-        Keyboard currentKeyboard = mInputView.getKeyboard();
+        Keyboard currentKeyboard = mInputView.getMKeyboard();
         if (mQwertyKeyboard == currentKeyboard) {
             // Alphabet keyboard
             checkToggleCapsLock();

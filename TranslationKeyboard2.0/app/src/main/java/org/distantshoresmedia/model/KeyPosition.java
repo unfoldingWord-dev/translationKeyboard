@@ -55,6 +55,9 @@ public class KeyPosition {
 	public KeyCharacter[] getCharacters() {
 		return characters;
 	}
+    public KeyCharacter getCharacterAtIndex(int i){
+        return characters[i];
+    }
 
     private int row;
     public int getRow() {

@@ -36,12 +36,12 @@ public class KeyCharacter {
         return name;
     }
 
-	private int[] utf8hexes;
- 	public void setUtf8hex(int[] utf8hexes) {
-		this.utf8hexes = utf8hexes;
+	private int[] unicodeValue;
+ 	public void setUnicodeValue(int[] unicodeValue) {
+		this.unicodeValue = unicodeValue;
 	}
-	public int[] getUtf8hex() {
-		return utf8hexes;
+	public int[] getUnicodeValue() {
+		return unicodeValue;
 	}
 
 	private Integer modMask;
@@ -53,8 +53,8 @@ public class KeyCharacter {
 	}
 
 
-    public KeyCharacter(Integer modMask, int[] utf8hexes){
-        this.utf8hexes = utf8hexes;
+    public KeyCharacter(Integer modMask, int[] unicodeValue){
+        this.unicodeValue = unicodeValue;
         this.modMask = modMask;
     }
 
@@ -83,7 +83,7 @@ public class KeyCharacter {
         return "KeyCharacter{" +
                 ", id=" + id +
                 ", name='" + name + '\'' +
-                ", utf8hexes=" + Arrays.toString(utf8hexes) +
+                ", unicodeValue=" + Arrays.toString(unicodeValue) +
                 ", modMask=" + modMask +
                 '}';
     }

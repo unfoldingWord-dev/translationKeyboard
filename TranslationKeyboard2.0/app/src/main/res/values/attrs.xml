@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="Keyboard_Key"></declare-styleable>
-    <declare-styleable name="Keyboard"></declare-styleable>
-</resources>

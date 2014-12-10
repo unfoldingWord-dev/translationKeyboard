@@ -61,12 +61,15 @@ public class KeyboardVariant {
     }
 
 	private ArrayList<KeyPosition[]> keys;
-// 	public void setKeys(KeyPosition[] keys) {
+    public ArrayList<KeyPosition[]> getKeys() {
+        return keys;
+    }
+    // 	public void setKeys(KeyPosition[] keys) {
 //		this.keys = keys;
 //	}
-	public KeyPosition[] getKeysAtIndex(int index) {
-        return this.keys.get(index);
-    }
+//	public KeyPosition[] getKeysAtIndex(int index) {
+//        return this.keys.get(index);
+//    }
 
     public KeyboardVariant(String name, String created, String updated, ArrayList<KeyPosition[]> keys){
         this.name = name;

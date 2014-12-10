@@ -18,7 +18,7 @@
 */
 -->
 
-<org.distantshoresmedia.translationkeyboard20.TKKeyboardView
+<org.distantshoresmedia.keyboard.TKKeyboardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/keyboard"
         android:layout_alignParentBottom="true"

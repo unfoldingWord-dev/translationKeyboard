@@ -20,7 +20,7 @@
  * Project.
  */
 
-package org.distantshoresmedia.basickeyboard;
+package org.distantshoresmedia.keyboard;
 
 import android.graphics.drawable.Drawable;
 

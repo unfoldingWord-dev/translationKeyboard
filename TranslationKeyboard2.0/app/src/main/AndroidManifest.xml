@@ -17,15 +17,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-		
-        <service android:name=".TKKeyboardInputService"
+
+        <service android:name="org.distantshoresmedia.keyboard.TKKeyboardInputService"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
             <meta-data android:name="android.view.im" android:resource="@xml/method" />
         </service>
-		
+
         <activity
             android:name="org.distantshoresmedia.translationkeyboard20.MainActivity"
             android:label="@string/app_name" >

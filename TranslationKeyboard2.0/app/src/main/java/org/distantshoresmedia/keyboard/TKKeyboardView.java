@@ -14,46 +14,51 @@
  * limitations under the License.
  */
 
-package org.distantshoresmedia.basickeyboard;
+package org.distantshoresmedia.keyboard;
+
+import org.distantshoresmedia.keyboard.Keyboard.Key;
+import org.distantshoresmedia.keyboard.Keyboard.Row;
 
 import android.content.Context;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.Keyboard.Key;
+//import android.inputmethodservice.Keyboard;
+//import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
 import android.view.inputmethod.InputMethodSubtype;
 
-public class BasicKeyboardView extends KeyboardView {
+public class TKKeyboardView extends KeyboardView {
 
-    private BasicKeyboard mKeyboard;
+    private Keyboard mKeyboard;
+
+    public Keyboard getMKeyboard() {
+        return mKeyboard;
+    }
+    public void setKeyboard(Keyboard mKeyboard) {
+        this.mKeyboard = mKeyboard;
+    }
 
     static final int KEYCODE_OPTIONS = -100;
 
-    public BasicKeyboardView(Context context, AttributeSet attrs) {
+    public TKKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BasicKeyboardView(Context context, AttributeSet attrs, int defStyle) {
+    public TKKeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    @Override
     protected boolean onLongPress(Key key) {
         if (key.codes[0] == Keyboard.KEYCODE_CANCEL) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
             return true;
         } else {
-            return super.onLongPress(key);
+            return false;
+//            return super.onLongPress(key);
         }
     }
 
     void setSubtypeOnSpaceKey(final InputMethodSubtype subtype) {
-        final BasicKeyboard keyboard = getKeyboard();
-        keyboard.setSpaceIcon(getResources().getDrawable(subtype.getIconResId()));
+        final Keyboard keyboard = getMKeyboard();
         invalidateAllKeys();
-    }
-    @Override
-    public BasicKeyboard getKeyboard() {
-        return mKeyboard;
     }
 }
