@@ -28,6 +28,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by Fechner on 11/28/14.
@@ -42,16 +46,21 @@ public class KeyboardDownloader {
 
     private Context context;
 
-    static public ArrayList<BaseKeyboard> keyboards = new ArrayList<BaseKeyboard>();
+    static public Map<String, BaseKeyboard> keyboards = new HashMap<String, BaseKeyboard>();
 
 
 //    public JSONObject keyboards;
 
+    static public BaseKeyboard getKeyboardWithID(int id){
+        BaseKeyboard desiredKeyboard = keyboards.get(Integer.toString(id));
+        return keyboards.get(Integer.toString(id));
+
+    }
 
     public void downloadKeyboards(Context context) {
         System.out.println("Will Download");
         this.context = context;
-        getJSONFromUrl(this.context, getKeyboardUrl("1"));
+        getJSONFromUrl(this.context, getKeyboardUrl());
     }
 
     static public String getKeyboardUrl() {
@@ -107,7 +116,7 @@ public class KeyboardDownloader {
 
 //        System.out.println("KeysInfo: " + keyObj.toString());
         BaseKeyboard newKeyboard = BaseKeyboard.getKeyboardFromJsonObject(keyObj);
-        keyboards.add(newKeyboard);
+        keyboards.put(Integer.toString((int) newKeyboard.getId()), newKeyboard);
         System.out.println("Keyboard: " + newKeyboard.toString());
     }
 

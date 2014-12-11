@@ -16,6 +16,9 @@
 
 package org.distantshoresmedia.keyboard;
 
+import org.distantshoresmedia.model.KeyCharacter;
+import org.distantshoresmedia.model.KeyPosition;
+import org.distantshoresmedia.model.KeyboardVariant;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -62,6 +65,11 @@ import java.util.StringTokenizer;
  * @attr ref android.R.styleable#Keyboard_verticalGap
  */
 public class Keyboard {
+
+    static final int BEGGINING_ROW_VALUE = 1;
+    static final int MID_ROW_VALUE = 5;
+    static final int END_ROW_VALUE = 9;
+
 
     static final String TAG = "Keyboard";
 
@@ -485,6 +493,12 @@ public class Keyboard {
             a.recycle();
         }
 
+        public void setCharacterTo(int charValue){
+            this.codes = new int[] {charValue};
+            this.label = Character.toString((char) charValue);
+            this.text = Character.toString((char) charValue);
+        }
+
         public boolean isDistinctCaps() {
             return isDistinctUppercase && keyboard.isShiftCaps();
         }
@@ -817,7 +831,6 @@ public class Keyboard {
      * @param context the application or service context
      * @param xmlLayoutResId the resource file that contains the keyboard layout and keys.
      * @param modeId keyboard mode identifier
-     * @param rowHeightPercent height of each row as percentage of screen height
      */
     public Keyboard(Context context, int defaultHeight, int xmlLayoutResId, int modeId, float kbHeightPercent) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -836,6 +849,28 @@ public class Keyboard {
         mKeyboardMode = modeId;
         mUseExtension = LatinIME.sKeyboardSettings.useExtension;
         loadKeyboard(context, context.getResources().getXml(xmlLayoutResId));
+        setEdgeFlags();
+        fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
+    }
+
+    public Keyboard(Context context, int defaultHeight, int xmlLayoutResId, int modeId, float kbHeightPercent,
+                    KeyboardVariant keyVariant) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        mDisplayWidth = dm.widthPixels;
+        mDisplayHeight = dm.heightPixels;
+        Log.v(TAG, "keyboard's display metrics:" + dm + ", mDisplayWidth=" + mDisplayWidth);
+
+        mDefaultHorizontalGap = 0;
+        mDefaultWidth = mDisplayWidth / 10;
+        mDefaultVerticalGap = 0;
+        mDefaultHeight = defaultHeight; // may be zero, to be adjusted below
+        mKeyboardHeight = Math.round(mDisplayHeight * kbHeightPercent / 100);
+        //Log.i("PCKeyboard", "mDefaultHeight=" + mDefaultHeight + "(arg=" + defaultHeight + ")" + " kbHeight=" + mKeyboardHeight + " displayHeight="+mDisplayHeight+")");
+        mKeys = new ArrayList<Key>();
+        mModifierKeys = new ArrayList<Key>();
+        mKeyboardMode = modeId;
+        mUseExtension = LatinIME.sKeyboardSettings.useExtension;
+        loadKeyboard(context, context.getResources().getXml(xmlLayoutResId), keyVariant);
         setEdgeFlags();
         fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
     }
@@ -1152,6 +1187,166 @@ public class Keyboard {
             XmlResourceParser parser) {
         return new Key(res, parent, x, y, parser);
     }
+
+    protected Key createKeyWithData(Resources res, Row parent, int x, int y, XmlResourceParser parser, int charValue) {
+        Key newKey = new Key(res, parent, x, y, parser);
+        newKey.setCharacterTo(charValue);
+        return newKey;
+    }
+
+
+    private void loadKeyboard(Context context, XmlResourceParser parser, KeyboardVariant variant) {
+        boolean inKey = false;
+        boolean inRow = false;
+        float x = 0;
+        int y = 0;
+        Key key = null;
+        Row currentRow = null;
+        Resources res = context.getResources();
+        boolean skipRow = false;
+        mRowCount = 0;
+
+
+        try {
+            int event;
+            Key prevKey = null;
+            while ((event = parser.next()) != XmlResourceParser.END_DOCUMENT) {
+                if (event == XmlResourceParser.START_TAG) {
+                    String tag = parser.getName();
+
+                    if (TAG_KEYBOARD.equals(tag)) {
+                        parseKeyboardAttributes(res, parser);
+                    }
+                    else if (TAG_ROW.equals(tag)) {
+                        inRow = true;
+                        x = 0;
+                        currentRow = createRowFromXml(res, parser);
+                        skipRow = currentRow.mode != 0 && currentRow.mode != mKeyboardMode;
+                        if (currentRow.extension) {
+                            if (mUseExtension) {
+                                ++mExtensionRowCount;
+                            } else {
+                                skipRow = true;
+                            }
+                        }
+                        if (skipRow) {
+                            skipToEndOfRow(parser);
+                            inRow = false;
+                        }
+                    } else if (TAG_KEY.equals(tag)) {
+                        inKey = true;
+                        key = createKeyFromXml(res, currentRow, Math.round(x), y, parser);
+                        key.realX = x;
+                        if (key.codes == null) {
+                            // skip this key, adding its width to the previous one
+                            if (prevKey != null) {
+                                prevKey.width += key.width;
+                            }
+                        } else {
+
+                            switch(key.codes[0]) {
+                                case BEGGINING_ROW_VALUE: {
+                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
+                                    KeyPosition position = positionRow[0];
+                                    KeyCharacter positionCharacter = position.getCharacterAtIndex(0);
+
+                                    key.setCharacterTo(positionCharacter.getUnicodeValue()[0]);
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    break;
+                                }
+                                case MID_ROW_VALUE: {
+                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
+
+                                    for (int i = 1; i < positionRow.length - 1; i++) {
+                                        KeyPosition position = positionRow[i];
+                                        KeyCharacter positionCharacter = position.getCharacterAtIndex(0);
+
+                                        Key newKey = createKeyWithData(res, currentRow, Math.round(x), y, parser, positionCharacter.getUnicodeValue()[0]);
+                                        mKeys.add(newKey);
+                                        prevKey = newKey;
+                                        x += key.realGap + key.realWidth;
+                                        if (x > mTotalWidth) {
+                                            mTotalWidth = Math.round(x);
+                                        }
+                                    }
+                                    break;
+                                }
+                                case END_ROW_VALUE: {
+                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
+                                    KeyPosition position = positionRow[positionRow.length - 1];
+                                    KeyCharacter positionCharacter = position.getCharacterAtIndex(0);
+
+                                    key.setCharacterTo(positionCharacter.getUnicodeValue()[0]);
+                                    break;
+                                }
+                                case KEYCODE_SHIFT: {
+                                    mKeys.add(key);
+                                    prevKey = key;
+
+                                    if (mShiftKeyIndex == -1) {
+                                        mShiftKey = key;
+                                        mShiftKeyIndex = mKeys.size() - 1;
+                                    }
+                                    mModifierKeys.add(key);
+                                    break;
+                                }
+                                case KEYCODE_ALT_SYM: {
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    mModifierKeys.add(key);
+                                    break;
+                                }
+                                case LatinKeyboardView.KEYCODE_CTRL_LEFT: {
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    mCtrlKey = key;
+                                    break;
+                                }
+                                case LatinKeyboardView.KEYCODE_ALT_LEFT: {
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    mAltKey = key;
+                                    break;
+                                }
+                                case LatinKeyboardView.KEYCODE_META_LEFT: {
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    mMetaKey = key;
+                                    break;
+                                }
+                                default:{
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (event == XmlResourceParser.END_TAG) {
+                    if (inKey) {
+                        inKey = false;
+                        x += key.realGap + key.realWidth;
+                        if (x > mTotalWidth) {
+                            mTotalWidth = Math.round(x);
+                        }
+                    } else if (inRow) {
+                        inRow = false;
+                        y += currentRow.verticalGap;
+                        y += currentRow.defaultHeight;
+                        mRowCount++;
+                    } else {
+                        // TODO: error or extend?
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Parse error:" + e);
+            e.printStackTrace();
+        }
+        mTotalHeight = y - mDefaultVerticalGap;
+    }
+
 
     private void loadKeyboard(Context context, XmlResourceParser parser) {
         boolean inKey = false;

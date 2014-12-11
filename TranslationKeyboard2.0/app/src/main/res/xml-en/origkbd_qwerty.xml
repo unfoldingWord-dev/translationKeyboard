@@ -25,7 +25,7 @@
     android:verticalGap="@dimen/key_bottom_gap"
 >
     <Row android:extension="true">
-        <Key android:keyLabel="2" android:shiftLabel="!" />
+        <Key android:keyLabel="1" android:shiftLabel="!" />
         <Key android:keyLabel="2" android:shiftLabel="\@" />
         <Key android:keyLabel="3" android:shiftLabel="\#" />
         <Key android:keyLabel="4" android:shiftLabel="&amp;" />

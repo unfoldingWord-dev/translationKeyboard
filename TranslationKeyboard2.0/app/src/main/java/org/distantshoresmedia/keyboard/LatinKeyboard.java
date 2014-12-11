@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.inputmethod.EditorInfo;
 
+import org.distantshoresmedia.model.KeyboardVariant;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.util.List;
@@ -116,6 +117,42 @@ public class LatinKeyboard extends Keyboard {
 
     public LatinKeyboard(Context context, int xmlLayoutResId) {
         this(context, xmlLayoutResId, 0, 0);
+    }
+
+    public LatinKeyboard(Context context, int xmlLayoutResId, int mode, float kbHeightPercent, KeyboardVariant keyVariant) {
+        super(context, 0, xmlLayoutResId, mode, kbHeightPercent, keyVariant);
+        final Resources res = context.getResources();
+        //Log.i("PCKeyboard", "keyHeight=" + this.getKeyHeight());
+        //this.setKeyHeight(30); // is useless, see http://code.google.com/p/android/issues/detail?id=4532
+        mContext = context;
+        mMode = mode;
+        mRes = res;
+        mShiftLockIcon = res.getDrawable(R.drawable.sym_keyboard_shift_locked);
+        mShiftLockPreviewIcon = res.getDrawable(R.drawable.sym_keyboard_feedback_shift_locked);
+        setDefaultBounds(mShiftLockPreviewIcon);
+        mSpaceIcon = res.getDrawable(R.drawable.sym_keyboard_space);
+        mSpaceAutoCompletionIndicator = res.getDrawable(R.drawable.sym_keyboard_space_led);
+        mSpacePreviewIcon = res.getDrawable(R.drawable.sym_keyboard_feedback_space);
+        mMicIcon = res.getDrawable(R.drawable.sym_keyboard_mic);
+        mMicPreviewIcon = res.getDrawable(R.drawable.sym_keyboard_feedback_mic);
+        mSettingsIcon = res.getDrawable(R.drawable.sym_keyboard_settings);
+        mSettingsPreviewIcon = res.getDrawable(R.drawable.sym_keyboard_feedback_settings);
+        setDefaultBounds(mMicPreviewIcon);
+        mButtonArrowLeftIcon = res.getDrawable(R.drawable.sym_keyboard_language_arrows_left);
+        mButtonArrowRightIcon = res.getDrawable(R.drawable.sym_keyboard_language_arrows_right);
+        m123MicIcon = res.getDrawable(R.drawable.sym_keyboard_123_mic);
+        m123MicPreviewIcon = res.getDrawable(R.drawable.sym_keyboard_feedback_123_mic);
+        mHintIcon = res.getDrawable(R.drawable.hint_popup);
+        setDefaultBounds(m123MicPreviewIcon);
+        sSpacebarVerticalCorrection = res.getDimensionPixelOffset(
+                R.dimen.spacebar_vertical_correction);
+        mIsAlphaKeyboard = xmlLayoutResId == R.xml.kbd_qwerty;
+        mIsAlphaFullKeyboard = xmlLayoutResId == R.xml.kbd_full;
+        mIsFnFullKeyboard = xmlLayoutResId == R.xml.kbd_full_fn || xmlLayoutResId == R.xml.kbd_compact_fn;
+        // The index of space key is available only after Keyboard constructor has finished.
+        mSpaceKeyIndexArray = new int[] { indexOf(LatinIME.ASCII_SPACE) };
+        // TODO remove this initialization after cleanup
+        mVerticalGap = super.getVerticalGap();
     }
 
     public LatinKeyboard(Context context, int xmlLayoutResId, int mode, float kbHeightPercent) {

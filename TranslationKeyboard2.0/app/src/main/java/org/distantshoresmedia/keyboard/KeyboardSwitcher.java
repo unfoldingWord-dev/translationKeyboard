@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.InflateException;
 
+import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.lang.ref.SoftReference;
@@ -196,8 +197,9 @@ public class KeyboardSwitcher implements
         mSymbolsId = makeSymbolsId(mHasVoice && !mVoiceOnPrimary);
         mSymbolsShiftedId = makeSymbolsShiftedId(mHasVoice && !mVoiceOnPrimary);
 
-        if (forceCreate)
+        if (forceCreate) {
             mKeyboards.clear();
+        }
         // Configuration change is coming after the keyboard gets recreated. So
         // don't rely on that.
         // If keyboards have already been made, check if we have a screen width
@@ -319,6 +321,7 @@ public class KeyboardSwitcher implements
 
     private LatinKeyboard getKeyboard(KeyboardId id) {
         SoftReference<LatinKeyboard> ref = mKeyboards.get(id);
+
         LatinKeyboard keyboard = (ref == null) ? null : ref.get();
         if (keyboard == null) {
             Resources orig = mInputMethodService.getResources();
@@ -326,8 +329,8 @@ public class KeyboardSwitcher implements
             Locale saveLocale = conf.locale;
             conf.locale = LatinIME.sKeyboardSettings.inputLocale;
             orig.updateConfiguration(conf, null);
-            keyboard = new LatinKeyboard(mInputMethodService, id.mXml,
-                    id.mKeyboardMode, id.mKeyboardHeightPercent);
+            keyboard = new LatinKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDownloader.getKeyboardWithID(5).getKeyboardVariants()[0]);
+//            keyboard = new LatinKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent);
             keyboard.setVoiceMode(hasVoiceButton(id.mXml == R.xml.kbd_symbols), mHasVoice);
             keyboard.setLanguageSwitcher(mLanguageSwitcher, mIsAutoCompletionActive);
 //            if (isFullMode()) {
