@@ -8,36 +8,85 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-feature android:name="android.hardware.microphone" android:required="false" />
     <uses-feature android:name="android.hardware.faketouch" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-	
-    <application
+
+    <application android:label="@string/english_ime_name"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:backupAgent="org.distantshoresmedia.keyboard.LatinIMEBackupAgent"
+        android:restoreAnyVersion="true"
+        android:hardwareAccelerated="false"
+        android:killAfterRestore="false"
+        android:logo="@drawable/icon"
+        android:icon="@drawable/icon">
 
-        <service android:name=".LatinIME"
-                android:label="@string/english_ime_name"
-                android:permission="android.permission.BIND_INPUT_METHOD"
-                android:logo="@drawable/icon"
-            	android:icon="@drawable/icon">
+        <service android:name="org.distantshoresmedia.keyboard.LatinIME"
+            android:label="@string/english_ime_name"
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:logo="@drawable/icon"
+            android:icon="@drawable/icon">
 
-	            <intent-filter>
-	                <action android:name="android.view.InputMethod" />
-	            </intent-filter>
-	            <meta-data android:name="android.view.im" android:resource="@xml/method" />
-				 </service>
-        <activity
-            android:name="org.distantshoresmedia.translationkeyboard20.MainActivity"
-            android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method" />
+        </service>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        <activity android:name="org.distantshoresmedia.keyboard.Main" android:label="Translation Keyboard 2.0">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="org.distantshoresmedia.keyboard.LatinIMESettings" android:label="@string/english_ime_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="org.distantshoresmedia.keyboard.InputLanguageSelection"
+            android:label="@string/language_selection_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="org.distantshoresmedia.keyboard.INPUT_LANGUAGE_SELECTION"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="org.distantshoresmedia.keyboard.PrefScreenActions"
+            android:label="@string/pref_screen_actions_title"
+            android:logo="@drawable/icon"
+            android:icon="@drawable/icon">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="org.distantshoresmedia.keyboard.PREFS_ACTIONS"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="org.distantshoresmedia.keyboard.PrefScreenView"
+            android:label="@string/pref_screen_actions_title"
+            android:logo="@drawable/icon"
+            android:icon="@drawable/icon">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="org.distantshoresmedia.keyboard.PREFS_VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="org.distantshoresmedia.keyboard.PrefScreenFeedback"
+            android:label="@string/pref_screen_feedback_title"
+            android:logo="@drawable/icon"
+            android:icon="@drawable/icon">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="org.distantshoresmedia.keyboard.PREFS_FEEDBACK"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

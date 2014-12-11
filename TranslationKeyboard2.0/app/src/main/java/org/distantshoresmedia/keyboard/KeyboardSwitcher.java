@@ -632,12 +632,20 @@ public class KeyboardSwitcher implements
                 } catch (InflateException e) {
                     tryGC = LatinIMEUtil.GCUtils.getInstance().tryGCOrWait(
                             mLayoutId + "," + newLayout, e);
+                } catch (NullPointerException e) {
+                    tryGC = LatinIMEUtil.GCUtils.getInstance().tryGCOrWait(
+                            mLayoutId + "," + newLayout, e);
                 }
             }
+            try {
             mInputView.setExtensionLayoutResId(THEMES[newLayout]);
             mInputView.setOnKeyboardActionListener(mInputMethodService);
             mInputView.setPadding(0, 0, 0, 0);
             mLayoutId = newLayout;
+            } catch (NullPointerException e) {
+                tryGC = LatinIMEUtil.GCUtils.getInstance().tryGCOrWait(
+                        mLayoutId + "," + newLayout, e);
+            }
         }
         mInputMethodService.mHandler.post(new Runnable() {
             public void run() {
