@@ -230,7 +230,7 @@ public class Suggest implements Dictionary.WordCallback {
      */
     public List<CharSequence> getSuggestions(View view, WordComposer wordComposer, 
             boolean includeTypedWordIfValid, CharSequence prevWordForBigram) {
-        LatinImeLogger.onStartSuggestion(prevWordForBigram);
+        TKIMELogger.onStartSuggestion(prevWordForBigram);
         mHaveCorrection = false;
         mIsFirstCharCapitalized = wordComposer.isFirstCharCapitalized();
         mIsAllUpperCase = wordComposer.isAllUpperCase();
@@ -245,7 +245,7 @@ public class Suggest implements Dictionary.WordCallback {
             mOriginalWord = mOriginalWordString;
             mLowerOriginalWord = mOriginalWordString.toLowerCase();
             // Treating USER_TYPED as UNIGRAM suggestion for logging now.
-            LatinImeLogger.onAddSuggestedWord(mOriginalWordString, Suggest.DIC_USER_TYPED,
+            TKIMELogger.onAddSuggestedWord(mOriginalWordString, Suggest.DIC_USER_TYPED,
                     Dictionary.DataType.UNIGRAM);
         } else {
             mLowerOriginalWord = "";
@@ -484,7 +484,7 @@ public class Suggest implements Dictionary.WordCallback {
                 mStringPool.add(garbage);
             }
         } else {
-            LatinImeLogger.onAddSuggestedWord(sb.toString(), dicTypeId, dataTypeForLog);
+            TKIMELogger.onAddSuggestedWord(sb.toString(), dicTypeId, dataTypeForLog);
         }
         return true;
     }

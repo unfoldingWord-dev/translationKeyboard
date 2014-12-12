@@ -82,7 +82,7 @@ public class UserBigramDictionary extends ExpandableDictionary {
     private static final String FREQ_COLUMN_PAIR_ID = "pair_id";
     private static final String FREQ_COLUMN_FREQUENCY = "freq";
 
-    private final LatinIME mIme;
+    private final TKIME mIme;
 
     /** Locale for which this auto dictionary is storing words */
     private String mLocale;
@@ -138,7 +138,7 @@ public class UserBigramDictionary extends ExpandableDictionary {
         sDeleteUserBigrams = deleteUserBigram;
     }
 
-    public UserBigramDictionary(Context context, LatinIME ime, String locale, int dicTypeId) {
+    public UserBigramDictionary(Context context, TKIME ime, String locale, int dicTypeId) {
         super(context, dicTypeId);
         mIme = ime;
         mLocale = locale;

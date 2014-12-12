@@ -41,7 +41,7 @@ import org.distantshoresmedia.translationkeyboard20.R;
 import java.util.List;
 import java.util.Locale;
 
-public class LatinKeyboard extends Keyboard {
+public class TKKeyboard extends Keyboard {
 
     private static final boolean DEBUG_PREFERRED_LETTER = true;
     private static final String TAG = "PCKeyboardLK";
@@ -98,7 +98,7 @@ public class LatinKeyboard extends Keyboard {
     // non-private.
     private final int mVerticalGap;
 
-    private LatinKeyboard mExtensionKeyboard;
+    private TKKeyboard mExtensionKeyboard;
 
     private static final float SPACEBAR_DRAG_THRESHOLD = 0.51f;
     private static final float OVERLAP_PERCENTAGE_LOW_PROB = 0.70f;
@@ -115,11 +115,11 @@ public class LatinKeyboard extends Keyboard {
 
     private static int sSpacebarVerticalCorrection;
 
-    public LatinKeyboard(Context context, int xmlLayoutResId) {
+    public TKKeyboard(Context context, int xmlLayoutResId) {
         this(context, xmlLayoutResId, 0, 0);
     }
 
-    public LatinKeyboard(Context context, int xmlLayoutResId, int mode, float kbHeightPercent, KeyboardVariant keyVariant) {
+    public TKKeyboard(Context context, int xmlLayoutResId, int mode, float kbHeightPercent, KeyboardVariant keyVariant) {
         super(context, 0, xmlLayoutResId, mode, kbHeightPercent, keyVariant);
         final Resources res = context.getResources();
         //Log.i("PCKeyboard", "keyHeight=" + this.getKeyHeight());
@@ -150,12 +150,12 @@ public class LatinKeyboard extends Keyboard {
         mIsAlphaFullKeyboard = xmlLayoutResId == R.xml.kbd_full;
         mIsFnFullKeyboard = xmlLayoutResId == R.xml.kbd_full_fn || xmlLayoutResId == R.xml.kbd_compact_fn;
         // The index of space key is available only after Keyboard constructor has finished.
-        mSpaceKeyIndexArray = new int[] { indexOf(LatinIME.ASCII_SPACE) };
+        mSpaceKeyIndexArray = new int[] { indexOf(TKIME.ASCII_SPACE) };
         // TODO remove this initialization after cleanup
         mVerticalGap = super.getVerticalGap();
     }
 
-    public LatinKeyboard(Context context, int xmlLayoutResId, int mode, float kbHeightPercent) {
+    public TKKeyboard(Context context, int xmlLayoutResId, int mode, float kbHeightPercent) {
         super(context, 0, xmlLayoutResId, mode, kbHeightPercent);
         final Resources res = context.getResources();
         //Log.i("PCKeyboard", "keyHeight=" + this.getKeyHeight());
@@ -186,7 +186,7 @@ public class LatinKeyboard extends Keyboard {
         mIsAlphaFullKeyboard = xmlLayoutResId == R.xml.kbd_full;
         mIsFnFullKeyboard = xmlLayoutResId == R.xml.kbd_full_fn || xmlLayoutResId == R.xml.kbd_compact_fn;
         // The index of space key is available only after Keyboard constructor has finished.
-        mSpaceKeyIndexArray = new int[] { indexOf(LatinIME.ASCII_SPACE) };
+        mSpaceKeyIndexArray = new int[] { indexOf(TKIME.ASCII_SPACE) };
         // TODO remove this initialization after cleanup
         mVerticalGap = super.getVerticalGap();
     }
@@ -197,13 +197,13 @@ public class LatinKeyboard extends Keyboard {
         Key key = new LatinKey(res, parent, x, y, parser);
         if (key.codes == null) return key;
         switch (key.codes[0]) {
-        case LatinIME.ASCII_ENTER:
+        case TKIME.ASCII_ENTER:
             mEnterKey = key;
             break;
-        case LatinKeyboardView.KEYCODE_F1:
+        case TKKeyboardView.KEYCODE_F1:
             mF1Key = key;
             break;
-        case LatinIME.ASCII_SPACE:
+        case TKIME.ASCII_SPACE:
             mSpaceKey = key;
             break;
         case KEYCODE_MODE_CHANGE:
@@ -291,11 +291,11 @@ public class LatinKeyboard extends Keyboard {
         return mIsAlphaKeyboard;
     }
 
-    public void setExtension(LatinKeyboard extKeyboard) {
+    public void setExtension(TKKeyboard extKeyboard) {
         mExtensionKeyboard = extKeyboard;
     }
 
-    public LatinKeyboard getExtension() {
+    public TKKeyboard getExtension() {
         return mExtensionKeyboard;
     }
 
@@ -385,7 +385,7 @@ public class LatinKeyboard extends Keyboard {
         }
         key.label = null;
         key.shiftLabel = null;
-        key.codes = new int[] { LatinKeyboardView.KEYCODE_VOICE };
+        key.codes = new int[] { TKKeyboardView.KEYCODE_VOICE };
         key.icon = micWithSettingsHintDrawable;
         key.iconPreview = mMicPreviewIcon;
     }
@@ -399,7 +399,7 @@ public class LatinKeyboard extends Keyboard {
                 drawSynthesizedSettingsHintImage(key.width, key.height, mSettingsIcon, mHintIcon));
     	key.label = null;
     	key.icon = settingsHintDrawable;
-    	key.codes = new int[] { LatinKeyboardView.KEYCODE_OPTIONS };
+    	key.codes = new int[] { TKKeyboardView.KEYCODE_OPTIONS };
     	key.popupResId = R.xml.popup_mic;
     	key.iconPreview = mSettingsPreviewIcon;
     }
@@ -676,8 +676,8 @@ public class LatinKeyboard extends Keyboard {
             	}
             }
             if (code == KEYCODE_DELETE) x -= key.width / 6;
-        } else if (code == LatinIME.ASCII_SPACE) {
-            y += LatinKeyboard.sSpacebarVerticalCorrection;
+        } else if (code == TKIME.ASCII_SPACE) {
+            y += TKKeyboard.sSpacebarVerticalCorrection;
             if (mLanguageSwitcher.getLocaleCount() > 1) {
                 if (mCurrentlyInSpace) {
                     int diff = x - mSpaceDragStartX;
@@ -855,7 +855,7 @@ public class LatinKeyboard extends Keyboard {
         public boolean isInside(int x, int y) {
             // TODO This should be done by parent.isInside(this, x, y)
             // if Key.parent were protected.
-            boolean result = LatinKeyboard.this.isInside(this, x, y);
+            boolean result = TKKeyboard.this.isInside(this, x, y);
             return result;
         }
 
@@ -878,7 +878,7 @@ public class LatinKeyboard extends Keyboard {
         @Override
         public int squaredDistanceFrom(int x, int y) {
             // We should count vertical gap between rows to calculate the center of this Key.
-            final int verticalGap = LatinKeyboard.this.mVerticalGap;
+            final int verticalGap = TKKeyboard.this.mVerticalGap;
             final int xDist = this.x + width / 2 - x;
             final int yDist = this.y + (height + verticalGap) / 2 - y;
             return xDist * xDist + yDist * yDist;

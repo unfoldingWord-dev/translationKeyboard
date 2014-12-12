@@ -35,7 +35,7 @@ public class PrefScreenView extends PreferenceActivity
         addPreferencesFromResource(R.xml.prefs_view);
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         prefs.registerOnSharedPreferenceChangeListener(this);
-        mRenderModePreference = (ListPreference) findPreference(LatinIME.PREF_RENDER_MODE);
+        mRenderModePreference = (ListPreference) findPreference(TKIME.PREF_RENDER_MODE);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PrefScreenView extends PreferenceActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (LatinKeyboardBaseView.sSetRenderMode == null) {
+        if (BaseKeyboardView.sSetRenderMode == null) {
             mRenderModePreference.setEnabled(false);
             mRenderModePreference.setSummary(R.string.render_mode_unavailable);
         }

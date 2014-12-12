@@ -19,8 +19,8 @@ package org.distantshoresmedia.keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.distantshoresmedia.keyboard.LatinKeyboardBaseView.OnKeyboardActionListener;
-import org.distantshoresmedia.keyboard.LatinKeyboardBaseView.UIHandler;
+import org.distantshoresmedia.keyboard.BaseKeyboardView.OnKeyboardActionListener;
+import org.distantshoresmedia.keyboard.BaseKeyboardView.UIHandler;
 
 import android.content.res.Resources;
 import org.distantshoresmedia.keyboard.Keyboard.Key;
@@ -48,7 +48,7 @@ public class PointerTracker {
     private final int mMultiTapKeyTimeout;
 
     // Miscellaneous constants
-    private static final int NOT_A_KEY = LatinKeyboardBaseView.NOT_A_KEY;
+    private static final int NOT_A_KEY = BaseKeyboardView.NOT_A_KEY;
     private static final int[] KEY_DELETE = { Keyboard.KEYCODE_DELETE };
 
     private final UIProxy mProxy;
@@ -226,10 +226,10 @@ public class PointerTracker {
         int primaryCode = key.codes[0];
         return primaryCode == Keyboard.KEYCODE_SHIFT
                 || primaryCode == Keyboard.KEYCODE_MODE_CHANGE
-                || primaryCode == LatinKeyboardView.KEYCODE_CTRL_LEFT
-                || primaryCode == LatinKeyboardView.KEYCODE_ALT_LEFT
-                || primaryCode == LatinKeyboardView.KEYCODE_META_LEFT
-                || primaryCode == LatinKeyboardView.KEYCODE_FN;
+                || primaryCode == TKKeyboardView.KEYCODE_CTRL_LEFT
+                || primaryCode == TKKeyboardView.KEYCODE_ALT_LEFT
+                || primaryCode == TKKeyboardView.KEYCODE_META_LEFT
+                || primaryCode == TKKeyboardView.KEYCODE_FN;
     }
 
     public boolean isModifier() {
@@ -242,7 +242,7 @@ public class PointerTracker {
 
     public boolean isSpaceKey(int keyIndex) {
         Key key = getKey(keyIndex);
-        return key != null && key.codes != null && key.codes[0] == LatinIME.ASCII_SPACE;
+        return key != null && key.codes != null && key.codes[0] == TKIME.ASCII_SPACE;
     }
 
     public void updateKey(int keyIndex) {
@@ -321,7 +321,7 @@ public class PointerTracker {
     }
 
     private static void addSlideKey(Key key) {
-        if (!sSlideKeyHack || LatinIME.sKeyboardSettings.sendSlideKeys == 0) return;
+        if (!sSlideKeyHack || TKIME.sKeyboardSettings.sendSlideKeys == 0) return;
         if (key == null) return;
         if (key.modifier) {
             clearSlideKeys();
@@ -336,7 +336,7 @@ public class PointerTracker {
     
     void sendSlideKeys() {
         if (!sSlideKeyHack) return;
-        int slideMode = LatinIME.sKeyboardSettings.sendSlideKeys;
+        int slideMode = TKIME.sKeyboardSettings.sendSlideKeys;
         if ((slideMode & 4) > 0) {
             // send all
             for (Key key : sSlideKeys) {
@@ -530,9 +530,9 @@ public class PointerTracker {
     private void startLongPressTimer(int keyIndex) {
         if (mKeyboardSwitcher.isInMomentaryAutoModeSwitchState()) {
             // We use longer timeout for sliding finger input started from the symbols mode key.
-            mHandler.startLongPressTimer(LatinIME.sKeyboardSettings.longpressTimeout * 3, keyIndex, this);
+            mHandler.startLongPressTimer(TKIME.sKeyboardSettings.longpressTimeout * 3, keyIndex, this);
         } else {
-            mHandler.startLongPressTimer(LatinIME.sKeyboardSettings.longpressTimeout, keyIndex, this);
+            mHandler.startLongPressTimer(TKIME.sKeyboardSettings.longpressTimeout, keyIndex, this);
         }
     }
 

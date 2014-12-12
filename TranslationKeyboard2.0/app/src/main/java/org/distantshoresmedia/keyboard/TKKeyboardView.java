@@ -37,7 +37,7 @@ import android.view.MotionEvent;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class LatinKeyboardView extends LatinKeyboardBaseView {
+public class TKKeyboardView extends BaseKeyboardView {
     static final String TAG = "HK/LatinKeyboardView";
 
 	// The keycode list needs to stay in sync with the
@@ -95,7 +95,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
     /** Whether the extension of this keyboard is visible */
     private boolean mExtensionVisible;
     /** The view that is shown as an extension of this keyboard view */
-    private LatinKeyboardView mExtension;
+    private TKKeyboardView mExtension;
     /** The popup window that contains the extension of this keyboard */
     private PopupWindow mExtensionPopup;
     /** Whether this view is an extension of another keyboard */
@@ -115,18 +115,18 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
     /** The y coordinate of the last row */
     private int mLastRowY;
     private int mExtensionLayoutResId = 0;
-    private LatinKeyboard mExtensionKeyboard;
+    private TKKeyboard mExtensionKeyboard;
 
-    public LatinKeyboardView(Context context, AttributeSet attrs) {
+    public TKKeyboardView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LatinKeyboardView(Context context, AttributeSet attrs, int defStyle) {
+    public TKKeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         // TODO(klausw): migrate attribute styles to LatinKeyboardView?
         TypedArray a = context.obtainStyledAttributes(
-                attrs, R.styleable.LatinKeyboardBaseView, defStyle, R.style.LatinKeyboardBaseView);
+                attrs, R.styleable.BaseKeyboardView, defStyle, R.style.LatinKeyboardBaseView);
         LayoutInflater inflate =
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -136,17 +136,17 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
             int attr = a.getIndex(i);
 
             switch (attr) {
-            case R.styleable.LatinKeyboardBaseView_keyPreviewLayout:
+            case R.styleable.BaseKeyboardView_keyPreviewLayout:
                 previewLayout = a.getResourceId(attr, 0);
                 if (previewLayout == R.layout.null_layout) previewLayout = 0;
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyPreviewOffset:
+            case R.styleable.BaseKeyboardView_keyPreviewOffset:
                 mPreviewOffset = a.getDimensionPixelOffset(attr, 0);
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyPreviewHeight:
+            case R.styleable.BaseKeyboardView_keyPreviewHeight:
                 mPreviewHeight = a.getDimensionPixelSize(attr, 80);
                 break;
-            case R.styleable.LatinKeyboardBaseView_popupLayout:
+            case R.styleable.BaseKeyboardView_popupLayout:
                 mPopupLayout = a.getResourceId(attr, 0);
                 if (mPopupLayout == R.layout.null_layout) mPopupLayout = 0;
                 break;
@@ -199,9 +199,9 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
     @Override
     public void setKeyboard(Keyboard newKeyboard) {
         final Keyboard oldKeyboard = getKeyboard();
-        if (oldKeyboard instanceof LatinKeyboard) {
+        if (oldKeyboard instanceof TKKeyboard) {
             // Reset old keyboard state before switching to new keyboard.
-            ((LatinKeyboard)oldKeyboard).keyReleased();
+            ((TKKeyboard)oldKeyboard).keyReleased();
         }
         super.setKeyboard(newKeyboard);
         // One-seventh of the keyboard width seems like a reasonable threshold
@@ -210,7 +210,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
         // Get Y coordinate of the last row based on the row count, assuming equal height
         int numRows = newKeyboard.mRowCount;
         mLastRowY = (newKeyboard.getHeight() * (numRows - 1)) / numRows;
-        mExtensionKeyboard = ((LatinKeyboard) newKeyboard).getExtension();
+        mExtensionKeyboard = ((TKKeyboard) newKeyboard).getExtension();
         if (mExtensionKeyboard != null && mExtension != null) mExtension.setKeyboard(mExtensionKeyboard);
         setKeyboardLocal(newKeyboard);
     }
@@ -323,8 +323,8 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
 
     @Override
     public boolean onTouchEvent(MotionEvent me) {
-        LatinKeyboard keyboard = (LatinKeyboard) getKeyboard();
-        if (LatinIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
+        TKKeyboard keyboard = (TKKeyboard) getKeyboard();
+        if (TKIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
             mLastX = (int) me.getX();
             mLastY = (int) me.getY();
             invalidate();
@@ -424,7 +424,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
             return false;
         }
         PointerTracker.clearSlideKeys();
-        if (((LatinKeyboard) getKeyboard()).getExtension() == null) return false;
+        if (((TKKeyboard) getKeyboard()).getExtension() == null) return false;
         makePopupWindow();
         mExtensionVisible = true;
         return true;
@@ -438,7 +438,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
             mExtensionPopup.setBackgroundDrawable(null);
             LayoutInflater li = (LayoutInflater) getContext().getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
-            mExtension = (LatinKeyboardView) li.inflate(mExtensionLayoutResId == 0 ?
+            mExtension = (TKKeyboardView) li.inflate(mExtensionLayoutResId == 0 ?
                     R.layout.input_trans : mExtensionLayoutResId, null);
             Keyboard keyboard = mExtensionKeyboard;
             mExtension.setKeyboard(keyboard);
@@ -565,7 +565,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
                                 MotionEvent me = MotionEvent.obtain(SystemClock.uptimeMillis(),
                                         SystemClock.uptimeMillis(),
                                         MotionEvent.ACTION_DOWN, x, y, 0);
-                                LatinKeyboardView.this.dispatchTouchEvent(me);
+                                TKKeyboardView.this.dispatchTouchEvent(me);
                                 me.recycle();
                                 sendEmptyMessageDelayed(MSG_TOUCH_UP, 500); // Deliver up in 500ms if nothing else
                                 // happens
@@ -580,7 +580,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
                                 MotionEvent me2 = MotionEvent.obtain(SystemClock.uptimeMillis(),
                                         SystemClock.uptimeMillis(),
                                         MotionEvent.ACTION_UP, x2, y2, 0);
-                                LatinKeyboardView.this.dispatchTouchEvent(me2);
+                                TKKeyboardView.this.dispatchTouchEvent(me2);
                                 me2.recycle();
                                 sendEmptyMessageDelayed(MSG_TOUCH_DOWN, 500); // Deliver up in 500ms if nothing else
                                 // happens
@@ -618,14 +618,14 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
 
     @Override
     public void draw(Canvas c) {
-        LatinIMEUtil.GCUtils.getInstance().reset();
+        TKIMEUtil.GCUtils.getInstance().reset();
         boolean tryGC = true;
-        for (int i = 0; i < LatinIMEUtil.GCUtils.GC_TRY_LOOP_MAX && tryGC; ++i) {
+        for (int i = 0; i < TKIMEUtil.GCUtils.GC_TRY_LOOP_MAX && tryGC; ++i) {
             try {
                 super.draw(c);
                 tryGC = false;
             } catch (OutOfMemoryError e) {
-                tryGC = LatinIMEUtil.GCUtils.getInstance().tryGCOrWait("LatinKeyboardView", e);
+                tryGC = TKIMEUtil.GCUtils.getInstance().tryGCOrWait("LatinKeyboardView", e);
             }
         }
         if (DEBUG_AUTO_PLAY) {
@@ -639,7 +639,7 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
                 }
             }
         }
-        if (LatinIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
+        if (TKIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
             if (mPaint == null) {
                 mPaint = new Paint();
                 mPaint.setColor(0x80FFFFFF);

@@ -15,14 +15,14 @@
 
     <application android:label="@string/english_ime_name"
         android:allowBackup="true"
-        android:backupAgent="org.distantshoresmedia.keyboard.LatinIMEBackupAgent"
+        android:backupAgent="org.distantshoresmedia.keyboard.TKIMEBackupAgent"
         android:restoreAnyVersion="true"
         android:hardwareAccelerated="false"
         android:killAfterRestore="false"
         android:logo="@drawable/icon"
         android:icon="@drawable/icon">
 
-        <service android:name="org.distantshoresmedia.keyboard.LatinIME"
+        <service android:name="org.distantshoresmedia.keyboard.TKIME"
             android:label="@string/english_ime_name"
             android:permission="android.permission.BIND_INPUT_METHOD"
             android:logo="@drawable/icon"
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.distantshoresmedia.keyboard.LatinIMESettings" android:label="@string/english_ime_settings">
+        <activity android:name="org.distantshoresmedia.keyboard.TKIMESettings" android:label="@string/english_ime_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>

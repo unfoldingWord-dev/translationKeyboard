@@ -21,7 +21,7 @@ import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-public class LatinIMEUtil {
+public class TKIMEUtil {
 
     /**
      * Cancel an {@link AsyncTask}.
@@ -59,7 +59,7 @@ public class LatinIMEUtil {
                 System.gc();
             }
             if (++mGCTryCount > GC_TRY_COUNT) {
-                LatinImeLogger.logOnException(metaData, t);
+                TKIMELogger.logOnException(metaData, t);
                 return false;
             } else {
                 try {
@@ -67,7 +67,7 @@ public class LatinIMEUtil {
                     return true;
                 } catch (InterruptedException e) {
                     Log.e(TAG, "Sleep was interrupted.");
-                    LatinImeLogger.logOnException(metaData, t);
+                    TKIMELogger.logOnException(metaData, t);
                     return false;
                 }
             }
@@ -149,7 +149,7 @@ public class LatinIMEUtil {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < mLength; ++i) {
                 char c = mCharBuf[normalize(mEnd - 1 - i)];
-                if (!((LatinIME)mContext).isWordSeparator(c)) {
+                if (!((TKIME)mContext).isWordSeparator(c)) {
                     sb.append(c);
                 } else {
                     break;

@@ -26,10 +26,10 @@ import android.util.Log;
 
 import org.distantshoresmedia.translationkeyboard20.R;
 
-public class LatinIMEDebugSettings extends PreferenceActivity
+public class TKIMEDebugSettings extends PreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "LatinIMEDebugSettings";
+    private static final String TAG = "TKIMEDebugSettings";
     private static final String DEBUG_MODE_KEY = "debug_mode";
 
     private CheckBoxPreference mDebugMode;

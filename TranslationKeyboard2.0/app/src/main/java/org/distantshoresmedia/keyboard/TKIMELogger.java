@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.List;
 
-public class LatinImeLogger implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class TKIMELogger implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     }

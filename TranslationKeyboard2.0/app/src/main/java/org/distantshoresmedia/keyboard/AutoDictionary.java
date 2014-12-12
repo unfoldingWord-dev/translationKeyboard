@@ -49,7 +49,7 @@ public class AutoDictionary extends ExpandableDictionary {
     // If the user touches a typed word 4 times or more, it will be added to the user dict.
     private static final int PROMOTION_THRESHOLD = 4 * FREQUENCY_FOR_PICKED;
 
-    private LatinIME mIme;
+    private TKIME mIme;
     // Locale for which this auto dictionary is storing words
     private String mLocale;
 
@@ -85,7 +85,7 @@ public class AutoDictionary extends ExpandableDictionary {
 
     private static DatabaseHelper sOpenHelper = null;
 
-    public AutoDictionary(Context context, LatinIME ime, String locale, int dicTypeId) {
+    public AutoDictionary(Context context, TKIME ime, String locale, int dicTypeId) {
         super(context, dicTypeId);
         mIme = ime;
         mLocale = locale;

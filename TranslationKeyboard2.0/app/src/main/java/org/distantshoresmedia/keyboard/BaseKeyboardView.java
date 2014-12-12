@@ -25,6 +25,7 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Paint.Align;
 import android.graphics.PorterDuff;
@@ -40,8 +41,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,22 +63,22 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 /**
- * A view that renders a virtual {@link LatinKeyboard}. It handles rendering of keys and
+ * A view that renders a virtual {@link TKKeyboard}. It handles rendering of keys and
  * detecting key presses and touch movements.
  *
- * TODO: References to LatinKeyboard in this class should be replaced with ones to its base class.
+ * TODO: References to TKKeyboard in this class should be replaced with ones to its base class.
  *
- * @attr ref R.styleable#LatinKeyboardBaseView_keyBackground
- * @attr ref R.styleable#LatinKeyboardBaseView_keyPreviewLayout
- * @attr ref R.styleable#LatinKeyboardBaseView_keyPreviewOffset
- * @attr ref R.styleable#LatinKeyboardBaseView_labelTextSize
- * @attr ref R.styleable#LatinKeyboardBaseView_keyTextSize
- * @attr ref R.styleable#LatinKeyboardBaseView_keyTextColor
- * @attr ref R.styleable#LatinKeyboardBaseView_verticalCorrection
- * @attr ref R.styleable#LatinKeyboardBaseView_popupLayout
+ * @attr ref R.styleable#BaseKeyboardView_keyBackground
+ * @attr ref R.styleable#BaseKeyboardView_keyPreviewLayout
+ * @attr ref R.styleable#BaseKeyboardView_keyPreviewOffset
+ * @attr ref R.styleable#BaseKeyboardView_labelTextSize
+ * @attr ref R.styleable#BaseKeyboardView_keyTextSize
+ * @attr ref R.styleable#BaseKeyboardView_keyTextColor
+ * @attr ref R.styleable#BaseKeyboardView_verticalCorrection
+ * @attr ref R.styleable#BaseKeyboardView_popupLayout
  */
-public class LatinKeyboardBaseView extends View implements PointerTracker.UIProxy {
-    private static final String TAG = "HK/LatinKeyboardBaseView";
+public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
+    private static final String TAG = "HK/BaseKeyboardView";
     private static final boolean DEBUG = false;
 
     public static final int NOT_A_TOUCH_COORDINATE = -1;
@@ -214,7 +217,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
     // Popup mini keyboard
     protected PopupWindow mMiniKeyboardPopup;
-    protected LatinKeyboardBaseView mMiniKeyboard;
+    protected BaseKeyboardView mMiniKeyboard;
     protected View mMiniKeyboardContainer;
     protected View mMiniKeyboardParent;
     protected boolean mMiniKeyboardVisible;
@@ -443,7 +446,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             try {
                 sSetRenderMode.invoke(this, mode, null);
                 sPrevRenderMode = mode;
-                Log.i(TAG, "render mode set to " + LatinIME.sKeyboardSettings.renderMode);
+                Log.i(TAG, "render mode set to " + TKIME.sKeyboardSettings.renderMode);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -454,66 +457,66 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         }
     }
     
-    public LatinKeyboardBaseView(Context context, AttributeSet attrs) {
+    public BaseKeyboardView(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.keyboardViewStyle);
     }
 
-    public LatinKeyboardBaseView(Context context, AttributeSet attrs, int defStyle) {
+    public BaseKeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        Log.i(TAG, "Creating new LatinKeyboardBaseView " + this);
-        setRenderModeIfPossible(LatinIME.sKeyboardSettings.renderMode);
+        Log.i(TAG, "Creating new BaseKeyboardView " + this);
+        setRenderModeIfPossible(TKIME.sKeyboardSettings.renderMode);
 
         TypedArray a = context.obtainStyledAttributes(
-                attrs, R.styleable.LatinKeyboardBaseView, defStyle, R.style.LatinKeyboardBaseView);
+                attrs, R.styleable.BaseKeyboardView, defStyle, R.style.LatinKeyboardBaseView);
 
         int n = a.getIndexCount();
         for (int i = 0; i < n; i++) {
             int attr = a.getIndex(i);
 
             switch (attr) {
-            case R.styleable.LatinKeyboardBaseView_keyBackground:
+            case R.styleable.BaseKeyboardView_keyBackground:
                 mKeyBackground = a.getDrawable(attr);
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyHysteresisDistance:
+            case R.styleable.BaseKeyboardView_keyHysteresisDistance:
                 mKeyHysteresisDistance = a.getDimensionPixelOffset(attr, 0);
                 break;
-            case R.styleable.LatinKeyboardBaseView_verticalCorrection:
+            case R.styleable.BaseKeyboardView_verticalCorrection:
                 mVerticalCorrection = a.getDimensionPixelOffset(attr, 0);
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyTextSize:
+            case R.styleable.BaseKeyboardView_keyTextSize:
                 mKeyTextSize = a.getDimensionPixelSize(attr, 18);
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyTextColor:
+            case R.styleable.BaseKeyboardView_keyTextColor:
                 mKeyTextColor = a.getColor(attr, 0xFF000000);
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyHintColor:
+            case R.styleable.BaseKeyboardView_keyHintColor:
                 mKeyHintColor = a.getColor(attr, 0xFFBBBBBB);
                 break;
-            case R.styleable.LatinKeyboardBaseView_keyCursorColor:
+            case R.styleable.BaseKeyboardView_keyCursorColor:
                 mKeyCursorColor = a.getColor(attr, 0xFF000000);
                 break;
-            case R.styleable.LatinKeyboardBaseView_recolorSymbols:
+            case R.styleable.BaseKeyboardView_recolorSymbols:
                 mRecolorSymbols = a.getBoolean(attr, false);
                 break;
-            case R.styleable.LatinKeyboardBaseView_labelTextSize:
+            case R.styleable.BaseKeyboardView_labelTextSize:
                 mLabelTextSize = a.getDimensionPixelSize(attr, 14);
                 break;
-            case R.styleable.LatinKeyboardBaseView_shadowColor:
+            case R.styleable.BaseKeyboardView_shadowColor:
                 mShadowColor = a.getColor(attr, 0);
                 break;
-            case R.styleable.LatinKeyboardBaseView_shadowRadius:
+            case R.styleable.BaseKeyboardView_shadowRadius:
                 mShadowRadius = a.getFloat(attr, 0f);
                 break;
             // TODO: Use Theme (android.R.styleable.Theme_backgroundDimAmount)
-            case R.styleable.LatinKeyboardBaseView_backgroundDimAmount:
+            case R.styleable.BaseKeyboardView_backgroundDimAmount:
                 mBackgroundDimAmount = a.getFloat(attr, 0.5f);
                 break;
-            case R.styleable.LatinKeyboardBaseView_backgroundAlpha:
+            case R.styleable.BaseKeyboardView_backgroundAlpha:
                 mBackgroundAlpha = a.getInteger(attr, 255);
                 break;
             //case android.R.styleable.
-            case R.styleable.LatinKeyboardBaseView_keyTextStyle:
+            case R.styleable.BaseKeyboardView_keyTextStyle:
                 int textStyle = a.getInt(attr, 0);
                 switch (textStyle) {
                     case 0:
@@ -527,7 +530,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
                         break;
                 }
                 break;
-            case R.styleable.LatinKeyboardBaseView_symbolColorScheme:
+            case R.styleable.BaseKeyboardView_symbolColorScheme:
                 mSymbolColorScheme = a.getInt(attr, 0);
                 break;
             }
@@ -612,11 +615,11 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
     }
 
     private boolean showHints7Bit() {
-        return LatinIME.sKeyboardSettings.hintMode >= 1;
+        return TKIME.sKeyboardSettings.hintMode >= 1;
     }
 
     private boolean showHintsAll() {
-        return LatinIME.sKeyboardSettings.hintMode >= 2;
+        return TKIME.sKeyboardSettings.hintMode >= 2;
     }
 
     public void setOnKeyboardActionListener(OnKeyboardActionListener listener) {
@@ -650,14 +653,14 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         mHandler.cancelKeyTimers();
         mHandler.cancelPopupPreview();
         mKeyboard = keyboard;
-        LatinImeLogger.onSetKeyboard(keyboard);
+        TKIMELogger.onSetKeyboard(keyboard);
         mKeys = mKeyDetector.setKeyboard(keyboard, -getPaddingLeft(),
                 -getPaddingTop() + mVerticalCorrection);
         mKeyboardVerticalGap = (int)getResources().getDimension(R.dimen.key_bottom_gap);
         for (PointerTracker tracker : mPointerTrackers) {
             tracker.setKeyboard(mKeys, mKeyHysteresisDistance);
         }
-        mLabelScale = LatinIME.sKeyboardSettings.labelScalePref;
+        mLabelScale = TKIME.sKeyboardSettings.labelScalePref;
         if (keyboard.mLayoutRows >= 4) mLabelScale *= 5.0f / keyboard.mLayoutRows;
         requestLayout();
         // Hint to reallocate the buffer if the size changed
@@ -667,7 +670,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         mMiniKeyboardCacheMain.clear();
         mMiniKeyboardCacheShift.clear();
         mMiniKeyboardCacheCaps.clear();
-        setRenderModeIfPossible(LatinIME.sKeyboardSettings.renderMode);
+        setRenderModeIfPossible(TKIME.sKeyboardSettings.renderMode);
         mIgnoreMove = true;
     }
     
@@ -740,7 +743,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
     public boolean isShiftAll() {
         int state = getShiftState();
-        if (LatinIME.sKeyboardSettings.shiftLockModifiers) {
+        if (TKIME.sKeyboardSettings.shiftLockModifiers) {
             return state == Keyboard.SHIFT_ON || state == Keyboard.SHIFT_LOCKED;
         } else {
             return state == Keyboard.SHIFT_ON;            
@@ -878,7 +881,12 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
     private void onBufferDraw(Canvas canvas) {
         //Log.i(TAG, "onBufferDraw called");
         if (/*mBuffer == null ||*/ mKeyboardChanged) {
-            mKeyboard.setKeyboardWidth(mViewWidth);
+
+            DisplayMetrics dm = getResources().getDisplayMetrics();
+            float fwidth = dm.density * dm.widthPixels;
+            float fheight = dm.density * dm.heightPixels;
+
+            mKeyboard.setKeyboardWidth(Math.round(fwidth / 2));
 //            if (mBuffer == null || mKeyboardChanged &&
 //                    (mBuffer.getWidth() != getWidth() || mBuffer.getHeight() != getHeight())) {
 //                // Make sure our bitmap is at least 1x1
@@ -981,7 +989,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
                 // For characters, use large font. For labels like "Done", use small font.
                 final int labelSize;
                 if (label.length() > 1 && key.codes.length < 2) {
-                    //Log.i(TAG, "mLabelTextSize=" + mLabelTextSize + " LatinIME.sKeyboardSettings.labelScale=" + LatinIME.sKeyboardSettings.labelScale);
+                    //Log.i(TAG, "mLabelTextSize=" + mLabelTextSize + " TKIME.sKeyboardSettings.labelScale=" + TKIME.sKeyboardSettings.labelScale);
                     labelSize = (int)(mLabelTextSize * mLabelScale);
                     paint.setTypeface(Typeface.DEFAULT);
                 } else {
@@ -1114,8 +1122,8 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
         }
 
-        if (LatinIME.sKeyboardSettings.showTouchPos || DEBUG) {
-            if (LatinIME.sKeyboardSettings.showTouchPos || mShowTouchPoints) {
+        if (TKIME.sKeyboardSettings.showTouchPos || DEBUG) {
+            if (TKIME.sKeyboardSettings.showTouchPos || mShowTouchPoints) {
                 for (PointerTracker tracker : mPointerTrackers) {
                     int startX = tracker.getStartX();
                     int startY = tracker.getStartY();
@@ -1148,8 +1156,8 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
     public void showPreview(int keyIndex, PointerTracker tracker) {
         int oldKeyIndex = mOldPreviewKeyIndex;
         mOldPreviewKeyIndex = keyIndex;
-        final boolean isLanguageSwitchEnabled = (mKeyboard instanceof LatinKeyboard)
-                && ((LatinKeyboard)mKeyboard).isLanguageSwitchEnabled();
+        final boolean isLanguageSwitchEnabled = (mKeyboard instanceof TKKeyboard)
+                && ((TKKeyboard)mKeyboard).isLanguageSwitchEnabled();
         // We should re-draw popup preview when 1) we need to hide the preview, 2) we will show
         // the space key preview and 3) pointer moves off the space key to other letter key, we
         // should hide the preview of the previous key.
@@ -1308,7 +1316,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         View container = inflater.inflate(mPopupLayout, null);
 
         mMiniKeyboard =
-                (LatinKeyboardBaseView)container.findViewById(R.id.LatinKeyboardBaseView);
+                (BaseKeyboardView)container.findViewById(R.id.LatinKeyboardBaseView);
         mMiniKeyboard.setOnKeyboardActionListener(new OnKeyboardActionListener() {
             public void onKey(int primaryCode, int[] keyCodes, int x, int y) {
                 mKeyboardActionListener.onKey(primaryCode, keyCodes, x, y);
@@ -1475,13 +1483,13 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
     private boolean shouldDrawIconFully(Key key) {
         return isNumberAtEdgeOfPopupChars(key) || isLatinF1Key(key)
-                || LatinKeyboard.hasPuncOrSmileysPopup(key);
+                || TKKeyboard.hasPuncOrSmileysPopup(key);
     }
 
     private boolean shouldDrawLabelAndIcon(Key key) {
         // isNumberAtEdgeOfPopupChars(key) ||
         return isNonMicLatinF1Key(key)
-                || LatinKeyboard.hasPuncOrSmileysPopup(key);
+                || TKKeyboard.hasPuncOrSmileysPopup(key);
     }
 
     private boolean shouldAlignLeftmost(Key key) {
@@ -1489,7 +1497,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
     }
 
     private boolean isLatinF1Key(Key key) {
-        return (mKeyboard instanceof LatinKeyboard) && ((LatinKeyboard)mKeyboard).isF1Key(key);
+        return (mKeyboard instanceof TKKeyboard) && ((TKKeyboard)mKeyboard).isF1Key(key);
     }
 
     private boolean isNonMicLatinF1Key(Key key) {

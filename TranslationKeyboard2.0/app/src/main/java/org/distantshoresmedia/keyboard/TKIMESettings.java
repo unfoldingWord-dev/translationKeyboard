@@ -36,7 +36,7 @@ import android.util.Log;
 
 import org.distantshoresmedia.translationkeyboard20.R;
 
-public class LatinIMESettings extends PreferenceActivity
+public class TKIMESettings extends PreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener,
         DialogInterface.OnDismissListener {
 
@@ -46,7 +46,7 @@ public class LatinIMESettings extends PreferenceActivity
     /* package */ static final String PREF_SETTINGS_KEY = "settings_key";
     static final String INPUT_CONNECTION_INFO = "input_connection_info";    
 
-    private static final String TAG = "LatinIMESettings";
+    private static final String TAG = "TKIMESettings";
 
     // Dialog ids
     private static final int VOICE_INPUT_CONFIRM_DIALOG = 0;
@@ -91,8 +91,8 @@ public class LatinIMESettings extends PreferenceActivity
                     .removePreference(mQuickFixes);
         }
         
-        Log.i(TAG, "compactModeEnabled=" + LatinIME.sKeyboardSettings.compactModeEnabled);
-        if (!LatinIME.sKeyboardSettings.compactModeEnabled) {
+        Log.i(TAG, "compactModeEnabled=" + TKIME.sKeyboardSettings.compactModeEnabled);
+        if (!TKIME.sKeyboardSettings.compactModeEnabled) {
             CharSequence[] oldEntries = mKeyboardModePortraitPreference.getEntries();
             CharSequence[] oldValues = mKeyboardModePortraitPreference.getEntryValues();
             
@@ -218,8 +218,8 @@ public class LatinIMESettings extends PreferenceActivity
                 [mSettingsKeyPreference.findIndexOfValue(mSettingsKeyPreference.getValue())]);
 
         mInputConnectionInfo.setSummary(String.format("%s type=%s",
-                LatinIME.sKeyboardSettings.editorPackageName,
-                inputTypeDesc(LatinIME.sKeyboardSettings.editorInputType)
+                TKIME.sKeyboardSettings.editorPackageName,
+                inputTypeDesc(TKIME.sKeyboardSettings.editorInputType)
                 ));
     }
 

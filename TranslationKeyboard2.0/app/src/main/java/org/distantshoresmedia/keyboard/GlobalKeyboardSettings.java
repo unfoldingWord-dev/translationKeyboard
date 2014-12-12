@@ -42,7 +42,7 @@ public final class GlobalKeyboardSettings {
     // Read by LatinKeyboardView
     public boolean showTouchPos = false;
     //
-    // Read by LatinIME
+    // Read by TKIME
     public String suggestedPunctuation = "!?,.";
     public int keyboardModePortrait = 2;
     public int keyboardModeLandscape = 2;
@@ -55,7 +55,7 @@ public final class GlobalKeyboardSettings {
     public boolean capsLock = false;
     public boolean shiftLockModifiers = false;
     //
-    // Read by LatinKeyboardBaseView
+    // Read by BaseKeyboardView
     public float labelScalePref = 1.0f;
     //
     // Read by CandidateView
@@ -64,7 +64,7 @@ public final class GlobalKeyboardSettings {
     // Read by PointerTracker
     public int sendSlideKeys = 0;
     
-    /* Updated by LatinIME */
+    /* Updated by TKIME */
     //
     // Read by KeyboardSwitcher
     public int keyboardMode = 0;
@@ -73,14 +73,14 @@ public final class GlobalKeyboardSettings {
     // Read by LatinKeyboardView and KeyboardSwitcher
     public float keyboardHeightPercent = 40.0f; // percent of screen height
     //
-    // Read by LatinKeyboardBaseView
+    // Read by BaseKeyboardView
     public int hintMode = 0;
     public int renderMode = 1;
     //
     // Read by PointerTracker
     public int longpressTimeout = 400;
     //
-    // Read by LatinIMESettings
+    // Read by TKIMESettings
     // These are cached values for informational display, don't use for other purposes
     public String editorPackageName; 
     public String editorFieldName; 
@@ -89,7 +89,7 @@ public final class GlobalKeyboardSettings {
 
     /* Updated by KeyboardSwitcher */
     //
-    // Used by LatinKeyboardBaseView and LatinIME
+    // Used by BaseKeyboardView and TKIME
 
     /* Updated by LanguageSwitcher */
     //
