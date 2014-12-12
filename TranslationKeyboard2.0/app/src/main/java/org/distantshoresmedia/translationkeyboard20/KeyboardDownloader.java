@@ -53,6 +53,8 @@ public class KeyboardDownloader {
 
     static public BaseKeyboard getKeyboardWithID(int id){
         BaseKeyboard desiredKeyboard = keyboards.get(Integer.toString(id));
+
+        System.out.println("Got keyboard with id: " + id + " and name: " + desiredKeyboard.getName());
         return keyboards.get(Integer.toString(id));
 
     }

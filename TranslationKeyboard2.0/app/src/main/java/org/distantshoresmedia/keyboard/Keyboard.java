@@ -493,10 +493,18 @@ public class Keyboard {
             a.recycle();
         }
 
-        public void setCharacterTo(int charValue){
-            this.codes = new int[] {charValue};
-            this.label = Character.toString((char) charValue);
-            this.text = Character.toString((char) charValue);
+        public void setCharactersTo(KeyPosition position){
+            int defaultValue = position.getCharacters()[0].getUnicodeValue()[0];
+            int shiftValue = position.getCharacters()[1].getUnicodeValue()[0];
+            this.codes = new int[] {defaultValue};
+            this.label = Character.toString((char) defaultValue);
+            this.text = Character.toString((char) defaultValue);
+            this.shiftLabel = Character.toString((char) shiftValue);
+
+            if(position.getCharacters().length > 2){
+                int longpressValue = position.getCharacters()[2].getUnicodeValue()[0];
+                this.popupCharacters = Character.toString((char) longpressValue);
+            }
         }
 
         public boolean isDistinctCaps() {
@@ -1188,9 +1196,9 @@ public class Keyboard {
         return new Key(res, parent, x, y, parser);
     }
 
-    protected Key createKeyWithData(Resources res, Row parent, int x, int y, XmlResourceParser parser, int charValue) {
+    protected Key createKeyWithData(Resources res, Row parent, int x, int y, XmlResourceParser parser, KeyPosition position) {
         Key newKey = new Key(res, parent, x, y, parser);
-        newKey.setCharacterTo(charValue);
+        newKey.setCharactersTo(position);
         return newKey;
     }
 
@@ -1248,9 +1256,8 @@ public class Keyboard {
                                 case BEGGINING_ROW_VALUE: {
                                     KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
                                     KeyPosition position = positionRow[0];
-                                    KeyCharacter positionCharacter = position.getCharacterAtIndex(0);
 
-                                    key.setCharacterTo(positionCharacter.getUnicodeValue()[0]);
+                                    key.setCharactersTo(position);
                                     mKeys.add(key);
                                     prevKey = key;
                                     break;
@@ -1260,9 +1267,7 @@ public class Keyboard {
 
                                     for (int i = 1; i < positionRow.length - 1; i++) {
                                         KeyPosition position = positionRow[i];
-                                        KeyCharacter positionCharacter = position.getCharacterAtIndex(0);
-
-                                        Key newKey = createKeyWithData(res, currentRow, Math.round(x), y, parser, positionCharacter.getUnicodeValue()[0]);
+                                        Key newKey = createKeyWithData(res, currentRow, Math.round(x), y, parser, position);
                                         mKeys.add(newKey);
                                         prevKey = newKey;
                                         x += key.realGap + key.realWidth;
@@ -1275,9 +1280,7 @@ public class Keyboard {
                                 case END_ROW_VALUE: {
                                     KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
                                     KeyPosition position = positionRow[positionRow.length - 1];
-                                    KeyCharacter positionCharacter = position.getCharacterAtIndex(0);
-
-                                    key.setCharacterTo(positionCharacter.getUnicodeValue()[0]);
+                                    key.setCharactersTo(position);
                                     break;
                                 }
                                 case KEYCODE_SHIFT: {
