@@ -13,6 +13,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +48,7 @@ public class KeyboardDownloader {
     private Context context;
 
     static public Map<String, BaseKeyboard> keyboards = new HashMap<String, BaseKeyboard>();
-
+    static public AvailableKeyboard[] availableKeyboards = null;
 
 //    public JSONObject keyboards;
 
@@ -59,10 +60,18 @@ public class KeyboardDownloader {
 
     }
 
+
     public void downloadKeyboards(Context context) {
         System.out.println("Will Download");
         this.context = context;
         getJSONFromUrl(this.context, getKeyboardUrl());
+    }
+
+    public void downloadKeyboardAvailability(){
+
+        if(availableKeyboards == null){
+
+        }
     }
 
     static public String getKeyboardUrl() {

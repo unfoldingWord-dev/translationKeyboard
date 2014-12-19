@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
+import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
 
@@ -42,9 +43,12 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        KeyboardDownloader downloader = new KeyboardDownloader();
 
-        downloader.downloadKeyboards(this.getApplicationContext());
+        KeyboardDatabaseHandler.initializeDatabase(this.getApplicationContext());
+
+//        KeyboardDownloader downloader = new KeyboardDownloader();
+//
+//        downloader.downloadKeyboards(this.getApplicationContext());
 
         setContentView(R.layout.main);
         String html = getString(R.string.main_body);
