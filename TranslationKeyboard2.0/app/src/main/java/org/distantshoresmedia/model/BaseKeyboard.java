@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 import de.greenrobot.dao.DaoException;
 
-public class BaseKeyboard {
+public class BaseKeyboard extends BaseDataClass{
 
     static final private String kUIDKey = "keyboard_id";
     static final private String kKeyboardNameKey = "keyboard_name";
@@ -21,15 +21,6 @@ public class BaseKeyboard {
     static final private String kIsoRegionKey = "iso_region";
     static final private String kIsoLanguageKey = "iso_language";
     static final private String kKeybaordVariantKey = "keyboard_variants";
-
-
-    private long id;
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public long getId() {
-        return id;
-    }
 
     private String Name;
     public void setName(String name) {
@@ -45,14 +36,6 @@ public class BaseKeyboard {
     }
     public String getCreatedAt() {
         return createdAt;
-    }
-
-    private String updatedAt;
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    public String getUpdatedAt() {
-        return updatedAt;
     }
 
     private String isoRegion;
@@ -80,16 +63,29 @@ public class BaseKeyboard {
 	}
 
 
-    public BaseKeyboard(long id, String name, String created, String updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
-        this.id = id;
+    public BaseKeyboard(long id, String name, String created, double updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
+        super(id, updated);
         this.Name = name;
         this.createdAt = created;
-        this.updatedAt = updated;
         this.isoRegion = isoRegion;
         this.isoLanguage = isoLanguage;
         this.keyboardVariants = variants;
     }
 
+    static public String getKeyboardNameFromJSONString(String json){
+
+        try {
+            JSONObject jObject = new JSONObject(json);
+            String name = jObject.getString(kKeyboardNameKey);
+
+            return name;
+        }
+        catch (JSONException e){
+            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString());
+        }
+
+        return null;
+    }
 
     static public BaseKeyboard getKeyboardFromJsonObject(JSONObject jsonObj){
 
@@ -98,7 +94,7 @@ public class BaseKeyboard {
             int id = jsonObj.getInt(kUIDKey);
             String name = jsonObj.getString(kKeyboardNameKey);
             String created = jsonObj.getString(kCreatedKey);
-            String updated = jsonObj.getString(kUpdatedKey);
+            double updated = jsonObj.getDouble(kUpdatedKey);
             String isoRegion = jsonObj.getString(kIsoRegionKey);
             String isoLanguage = jsonObj.getString(kIsoLanguageKey);
 
@@ -128,7 +124,7 @@ public class BaseKeyboard {
                 "Id=" + id +
                 ", Name='" + Name + '\'' +
                 ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", updatedAt=" + updated +
                 ", isoRegion='" + isoRegion + '\'' +
                 ", isoLanguage='" + isoLanguage + '\'' +
                 ", keyboardVariants=" + Arrays.toString(keyboardVariants) +

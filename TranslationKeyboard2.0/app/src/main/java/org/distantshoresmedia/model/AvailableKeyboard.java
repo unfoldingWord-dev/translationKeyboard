@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Fechner on 12/18/14.
  */
-public class AvailableKeyboard {
+public class AvailableKeyboard extends BaseDataClass{
 
     static final private String kKeyboardKey = "keyboards";
     static final private String kIdKey = "id";
@@ -18,15 +18,7 @@ public class AvailableKeyboard {
     static final private String kLanguageNameKey = "language_name";
     static final private String kUpdatedKey = "updated_at";
 
-    private int id;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     private String iso_language;
 
@@ -58,23 +50,27 @@ public class AvailableKeyboard {
         this.languageName = language;
     }
 
-    private double updated;
-
-    public double getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(double updated) {
-        this.updated = updated;
-    }
-
 
     public AvailableKeyboard(double updated, int id, String iso_language, String iso_region, String language) {
-        this.updated = updated;
-        this.id = id;
+        super(id, updated);
         this.iso_language = iso_language;
         this.iso_region = iso_region;
         this.languageName = language;
+    }
+
+    static public String getKeyboardNameFromJSONString(String json){
+
+        try {
+            JSONObject jObject = new JSONObject(json);
+            String name = jObject.getString(kLanguageNameKey);
+
+            return name;
+        }
+        catch (JSONException e){
+            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString());
+        }
+
+        return null;
     }
 
 
