@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import de.greenrobot.dao.DaoException;
 
@@ -64,7 +65,7 @@ public class BaseKeyboard extends BaseDataClass{
 
 
     public BaseKeyboard(long id, String name, String created, double updated, String isoRegion, String isoLanguage, KeyboardVariant[] variants){
-        super(id, updated);
+        super(id, new Date(Math.round(updated)));
         this.Name = name;
         this.createdAt = created;
         this.isoRegion = isoRegion;
@@ -81,7 +82,7 @@ public class BaseKeyboard extends BaseDataClass{
             return name;
         }
         catch (JSONException e){
-            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString());
+            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString() + "json: " + json);
         }
 
         return null;

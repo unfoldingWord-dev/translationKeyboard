@@ -38,14 +38,14 @@ public class BaseDataClass {
 
         try {
             JSONObject jObject = new JSONObject(json);
-            double name = jObject.getDouble(kUpdatedKey);
+            double time = jObject.getDouble(kUpdatedKey);
 
-            return name;
+            return time;
         }
         catch (JSONException e){
-            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString());
+            System.out.println("getUpdatedTimeFromJSONString JSONException: " + e.toString() + " json: " + json);
         }
 
-        return -1;
+        return 1413087174.3473752;
     }
 }

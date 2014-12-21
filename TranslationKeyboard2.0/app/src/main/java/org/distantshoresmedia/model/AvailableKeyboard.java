@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Fechner on 12/18/14.
@@ -13,31 +13,31 @@ public class AvailableKeyboard extends BaseDataClass{
 
     static final private String kKeyboardKey = "keyboards";
     static final private String kIdKey = "id";
-    static final private String kIsoLanguageKey = "iso_language";
-    static final private String kIsoRegionKey = "iso_region";
+    static final private String kIsoLanguageKey = "isoLanguage";
+    static final private String kIsoRegionKey = "isoRegion";
     static final private String kLanguageNameKey = "language_name";
     static final private String kUpdatedKey = "updated_at";
 
 
 
-    private String iso_language;
+    private String isoLanguage;
 
-    public String getIso_language() {
-        return iso_language;
+    public String getIsoLanguage() {
+        return isoLanguage;
     }
 
-    public void setIso_language(String iso_language) {
-        this.iso_language = iso_language;
+    public void setIsoLanguage(String isoLanguage) {
+        this.isoLanguage = isoLanguage;
     }
 
-    private String iso_region;
+    private String isoRegion;
 
-    public String getIso_region() {
-        return iso_region;
+    public String getIsoRegion() {
+        return isoRegion;
     }
 
-    public void setIso_region(String iso_region) {
-        this.iso_region = iso_region;
+    public void setIsoRegion(String isoRegion) {
+        this.isoRegion = isoRegion;
     }
 
     private String languageName;
@@ -51,11 +51,34 @@ public class AvailableKeyboard extends BaseDataClass{
     }
 
 
-    public AvailableKeyboard(double updated, int id, String iso_language, String iso_region, String language) {
+    public AvailableKeyboard(Date updated, int id, String isoLanguage, String isoRegion, String language) {
         super(id, updated);
-        this.iso_language = iso_language;
-        this.iso_region = iso_region;
+        this.isoLanguage = isoLanguage;
+        this.isoRegion = isoRegion;
         this.languageName = language;
+    }
+
+    public String getObjectAsJSONString(){
+
+        String jsonString = "{\n" + kIdKey + ":" + this.id + ",\n"
+                + kIsoLanguageKey + ":\"" + this.isoLanguage + "\",\n"
+                + kIsoRegionKey + ":\"" + this.isoRegion + "\",\n"
+                + kLanguageNameKey + ":\"" + this.languageName + "\",\n"
+                + kUpdatedKey + ":" + this.updated + ",\n},";
+
+        return jsonString;
+    }
+    @Override
+    public String toString() {
+        return "AvailableKeyboard{" +
+                "id=" + id +
+                ", isoLanguage='" + isoLanguage + '\'' +
+                ", isoRegion='" + isoRegion + '\'' +
+                ", language_name='" + languageName + '\'' +
+                ", updated=" + updated +
+                '}';
+
+
     }
 
     static public String getKeyboardNameFromJSONString(String json){
@@ -72,7 +95,6 @@ public class AvailableKeyboard extends BaseDataClass{
 
         return null;
     }
-
 
     static public AvailableKeyboard[] getKeyboardsFromJsonObject(JSONObject jsonObj) {
 
@@ -95,7 +117,8 @@ public class AvailableKeyboard extends BaseDataClass{
                 String language = jsonObj.getString(kLanguageNameKey);
                 double updated = jsonObj.getDouble(kUpdatedKey);
 
-                AvailableKeyboard newKeyboard = new AvailableKeyboard(updated, id, isoLanguage, isoRegion, language);
+
+                AvailableKeyboard newKeyboard = new AvailableKeyboard(new Date(Math.round(updated)), id, isoLanguage, isoRegion, language);
                 keyboardObjects[i] = newKeyboard;
             }
 
@@ -104,19 +127,6 @@ public class AvailableKeyboard extends BaseDataClass{
             System.out.println("KeyboardVariant JSONException: " + e.toString());
             return null;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "AvailableKeyboard{" +
-                "id=" + id +
-                ", iso_language='" + iso_language + '\'' +
-                ", iso_region='" + iso_region + '\'' +
-                ", language_name='" + languageName + '\'' +
-                ", updated=" + updated +
-                '}';
-
-
     }
 
 }

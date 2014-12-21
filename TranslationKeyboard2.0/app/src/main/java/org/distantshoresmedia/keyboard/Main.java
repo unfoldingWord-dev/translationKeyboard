@@ -46,9 +46,9 @@ public class Main extends Activity {
 
         KeyboardDatabaseHandler.initializeDatabase(this.getApplicationContext());
 
-//        KeyboardDownloader downloader = new KeyboardDownloader();
+        KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
 //
-//        downloader.downloadKeyboards(this.getApplicationContext());
+        downloader.updateKeyboards(this.getApplicationContext());
 
         setContentView(R.layout.main);
         String html = getString(R.string.main_body);

@@ -47,32 +47,59 @@ public class KeyboardDownloader {
 
     private Context context;
 
-    static public Map<String, BaseKeyboard> keyboards = new HashMap<String, BaseKeyboard>();
-    static public AvailableKeyboard[] availableKeyboards = null;
+    static private KeyboardDownloader sharedInstance = null;
 
-//    public JSONObject keyboards;
 
-    static public BaseKeyboard getKeyboardWithID(int id){
-        BaseKeyboard desiredKeyboard = keyboards.get(Integer.toString(id));
+    //region Public Methods
 
-        System.out.println("Got keyboard with id: " + id + " and name: " + desiredKeyboard.getName());
-        return keyboards.get(Integer.toString(id));
+    static public KeyboardDownloader getSharedInstance(){
 
+        if(sharedInstance == null){
+            sharedInstance = new KeyboardDownloader();
+        }
+        return sharedInstance;
     }
 
-
-    public void downloadKeyboards(Context context) {
+    public void updateKeyboards(Context context) {
         System.out.println("Will Download");
         this.context = context;
         getJSONFromUrl(this.context, getKeyboardUrl());
     }
 
-    public void downloadKeyboardAvailability(){
+    public void downloadKeyboard(String keyboardID){
 
-        if(availableKeyboards == null){
-
-        }
+        getJSONFromUrl(this.context, getKeyboardUrl(keyboardID));
     }
+
+    //endregion
+//    public JSONObject keyboards;
+
+//    static public BaseKeyboard getKeyboardWithID(int id){
+//        BaseKeyboard desiredKeyboard = keyboards.get(Integer.toString(id));
+//
+//        System.out.println("Got keyboard with id: " + id + " and name: " + desiredKeyboard.getName());
+//        return keyboards.get(Integer.toString(id));
+//
+//    }
+
+
+//    public void downloadKeyboardAvailability(){
+//
+//        if(availableKeyboards == null){
+//
+//        }
+//    }
+
+
+//    public void parseKeyboardType(JSONObject keyObj){
+//
+////        System.out.println("KeysInfo: " + keyObj.toString());
+//        BaseKeyboard newKeyboard = BaseKeyboard.getKeyboardFromJsonObject(keyObj);
+//        keyboards.put(Integer.toString((int) newKeyboard.getId()), newKeyboard);
+//        System.out.println("Keyboard: " + newKeyboard.toString());
+//    }
+
+    //region URL Builders
 
     static public String getKeyboardUrl() {
         return kBaseURL + kVersionUrlTag + kKeyboardUrlTag;
@@ -82,55 +109,25 @@ public class KeyboardDownloader {
         return kBaseURL + kVersionUrlTag + kKeyboardUrlTag + keyboardKey;
     }
 
-    public void parseJSONString(String json){
+    //endregion
 
-        try{
-            JSONObject jObject = new JSONObject(json);
-            JSONArray keysArray = jObject.getJSONArray("keyboards");
+//    public void parseKeyboardsInfo(JSONArray keyboardsArray){
+//
+////        System.out.println("KeysInfo: " + keyboardsArray.toString());
+//
+//        for(int i = 0; i < keyboardsArray.length(); i++){
+//            try {
+//                JSONObject board = keyboardsArray.getJSONObject(i);
+//                Integer keyboardID = board.getInt(kIdTag);
+//                getJSONFromUrl(this.context, getKeyboardUrl(keyboardID.toString()));
+//            }
+//            catch (JSONException e) {
+//                System.out.println(" JSONException: " + e.toString());
+//            }
+//        }
+//    }
 
-            if(keysArray != null){
-                parseKeyboardsInfo(keysArray);
-            }
-        }
-        catch (JSONException e){
-            try{
-                JSONObject jObject = new JSONObject(json);
-                String jArray = jObject.getString("keyboard_id");
-
-                if(jArray.length() > 0){
-                    parseKeyboardType(jObject);
-                }
-            }
-            catch (JSONException ex) {
-                System.out.println(" JSONException: " + ex.toString());
-            }
-        }
-    }
-
-    public void parseKeyboardsInfo(JSONArray keyboardsArray){
-
-//        System.out.println("KeysInfo: " + keyboardsArray.toString());
-
-        for(int i = 0; i < keyboardsArray.length(); i++){
-            try {
-                JSONObject board = keyboardsArray.getJSONObject(i);
-                Integer keyboardID = board.getInt(kIdTag);
-                getJSONFromUrl(this.context, getKeyboardUrl(keyboardID.toString()));
-            }
-            catch (JSONException e) {
-                System.out.println(" JSONException: " + e.toString());
-            }
-        }
-    }
-
-    public void parseKeyboardType(JSONObject keyObj){
-
-//        System.out.println("KeysInfo: " + keyObj.toString());
-        BaseKeyboard newKeyboard = BaseKeyboard.getKeyboardFromJsonObject(keyObj);
-        keyboards.put(Integer.toString((int) newKeyboard.getId()), newKeyboard);
-        System.out.println("Keyboard: " + newKeyboard.toString());
-    }
-
+    //region Generic data methods
 
     public void getJSONFromUrl(Context context, String url) {
 
@@ -143,6 +140,38 @@ public class KeyboardDownloader {
             System.out.println("Network Error");
         }
     }
+
+    public void parseJSONString(String json){
+
+
+        try{
+            JSONObject jObject = new JSONObject(json);
+            JSONArray keysArray = jObject.getJSONArray("keyboards");
+
+            // this means it's the available keyboards json
+            if(keysArray != null){
+               KeyboardDatabaseHandler.updateKeyboardsDatabaseWithJSON(this.context, json);
+            }
+        }
+        catch (JSONException e){
+            try{
+                JSONObject jObject = new JSONObject(json);
+                String jArray = jObject.getString("keyboard_id");
+
+                // this means it's an actual keyboard
+                if(jArray.length() > 0){
+                    KeyboardDatabaseHandler.updateOrSaveKeyboard(this.context, json);
+                }
+            }
+            catch (JSONException ex) {
+                System.out.println(" JSONException: " + ex.toString());
+            }
+        }
+    }
+
+    //endregion
+
+    //region Downloader
 
     private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
 
@@ -158,7 +187,7 @@ public class KeyboardDownloader {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            System.out.println("Result: " + result);
+//            System.out.println("Result: " + result);
             parseJSONString(result);
         }
 
@@ -203,4 +232,8 @@ public class KeyboardDownloader {
             return new String(buffer);
         }
     }
+
+    //endregion
+
+
 }

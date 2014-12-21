@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,8 @@ public class KeyboardDatabaseHandler {
     private static final String kDefaultKeyboardFileName = "default_keyboard";
 
     private static final String kKeyboardExtensionName = ".tk";
+
+    private static Context currentContext;
 
     //region File Name Helper Methods
 
@@ -104,6 +107,8 @@ public class KeyboardDatabaseHandler {
      */
     public static void initializeDatabase(Context context){
 
+        currentContext = context;
+
         if(false){//keyboardsHaveBeenSaved(context)){
             System.out.println("KeyboardsAlreadySaved");
         }
@@ -116,6 +121,25 @@ public class KeyboardDatabaseHandler {
     //endregion
 
     //region Public General Use
+
+    public static BaseKeyboard getKeyboardWithID( String id){
+
+        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(currentContext, getInstalledKeyboardFileName());
+
+        String jsonString = getJSONStringForKeyboard(currentContext, installedKeyboards.get(id));
+
+        try {
+            JSONObject jsonObj = new JSONObject(jsonString);
+            BaseKeyboard desiredKeyboard = BaseKeyboard.getKeyboardFromJsonObject(jsonObj);
+
+            return desiredKeyboard;
+        }
+        catch (JSONException e){
+
+            System.out.println("getKeyboardWithID JSONException: " + e.toString());
+            return null;
+        }
+    }
 
     /**
      *
@@ -138,20 +162,30 @@ public class KeyboardDatabaseHandler {
         return getJSONStringFromFile(context, getAvailableKeyboardFileName());
     }
 
-    public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboards){
+    public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsjson){
 
         String currentKeyboards = getJSONStringForAvailableKeyboards(context);
 
         double currentUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(currentKeyboards);
-        double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboards);
+        double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboardsjson);
 
         if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
             return true;
         }
-
-        return false;
+        else {
+            return updateKeyboards(context, newKeyboardsjson);
+        }
     }
 
+    public static boolean updateOrSaveKeyboard(Context context, String keyboardJSON){
+
+        String fileName = getKeyboardFileName(keyboardJSON);
+
+        System.out.println("Attempting to save Keyboard named: " + fileName);
+        saveFile(keyboardJSON, fileName, context);
+
+        return true;
+    }
     //endregion
 
     //region Private Setup
@@ -162,9 +196,9 @@ public class KeyboardDatabaseHandler {
      */
     private static void initializeKeyboards(Context context){
 
-        saveKeyboardsFile(context, getAvailableKeyboardFileName());
-        saveKeyboardsFile(context, getDownloadedKeyboardFileName());
-        saveKeyboardsFile(context, getInstalledKeyboardFileName());
+        saveDefaultKeyboardsFile(context, getAvailableKeyboardFileName());
+        saveDefaultKeyboardsFile(context, getDownloadedKeyboardFileName());
+        saveDefaultKeyboardsFile(context, getInstalledKeyboardFileName());
 
         String defaultKeyboardJSONString = getDefaultFileString(context, getDefaultKeyboardFileName());
         if(defaultKeyboardJSONString != null) {
@@ -176,7 +210,7 @@ public class KeyboardDatabaseHandler {
         }
     }
 
-    private static void saveKeyboardsFile(Context context, String fileName){
+    private static void saveDefaultKeyboardsFile(Context context, String fileName){
 
         String keyboardsJSONString = getDefaultFileString(context, fileName);
         if(keyboardsJSONString != null) {
@@ -211,7 +245,7 @@ public class KeyboardDatabaseHandler {
 
             resultString = new String(buffer, "UTF-8");
 
-            System.out.println("initializeKeyboards SavedString = " + resultString);
+            System.out.println("initializeKeyboards SavedString = " + resultString.substring(0, 10));
         }
         catch (IOException e){
             System.out.println("initializeKeyboards IOException: " + e.toString());
@@ -225,24 +259,71 @@ public class KeyboardDatabaseHandler {
 
     //region Private General Use
 
+    private static boolean updateKeyboards(Context context, String jsonString) {
+
+        saveFile(jsonString, getAvailableKeyboardFileName(), context);
+        return updateKeyboards(context);
+    }
+
     private static boolean updateKeyboards(Context context){
 
-        Map<String, AvailableKeyboard> currentKeyboards = makeKeyboardsDictionary(context, getAvailableKeyboardFileName());
-        Map<String, AvailableKeyboard> downloadedKeyboards = makeKeyboardsDictionary(context, getDownloadedKeyboardFileName());
-        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(context, getInstalledKeyboardFileName());
+        String jsonAvailableString = getJSONStringFromFile(context, getAvailableKeyboardFileName());
+        System.out.println("JSON Available String: " + jsonAvailableString);
+        Map<String, AvailableKeyboard> availableKeyboards = makeKeyboardsDictionary(context,jsonAvailableString);
+        Map<String, AvailableKeyboard> downloadedKeyboards = makeKeyboardsDictionary(context,
+                getJSONStringFromFile(context, getDownloadedKeyboardFileName()));
+        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(context,
+                getJSONStringFromFile(context, getInstalledKeyboardFileName()));
 
-        boolean needsUpdate;
+        boolean isUpdated = keyboardListsAreCurrentWithEachOther(availableKeyboards, downloadedKeyboards);
 
-        for (Map.Entry<String, AvailableKeyboard> keyboard : downloadedKeyboards.entrySet())
-        {
-            AvailableKeyboard downloadedKeyboard = keyboard.getValue();
+        System.out.println("Will check for keyboardUpdates;");
+        System.out.println("availableKeyboards count: " + availableKeyboards.size());
+        System.out.println("downloadedKeyboards count: " + downloadedKeyboards.size());
+        System.out.println("installedKeyboards count: " + installedKeyboards.size());
 
-            AvailableKeyboard newKeyboard = currentKeyboards.get(keyboard.getKey());
+        if(! isUpdated) {
 
-            if(isCurrent(downloadedKeyboard.getUpdated(), newKeyboard.getUpdated()));
+            for (String key : availableKeyboards.keySet()){
+
+                if(! isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
+                    downloadedKeyboards.put(key, availableKeyboards.get(key));
+
+                    System.out.println("Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
+                    KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(key).getId()));
+                }
+
+            }
+
+            saveKeyboards(context, downloadedKeyboards, kDownloadedKeyboardsFileName);
         }
 
-        return false;
+        if(! keyboardListsAreCurrentWithEachOther(downloadedKeyboards, installedKeyboards)){
+
+            for (String key : installedKeyboards.keySet()){
+                installedKeyboards.put(key, availableKeyboards.get(key));
+            }
+            saveKeyboards(context, installedKeyboards, kInstalledKeyboardsFileName);
+        }
+
+        return isUpdated;
+    }
+
+    private static boolean keyboardListsAreCurrentWithEachOther(Map<String, AvailableKeyboard> updatedKeyboardMap,
+                                                                Map<String, AvailableKeyboard> subjectKeyboardMap){
+
+        for (Map.Entry<String, AvailableKeyboard> keyboard : subjectKeyboardMap.entrySet())
+        {
+            AvailableKeyboard subjectKeyboard = keyboard.getValue();
+
+            AvailableKeyboard newKeyboard = updatedKeyboardMap.get(keyboard.getKey());
+
+            if(! isCurrent(subjectKeyboard.getUpdated(), newKeyboard.getUpdated())){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static Map<String, AvailableKeyboard> makeKeyboardsDictionary(Context context, String jsonString){
@@ -260,12 +341,25 @@ public class KeyboardDatabaseHandler {
 
         }
         catch (JSONException e){
-            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString());
+            System.out.println("makeKeyboardsDictionary JSONException: " + e.toString());
         }
 
         return null;
     }
 
+    private static String createJSONStringForKeyboards(AvailableKeyboard[] keyboards){
+
+        String jsonString = "{\nkeyboards:[\n";
+
+        for(AvailableKeyboard keyboard : keyboards){
+
+            jsonString += keyboard.getObjectAsJSONString();
+        }
+
+        jsonString += "\n]\n}";
+
+        return jsonString;
+    }
     /**
      * *
      * @param context
@@ -328,6 +422,20 @@ public class KeyboardDatabaseHandler {
         return resultString;
     }
 
+    private static void saveKeyboards(Context context,  Map<String, AvailableKeyboard> keyboards, String fileName){
+
+        AvailableKeyboard[] keyboardsArray = new AvailableKeyboard[keyboards.size()];
+
+        int i = 0;
+        for(Map.Entry<String, AvailableKeyboard> keyboard : keyboards.entrySet()){
+
+            keyboardsArray[i] = keyboard.getValue();
+        }
+
+
+        saveFile(createJSONStringForKeyboards(keyboardsArray), fileName, context);
+    }
+
     /**
      *
      * @param fileString
@@ -336,7 +444,7 @@ public class KeyboardDatabaseHandler {
      */
     private static void saveFile(String fileString, String fileName, Context context){
 
-        System.out.println("Attempting to save file named:" + fileName + " file: " + fileString );
+        System.out.println("Attempting to save file named:" + fileName);
 
         try {
             File file = new File(context.getFilesDir(), fileName);
@@ -357,6 +465,8 @@ public class KeyboardDatabaseHandler {
     //endregion
 
 
+    //region Helper Methods
+
     private static boolean isCurrent(Date oldTime, Date newTime){
 
         if(oldTime.before(newTime)){
@@ -366,4 +476,5 @@ public class KeyboardDatabaseHandler {
             return true;
         }
     }
+    //endregion
 }

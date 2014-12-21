@@ -1,8 +1,8 @@
 {
 	keyboard_id: 1,
 	keyboard_name: "English (en)",
-	created_at: 1413086345.426047,
-	updated_at: 1418939996.926526,
+	created_at: 10.426047,
+	updated_at: 10.6,
 	iso_region: "US",
 	iso_language: "en",
 	keyboard_variants: [

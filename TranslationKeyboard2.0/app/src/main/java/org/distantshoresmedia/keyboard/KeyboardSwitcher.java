@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.InflateException;
 
+import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
 
@@ -329,7 +330,7 @@ public class KeyboardSwitcher implements
             Locale saveLocale = conf.locale;
             conf.locale = TKIME.sKeyboardSettings.inputLocale;
             orig.updateConfiguration(conf, null);
-            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDownloader.getKeyboardWithID(1).getKeyboardVariants()[0]);
+            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDatabaseHandler.getKeyboardWithID("1").getKeyboardVariants()[0]);
 //            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent);
             keyboard.setVoiceMode(hasVoiceButton(id.mXml == R.xml.kbd_symbols), mHasVoice);
             keyboard.setLanguageSwitcher(mLanguageSwitcher, mIsAutoCompletionActive);
