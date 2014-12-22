@@ -16,7 +16,7 @@
 
 package org.distantshoresmedia.keyboard;
 
-class ModifierKeyState {
+public class ModifierKeyState {
     private static final int RELEASING = 0;
     private static final int PRESSING = 1;
     private static final int CHORDING = 2;

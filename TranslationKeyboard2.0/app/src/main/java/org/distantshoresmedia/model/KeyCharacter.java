@@ -56,8 +56,6 @@ public class KeyCharacter {
 
     static public KeyCharacter getCharacterFromJsonObject(JSONObject jsonObj){
 
-        System.out.println("Got to KeyCharacter");
-
         try {
             int mask = jsonObj.getInt(kModeMaskKey);
             int[] hexes = {jsonObj.getInt(kUnicodeValue)};

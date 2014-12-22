@@ -21,6 +21,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 import org.distantshoresmedia.translationkeyboard20.R;
 
@@ -32,11 +34,25 @@ public class PrefScreenView extends PreferenceActivity
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        System.out.println("Got here. preferences onCreate");
         addPreferencesFromResource(R.xml.prefs_view);
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         prefs.registerOnSharedPreferenceChangeListener(this);
         mRenderModePreference = (ListPreference) findPreference(TKIME.PREF_RENDER_MODE);
     }
+
+    public static class TKSettingsFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            PreferenceManager.setDefaultValues(getActivity(),
+                    R.xml.prefs_view, false);
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.prefs_view);
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

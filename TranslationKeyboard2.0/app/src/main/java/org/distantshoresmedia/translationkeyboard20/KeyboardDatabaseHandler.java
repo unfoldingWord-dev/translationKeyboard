@@ -46,6 +46,11 @@ public class KeyboardDatabaseHandler {
         return fileName + kKeyboardExtensionName;
     }
 
+    private static String addKeyboardExtension(Long fileName){
+        String name = fileName + kKeyboardExtensionName;
+        return name;
+    }
+
     /**
      *
      * @return File name for the available keyboards file
@@ -75,6 +80,10 @@ public class KeyboardDatabaseHandler {
         return addKeyboardExtension(kDefaultKeyboardFileName);
     }
 
+    private static String getKeyboardIDFileName(String id){
+        String fileName = addKeyboardExtension(id);
+        return fileName;
+    }
     /**
      *
      * @param jsonString
@@ -82,7 +91,7 @@ public class KeyboardDatabaseHandler {
      */
     private static String getKeyboardFileName(String jsonString){
 
-        String fileName = addKeyboardExtension(BaseKeyboard.getKeyboardNameFromJSONString(jsonString));
+        String fileName = addKeyboardExtension(BaseKeyboard.getKeyboardIDFromJSONString(jsonString));
         return fileName;
     }
     /**
@@ -124,9 +133,9 @@ public class KeyboardDatabaseHandler {
 
     public static BaseKeyboard getKeyboardWithID( String id){
 
-        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(currentContext, getInstalledKeyboardFileName());
+//        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(currentContext, getJSONStringFromFile(currentContext, getKeyboardIDFileName(id)));
 
-        String jsonString = getJSONStringForKeyboard(currentContext, installedKeyboards.get(id));
+        String jsonString = getJSONStringFromFile(currentContext, getKeyboardIDFileName(id));
 
         try {
             JSONObject jsonObj = new JSONObject(jsonString);
@@ -203,7 +212,7 @@ public class KeyboardDatabaseHandler {
         String defaultKeyboardJSONString = getDefaultFileString(context, getDefaultKeyboardFileName());
         if(defaultKeyboardJSONString != null) {
 
-            saveFile(defaultKeyboardJSONString, BaseKeyboard.getKeyboardNameFromJSONString(defaultKeyboardJSONString), context);
+            saveFile(defaultKeyboardJSONString, getKeyboardFileName(defaultKeyboardJSONString), context);
         }
         else{
             System.out.println("initializeKeyboards error with File: " + getDefaultKeyboardFileName());
@@ -286,7 +295,8 @@ public class KeyboardDatabaseHandler {
 
             for (String key : availableKeyboards.keySet()){
 
-                if(! isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
+
+                if(downloadedKeyboards.keySet().contains(key) && ! isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
                     downloadedKeyboards.put(key, availableKeyboards.get(key));
 
                     System.out.println("Will Download/update keyboard id: " + availableKeyboards.get(key).getId());

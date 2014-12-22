@@ -97,6 +97,13 @@ public class Main extends Activity {
                 }
             }
         });
+
+        final Button setup5 = (Button) findViewById(R.id.main_setup_btn_get_prefs);
+        setup5.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS), 0);
+            }
+        });
         // PluginManager.getPluginDictionaries(getApplicationContext()); // why?
     }    
 }

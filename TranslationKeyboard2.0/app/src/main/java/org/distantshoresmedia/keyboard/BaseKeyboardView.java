@@ -273,7 +273,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
     // Distance from horizontal center of the key, proportional to key label text height.
     private final float KEY_LABEL_VERTICAL_ADJUSTMENT_FACTOR = 0.55f;
     private final String KEY_LABEL_HEIGHT_REFERENCE_CHAR = "H";
-    /* package */ static Method sSetRenderMode;
+    /* package */ static public Method sSetRenderMode;
     private static int sPrevRenderMode = -1;
 
     private final UIHandler mHandler = new UIHandler();
@@ -807,7 +807,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             setMeasuredDimension(
                     getPaddingLeft() + getPaddingRight(), getPaddingTop() + getPaddingBottom());
         } else {
-            int width = mKeyboard.getMinWidth() + getPaddingLeft() + getPaddingRight();
+            int width = mKeyboard.getMinWidth() - getPaddingLeft() - getPaddingRight();
             if (MeasureSpec.getSize(widthMeasureSpec) < width + 10) {
                 int badWidth = MeasureSpec.getSize(widthMeasureSpec);
                 if (badWidth != width) Log.i(TAG, "ignoring unexpected width=" + badWidth);

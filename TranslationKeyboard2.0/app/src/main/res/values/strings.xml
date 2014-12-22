@@ -624,6 +624,7 @@
     <string name="main_setup_set_ime">Set input method</string>
     <string name="main_setup_get_dicts">Get dictionaries</string>
     <string name="main_setup_input_lang">Input languages</string>
+    <string name="main_setup_get_prefs">Preferences</string>
     <string name="main_body"><Data>
       <![CDATA["
         <h2>Enabling Translation Keyboard Keyboard</h2>

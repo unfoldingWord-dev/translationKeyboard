@@ -17,6 +17,7 @@
 package org.distantshoresmedia.keyboard;
 
 public class ComposeSequence extends ComposeBase {
+
     public ComposeSequence(ComposeSequencing user) {
             init(user);
     }

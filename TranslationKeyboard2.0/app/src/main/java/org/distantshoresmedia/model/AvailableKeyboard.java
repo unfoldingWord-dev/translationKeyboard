@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -13,8 +14,8 @@ public class AvailableKeyboard extends BaseDataClass{
 
     static final private String kKeyboardKey = "keyboards";
     static final private String kIdKey = "id";
-    static final private String kIsoLanguageKey = "isoLanguage";
-    static final private String kIsoRegionKey = "isoRegion";
+    static final private String kIsoLanguageKey = "iso_language";
+    static final private String kIsoRegionKey = "iso_region";
     static final private String kLanguageNameKey = "language_name";
     static final private String kUpdatedKey = "updated_at";
 
@@ -100,33 +101,42 @@ public class AvailableKeyboard extends BaseDataClass{
 
         System.out.println("Got to KeyboardVariant");
 
+        ArrayList<AvailableKeyboard> keyboardObjects = new ArrayList<AvailableKeyboard>();
+
         try {
 
             // Get an arraylist of keypositions based on the JSON
             JSONArray keyboards = jsonObj.getJSONArray(kKeyboardKey);
-            AvailableKeyboard[] keyboardObjects = new AvailableKeyboard[keyboards.length()];
-
-            int total = 0;
 
             for (int i = 0; i < keyboards.length(); i++) {
                 JSONObject rowObj = keyboards.getJSONObject(i);
 
-                int id = jsonObj.getInt(kIdKey);
-                String isoLanguage = jsonObj.getString(kIsoLanguageKey);
-                String isoRegion = jsonObj.getString(kIsoRegionKey);
-                String language = jsonObj.getString(kLanguageNameKey);
-                double updated = jsonObj.getDouble(kUpdatedKey);
+                int id = rowObj.getInt(kIdKey);
+                String isoLanguage = rowObj.getString(kIsoLanguageKey);
+                String isoRegion = rowObj.getString(kIsoRegionKey);
+                String language = rowObj.getString(kLanguageNameKey);
+                double updated = rowObj.getDouble(kUpdatedKey);
 
 
                 AvailableKeyboard newKeyboard = new AvailableKeyboard(new Date(Math.round(updated)), id, isoLanguage, isoRegion, language);
-                keyboardObjects[i] = newKeyboard;
+                keyboardObjects.add(newKeyboard);
             }
 
-            return keyboardObjects;
         } catch (JSONException e) {
-            System.out.println("KeyboardVariant JSONException: " + e.toString());
+            System.out.println("AvailableKeyboard JSONException: " + e.toString());
             return null;
         }
+
+        AvailableKeyboard[] finalKeyboards = new AvailableKeyboard[keyboardObjects.size()];
+
+        int i = 0;
+        for(AvailableKeyboard keyboard : keyboardObjects){
+
+            finalKeyboards[i] = keyboard;
+            i++;
+        }
+
+        return finalKeyboards;
     }
 
 }

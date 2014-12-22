@@ -23,11 +23,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-interface ComposeSequencing {
-    public void onText(CharSequence text);
-    public void updateShiftKeyState(EditorInfo attr);
-    public EditorInfo getCurrentInputEditorInfo();
-}
 
 public abstract class ComposeBase {
     private static final String TAG = "HK/ComposeBase";

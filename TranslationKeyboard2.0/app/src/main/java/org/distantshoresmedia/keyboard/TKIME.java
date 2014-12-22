@@ -124,7 +124,7 @@ public class TKIME extends InputMethodService implements
     static final String PREF_HEIGHT_LANDSCAPE = "settings_height_landscape";
     static final String PREF_HINT_MODE = "pref_hint_mode";
     static final String PREF_LONGPRESS_TIMEOUT = "pref_long_press_duration";
-    static final String PREF_RENDER_MODE = "pref_render_mode";
+    static public final String PREF_RENDER_MODE = "pref_render_mode";
     static final String PREF_SWIPE_UP = "pref_swipe_up";
     static final String PREF_SWIPE_DOWN = "pref_swipe_down";
     static final String PREF_SWIPE_LEFT = "pref_swipe_left";

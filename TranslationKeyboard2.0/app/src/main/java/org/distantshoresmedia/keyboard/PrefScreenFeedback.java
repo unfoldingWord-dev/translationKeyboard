@@ -21,6 +21,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 import org.distantshoresmedia.translationkeyboard20.R;
 
@@ -35,6 +37,17 @@ public class PrefScreenFeedback extends PreferenceActivity
         prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
+    public static class TKSettingsFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            PreferenceManager.setDefaultValues(getActivity(),
+                    R.xml.prefs_feedback, false);
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.prefs_feedback);
+        }
+    }
     @Override
     protected void onDestroy() {
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(

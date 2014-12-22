@@ -22,14 +22,6 @@ public class KeyboardVariant {
     static final private String kKeyboardPositionRowKey = "key_position_rows";
     static final private String kKeyboardPositionCollumnKey = "key_position_columns";
 
-    private Long id;
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     private String name;
     public void setName(String name) {
         this.name = name;
@@ -111,6 +103,7 @@ public class KeyboardVariant {
         }
 
         catch (JSONException e) {
+            System.out.println("bummer");
             System.out.println("KeyboardVariant JSONException: " + e.toString());
             return null;
         }
@@ -119,7 +112,6 @@ public class KeyboardVariant {
     @Override
     public String toString() {
         return "KeyboardVariant{" +
-                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +

@@ -50,6 +50,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="org.distantshoresmedia.keyboard.TKIMEDebugSettings" android:label="@string/english_ime_debug_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name="org.distantshoresmedia.keyboard.InputLanguageSelection"
             android:label="@string/language_selection_title">
             <intent-filter>
@@ -65,7 +71,7 @@
             android:icon="@drawable/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.keyboard.PREFS_ACTIONS"/>
+                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_ACTIONS"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -76,7 +82,7 @@
             android:icon="@drawable/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.keyboard.PREFS_VIEW"/>
+                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -87,7 +93,7 @@
             android:icon="@drawable/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.keyboard.PREFS_FEEDBACK"/>
+                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_FEEDBACK"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

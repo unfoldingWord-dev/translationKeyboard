@@ -73,6 +73,21 @@ public class BaseKeyboard extends BaseDataClass{
         this.keyboardVariants = variants;
     }
 
+    static public Long getKeyboardIDFromJSONString(String json){
+
+        try {
+            JSONObject jObject = new JSONObject(json);
+            long name = jObject.getLong(kUIDKey);
+
+            return name;
+        }
+        catch (JSONException e){
+            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString() + "json: " + json);
+        }
+
+        return null;
+    }
+
     static public String getKeyboardNameFromJSONString(String json){
 
         try {
