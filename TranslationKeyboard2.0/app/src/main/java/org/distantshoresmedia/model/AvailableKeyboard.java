@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Fechner on 12/18/14.
@@ -68,6 +69,10 @@ public class AvailableKeyboard extends BaseDataClass{
                 + kUpdatedKey + ":" + this.updated + ",\n},";
 
         return jsonString;
+    }
+
+    public Locale getKeyboardAsLocale(){
+        return new Locale(languageName, isoLanguage, isoRegion);
     }
     @Override
     public String toString() {
