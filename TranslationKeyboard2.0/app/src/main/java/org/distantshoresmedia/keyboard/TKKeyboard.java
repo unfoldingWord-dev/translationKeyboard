@@ -194,7 +194,7 @@ public class TKKeyboard extends Keyboard {
     @Override
     protected Key createKeyFromXml(Resources res, Row parent, int x, int y,
             XmlResourceParser parser) {
-        Key key = new LatinKey(res, parent, x, y, parser);
+        Key key = new TKKey(res, parent, x, y, parser);
         if (key.codes == null) return key;
         switch (key.codes[0]) {
         case TKIME.ASCII_ENTER:
@@ -662,7 +662,7 @@ public class TKKeyboard extends Keyboard {
      * Does the magic of locking the touch gesture into the spacebar when
      * switching input languages.
      */
-    boolean isInside(LatinKey key, int x, int y) {
+    boolean isInside(TKKey key, int x, int y) {
         final int code = key.codes[0];
         if (code == KEYCODE_SHIFT ||
                 code == KEYCODE_DELETE) {
@@ -824,7 +824,7 @@ public class TKKeyboard extends Keyboard {
     }
 
     // TODO LatinKey could be static class
-    class LatinKey extends Key {
+    class TKKey extends Key {
 
         // functional normal state (with properties)
         private final int[] KEY_STATE_FUNCTIONAL_NORMAL = {
@@ -837,7 +837,7 @@ public class TKKeyboard extends Keyboard {
                 android.R.attr.state_pressed
         };
 
-        public LatinKey(Resources res, Keyboard.Row parent, int x, int y,
+        public TKKey(Resources res, Keyboard.Row parent, int x, int y,
                 XmlResourceParser parser) {
             super(res, parent, x, y, parser);
         }

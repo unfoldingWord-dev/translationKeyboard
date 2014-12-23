@@ -812,6 +812,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
                 int badWidth = MeasureSpec.getSize(widthMeasureSpec);
                 if (badWidth != width) Log.i(TAG, "ignoring unexpected width=" + badWidth);
             }
+
             Log.i(TAG, "onMeasure width=" + width);
             setMeasuredDimension(
                     width, mKeyboard.getHeight() + getPaddingTop() + getPaddingBottom());
@@ -886,7 +887,9 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             float fwidth = dm.density * dm.widthPixels;
             float fheight = dm.density * dm.heightPixels;
 
-            mKeyboard.setKeyboardWidth(Math.round(fwidth / 2));
+            int finalWidth = (int) Math.round( ( fwidth / 2.0));
+
+            mKeyboard.setKeyboardWidth(finalWidth);
 //            if (mBuffer == null || mKeyboardChanged &&
 //                    (mBuffer.getWidth() != getWidth() || mBuffer.getHeight() != getHeight())) {
 //                // Make sure our bitmap is at least 1x1

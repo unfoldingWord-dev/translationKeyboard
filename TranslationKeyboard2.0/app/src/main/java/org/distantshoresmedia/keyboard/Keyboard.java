@@ -846,7 +846,7 @@ public class Keyboard {
         Log.v(TAG, "keyboard's display metrics:" + dm + ", mDisplayWidth=" + mDisplayWidth);
 
         mDefaultHorizontalGap = 0;
-        mDefaultWidth = mDisplayWidth / 10;
+        mDefaultWidth = mDisplayWidth / 13;
         mDefaultVerticalGap = 0;
         mDefaultHeight = defaultHeight; // may be zero, to be adjusted below
         mKeyboardHeight = Math.round(mDisplayHeight * kbHeightPercent / 100); 
@@ -868,7 +868,7 @@ public class Keyboard {
         Log.v(TAG, "keyboard's display metrics:" + dm + ", mDisplayWidth=" + mDisplayWidth);
 
         mDefaultHorizontalGap = 0;
-        mDefaultWidth = mDisplayWidth / 10;
+        mDefaultWidth = mDisplayWidth / 13;
         mDefaultVerticalGap = 0;
         mDefaultHeight = defaultHeight; // may be zero, to be adjusted below
         mKeyboardHeight = Math.round(mDisplayHeight * kbHeightPercent / 100);
@@ -1218,6 +1218,8 @@ public class Keyboard {
             int event;
             Key prevKey = null;
             while ((event = parser.next()) != XmlResourceParser.END_DOCUMENT) {
+
+                System.out.println("Current x: " + x);
                 if (event == XmlResourceParser.START_TAG) {
                     String tag = parser.getName();
 
@@ -1241,6 +1243,7 @@ public class Keyboard {
                             inRow = false;
                         }
                     } else if (TAG_KEY.equals(tag)) {
+
                         inKey = true;
                         key = createKeyFromXml(res, currentRow, Math.round(x), y, parser);
                         key.realX = x;
@@ -1264,24 +1267,31 @@ public class Keyboard {
                                 case MID_ROW_VALUE: {
                                     KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
 
-                                    for (int i = 1; i < positionRow.length - 1; i++) {
+                                    for (int i = 1; i < positionRow.length; i++) {
                                         KeyPosition position = positionRow[i];
                                         Key newKey = createKeyWithData(res, currentRow, Math.round(x), y, parser, position);
                                         mKeys.add(newKey);
                                         prevKey = newKey;
-                                        x += key.realGap + key.realWidth;
-                                        if (x > mTotalWidth) {
-                                            mTotalWidth = Math.round(x);
+                                        if(i < positionRow.length - 1) {
+                                            x += key.realGap + key.realWidth;
+                                            if (x > mTotalWidth) {
+                                                mTotalWidth = Math.round(x);
+                                            }
+                                            System.out.println("Current x: " + x);
                                         }
                                     }
                                     break;
                                 }
-                                case END_ROW_VALUE: {
-                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
-                                    KeyPosition position = positionRow[positionRow.length - 1];
-                                    key.setCharactersTo(position);
-                                    break;
-                                }
+//                                case END_ROW_VALUE: {
+//
+//                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
+//                                    KeyPosition position = positionRow[positionRow.length - 1];
+//
+//                                    key.setCharactersTo(position);
+//                                    mKeys.add(key);
+//                                    prevKey = key;
+//                                    break;
+//                                }
                                 case KEYCODE_SHIFT: {
                                     mKeys.add(key);
                                     prevKey = key;
@@ -1465,9 +1475,9 @@ public class Keyboard {
         TypedArray a = res.obtainAttributes(Xml.asAttributeSet(parser),
                 R.styleable.Keyboard);
 
-        mDefaultWidth = getDimensionOrFraction(a,
-                R.styleable.Keyboard_keyWidth,
-                mDisplayWidth, mDisplayWidth / 10);
+//        mDefaultWidth = getDimensionOrFraction(a,
+//                R.styleable.Keyboard_keyWidth,
+//                mDisplayWidth, mDisplayWidth / 13);
         mDefaultHeight = Math.round(getDimensionOrFraction(a,
                 R.styleable.Keyboard_keyHeight,
                 mDisplayHeight, mDefaultHeight));
@@ -1499,7 +1509,8 @@ public class Keyboard {
         if (value == null) return defValue;
         if (value.type == TypedValue.TYPE_DIMENSION) {
             return a.getDimensionPixelOffset(index, Math.round(defValue));
-        } else if (value.type == TypedValue.TYPE_FRACTION) {
+        }
+        else if (value.type == TypedValue.TYPE_FRACTION) {
             // Round it to avoid values like 47.9999 from getting truncated
             //return Math.round(a.getFraction(index, base, base, defValue));
             return a.getFraction(index, base, base, defValue);
