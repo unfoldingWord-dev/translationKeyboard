@@ -21,15 +21,15 @@ public class BaseDataClass {
         this.id = id;
     }
 
-    protected Date updated;
-    public Date getUpdated() {
+    protected double updated;
+    public double getUpdated() {
         return updated;
     }
-    public void setUpdated(Date updated) {
+    public void setUpdated(double updated) {
         this.updated = updated;
     }
 
-    public BaseDataClass(long id, Date updated) {
+    public BaseDataClass(long id, double updated) {
         this.id = id;
         this.updated = updated;
     }

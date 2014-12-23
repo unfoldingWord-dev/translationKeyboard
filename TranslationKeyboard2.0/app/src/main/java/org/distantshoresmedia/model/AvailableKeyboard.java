@@ -53,7 +53,7 @@ public class AvailableKeyboard extends BaseDataClass{
     }
 
 
-    public AvailableKeyboard(Date updated, int id, String isoLanguage, String isoRegion, String language) {
+    public AvailableKeyboard(double updated, int id, String isoLanguage, String isoRegion, String language) {
         super(id, updated);
         this.isoLanguage = isoLanguage;
         this.isoRegion = isoRegion;
@@ -62,11 +62,11 @@ public class AvailableKeyboard extends BaseDataClass{
 
     public String getObjectAsJSONString(){
 
-        String jsonString = "{\n" + kIdKey + ":" + this.id + ",\n"
-                + kIsoLanguageKey + ":\"" + this.isoLanguage + "\",\n"
-                + kIsoRegionKey + ":\"" + this.isoRegion + "\",\n"
-                + kLanguageNameKey + ":\"" + this.languageName + "\",\n"
-                + kUpdatedKey + ":" + this.updated + ",\n},";
+        String jsonString = "{\n" + kIdKey + ": " + this.id + ",\n"
+                + kIsoLanguageKey + ": \"" + this.isoLanguage + "\",\n"
+                + kIsoRegionKey + ": \"" + this.isoRegion + "\",\n"
+                + kLanguageNameKey + ": \"" + this.languageName + "\",\n"
+                + kUpdatedKey + ": " + this.updated + "\n},";
 
         return jsonString;
     }
@@ -74,6 +74,7 @@ public class AvailableKeyboard extends BaseDataClass{
     public Locale getKeyboardAsLocale(){
         return new Locale(languageName, isoLanguage, isoRegion);
     }
+
     @Override
     public String toString() {
         return "AvailableKeyboard{" +
@@ -123,7 +124,7 @@ public class AvailableKeyboard extends BaseDataClass{
                 double updated = rowObj.getDouble(kUpdatedKey);
 
 
-                AvailableKeyboard newKeyboard = new AvailableKeyboard(new Date(Math.round(updated)), id, isoLanguage, isoRegion, language);
+                AvailableKeyboard newKeyboard = new AvailableKeyboard(updated, id, isoLanguage, isoRegion, language);
                 keyboardObjects.add(newKeyboard);
             }
 
