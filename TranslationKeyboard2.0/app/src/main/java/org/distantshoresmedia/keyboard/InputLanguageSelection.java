@@ -243,15 +243,14 @@ public class InputLanguageSelection extends PreferenceActivity {
         int count = parent.getPreferenceCount();
         for (int i = 0; i < count; i++) {
             CheckBoxPreference pref = (CheckBoxPreference) parent.getPreference(i);
+
+            Locale locale = mAvailableLanguages.get(i).locale;
             if (pref.isChecked()) {
-                Locale locale = mAvailableLanguages.get(i).locale;
-                AvailableKeyboard localKeyboard = keyboardsDictionary.get(locale.getLanguage());
-                boolean hasInstalled = KeyboardDatabaseHandler.hasInstalledKeyboard(localKeyboard);
-                if(!hasInstalled){
-                    KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(localKeyboard.getId()));
-                }
                 checkedLanguages += get5Code(locale) + ",";
             }
+
+            AvailableKeyboard localKeyboard = keyboardsDictionary.get(locale.getLanguage());
+            KeyboardDatabaseHandler.installedKeyboardHasState(localKeyboard, pref.isChecked());
         }
         if (checkedLanguages.length() < 1) checkedLanguages = null; // Save null
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);

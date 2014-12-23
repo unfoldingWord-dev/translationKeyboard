@@ -62,11 +62,11 @@ public class AvailableKeyboard extends BaseDataClass{
 
     public String getObjectAsJSONString(){
 
-        String jsonString = "{\n" + kIdKey + ": " + this.id + ",\n"
-                + kIsoLanguageKey + ": \"" + this.isoLanguage + "\",\n"
-                + kIsoRegionKey + ": \"" + this.isoRegion + "\",\n"
-                + kLanguageNameKey + ": \"" + this.languageName + "\",\n"
-                + kUpdatedKey + ": " + this.updated + "\n},";
+        String jsonString = "{\n" + kIdKey + ": " + this.id + ","
+                + kIsoLanguageKey + ": \"" + this.isoLanguage + "\","
+                + kIsoRegionKey + ": \"" + this.isoRegion + "\","
+                + kLanguageNameKey + ": \"" + this.languageName + "\","
+                + kUpdatedKey + ": " + this.updated + "},";
 
         return jsonString;
     }
@@ -111,10 +111,10 @@ public class AvailableKeyboard extends BaseDataClass{
 
         try {
 
-            // Get an arraylist of keypositions based on the JSON
             JSONArray keyboards = jsonObj.getJSONArray(kKeyboardKey);
 
-            for (int i = 0; i < keyboards.length(); i++) {
+            int lastIndex = keyboards.length();
+            for (int i = 0; i < lastIndex; i++) {
                 JSONObject rowObj = keyboards.getJSONObject(i);
 
                 int id = rowObj.getInt(kIdKey);

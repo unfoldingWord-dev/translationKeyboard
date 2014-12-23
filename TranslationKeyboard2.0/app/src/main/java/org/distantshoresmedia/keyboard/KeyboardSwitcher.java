@@ -22,14 +22,15 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.InflateException;
 
+import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class KeyboardSwitcher implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -330,7 +331,23 @@ public class KeyboardSwitcher implements
             Locale saveLocale = conf.locale;
             conf.locale = TKIME.sKeyboardSettings.inputLocale;
             orig.updateConfiguration(conf, null);
-            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDatabaseHandler.getKeyboardWithID("1").getKeyboardVariants()[0]);
+
+//            AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getAvailableKeyboards();
+//
+//
+//            Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
+//
+//            for(AvailableKeyboard aKeyboard : keyboards){
+//                keyboardsDictionary.put( aKeyboard.getIsoLanguage().toLowerCase(), aKeyboard);
+//            }
+//            String language = saveLocale.getLanguage();
+//
+//            System.out.println("desired Language: " + language);
+//            AvailableKeyboard desiredKeyboard = keyboardsDictionary.get(language);
+
+            String keyboardID = Long.toString(KeyboardDatabaseHandler.getCurrentKeyboard().getId());
+            System.out.println("desired Language ID: " + keyboardID);
+            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDatabaseHandler.getKeyboardWithID(keyboardID).getKeyboardVariants()[0]);
 //            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent);
             keyboard.setVoiceMode(hasVoiceButton(id.mXml == R.xml.kbd_symbols), mHasVoice);
             keyboard.setLanguageSwitcher(mLanguageSwitcher, mIsAutoCompletionActive);

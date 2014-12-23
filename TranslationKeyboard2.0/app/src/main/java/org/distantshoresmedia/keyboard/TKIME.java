@@ -18,6 +18,7 @@ package org.distantshoresmedia.keyboard;
 
 //import com.google.android.voiceime.VoiceRecognitionTrigger;
 
+import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -2883,6 +2884,8 @@ public class TKIME extends InputMethodService implements
     }
 
     void toggleLanguage(boolean reset, boolean next) {
+
+        KeyboardDatabaseHandler.calculateCurrentKeyboardIndex(reset, next);
         if (reset) {
             mLanguageSwitcher.reset();
         } else {

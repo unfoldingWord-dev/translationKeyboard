@@ -44,7 +44,7 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        KeyboardDatabaseHandler.initializeDatabase(this.getApplicationContext());
+        KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
 
         KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
 //

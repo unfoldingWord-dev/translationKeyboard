@@ -44,8 +44,7 @@ public class BaseDataClass {
         }
         catch (JSONException e){
             System.out.println("getUpdatedTimeFromJSONString JSONException: " + e.toString() + " json: " + json);
+            return 1413087174.3473752;
         }
-
-        return 1413087174.3473752;
     }
 }
