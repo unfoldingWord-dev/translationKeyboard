@@ -25,8 +25,8 @@
 				android:layout_height="wrap_content"></Button>
 		</TableRow>
 		<TableRow>
-			<Button android:text="@string/main_setup_get_prefs"
-				android:id="@+id/main_setup_btn_get_prefs" android:layout_width="wrap_content"
+			<Button android:text="@string/main_setup_update_keyboards"
+				android:id="@+id/main_setup_btn_update_keyboards" android:layout_width="wrap_content"
 				android:layout_height="wrap_content"></Button>
 		</TableRow>
 	</TableLayout>
