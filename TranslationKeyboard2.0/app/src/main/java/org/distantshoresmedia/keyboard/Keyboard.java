@@ -199,6 +199,8 @@ public class Keyboard {
         /** Vertical gap following this row. */
         public int verticalGap;
 
+        public int rowIndex;
+
         /** The keyboard mode for this row */
         public int mode;
         
@@ -210,6 +212,15 @@ public class Keyboard {
             this.parent = parent;
         }
 
+        public Row(Resources res, Keyboard parent, XmlResourceParser parser, int rowIndex) {
+            this(res, parent, parser);
+            this.rowIndex = rowIndex;
+            int possibleWidth = (int) Math.round(parent.calculateKeyWidth(rowIndex));
+
+            if(possibleWidth > 0){
+                defaultWidth = possibleWidth;
+            }
+        }
         public Row(Resources res, Keyboard parent, XmlResourceParser parser) {
             this.parent = parent;
             TypedArray a = res.obtainAttributes(Xml.asAttributeSet(parser),
@@ -217,9 +228,9 @@ public class Keyboard {
             defaultWidth = getDimensionOrFraction(a,
                     R.styleable.Keyboard_keyWidth,
                     parent.mDisplayWidth, parent.mDefaultWidth);
-            defaultHeight = Math.round(getDimensionOrFraction(a,
-                    R.styleable.Keyboard_keyHeight,
-                    parent.mDisplayHeight, parent.mDefaultHeight));
+            defaultHeight = (int) Math.round(parent.calculateKeyHeight()); //Math.round(getDimensionOrFraction(a,
+//                    R.styleable.Keyboard_keyHeight,
+//                    parent.mDisplayHeight, parent.mDefaultHeight));
             defaultHorizontalGap = getDimensionOrFraction(a,
                     R.styleable.Keyboard_horizontalGap,
                     parent.mDisplayWidth, parent.mDefaultHorizontalGap);
@@ -396,9 +407,16 @@ public class Keyboard {
             TypedArray a = res.obtainAttributes(Xml.asAttributeSet(parser),
                     R.styleable.Keyboard);
 
-            realWidth = getDimensionOrFraction(a,
-                    R.styleable.Keyboard_keyWidth,
-                    keyboard.mDisplayWidth, parent.defaultWidth);
+            float possibleWidth = (float) keyboard.calculateKeyWidth(parent.rowIndex); //getDimensionOrFraction(a,
+//                    R.styleable.Keyboard_keyWidth,
+//                    keyboard.mDisplayWidth, parent.defaultWidth);
+
+            if(possibleWidth < 0){
+                possibleWidth = getDimensionOrFraction(a,
+                        R.styleable.Keyboard_keyWidth,
+                        keyboard.mDisplayWidth, parent.defaultWidth);
+            }
+            realWidth = possibleWidth;
             float realHeight = getDimensionOrFraction(a,
                     R.styleable.Keyboard_keyHeight,
                     keyboard.mDisplayHeight, parent.defaultHeight);
@@ -857,7 +875,7 @@ public class Keyboard {
         mDefaultWidth = mDisplayWidth / 13;
         mDefaultVerticalGap = 0;
         mDefaultHeight = defaultHeight; // may be zero, to be adjusted below
-        mKeyboardHeight = Math.round(mDisplayHeight * kbHeightPercent / 100); 
+        mKeyboardHeight = Math.round(mDisplayHeight * (kbHeightPercent / 100));
         //Log.i("PCKeyboard", "mDefaultHeight=" + mDefaultHeight + "(arg=" + defaultHeight + ")" + " kbHeight=" + mKeyboardHeight + " displayHeight="+mDisplayHeight+")");
         mKeys = new ArrayList<Key>();
         mModifierKeys = new ArrayList<Key>();
@@ -880,7 +898,7 @@ public class Keyboard {
         mDefaultWidth = mDisplayWidth / 13;
         mDefaultVerticalGap = 0;
         mDefaultHeight = defaultHeight; // may be zero, to be adjusted below
-        mKeyboardHeight = Math.round(mDisplayHeight * kbHeightPercent / 100);
+        mKeyboardHeight = Math.round(mDisplayHeight * (kbHeightPercent / 100));
         //Log.i("PCKeyboard", "mDefaultHeight=" + mDefaultHeight + "(arg=" + defaultHeight + ")" + " kbHeight=" + mKeyboardHeight + " displayHeight="+mDisplayHeight+")");
         mKeys = new ArrayList<Key>();
         mModifierKeys = new ArrayList<Key>();
@@ -1199,12 +1217,18 @@ public class Keyboard {
         return new Row(res, this, parser);
     }
 
+    protected Row createRowFromXml(Resources res, XmlResourceParser parser, int index) {
+        return new Row(res, this, parser, index);
+    }
+
+
     protected Key createKeyFromXml(Resources res, Row parent, int x, int y,
             XmlResourceParser parser) {
         return new Key(res, parent, x, y, parser);
     }
 
-    protected Key createKeyWithData(Resources res, Row parent, int x, int y, XmlResourceParser parser, KeyPosition position) {
+    protected Key createKeyWithData(Resources res, Row parent, int x, int y,
+                                    XmlResourceParser parser, KeyPosition position) {
         Key newKey = new Key(res, parent, x, y, parser);
         newKey.setCharactersTo(position);
         return newKey;
@@ -1238,7 +1262,7 @@ public class Keyboard {
                     else if (TAG_ROW.equals(tag)) {
                         inRow = true;
                         x = 0;
-                        currentRow = createRowFromXml(res, parser);
+                        currentRow = createRowFromXml(res, parser, mRowCount);
                         skipRow = currentRow.mode != 0 && currentRow.mode != mKeyboardMode;
                         if (currentRow.extension) {
                             if (mUseExtension) {
@@ -1385,6 +1409,7 @@ public class Keyboard {
             int event;
             Key prevKey = null;
             while ((event = parser.next()) != XmlResourceParser.END_DOCUMENT) {
+
                 if (event == XmlResourceParser.START_TAG) {
                     String tag = parser.getName();
                     if (TAG_ROW.equals(tag)) {
@@ -1485,30 +1510,32 @@ public class Keyboard {
         TypedArray a = res.obtainAttributes(Xml.asAttributeSet(parser),
                 R.styleable.Keyboard);
 
-//        mDefaultWidth = getDimensionOrFraction(a,
-//                R.styleable.Keyboard_keyWidth,
-//                mDisplayWidth, mDisplayWidth / 13);
-        mDefaultHeight = Math.round(getDimensionOrFraction(a,
-                R.styleable.Keyboard_keyHeight,
-                mDisplayHeight, mDefaultHeight));
-        mDefaultHorizontalGap = getDimensionOrFraction(a,
-                R.styleable.Keyboard_horizontalGap,
-                mDisplayWidth, 0);
-        mDefaultVerticalGap = Math.round(getDimensionOrFraction(a,
-                R.styleable.Keyboard_verticalGap,
-                mDisplayHeight, 0));
         mHorizontalPad = res.getDimension(R.dimen.key_horizontal_pad);//getDimensionOrFraction(a,
 //                R.styleable.Keyboard_horizontalPad,
 //                mDisplayWidth, res.getDimension(R.dimen.key_horizontal_pad));
         mVerticalPad = res.getDimension(R.dimen.key_vertical_pad); //getDimensionOrFraction(a,
 //                R.styleable.Keyboard_verticalPad,
 //                mDisplayHeight, res.getDimension(R.dimen.key_vertical_pad));
-        mLayoutRows = a.getInteger(R.styleable.Keyboard_layoutRows, DEFAULT_LAYOUT_ROWS);
+
+        mDefaultWidth = (float) calculateKeyWidth(0); //getDimensionOrFraction(a,
+//                R.styleable.Keyboard_keyWidth,
+//                mDisplayWidth, mDisplayWidth / 13);
+        mDefaultHeight = (int) Math.round(calculateKeyHeight());//Math.round(getDimensionOrFraction(a,
+//                R.styleable.Keyboard_keyHeight,
+//                mDisplayHeight, mDefaultHeight));
+        mDefaultHorizontalGap = getDimensionOrFraction(a,
+                R.styleable.Keyboard_horizontalGap,
+                mDisplayWidth, 0);
+        mDefaultVerticalGap = Math.round(getDimensionOrFraction(a,
+                R.styleable.Keyboard_verticalGap,
+                mDisplayHeight, 0));
+
+        mLayoutRows = currentKeyboard.getNumberOfRows() + 1;// a.getInteger(R.styleable.Keyboard_layoutRows, DEFAULT_LAYOUT_ROWS);
         mLayoutColumns = a.getInteger(R.styleable.Keyboard_layoutColumns, DEFAULT_LAYOUT_COLUMNS);
-        if (mDefaultHeight == 0 && mKeyboardHeight > 0 && mLayoutRows > 0) {
-            mDefaultHeight = mKeyboardHeight / mLayoutRows;
-            //Log.i(TAG, "got mLayoutRows=" + mLayoutRows + ", mDefaultHeight=" + mDefaultHeight);
-        }
+//        if (mDefaultHeight == 0 && mKeyboardHeight > 0 && mLayoutRows > 0) {
+//            mDefaultHeight = mKeyboardHeight / mLayoutRows;
+//            //Log.i(TAG, "got mLayoutRows=" + mLayoutRows + ", mDefaultHeight=" + mDefaultHeight);
+//        }
         mProximityThreshold = (int) (mDefaultWidth * SEARCH_DISTANCE);
         mProximityThreshold = mProximityThreshold * mProximityThreshold; // Square it for comparison
         a.recycle();
@@ -1530,10 +1557,21 @@ public class Keyboard {
 
     private double calculateKeyWidth(int row){
 
-        int numberOfKeys = currentKeyboard.getNumberOfKeysForRows()[row];
+        if(row >= currentKeyboard.getNumberOfKeysForRows().length){
+            return -1;
+        }
+        //second to the last row
+        boolean secondToTheLastRow = (row == (currentKeyboard.getNumberOfRows() - 1));
+
+        // make room for the shift/delete key.
+        // TODO : should probably be pulling this from somewhere
+        int extraKeys = (secondToTheLastRow)? 2 : 0;
+
+        int numberOfKeys = currentKeyboard.getNumberOfKeysForRows()[row] + extraKeys;
 
         double totalPadding = mDefaultHorizontalGap * (numberOfKeys + 1.0);
         double totalWorkingWidth = mDisplayWidth - totalPadding;
+
         double keyWidth = totalWorkingWidth / (double) numberOfKeys;
 
         return keyWidth;
@@ -1544,8 +1582,8 @@ public class Keyboard {
         // +1 for the row with the space bar.
         int numberOfRows = currentKeyboard.getNumberOfRows() + 1;
 
-        double totalPadding = mDefaultVerticalGap * (numberOfRows + 1.0);
-        double totalWorkingHeight = mDisplayHeight - totalPadding;
+        double totalPadding = mVerticalPad * (numberOfRows + 1.0);
+        double totalWorkingHeight = mKeyboardHeight - totalPadding;
         double keyHeight = totalWorkingHeight / (double) numberOfRows;
 
         return keyHeight;
