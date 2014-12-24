@@ -16,6 +16,7 @@
 
 package org.distantshoresmedia.keyboard;
 
+import org.distantshoresmedia.model.KeyCharacter;
 import org.distantshoresmedia.model.KeyPosition;
 import org.distantshoresmedia.model.KeyboardVariant;
 import org.distantshoresmedia.translationkeyboard20.R;
@@ -493,16 +494,21 @@ public class Keyboard {
         }
 
         public void setCharactersTo(KeyPosition position){
-            int defaultValue = position.getCharacters()[0].getUnicodeValue()[0];
-            int shiftValue = position.getCharacters()[1].getUnicodeValue()[0];
-            this.codes = new int[] {defaultValue};
-            this.label = Character.toString((char) defaultValue);
-            this.text = Character.toString((char) defaultValue);
-            this.shiftLabel = Character.toString((char) shiftValue);
+
+            KeyCharacter[] characters = position.getCharacters();
+            int[] characterValues = new int[characters.length];
+
+            for(KeyCharacter character : characters){
+                characterValues[character.getModmask()] = character.getUnicodeValue()[0];
+            }
+
+            this.codes = new int[] {characterValues[0]};
+            this.label = Character.toString((char) characterValues[0]);
+            this.text = Character.toString((char) characterValues[0]);
+            this.shiftLabel = Character.toString((char) characterValues[1]);
 
             if(position.getCharacters().length > 2){
-                int longpressValue = position.getCharacters()[2].getUnicodeValue()[0];
-                this.popupCharacters = Character.toString((char) longpressValue);
+                this.popupCharacters = Character.toString((char) characterValues[2]);
             }
         }
 

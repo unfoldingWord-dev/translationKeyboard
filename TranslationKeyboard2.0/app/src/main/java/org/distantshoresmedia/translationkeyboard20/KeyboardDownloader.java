@@ -72,32 +72,6 @@ public class KeyboardDownloader {
     }
 
     //endregion
-//    public JSONObject keyboards;
-
-//    static public BaseKeyboard getKeyboardWithID(int id){
-//        BaseKeyboard desiredKeyboard = keyboards.get(Integer.toString(id));
-//
-//        System.out.println("Got keyboard with id: " + id + " and name: " + desiredKeyboard.getName());
-//        return keyboards.get(Integer.toString(id));
-//
-//    }
-
-
-//    public void downloadKeyboardAvailability(){
-//
-//        if(availableKeyboards == null){
-//
-//        }
-//    }
-
-
-//    public void parseKeyboardType(JSONObject keyObj){
-//
-////        System.out.println("KeysInfo: " + keyObj.toString());
-//        BaseKeyboard newKeyboard = BaseKeyboard.getKeyboardFromJsonObject(keyObj);
-//        keyboards.put(Integer.toString((int) newKeyboard.getId()), newKeyboard);
-//        System.out.println("Keyboard: " + newKeyboard.toString());
-//    }
 
     //region URL Builders
 
@@ -110,22 +84,6 @@ public class KeyboardDownloader {
     }
 
     //endregion
-
-//    public void parseKeyboardsInfo(JSONArray keyboardsArray){
-//
-////        System.out.println("KeysInfo: " + keyboardsArray.toString());
-//
-//        for(int i = 0; i < keyboardsArray.length(); i++){
-//            try {
-//                JSONObject board = keyboardsArray.getJSONObject(i);
-//                Integer keyboardID = board.getInt(kIdTag);
-//                getJSONFromUrl(this.context, getKeyboardUrl(keyboardID.toString()));
-//            }
-//            catch (JSONException e) {
-//                System.out.println(" JSONException: " + e.toString());
-//            }
-//        }
-//    }
 
     //region Generic data methods
 

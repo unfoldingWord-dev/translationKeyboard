@@ -57,6 +57,11 @@ public class KeyboardVariant {
 //        return this.keys.get(index);
 //    }
 
+    public int getNumberOfRows(){
+
+        return keys.size();
+    }
+
     public KeyboardVariant(String name, String created, String updated, ArrayList<KeyPosition[]> keys){
         this.name = name;
         this.createdAt = created;

@@ -284,19 +284,20 @@ public class KeyboardDatabaseHandler {
         return getJSONStringFromFile(context, getAvailableKeyboardFileName());
     }
 
-    public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsjson){
+    public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
 
+        System.out.println("Is updating available keyboards.");
         String currentKeyboards = getJSONStringForAvailableKeyboards(context);
 
         double currentUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(currentKeyboards);
-        double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboardsjson);
+        double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboardsJson);
 
-        if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
-            return true;
-        }
-        else {
-            return updateKeyboards(context, newKeyboardsjson);
-        }
+//        if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
+//            return true;
+//        }
+//        else {
+            return updateKeyboards(context, newKeyboardsJson);
+//        }
     }
 
     public static boolean updateOrSaveKeyboard(Context context, String keyboardJSON){
@@ -468,8 +469,9 @@ public class KeyboardDatabaseHandler {
         Map<String, AvailableKeyboard> downloadedKeyboards = getDownloadedKeyboardsDictionary();
         Map<String, AvailableKeyboard> installedKeyboards = getInstalledKeyboardDictionary();
 
-        downloadedKeyboards.put(key, availableKeyboards.get(key));
-        installedKeyboards.put(key, availableKeyboards.get(key));
+        downloadedKeyboardsDictionary.put(key, availableKeyboards.get(key));
+
+        installedKeyboardDictionary.put(key, availableKeyboards.get(key));
 
         saveKeyboardAvailability();
     }
@@ -491,11 +493,13 @@ public class KeyboardDatabaseHandler {
         System.out.println("installedKeyboards count: " + installedKeyboards.size());
 
         if(! isUpdated) {
+            System.out.println("is updating downloaded Keyboards");
 
             for (String key : availableKeyboards.keySet()){
 
 
                 if(downloadedKeyboards.keySet().contains(key) && ! isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
+                    System.out.println("Is downloading updated keyboard with id: " + key);
                     downloadedKeyboards.put(key, availableKeyboards.get(key));
 
                     System.out.println("Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
@@ -509,6 +513,7 @@ public class KeyboardDatabaseHandler {
 
         if(! keyboardListsAreCurrentWithEachOther(downloadedKeyboards, installedKeyboards)){
 
+            System.out.println("Is updating installed keyboards");
             for (String key : installedKeyboards.keySet()){
                 installedKeyboards.put(key, availableKeyboards.get(key));
             }
