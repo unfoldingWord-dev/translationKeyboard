@@ -527,9 +527,18 @@ public class Keyboard {
             this.text = Character.toString((char) characterValues[0]);
             this.shiftLabel = Character.toString((char) characterValues[1]);
 
+            String popChars = "";
             if(position.getCharacters().length > 2){
-                this.popupCharacters = Character.toString((char) characterValues[2]);
+
+                for(KeyCharacter character : characters){
+                    if(character.getModmask() == 2) {
+                        popChars += Character.toString((char) character.getUnicodeValue()[0]);
+                    }
+                }
+
+                this.popupCharacters = popChars;
             }
+
         }
 
         public boolean isDistinctCaps() {
