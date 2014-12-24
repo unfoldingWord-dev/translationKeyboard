@@ -1,7 +1,10 @@
 package org.distantshoresmedia.translationkeyboard20;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import org.distantshoresmedia.keyboard.KeyboardSwitcher;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
 import org.json.JSONException;
@@ -498,7 +501,7 @@ public class KeyboardDatabaseHandler {
 
         installedKeyboardDictionary.put(key, availableKeyboards.get(key));
 
-        saveKeyboardAvailability();
+        KeyboardSwitcher.getInstance().makeKeyboards(true);
     }
 
     private static boolean updateKeyboards(Context context){
