@@ -25,41 +25,46 @@
     android:keyHeight="@dimen/key_height"
     >
 
-    <Row android:extension="true">
+    <Row>
         <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
 		<Key android:codes="5" android:keyLabel="5" />
+		<Key android:codes="9" android:keyLabel="9" 						android:keyEdgeFlags="right"/>
 
     </Row>
 	
     <Row>
         <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
 		<Key android:codes="5" android:keyLabel="5" />
+		<Key android:codes="9" android:keyLabel="9" 						android:keyEdgeFlags="right"/>
 
     </Row>
 	
     <Row>
         <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
 		<Key android:codes="5" android:keyLabel="5" />
+		<Key android:codes="9" android:keyLabel="9" 						android:keyEdgeFlags="right"/>
     </Row>
     
     <Row>
         <Key 	android:codes="@integer/key_shift" 
 				android:keyIcon="@drawable/sym_keyboard_shift" 
 				android:iconPreview="@drawable/sym_keyboard_feedback_shift"
-            	android:keyWidth="8%p" 
+            	android:keyWidth="10%p" 
 				android:isModifier="true"
             	android:isSticky="true" 
 				android:keyEdgeFlags="left"/>
 				
 		<Key android:codes="1" android:keyLabel="1" />
 		<Key android:codes="5" android:keyLabel="5" />
+		<Key android:codes="9" android:keyLabel="9" />
 
         <Key 	android:codes="@integer/key_delete"
 				android:keyIcon="@drawable/sym_keyboard_delete" 
 				android:iconPreview="@drawable/sym_keyboard_feedback_delete"
-            	android:keyWidth="8%p" 
+            	android:keyWidth="10%p" 
 				android:isModifier="true"
-            	android:isRepeatable="true"/>
+            	android:isRepeatable="true"
+				android:keyEdgeFlags="right"/>
         
     </Row>
     

@@ -807,7 +807,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             setMeasuredDimension(
                     getPaddingLeft() + getPaddingRight(), getPaddingTop() + getPaddingBottom());
         } else {
-            int width = mKeyboard.getMinWidth() - getPaddingLeft() - getPaddingRight();
+            int width = mKeyboard.getMinWidth() + getPaddingLeft() + getPaddingRight();
             if (MeasureSpec.getSize(widthMeasureSpec) < width + 10) {
                 int badWidth = MeasureSpec.getSize(widthMeasureSpec);
                 if (badWidth != width) Log.i(TAG, "ignoring unexpected width=" + badWidth);

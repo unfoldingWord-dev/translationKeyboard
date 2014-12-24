@@ -292,12 +292,14 @@ public class KeyboardDatabaseHandler {
         double currentUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(currentKeyboards);
         double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboardsJson);
 
-//        if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
-//            return true;
-//        }
-//        else {
+        if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
+            System.out.println("keyboards up to date");
+            return true;
+        }
+        else {
+            System.out.println("Keyboards will be updated");
             return updateKeyboards(context, newKeyboardsJson);
-//        }
+        }
     }
 
     public static boolean updateOrSaveKeyboard(Context context, String keyboardJSON){

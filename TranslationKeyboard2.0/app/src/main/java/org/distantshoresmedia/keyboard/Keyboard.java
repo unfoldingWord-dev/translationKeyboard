@@ -177,6 +177,8 @@ public class Keyboard {
     /** Number of key widths from current touch point to search for nearest keys. */
     private static float SEARCH_DISTANCE = 1.8f;
 
+    private KeyboardVariant currentKeyboard;
+
     /**
      * Container for keys in the keyboard. All keys in a row are at the same Y-coordinate.
      * Some of the key size defaults can be overridden per row from what the {@link Keyboard}
@@ -868,6 +870,7 @@ public class Keyboard {
 
     public Keyboard(Context context, int defaultHeight, int xmlLayoutResId, int modeId, float kbHeightPercent,
                     KeyboardVariant keyVariant) {
+        currentKeyboard = keyVariant;
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         mDisplayWidth = dm.widthPixels;
         mDisplayHeight = dm.heightPixels;
@@ -1225,7 +1228,7 @@ public class Keyboard {
             Key prevKey = null;
             while ((event = parser.next()) != XmlResourceParser.END_DOCUMENT) {
 
-                System.out.println("Current x: " + x);
+//                System.out.println("Current x: " + x);
                 if (event == XmlResourceParser.START_TAG) {
                     String tag = parser.getName();
 
@@ -1273,31 +1276,32 @@ public class Keyboard {
                                 case MID_ROW_VALUE: {
                                     KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
 
-                                    for (int i = 1; i < positionRow.length; i++) {
+                                    for (int i = 1; i < positionRow.length - 1; i++) {
                                         KeyPosition position = positionRow[i];
                                         Key newKey = createKeyWithData(res, currentRow, Math.round(x), y, parser, position);
                                         mKeys.add(newKey);
                                         prevKey = newKey;
-                                        if(i < positionRow.length - 1) {
+                                        if(i < positionRow.length - 2) {
                                             x += key.realGap + key.realWidth;
                                             if (x > mTotalWidth) {
                                                 mTotalWidth = Math.round(x);
                                             }
-                                            System.out.println("Current x: " + x);
+//                                            System.out.println("Current x: " + x);
                                         }
                                     }
                                     break;
                                 }
-//                                case END_ROW_VALUE: {
-//
-//                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
-//                                    KeyPosition position = positionRow[positionRow.length - 1];
-//
-//                                    key.setCharactersTo(position);
-//                                    mKeys.add(key);
-//                                    prevKey = key;
-//                                    break;
-//                                }
+                                case END_ROW_VALUE: {
+
+                                    KeyPosition[] positionRow = variant.getKeys().get(mRowCount);
+                                    KeyPosition position = positionRow[positionRow.length - 1];
+
+                                    key.setCharactersTo(position);
+                                    mKeys.add(key);
+                                    prevKey = key;
+                                    x += key.realGap;
+                                    break;
+                                }
                                 case KEYCODE_SHIFT: {
                                     mKeys.add(key);
                                     prevKey = key;
@@ -1493,12 +1497,12 @@ public class Keyboard {
         mDefaultVerticalGap = Math.round(getDimensionOrFraction(a,
                 R.styleable.Keyboard_verticalGap,
                 mDisplayHeight, 0));
-        mHorizontalPad = getDimensionOrFraction(a,
-                R.styleable.Keyboard_horizontalPad,
-                mDisplayWidth, res.getDimension(R.dimen.key_horizontal_pad));
-        mVerticalPad = getDimensionOrFraction(a,
-                R.styleable.Keyboard_verticalPad,
-                mDisplayHeight, res.getDimension(R.dimen.key_vertical_pad));
+        mHorizontalPad = res.getDimension(R.dimen.key_horizontal_pad);//getDimensionOrFraction(a,
+//                R.styleable.Keyboard_horizontalPad,
+//                mDisplayWidth, res.getDimension(R.dimen.key_horizontal_pad));
+        mVerticalPad = res.getDimension(R.dimen.key_vertical_pad); //getDimensionOrFraction(a,
+//                R.styleable.Keyboard_verticalPad,
+//                mDisplayHeight, res.getDimension(R.dimen.key_vertical_pad));
         mLayoutRows = a.getInteger(R.styleable.Keyboard_layoutRows, DEFAULT_LAYOUT_ROWS);
         mLayoutColumns = a.getInteger(R.styleable.Keyboard_layoutColumns, DEFAULT_LAYOUT_COLUMNS);
         if (mDefaultHeight == 0 && mKeyboardHeight > 0 && mLayoutRows > 0) {
@@ -1522,6 +1526,29 @@ public class Keyboard {
             return a.getFraction(index, base, base, defValue);
         }
         return defValue;
+    }
+
+    private double calculateKeyWidth(int row){
+
+        int numberOfKeys = currentKeyboard.getNumberOfKeysForRows()[row];
+
+        double totalPadding = mDefaultHorizontalGap * (numberOfKeys + 1.0);
+        double totalWorkingWidth = mDisplayWidth - totalPadding;
+        double keyWidth = totalWorkingWidth / (double) numberOfKeys;
+
+        return keyWidth;
+    }
+
+    private double calculateKeyHeight(){
+
+        // +1 for the row with the space bar.
+        int numberOfRows = currentKeyboard.getNumberOfRows() + 1;
+
+        double totalPadding = mDefaultVerticalGap * (numberOfRows + 1.0);
+        double totalWorkingHeight = mDisplayHeight - totalPadding;
+        double keyHeight = totalWorkingHeight / (double) numberOfRows;
+
+        return keyHeight;
     }
 
     @Override
