@@ -19,6 +19,7 @@ import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -186,6 +187,28 @@ public class KeyboardDatabaseHandler {
     //endregion
 
     //region Public General Use
+
+    public static String getKeyboardIdWithLocal(Locale locale){
+
+        updateCurrentKeyboards();
+
+        for(AvailableKeyboard keyboard : currentKeyboards){
+
+            Locale keyboardLocal = keyboard.getKeyboardAsLocale();
+
+            String localeLanguage = locale.getLanguage();
+            String keyboardCountry = keyboardLocal.getCountry();
+
+            if(localeLanguage.compareToIgnoreCase(keyboardCountry) == 0){
+
+                return Long.toString(keyboard.getId());
+            }
+            System.out.println("Desired locale: " + locale.toString() + " keyboardLocal: " + keyboardLocal.toString());
+
+        }
+
+        return "1";
+    }
 
     public static void calculateCurrentKeyboardIndex(boolean reset, boolean next) {
 

@@ -345,8 +345,8 @@ public class KeyboardSwitcher implements
 //            System.out.println("desired Language: " + language);
 //            AvailableKeyboard desiredKeyboard = keyboardsDictionary.get(language);
 
-            String keyboardID = Long.toString(KeyboardDatabaseHandler.getCurrentKeyboard().getId());
-            System.out.println("desired Language ID: " + keyboardID);
+            String keyboardID = KeyboardDatabaseHandler.getKeyboardIdWithLocal(conf.locale);
+//            System.out.println("desired Language ID: " + language);
             keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDatabaseHandler.getKeyboardWithID(keyboardID).getKeyboardVariants()[0]);
 //            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent);
             keyboard.setVoiceMode(hasVoiceButton(id.mXml == R.xml.kbd_symbols), mHasVoice);

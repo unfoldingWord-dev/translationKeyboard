@@ -442,7 +442,8 @@ public class TKKeyboard extends Keyboard {
         if (mLocale != null) {
             mSpaceKey.icon = new BitmapDrawable(mRes,
                     drawSpaceBar(OPACITY_FULLY_OPAQUE, isAutoCompletion));
-        } else {
+        }
+        else {
             // sym_keyboard_space_led can be shared with Black and White symbol themes.
             if (isAutoCompletion) {
                 mSpaceKey.icon = new BitmapDrawable(mRes,
