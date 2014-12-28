@@ -17,6 +17,7 @@
 package org.distantshoresmedia.keyboard;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -35,8 +36,9 @@ import android.widget.TextView.BufferType;
 import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
+import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 
-public class Main extends Activity {
+public class Main extends Activity implements UpdateFragment.OnFragmentInteractionListener {
 
     private final static String MARKET_URI = "market://search?q=pub:\"Klaus Weidner\"";
 
@@ -81,7 +83,6 @@ public class Main extends Activity {
             }
         });
 
-        
 
         final Button setup5 = (Button) findViewById(R.id.main_setup_btn_update_keyboards);
         setup5.setOnClickListener(new View.OnClickListener() {
@@ -90,13 +91,22 @@ public class Main extends Activity {
             }
         });
         // PluginManager.getPluginDictionaries(getApplicationContext()); // why?
+
+        final View updated = findViewById(R.id.main_setup_fragment_update_box);
     }
 
     private void updateKeyboards(){
 
+
         KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
 //
         downloader.updateKeyboards(this.getApplicationContext());
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+        System.out.println("Fragment interaction");
     }
 }
 
