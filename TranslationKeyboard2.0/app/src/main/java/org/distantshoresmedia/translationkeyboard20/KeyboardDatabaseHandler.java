@@ -312,6 +312,7 @@ public class KeyboardDatabaseHandler {
 
     public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
 
+        UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
         System.out.println("Is updating available keyboards.");
         String currentKeyboards = getJSONStringForAvailableKeyboards(context);
 
@@ -320,15 +321,19 @@ public class KeyboardDatabaseHandler {
 
         if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
             System.out.println("keyboards up to date");
+            UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
             return true;
         }
         else {
             System.out.println("Keyboards will be updated");
+            UpdateFragment.getSharedInstance().setProgress(30, "Updating");
             return updateKeyboards(context, newKeyboardsJson);
         }
     }
 
     public static boolean updateOrSaveKeyboard(Context context, String keyboardJSON){
+
+        UpdateFragment.getSharedInstance().setProgress(60, "Saving Keyboard" );
 
         String fileName = getKeyboardFileName(keyboardJSON);
 
@@ -502,6 +507,7 @@ public class KeyboardDatabaseHandler {
         installedKeyboardDictionary.put(key, availableKeyboards.get(key));
 
         KeyboardSwitcher.getInstance().makeKeyboards(true);
+        UpdateFragment.getSharedInstance().endProgress(true, "Updated");
     }
 
     private static boolean updateKeyboards(Context context){
@@ -530,6 +536,7 @@ public class KeyboardDatabaseHandler {
                     System.out.println("Is downloading updated keyboard with id: " + key);
                     downloadedKeyboards.put(key, availableKeyboards.get(key));
 
+                    UpdateFragment.getSharedInstance().setProgress(40, "Downloading new keyboard for: " + availableKeyboards.get(key).getLanguageName());
                     System.out.println("Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
                     KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(key).getId()));
                 }

@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     tools:context="org.distantshoresmedia.translationkeyboard20.UpdateFragment"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
 
 
         <TextView
@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Updating"
-            android:id="@+id/updatingTextView"
+            android:id="@+id/updating_text_view_id"
             android:layout_gravity="center_horizontal|top" />
 
         <TextView
@@ -20,14 +20,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Status:"
-            android:id="@+id/statusTexView"
+            android:id="@+id/status_text_view_id"
             android:layout_gravity="center" />
 
         <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
+            android:id="@+id/progress_bar_id"
             android:layout_gravity="center_horizontal|bottom"
             android:indeterminate="false" />
 

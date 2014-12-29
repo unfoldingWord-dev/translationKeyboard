@@ -18,6 +18,8 @@ package org.distantshoresmedia.keyboard;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -90,23 +92,35 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
                 updateKeyboards();
             }
         });
-        // PluginManager.getPluginDictionaries(getApplicationContext()); // why?
 
-        final View updated = findViewById(R.id.main_setup_fragment_update_box);
     }
 
     private void updateKeyboards(){
 
 
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        UpdateFragment updateFragment = UpdateFragment.getSharedInstance();
+
+        transaction.add(R.id.updating_layout_id,  updateFragment);
+        transaction.commit();
+        updateFragment.setProgress(5, "Initializing");
+
         KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
-//
         downloader.updateKeyboards(this.getApplicationContext());
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void endUpdate() {
 
         System.out.println("Fragment interaction");
+
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction.remove(UpdateFragment.getSharedInstance());
+        transaction.commit();
     }
 }
 

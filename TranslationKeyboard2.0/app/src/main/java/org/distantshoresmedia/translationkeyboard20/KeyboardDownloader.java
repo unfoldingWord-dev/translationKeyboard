@@ -63,6 +63,8 @@ public class KeyboardDownloader {
     public void updateKeyboards(Context context) {
         System.out.println("Will Download");
         this.context = context;
+
+        UpdateFragment.getSharedInstance().setProgress(10, "Finding Most Recent Updates");
         getJSONFromUrl(this.context, getKeyboardUrl());
     }
 

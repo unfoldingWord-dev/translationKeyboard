@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 
 /**
@@ -20,12 +22,18 @@ import android.view.ViewGroup;
 public class UpdateFragment extends Fragment {
 
     private static final int kSizeBuffer = 10;
+    private static final String kProgressText = "Status: ";
 
-//    private static UpdateFragment sharedInstance;
-//
-//    public static void setSharedInstance(UpdateFragment sharedInstance) {
-//        UpdateFragment.sharedInstance = sharedInstance;
-//    }
+    private static UpdateFragment sharedInstance = null;
+    public static UpdateFragment getSharedInstance() {
+
+        if(sharedInstance == null){
+            sharedInstance = new UpdateFragment();
+        }
+
+        return sharedInstance;
+    }
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +45,12 @@ public class UpdateFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private TextView statusTextView = null;
+    private ProgressBar progressBar = null;
+
+    private String currentText = "";
+    private int progress = -1;
 
     /**
      * Use this factory method to create a new instance of
@@ -64,8 +78,6 @@ public class UpdateFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        UpdateFragment.sharedInstance = this;
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -78,19 +90,16 @@ public class UpdateFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View newView = inflater.inflate(R.layout.fragment_update, container, false);
-//
-//        newView.getLayoutParams().height = container.getLayoutParams().height - (kSizeBuffer * 2);
-//        newView.getLayoutParams().width = container.getLayoutParams().width - (kSizeBuffer * 2);
-//
-//        newView.setPadding(kSizeBuffer, kSizeBuffer, kSizeBuffer, kSizeBuffer);
 
+        statusTextView = (TextView) newView.findViewById(R.id.status_text_view_id);
+        progressBar = (ProgressBar) newView.findViewById(R.id.progress_bar_id);
         return newView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.endUpdate();
         }
     }
 
@@ -111,6 +120,34 @@ public class UpdateFragment extends Fragment {
         mListener = null;
     }
 
+    public void setProgress(int percent, String text){
+
+        this.progress =  percent;
+        this.currentText = kProgressText + text;
+        updateDetails();
+    }
+
+    public void endProgress(boolean success, String text){
+
+        this.progress = (success)? 100 : 0;
+        this.currentText = (success)? "Finished" : "Error";
+        updateDetails();
+
+        if(mListener != null){
+            mListener.endUpdate();
+        }
+    }
+
+    private void updateDetails(){
+
+        if(this.progressBar != null){
+            this.progressBar.setProgress(progress);
+        }
+        if(this.statusTextView != null){
+            this.statusTextView.setText(kProgressText + currentText);
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -122,8 +159,9 @@ public class UpdateFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+
+        public void endUpdate();
+
     }
 
 }
