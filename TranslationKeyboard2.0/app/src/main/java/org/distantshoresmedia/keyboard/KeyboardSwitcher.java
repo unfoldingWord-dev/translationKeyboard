@@ -195,6 +195,9 @@ public class KeyboardSwitcher implements
     }
 
     public void makeKeyboards(boolean forceCreate) {
+        if(mInputMethodService == null){
+            return;
+        }
         mFullMode = TKIME.sKeyboardSettings.keyboardMode;
         mSymbolsId = makeSymbolsId(mHasVoice && !mVoiceOnPrimary);
         mSymbolsShiftedId = makeSymbolsShiftedId(mHasVoice && !mVoiceOnPrimary);

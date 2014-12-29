@@ -114,7 +114,7 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
     @Override
     public void endUpdate() {
 
-        System.out.println("Fragment interaction");
+        System.out.println("Fragment Closed");
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();

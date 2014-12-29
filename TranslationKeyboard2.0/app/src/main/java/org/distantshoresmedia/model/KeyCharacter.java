@@ -8,8 +8,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import de.greenrobot.dao.DaoException;
-
 public class KeyCharacter {
 
     static final private String kModeMaskKey = "modmask";

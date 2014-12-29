@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import de.greenrobot.dao.DaoException;
 
 public class KeyPosition {
 

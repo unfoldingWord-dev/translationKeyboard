@@ -11,8 +11,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Date;
 
-import de.greenrobot.dao.DaoException;
-
 public class BaseKeyboard extends BaseDataClass{
 
     static final private String kUIDKey = "keyboard_id";

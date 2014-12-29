@@ -12,8 +12,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import de.greenrobot.dao.DaoException;
-
 public class KeyboardVariant {
 
     static final private String kNameKey = "name";

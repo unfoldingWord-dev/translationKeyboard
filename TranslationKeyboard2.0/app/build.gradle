@@ -1,26 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
-
     defaultConfig {
         applicationId "org.distantshoresmedia.translationkeyboard20"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName '2.0'
+        testApplicationId 'org.distantshoresmedia.translationkeyboard20test'
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled true
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.2'
-    compile 'de.greenrobot:greendao:1.3.7'
-    compile 'de.greenrobot:greendao-generator:1.3.1'
 }
