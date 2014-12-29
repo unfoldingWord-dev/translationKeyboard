@@ -93,6 +93,7 @@ public class UpdateFragment extends Fragment {
 
         statusTextView = (TextView) newView.findViewById(R.id.status_text_view_id);
         progressBar = (ProgressBar) newView.findViewById(R.id.progress_bar_id);
+        progressBar.setProgress(0);
         return newView;
     }
 
