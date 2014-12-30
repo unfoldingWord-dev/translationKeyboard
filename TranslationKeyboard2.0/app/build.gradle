@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
+        release {
+            keyAlias 'KEY_ALIAS'
+            keyPassword 'KEY_PASSWORD'
+            storeFile file('PATH_TO_FILE')
+            storePassword 'KEYSTORE_PASSWORD'
+        }
     }
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
@@ -10,12 +16,13 @@ android {
         minSdkVersion 8
         targetSdkVersion 21
         versionCode 13
-        versionName '0.6.0'
+        versionName '2.0.0'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
     }
     buildTypes {
         release {
             minifyEnabled true
+            signingConfig signingConfigs.release
         }
     }
     productFlavors {
