@@ -2,23 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        release {
-            keyAlias 'KEY_ALIAS'
-            keyPassword 'KEY_PASSWORD'
-            storeFile file('PATH_TO_FILE')
-            storePassword 'KEYSTORE_PASSWORD'
-        }
     }
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
     defaultConfig {
-        applicationId "org.distantshoresmedia.translationkeyboard20"
+        applicationId 'org.distantshoresmedia.translationkeyboard'
         minSdkVersion 8
         targetSdkVersion 21
-        versionCode 2
-        versionName '2.0'
-        testApplicationId 'org.distantshoresmedia.translationkeyboard20test'
-        signingConfig signingConfigs.release
+        versionCode 13
+        versionName '0.6.0'
+        testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
     }
     buildTypes {
         release {

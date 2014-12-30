@@ -27,7 +27,7 @@
         android:paddingRight="16dip"
         >
     <org.distantshoresmedia.keyboard.BaseKeyboardView
-            xmlns:latin="http://schemas.android.com/apk/res/org.distantshoresmedia.translationkeyboard20"
+            xmlns:latin="http://schemas.android.com/apk/res/org.distantshoresmedia.translationkeyboard"
             android:id="@+id/LatinKeyboardBaseView"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
