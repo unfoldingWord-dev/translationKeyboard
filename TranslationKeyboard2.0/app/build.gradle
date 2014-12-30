@@ -25,8 +25,11 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    productFlavors {
+
+    lintOptions {
+        abortOnError false
     }
+
 }
 
 dependencies {
