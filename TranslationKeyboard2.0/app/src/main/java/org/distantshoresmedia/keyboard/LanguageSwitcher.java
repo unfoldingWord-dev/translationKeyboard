@@ -29,7 +29,7 @@ import android.text.TextUtils;
  */
 public class LanguageSwitcher {
 
-    private static final String TAG = "HK/LanguageSwitcher";
+    private static final String TAG = "TK/LanguageSwitcher";
     private Locale[] mLocales;
     private TKIME mIme;
     private String[] mSelectedLanguageArray;

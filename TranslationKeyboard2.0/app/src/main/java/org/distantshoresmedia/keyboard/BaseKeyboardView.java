@@ -887,7 +887,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             float fwidth = dm.density * dm.widthPixels;
             float fheight = dm.density * dm.heightPixels;
 
-            int finalWidth = (int) Math.round( ( fwidth / 2.0));
+            int finalWidth = (int) Math.round( fwidth);
 
             mKeyboard.setKeyboardWidth(finalWidth);
 //            if (mBuffer == null || mKeyboardChanged &&

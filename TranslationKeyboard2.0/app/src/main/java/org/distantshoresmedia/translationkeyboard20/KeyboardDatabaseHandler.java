@@ -3,6 +3,7 @@ package org.distantshoresmedia.translationkeyboard20;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.distantshoresmedia.keyboard.KeyboardSwitcher;
 import org.distantshoresmedia.model.AvailableKeyboard;
@@ -29,6 +30,8 @@ import java.util.Map;
  * Created by Fechner on 12/18/14.
  */
 public class KeyboardDatabaseHandler {
+
+    private static final String TAG = "KeyboardDatabaseHandler";
 
     private static final String kAvailableKeyboardsFileName = "available_keyboards";
     private static final String kDownloadedKeyboardsFileName = "downloaded_keyboards";
@@ -215,7 +218,7 @@ public class KeyboardDatabaseHandler {
 
     public static void calculateCurrentKeyboardIndex(boolean reset, boolean next) {
 
-        System.out.print("Changed from index: " + currentKeyboardIndex);
+        Log.i(TAG, "Changed from index: " + currentKeyboardIndex);
         if(reset){
             currentKeyboardIndex = 0;
             return;
@@ -228,7 +231,7 @@ public class KeyboardDatabaseHandler {
             currentKeyboardIndex = (currentKeyboardIndex + 1) % currentKeyboards.length;
         }
 
-        System.out.print(" To index: " + currentKeyboardIndex);
+        Log.i(TAG, " To index: " + currentKeyboardIndex);
     }
 
     private static void updateCurrentKeyboards(){
@@ -271,7 +274,7 @@ public class KeyboardDatabaseHandler {
 
     public static BaseKeyboard getKeyboardWithID( String id){
 
-        System.out.println("Requesting keyboard with ID: " + id);
+        Log.i(TAG, "Requesting keyboard with ID: " + id);
 //        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(currentContext, getJSONStringFromFile(currentContext, getKeyboardIDFileName(id)));
 
         String jsonString = getJSONStringFromFile(currentContext, getKeyboardIDFileName(id));
@@ -284,7 +287,7 @@ public class KeyboardDatabaseHandler {
         }
         catch (JSONException e){
 
-            System.out.println("getKeyboardWithID JSONException: " + e.toString());
+            Log.i(TAG, "getKeyboardWithID JSONException: " + e.toString());
             return null;
         }
     }
@@ -313,19 +316,19 @@ public class KeyboardDatabaseHandler {
     public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
 
         UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
-        System.out.println("Is updating available keyboards.");
+        Log.i(TAG, "Is updating available keyboards.");
         String currentKeyboards = getJSONStringForAvailableKeyboards(context);
 
         double currentUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(currentKeyboards);
         double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboardsJson);
 
         if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
-            System.out.println("keyboards up to date");
+            Log.i(TAG, "keyboards up to date");
             UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
             return true;
         }
         else {
-            System.out.println("Keyboards will be updated");
+            Log.i(TAG, "Keyboards will be updated");
             UpdateFragment.getSharedInstance().setProgress(30, "Updating");
             return updateKeyboards(context, newKeyboardsJson);
         }
@@ -337,7 +340,7 @@ public class KeyboardDatabaseHandler {
 
         String fileName = getKeyboardFileName(keyboardJSON);
 
-        System.out.println("Attempting to save Keyboard named: " + fileName);
+        Log.i(TAG, "Attempting to save Keyboard named: " + fileName);
         saveFile(keyboardJSON, fileName, context);
 
         String keyboardID = Long.toString(BaseKeyboard.getKeyboardIDFromJSONString(keyboardJSON));
@@ -626,7 +629,7 @@ public class KeyboardDatabaseHandler {
             System.out.println("Keyboard File Not Yet Saved");
         }
         catch (IOException e){
-            System.out.print("keyboardsHaveBeenSaved() IOException: " + e.toString());
+            Log.i(TAG, "keyboardsHaveBeenSaved() IOException: " + e.toString());
         }
 
         return false;
@@ -700,9 +703,9 @@ public class KeyboardDatabaseHandler {
         try {
             File file = new File(context.getFilesDir(), fileName);
 
-            FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            fos.write(fileString.getBytes());
-            fos.close();
+            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream.write(fileString.getBytes());
+            outputStream.close();
         }
         catch (FileNotFoundException e){
             System.out.println("saveFile FileNotFoundException: " + e.toString());

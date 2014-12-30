@@ -39,6 +39,8 @@ import java.util.Map;
  */
 public class KeyboardDownloader {
 
+    static final String TAG = "KeyboardDownloader";
+
     static final String kBaseURL = "http://remote.actsmedia.com/api/";
     static final String kVersionUrlTag = "v1/";
     static final String kKeyboardUrlTag = "keyboard/";
@@ -124,7 +126,7 @@ public class KeyboardDownloader {
                 }
             }
             catch (JSONException ex) {
-                System.out.println(" JSONException: " + ex.toString());
+                Log.e(TAG, " JSONException: " + ex.toString());
             }
         }
     }
@@ -155,13 +157,13 @@ public class KeyboardDownloader {
             InputStream is = null;
             // Only display the first 500 characters of the retrieved
             // web page content.
-            int len = 500000;
+            int len = 400000;
 
             try {
                 URL url = new URL(myUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setReadTimeout(20000 /* milliseconds */);
+                conn.setConnectTimeout(30000 /* milliseconds */);
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
                 // Starts the query
@@ -171,7 +173,7 @@ public class KeyboardDownloader {
                 is = conn.getInputStream();
 
                 // Convert the InputStream into a string
-                String contentAsString = readIt(is, len);
+                String contentAsString = readIt(is, len).trim();
 
                 return contentAsString;
 
