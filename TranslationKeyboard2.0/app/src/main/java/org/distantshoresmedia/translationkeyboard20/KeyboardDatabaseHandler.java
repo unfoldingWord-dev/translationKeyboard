@@ -172,11 +172,13 @@ public class KeyboardDatabaseHandler {
     /**
      *
      * @param context
+     * @return boolean of whether or not it initialized
      */
-    public static void initializeDatabaseIfNecessary(Context context){
+    public static boolean initializeDatabaseIfNecessary(Context context){
 
         currentContext = context;
 
+        boolean hasBeenSaved = keyboardsHaveBeenSaved(context);
         if(keyboardsHaveBeenSaved(context)){
             System.out.println("KeyboardsAlreadySaved");
         }
@@ -189,6 +191,8 @@ public class KeyboardDatabaseHandler {
         Map<String, AvailableKeyboard> downloadedKeyboards = getDownloadedKeyboardsDictionary();
         Map<String, AvailableKeyboard> installedKeyboards = getInstalledKeyboardDictionary();
 
+        boolean didInitialize = ! hasBeenSaved;
+        return didInitialize;
     }
     //endregion
 

@@ -48,9 +48,11 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
+        boolean needsUpdate = KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
 
-        updateKeyboards();
+        if(needsUpdate) {
+            updateKeyboards();
+        }
 
         setContentView(R.layout.main);
         String html = getString(R.string.main_body);
