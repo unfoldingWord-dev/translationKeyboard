@@ -87,7 +87,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         String lang = l.getLanguage();
         String country = l.getCountry();
 
-            return LanguageSwitcher.toTitleCase(l.getDisplayName(l));
+        return LanguageSwitcher.toTitleCase(l.getDisplayName(l));
 
     }
     

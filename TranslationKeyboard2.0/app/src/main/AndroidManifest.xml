@@ -17,6 +17,7 @@
 
 
     <application android:label="@string/english_ime_name"
+
         android:allowBackup="true"
         android:backupAgent="org.distantshoresmedia.keyboard.TKIMEBackupAgent"
         android:restoreAnyVersion="true"
@@ -34,10 +35,12 @@
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
+
             <meta-data android:name="android.view.im" android:resource="@xml/method" />
+
         </service>
 
-        <activity android:name="org.distantshoresmedia.keyboard.Main" android:label="Translation Keyboard 2.0">
+        <activity android:name="org.distantshoresmedia.keyboard.Main" android:label="Translation Keyboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -97,5 +100,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
 </manifest>
