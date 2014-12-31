@@ -162,6 +162,7 @@ public class InputLanguageSelection extends PreferenceActivity {
             String fivecode = get5Code(locale);
             String language = locale.getLanguage();
 //            boolean checked = languageSelections.contains(fivecode);
+            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(language));
             boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(keyboardsDictionary.get(language));
             pref.setChecked(checked);
 //            boolean has4Row = arrayContains(KBD_4_ROW, fivecode) || arrayContains(KBD_4_ROW, language);

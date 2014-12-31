@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
-    <string name="app_name">Translation Keyboard</string>
-    <string name="english_ime_name">Translation Keyboard</string>
+    <string name="app_name">translationKeyboard</string>
+    <string name="english_ime_name">translationKeyboard</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="ime_name">Translation Keyboard</string>
+    <string name="ime_name">translationKeyboard</string>
 
     <!-- Symbols that are commonly considered word separators in this language -->
     <string name="word_separators">\u0020.,;:!?\n()[]*&amp;@{}/&lt;>_+=|"</string>
@@ -15,14 +15,14 @@
     <!--<string name="label_subtype_en_GB">English (GB)</string>-->
 
     <!-- Titles for ImePreference -->
-    <string name="settings_name">Translation Keyboard Settings</string>
+    <string name="settings_name">translationKeyboard Settings</string>
     <string name="select_language">Select input languages</string>
     <string name="general_category">General</string>
 
     <!-- from Hacker's Keyboard -->
     <!-- Various configuration titles -->
 
-    <string name="english_ime_settings">Settings for Translation Keyboard</string>
+    <string name="english_ime_settings">Settings for translationKeyboard</string>
     <!-- Title for Latin keyboard input options dialog -->
     <string name="english_ime_input_options">Input options</string>
     <string name="title_keyboard_view_settings">Keyboard view settings</string>
@@ -630,13 +630,13 @@
 	<string name="main_setup_update_box">Update Box</string>
     <string name="main_body"><Data>
 <![CDATA["
-        <h2>Enabling Translation Keyboard Keyboard</h2>
+        <h2>Enabling translationKeyboard</h2>
         
         
         <h3>Add the keyboard to the system's input method list:</h3>
         <blockquote>
           <p>&#8226; Open the system input settings configuration by pressing the <b>Enable Keyboard</b> button above.</p>
-          <p>&#8226; Find <i>Translation Keyboard</i> in the input method list, tap the checkmark to switch it on.</p>
+          <p>&#8226; Find <i>translationKeyboard</i> in the input method list, tap the checkmark to switch it on.</p>
           <p>&#8226; Acknowledge the warning shown by the system. The system always shows this message when enabling a third-party input method.</p>
           <p>&#8226; Press the <i>Back</i> button to return to this page.</p>
         </blockquote>
@@ -644,7 +644,7 @@
         <h3>Choose the currently active input method:</h3>
         <blockquote>
           <p>&#8226; Press the <b>Set input method</b> button above.</p>
-          <p>&#8226; Select <i>Translation Keyboard</i> from the list.</p>
+          <p>&#8226; Select <i>translationKeyboard</i> from the list.</p>
         </blockquote>
 
         <h3>Optional: Select input languages:</h3>
