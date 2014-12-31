@@ -22,15 +22,13 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.InflateException;
 
-import org.distantshoresmedia.model.AvailableKeyboard;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
+import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class KeyboardSwitcher implements
         SharedPreferences.OnSharedPreferenceChangeListener {

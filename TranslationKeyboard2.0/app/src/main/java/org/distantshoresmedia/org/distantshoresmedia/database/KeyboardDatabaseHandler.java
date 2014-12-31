@@ -1,4 +1,4 @@
-package org.distantshoresmedia.translationkeyboard20;
+package org.distantshoresmedia.org.distantshoresmedia.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +8,8 @@ import android.util.Log;
 import org.distantshoresmedia.keyboard.KeyboardSwitcher;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
+import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
+import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,13 +34,6 @@ import java.util.Map;
 public class KeyboardDatabaseHandler {
 
     private static final String TAG = "KeyboardDatabaseHandler";
-
-    private static final String kAvailableKeyboardsFileName = "available_keyboards";
-    private static final String kDownloadedKeyboardsFileName = "downloaded_keyboards";
-    private static final String kInstalledKeyboardsFileName = "installed_keyboards";
-    private static final String kDefaultKeyboardFileName = "default_keyboard";
-
-    private static final String kKeyboardExtensionName = ".tk";
 
     private static Context currentContext;
 
@@ -91,79 +86,6 @@ public class KeyboardDatabaseHandler {
 
         installedKeyboardDictionary =makeKeyboardsDictionary(currentContext,jsonString);
     }
-    //endregion
-
-
-    //region File Name Helper Methods
-
-    /**
-     *
-     * @param fileName
-     * @return
-     */
-    private static String addKeyboardExtension(String fileName){
-        return fileName + kKeyboardExtensionName;
-    }
-
-    private static String addKeyboardExtension(Long fileName){
-        String name = fileName + kKeyboardExtensionName;
-        return name;
-    }
-
-    /**
-     *
-     * @return File name for the available keyboards file
-     */
-    private static String getAvailableKeyboardFileName(){
-        return addKeyboardExtension(kAvailableKeyboardsFileName);
-    }
-    /**
-     *
-     * @return File name for the downloaded keyboards file
-     */
-    private static String getDownloadedKeyboardFileName(){
-        return addKeyboardExtension(kDownloadedKeyboardsFileName);
-    }
-    /**
-     *
-     * @return File name for the installed keyboards file
-     */
-    private static String getInstalledKeyboardFileName(){
-        return addKeyboardExtension(kInstalledKeyboardsFileName);
-    }
-
-    /**
-     *
-     * @return File name for the Default keyboard file */
-    private static String getDefaultKeyboardFileName(){
-        return addKeyboardExtension(kDefaultKeyboardFileName);
-    }
-
-    private static String getKeyboardIDFileName(String id){
-        String fileName = addKeyboardExtension(id);
-        return fileName;
-    }
-    /**
-     *
-     * @param jsonString
-     * @return File name from a BaseKeyboard JSON String
-     */
-    private static String getKeyboardFileName(String jsonString){
-
-        String fileName = addKeyboardExtension(BaseKeyboard.getKeyboardIDFromJSONString(jsonString));
-        return fileName;
-    }
-    /**
-     *
-     * @param keyboard
-     * @return  File name from an AvailableKeyboard object
-     */
-    private static String getKeyboardFileName(AvailableKeyboard keyboard){
-
-        String fileName = addKeyboardExtension(BaseKeyboard.getKeyboardNameFromJSONString(keyboard.getLanguageName()));
-        return fileName;
-    }
-
     //endregion
 
 
@@ -447,39 +369,6 @@ public class KeyboardDatabaseHandler {
         }
     }
 
-    /**
-     *
-     * @param context
-     * @param fileName
-     * @return
-     */
-    private static String getDefaultFileString(Context context, String fileName){
-
-        String resultString = "";
-
-        try{
-
-            InputStream fileStream = context.getAssets().open(fileName);
-
-            int size = fileStream.available();
-
-            byte[] buffer = new byte[size];
-
-            fileStream.read(buffer);
-
-            fileStream.close();
-
-            resultString = new String(buffer, "UTF-8");
-
-            System.out.println("initializeKeyboards SavedString = " + resultString.substring(0, 10));
-        }
-        catch (IOException e){
-            System.out.println("initializeKeyboards IOException: " + e.toString());
-            return null;
-        }
-
-        return resultString;
-    }
 
     //endregion
 
@@ -668,45 +557,7 @@ public class KeyboardDatabaseHandler {
         return false;
     }
 
-    /**
-     *
-     * @param context
-     * @param fileName
-     * @return
-     */
-    private static String getJSONStringFromFile(Context context, String fileName){
 
-        if(!keyboardsHaveBeenSaved(context)){
-            initializeKeyboards(context);
-        }
-
-        String resultString = "";
-
-        try{
-            InputStream fileStream = context.openFileInput(fileName);
-
-            int size = fileStream.available();
-
-            byte[] buffer = new byte[size];
-
-            fileStream.read(buffer);
-
-            fileStream.close();
-
-            resultString = new String(buffer, "UTF-8");
-
-        }
-        catch (FileNotFoundException e){
-            System.out.println("getKeyboardsJSONString FileNotFoundException: " + e.toString());
-            return null;
-        }
-        catch (IOException e){
-            System.out.println("getKeyboardsJSONString IOException: " + e.toString());
-            return null;
-        }
-
-        return resultString;
-    }
 
     private static void deleteFile(Context context, String fileName){
 
@@ -728,51 +579,8 @@ public class KeyboardDatabaseHandler {
         saveFile(createJSONStringForKeyboards(keyboardsArray), fileName, context);
     }
 
-    /**
-     *
-     * @param fileString
-     * @param fileName
-     * @param context
-     */
-    private static void saveFile(String fileString, String fileName, Context context){
 
-        System.out.println("Attempting to save file named:" + fileName);
-
-        try {
-            File file = new File(context.getFilesDir(), fileName);
-
-            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            outputStream.write(fileString.getBytes());
-            outputStream.close();
-        }
-        catch (FileNotFoundException e){
-            System.out.println("saveFile FileNotFoundException: " + e.toString());
-        }
-        catch (IOException e){
-            System.out.println("saveFile IOException: " + e.toString());
-        }
-        System.out.println("File saving was successful.");
-    }
 
     //endregion
 
-
-    //region Helper Methods
-
-    private static boolean isCurrent(double oldTime, double newTime){
-
-        boolean current = isCurrent(new Date(Math.round(oldTime)), new Date(Math.round(newTime)));
-        return current;
-    }
-
-    private static boolean isCurrent(Date oldTime, Date newTime){
-
-        if(oldTime.before(newTime)){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
-    //endregion
 }

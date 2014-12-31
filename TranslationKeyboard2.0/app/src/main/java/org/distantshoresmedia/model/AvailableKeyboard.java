@@ -102,13 +102,14 @@ public class AvailableKeyboard extends BaseDataClass{
         return null;
     }
 
-    static public AvailableKeyboard[] getKeyboardsFromJsonObject(JSONObject jsonObj) {
+    static public AvailableKeyboard[] getKeyboardsFromJsonString(String json) {
 
         System.out.println("Got to KeyboardVariant");
 
         ArrayList<AvailableKeyboard> keyboardObjects = new ArrayList<AvailableKeyboard>();
 
         try {
+            JSONObject jsonObj= new JSONObject(json);
 
             JSONArray keyboards = jsonObj.getJSONArray(kKeyboardKey);
 

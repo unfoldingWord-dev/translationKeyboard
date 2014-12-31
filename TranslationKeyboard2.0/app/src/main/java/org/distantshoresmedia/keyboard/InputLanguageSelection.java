@@ -39,10 +39,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
+import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
-import org.json.JSONObject;
 
 public class InputLanguageSelection extends PreferenceActivity {
     private static final String TAG = "PCKeyboardILS";

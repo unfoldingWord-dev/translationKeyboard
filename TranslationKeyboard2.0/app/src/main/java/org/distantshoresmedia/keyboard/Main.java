@@ -17,13 +17,10 @@
 package org.distantshoresmedia.keyboard;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -33,10 +30,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
-import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
+import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;

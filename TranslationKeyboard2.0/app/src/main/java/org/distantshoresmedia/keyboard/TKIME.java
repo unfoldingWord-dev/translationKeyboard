@@ -18,7 +18,7 @@ package org.distantshoresmedia.keyboard;
 
 //import com.google.android.voiceime.VoiceRecognitionTrigger;
 
-import org.distantshoresmedia.translationkeyboard20.KeyboardDatabaseHandler;
+import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.xmlpull.v1.XmlPullParserException;
 
