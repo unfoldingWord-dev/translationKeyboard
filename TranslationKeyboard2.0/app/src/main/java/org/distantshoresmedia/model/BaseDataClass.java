@@ -21,7 +21,7 @@ public class BaseDataClass {
         this.id = id;
     }
 
-    protected double updated;
+    protected double updated = -1;
     public double getUpdated() {
         return updated;
     }

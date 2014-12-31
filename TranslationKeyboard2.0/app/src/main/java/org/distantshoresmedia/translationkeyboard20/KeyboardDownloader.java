@@ -93,6 +93,7 @@ public class KeyboardDownloader {
 
     public void getJSONFromUrl(Context context, String url) {
 
+        Log.i(TAG, "will attempt to download URL: " + url);
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -127,6 +128,7 @@ public class KeyboardDownloader {
             }
             catch (JSONException ex) {
                 Log.e(TAG, " JSONException: " + ex.toString());
+                UpdateFragment.getSharedInstance().endProgress(false, "Update Failed.");
             }
         }
     }

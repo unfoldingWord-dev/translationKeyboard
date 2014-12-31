@@ -24,6 +24,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -97,18 +98,23 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
 
     }
 
-    private void updateKeyboards(){
+    private void updateKeyboards() {
+
+        if (Build.VERSION.SDK_INT >= 11){
+            UpdateFragment updateFragment = UpdateFragment.getSharedInstance();
+
+            if(!updateFragment.isShowing()) {
 
 
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
 
-        UpdateFragment updateFragment = UpdateFragment.getSharedInstance();
 
-        transaction.add(R.id.updating_layout_id,  updateFragment);
-        transaction.commit();
-        updateFragment.setProgress(5, "Initializing");
-
+                transaction.add(R.id.updating_layout_id, updateFragment);
+                transaction.commit();
+                updateFragment.setProgress(5, "Initializing");
+            }
+    }
         KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
         downloader.updateKeyboards(this.getApplicationContext());
     }

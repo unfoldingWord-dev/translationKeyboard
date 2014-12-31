@@ -21,7 +21,6 @@ public class AvailableKeyboard extends BaseDataClass{
     static final private String kUpdatedKey = "updated_at";
 
 
-
     private String isoLanguage;
 
     public String getIsoLanguage() {

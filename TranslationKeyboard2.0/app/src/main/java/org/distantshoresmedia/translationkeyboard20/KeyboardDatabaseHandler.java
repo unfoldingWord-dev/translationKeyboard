@@ -321,6 +321,7 @@ public class KeyboardDatabaseHandler {
 
         UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
         Log.i(TAG, "Is updating available keyboards.");
+
         String currentKeyboards = getJSONStringForAvailableKeyboards(context);
 
         double currentUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(currentKeyboards);
@@ -533,8 +534,30 @@ public class KeyboardDatabaseHandler {
         System.out.println("downloadedKeyboards count: " + downloadedKeyboards.size());
         System.out.println("installedKeyboards count: " + installedKeyboards.size());
 
+
         if(! isUpdated) {
             System.out.println("is updating downloaded Keyboards");
+
+            ArrayList<String> deleteKeys = new ArrayList<String>();
+
+            for (String key : downloadedKeyboards.keySet()){
+
+                if(!availableKeyboards.containsKey(key)){
+                    deleteKeys.add(key);
+                }
+            }
+
+            if(deleteKeys.size() > 0){
+                for(String key : deleteKeys){
+                    if(downloadedKeyboards.containsKey(key)){
+                        downloadedKeyboards.remove(key);
+                        deleteFile(context, getKeyboardIDFileName(key));
+                    }
+                    if(installedKeyboards.containsKey(key)){
+                        installedKeyboards.remove(key);
+                    }
+                }
+            }
 
             for (String key : availableKeyboards.keySet()){
 
@@ -562,6 +585,8 @@ public class KeyboardDatabaseHandler {
             saveKeyboards(context, installedKeyboards, getInstalledKeyboardFileName());
         }
 
+        updateCurrentKeyboards();
+
         return isUpdated;
     }
 
@@ -573,6 +598,10 @@ public class KeyboardDatabaseHandler {
             AvailableKeyboard subjectKeyboard = keyboard.getValue();
 
             AvailableKeyboard newKeyboard = updatedKeyboardMap.get(keyboard.getKey());
+
+            if(newKeyboard == null || subjectKeyboard == null){
+                return false;
+            }
 
             if(! isCurrent(subjectKeyboard.getUpdated(), newKeyboard.getUpdated())){
                 return false;
@@ -679,6 +708,11 @@ public class KeyboardDatabaseHandler {
         return resultString;
     }
 
+    private static void deleteFile(Context context, String fileName){
+
+        context.deleteFile(fileName);
+    }
+
     private static void saveKeyboards(Context context,  Map<String, AvailableKeyboard> keyboards, String fileName){
 
         AvailableKeyboard[] keyboardsArray = new AvailableKeyboard[keyboards.size()];
@@ -727,7 +761,8 @@ public class KeyboardDatabaseHandler {
 
     private static boolean isCurrent(double oldTime, double newTime){
 
-        return isCurrent(new Date(Math.round(oldTime)), new Date(Math.round(newTime)));
+        boolean current = isCurrent(new Date(Math.round(oldTime)), new Date(Math.round(newTime)));
+        return current;
     }
 
     private static boolean isCurrent(Date oldTime, Date newTime){

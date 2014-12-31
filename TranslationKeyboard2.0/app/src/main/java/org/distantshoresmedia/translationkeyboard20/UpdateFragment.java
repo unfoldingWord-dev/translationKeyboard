@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +122,15 @@ public class UpdateFragment extends Fragment {
         mListener = null;
     }
 
+    public boolean isShowing(){
+        if(progress < 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public void setProgress(int percent, String text){
 
         this.progress =  percent;
@@ -135,7 +145,14 @@ public class UpdateFragment extends Fragment {
         updateDetails();
 
         if(mListener != null){
-            mListener.endUpdate();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    mListener.endUpdate();
+                    progress = -1;
+                }
+            }, 1500);
+
         }
     }
 
