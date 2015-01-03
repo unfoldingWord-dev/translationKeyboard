@@ -37,58 +37,6 @@ public class KeyboardDatabaseHandler {
 
     private static Context currentContext;
 
-    private static AvailableKeyboard[] currentKeyboards = null;
-
-    private static int currentKeyboardIndex = 0;
-
-    //region keyboards dictionaries
-    private static Map<String, AvailableKeyboard> availableKeyboardsDictionary = null;
-    private static Map<String, AvailableKeyboard> getAvailableKeyboardsDictionary(){
-
-        if(availableKeyboardsDictionary == null){
-            availableKeyboardsDictionary = makeKeyboardsDictionary(currentContext,
-                getJSONStringFromFile(currentContext, getAvailableKeyboardFileName()));
-    }
-
-        return availableKeyboardsDictionary;
-    }
-    private static void setAvailableKeyboardsDictionary(String jsonString){
-
-        availableKeyboardsDictionary =makeKeyboardsDictionary(currentContext,jsonString);
-    }
-
-    private static Map<String, AvailableKeyboard> downloadedKeyboardsDictionary = null;
-    private static Map<String, AvailableKeyboard> getDownloadedKeyboardsDictionary(){
-
-        if(downloadedKeyboardsDictionary == null){
-            downloadedKeyboardsDictionary = makeKeyboardsDictionary(currentContext,
-                    getJSONStringFromFile(currentContext, getDownloadedKeyboardFileName()));
-        }
-
-        return downloadedKeyboardsDictionary;
-    }
-    private static void setDownloadedKeyboardsDictionary(String jsonString){
-
-        downloadedKeyboardsDictionary =makeKeyboardsDictionary(currentContext,jsonString);
-    }
-
-    private static Map<String, AvailableKeyboard> installedKeyboardDictionary = null;
-    private static Map<String, AvailableKeyboard> getInstalledKeyboardDictionary(){
-
-        if(installedKeyboardDictionary == null){
-            installedKeyboardDictionary = makeKeyboardsDictionary(currentContext,
-                    getJSONStringFromFile(currentContext, getInstalledKeyboardFileName()));
-        }
-
-        return installedKeyboardDictionary;
-    }
-    private static void setInstalledKeyboardDictionary(String jsonString){
-
-        installedKeyboardDictionary =makeKeyboardsDictionary(currentContext,jsonString);
-    }
-    //endregion
-
-
     //region Public Setup
 
     /**
@@ -100,18 +48,14 @@ public class KeyboardDatabaseHandler {
 
         currentContext = context;
 
-        boolean hasBeenSaved = keyboardsHaveBeenSaved(context);
-        if(keyboardsHaveBeenSaved(context)){
+        boolean hasBeenSaved = KeyboardFileLoader.hasSavedKeyboards(context);
+        if(hasBeenSaved){
             System.out.println("KeyboardsAlreadySaved");
         }
         else{
-            System.out.println("Keyboards Will Be Intialized");
+            System.out.println("Keyboards Will Be Initialized");
             initializeKeyboards(context);
         }
-
-        Map<String, AvailableKeyboard> availableKeyboards = getAvailableKeyboardsDictionary();
-        Map<String, AvailableKeyboard> downloadedKeyboards = getDownloadedKeyboardsDictionary();
-        Map<String, AvailableKeyboard> installedKeyboards = getInstalledKeyboardDictionary();
 
         boolean didInitialize = ! hasBeenSaved;
         return didInitialize;
@@ -142,23 +86,6 @@ public class KeyboardDatabaseHandler {
         return "1";
     }
 
-    public static void calculateCurrentKeyboardIndex(boolean reset, boolean next) {
-
-        Log.i(TAG, "Changed from index: " + currentKeyboardIndex);
-        if(reset){
-            currentKeyboardIndex = 0;
-            return;
-        }
-        if(! next){
-                currentKeyboardIndex = (currentKeyboardIndex == 0)?
-                        currentKeyboards.length - 1 : --currentKeyboardIndex;
-        }
-        else{
-            currentKeyboardIndex = (currentKeyboardIndex + 1) % currentKeyboards.length;
-        }
-
-        Log.i(TAG, " To index: " + currentKeyboardIndex);
-    }
 
     private static void updateCurrentKeyboards(){
 
@@ -196,47 +123,6 @@ public class KeyboardDatabaseHandler {
         }
 
         return keyboards;
-    }
-
-    public static BaseKeyboard getKeyboardWithID( String id){
-
-        Log.i(TAG, "Requesting keyboard with ID: " + id);
-//        Map<String, AvailableKeyboard> installedKeyboards = makeKeyboardsDictionary(currentContext, getJSONStringFromFile(currentContext, getKeyboardIDFileName(id)));
-
-        String jsonString = getJSONStringFromFile(currentContext, getKeyboardIDFileName(id));
-
-        try {
-            JSONObject jsonObj = new JSONObject(jsonString);
-            BaseKeyboard desiredKeyboard = BaseKeyboard.getKeyboardFromJsonObject(jsonObj);
-
-            return desiredKeyboard;
-        }
-        catch (JSONException e){
-
-            Log.i(TAG, "getKeyboardWithID JSONException: " + e.toString());
-            return null;
-        }
-    }
-
-    /**
-     *
-     * @param context
-     * @param keyboard
-     * @return
-     */
-    public static String getJSONStringForKeyboard(Context context, AvailableKeyboard keyboard) {
-
-        return getJSONStringFromFile(context, getKeyboardFileName(keyboard));
-    }
-
-    /**
-     *
-     * @param context
-     * @return
-     */
-    public static String getJSONStringForAvailableKeyboards(Context context) {
-
-        return getJSONStringFromFile(context, getAvailableKeyboardFileName());
     }
 
     public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
@@ -277,63 +163,6 @@ public class KeyboardDatabaseHandler {
         return true;
     }
 
-    public static boolean hasInstalledKeyboard(AvailableKeyboard keyboard){
-
-        Map<String, AvailableKeyboard> installedKeyboards = getInstalledKeyboardDictionary();
-
-        boolean hasKeyboard = (installedKeyboards.keySet().contains(Long.toString(keyboard.getId())));
-
-        return hasKeyboard;
-    }
-
-    public static boolean hasDownloadedKeyboard(AvailableKeyboard keyboard){
-
-        Map<String, AvailableKeyboard> downloadedKeyboards =getDownloadedKeyboardsDictionary();
-
-        boolean hasKeyboard = (downloadedKeyboards.keySet().contains(Long.toString(keyboard.getId())));
-
-        return hasKeyboard;
-    }
-
-    public static void installedKeyboardHasState(AvailableKeyboard keyboard, boolean active){
-
-        Map<String, AvailableKeyboard> installedKeyboards = getInstalledKeyboardDictionary();
-
-        boolean hasKeyboard = (installedKeyboards.keySet().contains(Long.toString(keyboard.getId())));
-
-        // we're good
-        if(hasKeyboard == active){
-            return;
-        }
-        // needs to download the keyboard
-        else if(active && !hasKeyboard){
-            KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(keyboard.getId()));
-        }
-        // needs to delete the keyboard from the installed keyboards
-        else{
-            installedKeyboards.remove(Long.toString(keyboard.getId()));
-            installedKeyboardDictionary = installedKeyboards;
-            saveKeyboardAvailability();
-        }
-
-    }
-
-    public static AvailableKeyboard[] getAvailableKeyboards(){
-
-        Map<String, AvailableKeyboard> availableKeyboards = getAvailableKeyboardsDictionary();
-
-        AvailableKeyboard[] keyboards = new AvailableKeyboard[availableKeyboards.size()];
-
-        int i = 0;
-        for(AvailableKeyboard keyboard : availableKeyboards.values()){
-
-            keyboards[i] = keyboard;
-            i++;
-        }
-
-        return keyboards;
-    }
-
     //endregion
 
     //region Private Setup
@@ -372,26 +201,9 @@ public class KeyboardDatabaseHandler {
 
     //endregion
 
+
     //region Private General Use
 
-    private static void saveKeyboardAvailability(){
-
-        Map<String, AvailableKeyboard> availableKeyboards = getAvailableKeyboardsDictionary();
-        Map<String, AvailableKeyboard> downloadedKeyboards = getDownloadedKeyboardsDictionary();
-        Map<String, AvailableKeyboard> installedKeyboards = getInstalledKeyboardDictionary();
-
-
-        saveKeyboards(currentContext, availableKeyboards, getAvailableKeyboardFileName());
-        saveKeyboards(currentContext, downloadedKeyboards, getDownloadedKeyboardFileName());
-        saveKeyboards(currentContext, installedKeyboards, getInstalledKeyboardFileName());
-        updateCurrentKeyboards();
-    }
-
-    private static boolean updateKeyboards(Context context, String jsonString) {
-
-        saveFile(jsonString, getAvailableKeyboardFileName(), context);
-        return updateKeyboards(context);
-    }
 
     private static void didInstallKeyboardWithId(String key) {
 
@@ -479,47 +291,6 @@ public class KeyboardDatabaseHandler {
         return isUpdated;
     }
 
-    private static boolean keyboardListsAreCurrentWithEachOther(Map<String, AvailableKeyboard> updatedKeyboardMap,
-                                                                Map<String, AvailableKeyboard> subjectKeyboardMap){
-
-        for (Map.Entry<String, AvailableKeyboard> keyboard : subjectKeyboardMap.entrySet())
-        {
-            AvailableKeyboard subjectKeyboard = keyboard.getValue();
-
-            AvailableKeyboard newKeyboard = updatedKeyboardMap.get(keyboard.getKey());
-
-            if(newKeyboard == null || subjectKeyboard == null){
-                return false;
-            }
-
-            if(! isCurrent(subjectKeyboard.getUpdated(), newKeyboard.getUpdated())){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static Map<String, AvailableKeyboard> makeKeyboardsDictionary(Context context, String jsonString){
-
-
-        try {
-            AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonObject(new JSONObject(jsonString));
-
-            Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
-
-            for(AvailableKeyboard keyboard : keyboards){
-                keyboardsDictionary.put(Integer.toString((int) keyboard.getId()), keyboard);
-            }
-            return keyboardsDictionary;
-
-        }
-        catch (JSONException e){
-            System.out.println("makeKeyboardsDictionary JSONException: " + e.toString());
-        }
-
-        return null;
-    }
 
     private static String createJSONStringForKeyboards(AvailableKeyboard[] keyboards){
 
@@ -535,50 +306,6 @@ public class KeyboardDatabaseHandler {
 
         return jsonString;
     }
-    /**
-     * *
-     * @param context
-     * @return true if the keyboards file exists.
-     */
-    private static boolean keyboardsHaveBeenSaved(Context context){
-
-        try{
-            FileInputStream file = context.openFileInput(getAvailableKeyboardFileName());
-            file.close();
-            return true;
-        }
-        catch (FileNotFoundException e ){
-            System.out.println("Keyboard File Not Yet Saved");
-        }
-        catch (IOException e){
-            Log.i(TAG, "keyboardsHaveBeenSaved() IOException: " + e.toString());
-        }
-
-        return false;
-    }
-
-
-
-    private static void deleteFile(Context context, String fileName){
-
-        context.deleteFile(fileName);
-    }
-
-    private static void saveKeyboards(Context context,  Map<String, AvailableKeyboard> keyboards, String fileName){
-
-        AvailableKeyboard[] keyboardsArray = new AvailableKeyboard[keyboards.size()];
-
-        int i = 0;
-        for(Map.Entry<String, AvailableKeyboard> keyboard : keyboards.entrySet()){
-
-            keyboardsArray[i] = keyboard.getValue();
-            i++;
-        }
-
-
-        saveFile(createJSONStringForKeyboards(keyboardsArray), fileName, context);
-    }
-
 
 
     //endregion

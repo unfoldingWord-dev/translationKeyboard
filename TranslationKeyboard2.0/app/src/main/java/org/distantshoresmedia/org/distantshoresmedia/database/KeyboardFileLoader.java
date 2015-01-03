@@ -3,6 +3,7 @@ package org.distantshoresmedia.org.distantshoresmedia.database;
 import android.content.Context;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
+import org.distantshoresmedia.model.BaseKeyboard;
 
 /**
  * Created by Fechner on 12/31/14.
@@ -61,15 +62,64 @@ public class KeyboardFileLoader {
 
     //region General Use
 
+    public static boolean hasSavedKeyboards(Context context){
+
+        boolean hasLoadedKeyboards =  (getAvailableKeyboards(context) == null)? false : true;
+        return hasLoadedKeyboards;
+    }
+    /**
+     *
+     * @param context
+     * @param keyboard
+     * @return json string for the desired keyboard
+     */
+    public static String loadKeyboardFromFiles(Context context, AvailableKeyboard keyboard){
+
+        String id = Long.toString(keyboard.getId());
+        String json = getKeyboardForID(context, id);
+
+        return json;
+    }
+
+    /**
+     *
+     * @param context
+     * @param id
+     * @return json string for the desired keyboard
+     */
+    public static String loadKeyboardFromFiles(Context context, String id){
+
+        String json = getKeyboardForID(context, id);
+        return json;
+    }
+
+    /**
+     *
+     * @param context
+     * @param id
+     * @return json string for the desired keyboard
+     */
+    private static String getKeyboardForID(Context context, String id){
+
+        String fileName = FileNameHelper.getKeyboardIDFileName(id);
+        String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
+
+        return json;
+    }
+
     /**
      *
      * @param context
      * @return The available keyboards
      */
-    private static AvailableKeyboard[] getAvailableKeyboards(Context context){
+    public static AvailableKeyboard[] getAvailableKeyboards(Context context){
 
         String fileName = FileNameHelper.getAvailableKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
+
+        if(! jsonIsValid(json)){
+            return null;
+        }
 
         AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
 
@@ -81,10 +131,14 @@ public class KeyboardFileLoader {
      * @param context
      * @return The keyboards that have been downloaded
      */
-    private static AvailableKeyboard[] getDownloadedKeyboards(Context context){
+    public static AvailableKeyboard[] getDownloadedKeyboards(Context context){
 
         String fileName = FileNameHelper.getDownloadedKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
+
+        if(! jsonIsValid(json)){
+            return null;
+        }
 
         AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
 
@@ -96,16 +150,29 @@ public class KeyboardFileLoader {
      * @param context
      * @return the keyboards the user has chosen to install and are available to use
      */
-    private static AvailableKeyboard[] getInstalledKeyboards(Context context){
+    public static AvailableKeyboard[] getInstalledKeyboards(Context context){
 
         String fileName = FileNameHelper.getInstalledKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
+
+        if(! jsonIsValid(json)){
+            return null;
+        }
 
         AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
 
         return keyboards;
     }
 
+    private static boolean jsonIsValid(String json){
+
+        if(json == null || json.length() < 1){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
     //endregion
 
 }

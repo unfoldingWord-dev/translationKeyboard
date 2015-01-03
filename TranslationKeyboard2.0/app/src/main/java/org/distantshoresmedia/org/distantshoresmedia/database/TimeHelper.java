@@ -9,13 +9,13 @@ public class TimeHelper {
 
     //region Helper Methods
 
-    private static boolean isCurrent(double oldTime, double newTime){
+    public static boolean isCurrent(double oldTime, double newTime){
 
         boolean current = isCurrent(new Date(Math.round(oldTime)), new Date(Math.round(newTime)));
         return current;
     }
 
-    private static boolean isCurrent(Date oldTime, Date newTime){
+    public static boolean isCurrent(Date oldTime, Date newTime){
 
         if(oldTime.before(newTime)){
             return false;
