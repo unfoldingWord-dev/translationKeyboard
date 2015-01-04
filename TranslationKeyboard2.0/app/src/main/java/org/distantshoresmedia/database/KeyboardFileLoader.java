@@ -1,4 +1,4 @@
-package org.distantshoresmedia.org.distantshoresmedia.database;
+package org.distantshoresmedia.database;
 
 import android.content.Context;
 
@@ -62,7 +62,86 @@ public class KeyboardFileLoader {
 
     //region General Use
 
-    public static boolean hasSavedKeyboards(Context context){
+    /**
+     *
+     * @param context
+     * @return
+     */
+    protected static double getUpdatedDate(Context context){
+
+        String fileName = FileNameHelper.getInstalledKeyboardsFileName();
+        String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
+
+        double date = AvailableKeyboard.getUpdatedTimeFromJSONString(json);
+
+        return date;
+    }
+
+    protected static void saveAvailableKeyboards(Context context, AvailableKeyboard[] keyboards){
+
+        saveKeyboards(context, keyboards, FileNameHelper.getAvailableKeyboardsFileName());
+    }
+    protected static void saveDownloadedKeyboards(Context context, AvailableKeyboard[] keyboards){
+
+        saveKeyboards(context, keyboards, FileNameHelper.getDownloadedKeyboardsFileName());
+    }
+    protected static void saveInstalledKeyboards(Context context, AvailableKeyboard[] keyboards){
+
+        saveKeyboards(context, keyboards, FileNameHelper.getInstalledKeyboardsFileName());
+    }
+
+    /**
+     *
+     * @param context
+     * @param keyboards
+     * @param fileName
+     */
+    protected static void saveKeyboards(Context context, AvailableKeyboard[] keyboards, String fileName){
+
+        String json = createJSONStringForKeyboards(keyboards);
+
+        FileLoader.saveFileToApplicationFiles(context, json, fileName);
+    }
+
+    /**
+     *
+     * @param keyboards
+     * @return
+     */
+    private static String createJSONStringForKeyboards(AvailableKeyboard[] keyboards){
+
+        String jsonString = "{\nkeyboards:[\n";
+
+        for(AvailableKeyboard keyboard : keyboards){
+
+            jsonString += keyboard.getObjectAsJSONString();
+        }
+
+        jsonString = jsonString.substring(0, jsonString.length() - 1);
+        jsonString += "\n]\n}";
+
+        return jsonString;
+    }
+
+    /**
+     *
+     * @param context
+     * @param json
+     */
+    protected static void saveKeyboardJson(Context context, String json){
+
+        String keyboardID = Long.toString(BaseKeyboard.getKeyboardIDFromJSONString(json));
+        String fileName = FileNameHelper.getKeyboardIDFileName(keyboardID);
+
+        FileLoader.saveFileToApplicationFiles(context, json, fileName);
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     */
+    protected static boolean hasSavedKeyboards(Context context){
 
         boolean hasLoadedKeyboards =  (getAvailableKeyboards(context) == null)? false : true;
         return hasLoadedKeyboards;
@@ -73,7 +152,7 @@ public class KeyboardFileLoader {
      * @param keyboard
      * @return json string for the desired keyboard
      */
-    public static String loadKeyboardFromFiles(Context context, AvailableKeyboard keyboard){
+    protected static String loadKeyboardFromFiles(Context context, AvailableKeyboard keyboard){
 
         String id = Long.toString(keyboard.getId());
         String json = getKeyboardForID(context, id);
@@ -87,7 +166,7 @@ public class KeyboardFileLoader {
      * @param id
      * @return json string for the desired keyboard
      */
-    public static String loadKeyboardFromFiles(Context context, String id){
+    protected static String loadKeyboardFromFiles(Context context, String id){
 
         String json = getKeyboardForID(context, id);
         return json;
@@ -112,7 +191,7 @@ public class KeyboardFileLoader {
      * @param context
      * @return The available keyboards
      */
-    public static AvailableKeyboard[] getAvailableKeyboards(Context context){
+    protected static AvailableKeyboard[] getAvailableKeyboards(Context context){
 
         String fileName = FileNameHelper.getAvailableKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
@@ -131,7 +210,7 @@ public class KeyboardFileLoader {
      * @param context
      * @return The keyboards that have been downloaded
      */
-    public static AvailableKeyboard[] getDownloadedKeyboards(Context context){
+    protected static AvailableKeyboard[] getDownloadedKeyboards(Context context){
 
         String fileName = FileNameHelper.getDownloadedKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
@@ -150,7 +229,7 @@ public class KeyboardFileLoader {
      * @param context
      * @return the keyboards the user has chosen to install and are available to use
      */
-    public static AvailableKeyboard[] getInstalledKeyboards(Context context){
+    protected static AvailableKeyboard[] getInstalledKeyboards(Context context){
 
         String fileName = FileNameHelper.getInstalledKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);

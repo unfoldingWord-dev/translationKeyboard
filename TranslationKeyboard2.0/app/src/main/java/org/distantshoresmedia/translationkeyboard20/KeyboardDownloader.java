@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
+import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

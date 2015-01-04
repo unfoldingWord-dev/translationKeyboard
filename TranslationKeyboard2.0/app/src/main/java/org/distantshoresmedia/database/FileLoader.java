@@ -1,4 +1,4 @@
-package org.distantshoresmedia.org.distantshoresmedia.database;
+package org.distantshoresmedia.database;
 
 import android.content.Context;
 import android.util.Log;
@@ -126,6 +126,12 @@ public class FileLoader {
         }
 
         return resultString;
+    }
+
+
+    protected static void deleteFile(Context context, String fileName){
+
+        context.deleteFile(fileName);
     }
 
 

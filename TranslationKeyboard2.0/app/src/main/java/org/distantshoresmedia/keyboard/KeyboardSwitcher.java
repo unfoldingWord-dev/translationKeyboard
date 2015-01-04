@@ -22,7 +22,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.InflateException;
 
-import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
+import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.lang.ref.SoftReference;

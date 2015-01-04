@@ -39,7 +39,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
-import org.distantshoresmedia.org.distantshoresmedia.database.KeyboardDatabaseHandler;
+import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 public class InputLanguageSelection extends PreferenceActivity {
@@ -131,7 +131,7 @@ public class InputLanguageSelection extends PreferenceActivity {
             availableLanguages.add(get5Code(locale));
         }
 
-        AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getAvailableKeyboards();
+        AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getInstalledKeyboards();
 
 
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
@@ -227,7 +227,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getAvailableKeyboards();
+        AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getInstalledKeyboards();
 
 
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
@@ -280,7 +280,7 @@ public class InputLanguageSelection extends PreferenceActivity {
 
         ArrayList<Loc> uniqueLocales = new ArrayList<Loc>();
 
-        AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getAvailableKeyboards();
+        AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getInstalledKeyboards();
 
         for(AvailableKeyboard keyboard : keyboards){
 

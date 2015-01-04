@@ -1,4 +1,4 @@
-package org.distantshoresmedia.org.distantshoresmedia.database;
+package org.distantshoresmedia.database;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package org.distantshoresmedia.org.distantshoresmedia.database;
+package org.distantshoresmedia.database;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;

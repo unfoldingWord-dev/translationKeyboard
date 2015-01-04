@@ -101,10 +101,14 @@ public class BaseKeyboard extends BaseDataClass{
         return null;
     }
 
-    static public BaseKeyboard getKeyboardFromJsonObject(JSONObject jsonObj){
+    static public BaseKeyboard getKeyboardFromJsonString(String json){
+
 
         System.out.println("Got to BaseKeyboard");
         try {
+
+            JSONObject jsonObj = new JSONObject(json);
+
             int id = jsonObj.getInt(kUIDKey);
             String name = jsonObj.getString(kKeyboardNameKey);
             String created = jsonObj.getString(kCreatedKey);
