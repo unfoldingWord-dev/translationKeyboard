@@ -177,7 +177,7 @@ public class KeyboardDataHandler {
         KeyboardFileLoader.saveDownloadedKeyboards(context, getKeyboardsArrayFromDictionary(context, downKeys));
 
 
-        keysList = new ArrayList<>();
+        keysList = new ArrayList<String>();
         for(String id : instKeys.keySet()){
             if(! availKeys.containsKey(id)) {
                 keysList.add(id);
