@@ -3,9 +3,11 @@ package org.distantshoresmedia.database;
 import android.content.Context;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
+import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -82,12 +84,12 @@ public class KeyboardDataHandler {
         if( hasKey && !installed){
 
             installedKeyboardDictionary.remove(id);
-            updateAvailableKeyboards(context);
+            updateKeyboardAvailability(context);
         }
         else if(!hasKey && installed){
 
             installedKeyboardDictionary.put(id, keyboard);
-            updateAvailableKeyboards(context);
+            updateKeyboardAvailability(context);
         }
     }
 
@@ -105,7 +107,7 @@ public class KeyboardDataHandler {
         getDownloadedKeyboardsDictionary(context).put(id, keyboard);
         getInstalledKeyboardDictionary(context).put(id, keyboard);
 
-        updateAvailableKeyboards(context);
+        updateKeyboardAvailability(context);
     }
     /**
      *
@@ -118,9 +120,10 @@ public class KeyboardDataHandler {
         getAvailableKeyboardsDictionary(context).put(id, keyboard);
 
         if(getDownloadedKeyboardsDictionary(context).containsKey(id)){
+
+            KeyboardDownloader.getSharedInstance().downloadKeyboard(id);
+
             downloadedKeyboardsDictionary.put(id, keyboard);
-        }
-        if(getInstalledKeyboardDictionary(context).containsKey(id)){
             installedKeyboardDictionary.put(id, keyboard);
         }
     }
@@ -144,17 +147,55 @@ public class KeyboardDataHandler {
             installedKeyboardDictionary.remove(id);
         }
 
+        invalidateLoadedKeyboardsAvailable();
+
     }
 
     /**
      *
      * @param context
      */
-    protected static void updateAvailableKeyboards(Context context){
+    protected static void updateKeyboardAvailability(Context context){
 
         KeyboardFileLoader.saveAvailableKeyboards(context, getKeyboardsArrayFromDictionary(context, getAvailableKeyboardsDictionary(context)));
-        KeyboardFileLoader.saveDownloadedKeyboards(context, getKeyboardsArrayFromDictionary(context, getDownloadedKeyboardsDictionary(context)));
-        KeyboardFileLoader.saveInstalledKeyboards(context, getKeyboardsArrayFromDictionary(context, getInstalledKeyboardDictionary(context)));
+
+        Map<String, AvailableKeyboard> availKeys = getAvailableKeyboardsDictionary(context);
+        Map<String, AvailableKeyboard> downKeys = getDownloadedKeyboardsDictionary(context);
+        Map<String, AvailableKeyboard> instKeys = getInstalledKeyboardDictionary(context);
+
+        ArrayList<String> keysList = new ArrayList<>();
+        for(String id : downKeys.keySet()){
+            if(! availKeys.containsKey(id)) {
+                keysList.add(id);
+            }
+        }
+        if(keysList.size() > 0){
+            for(String key : keysList){
+                downKeys.remove(key);
+            }
+        }
+        KeyboardFileLoader.saveDownloadedKeyboards(context, getKeyboardsArrayFromDictionary(context, downKeys));
+
+
+        keysList = new ArrayList<>();
+        for(String id : instKeys.keySet()){
+            if(! availKeys.containsKey(id)) {
+                keysList.add(id);
+            }
+        }
+        if(keysList.size() > 0){
+            for(String key : keysList){
+                instKeys.remove(key);
+            }
+        }
+        KeyboardFileLoader.saveInstalledKeyboards(context, getKeyboardsArrayFromDictionary(context, instKeys));
+
+        invalidateLoadedKeyboardsAvailable();
+    }
+
+    protected static void updateAvailableKeyboards(Context context, AvailableKeyboard[] keyboards ){
+
+        KeyboardFileLoader.saveAvailableKeyboards(context, keyboards);
         invalidateLoadedKeyboardsAvailable();
     }
 
@@ -246,21 +287,17 @@ public class KeyboardDataHandler {
     protected static boolean keyboardListsAreCurrentWithEachOther(Map<String, AvailableKeyboard> updatedKeyboardMap,
                                                                 Map<String, AvailableKeyboard> subjectKeyboardMap){
 
-        for (Map.Entry<String, AvailableKeyboard> keyboard : subjectKeyboardMap.entrySet())
-        {
-            AvailableKeyboard subjectKeyboard = keyboard.getValue();
-
-            AvailableKeyboard newKeyboard = updatedKeyboardMap.get(keyboard.getKey());
-
-            if(newKeyboard == null || subjectKeyboard == null){
-                return false;
+        boolean isCurrent = true;
+        for(String id : updatedKeyboardMap.keySet()){
+            if(! subjectKeyboardMap.containsKey(id)){
+                isCurrent = false;
+                break;
             }
-
-            if(! TimeHelper.isCurrent(subjectKeyboard.getUpdated(), newKeyboard.getUpdated())){
-                return false;
+            if(!isCurrent){
+                break;
             }
         }
 
-        return true;
+        return isCurrent;
     }
 }

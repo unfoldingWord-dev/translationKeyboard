@@ -111,7 +111,8 @@ public class KeyboardDatabaseHandler {
         double currentUpdatedDate = KeyboardFileLoader.getUpdatedDate(context);
         double newUpdatedDate = AvailableKeyboard.getUpdatedTimeFromJSONString(newKeyboardsJson);
 
-        if(Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate)){
+        boolean isUpdated = Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate);
+        if(isUpdated){
             Log.i(TAG, "keyboards up to date");
             UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
             return true;
@@ -119,7 +120,7 @@ public class KeyboardDatabaseHandler {
         else {
             Log.i(TAG, "Keyboards will be updated");
             UpdateFragment.getSharedInstance().setProgress(30, "Updating");
-            return updateKeyboards(context);
+            return updateKeyboards(context, newKeyboardsJson);
         }
     }
 
@@ -142,55 +143,64 @@ public class KeyboardDatabaseHandler {
         UpdateFragment.getSharedInstance().endProgress(true, "Updated");
     }
 
-    private static boolean updateKeyboards(Context context){
+    private static boolean updateKeyboards(Context context, String json){
+
+        KeyboardDataHandler.updateAvailableKeyboards(context, AvailableKeyboard.getKeyboardsFromJsonString(json));
 
         Map<String, AvailableKeyboard> availableKeyboards = KeyboardDataHandler.getAvailableKeyboardsDictionary(context);
         Map<String, AvailableKeyboard> downloadedKeyboards = KeyboardDataHandler.getDownloadedKeyboardsDictionary(context);
         Map<String, AvailableKeyboard> installedKeyboards = KeyboardDataHandler.getInstalledKeyboardDictionary(context);
 
-        boolean isUpdated = KeyboardDataHandler.keyboardListsAreCurrentWithEachOther(availableKeyboards, downloadedKeyboards);
-
-        Log.i(TAG, "Will check for keyboardUpdates, isUpdated: " + isUpdated);
+        Log.i(TAG, "Will check for keyboardUpdates");
         Log.i(TAG, "availableKeyboards count: " + availableKeyboards.size());
         Log.i(TAG, "downloadedKeyboards count: " + downloadedKeyboards.size());
         Log.i(TAG, "installedKeyboards count: " + installedKeyboards.size());
 
 
-        if(! isUpdated) {
-            System.out.println("is updating downloaded Keyboards");
+        System.out.println("is updating downloaded Keyboards");
 
-            ArrayList<String> deleteKeys = new ArrayList<String>();
+        ArrayList<String> deleteKeys = new ArrayList<String>();
 
-            for (String key : downloadedKeyboards.keySet()){
-                if(!availableKeyboards.containsKey(key)){
-                    deleteKeys.add(key);
-                }
-            }
-
-            if(deleteKeys.size() > 0){
-                for(String key : deleteKeys){
-                    if(downloadedKeyboards.containsKey(key)){
-                        KeyboardDataHandler.deleteKeyboardWithId(context, key);
-                    }
-                }
-            }
-
-            for (String key : availableKeyboards.keySet()){
-
-                if(downloadedKeyboards.keySet().contains(key) && ! TimeHelper.isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
-                    Log.i(TAG, "Is downloading updated keyboard with id: " + key);
-                    KeyboardDataHandler.updateAvailableKeyboard(context, availableKeyboards.get(key));
-
-                    UpdateFragment.getSharedInstance().setProgress(40, "Downloading new keyboard for: " + availableKeyboards.get(key).getLanguageName());
-                    Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
-                    KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(key).getId()));
-                }
+        for (String key : downloadedKeyboards.keySet()){
+            if(!availableKeyboards.containsKey(key)){
+                deleteKeys.add(key);
             }
         }
 
-        KeyboardDataHandler.updateAvailableKeyboards(context);
+        if(deleteKeys.size() > 0){
+            for(String key : deleteKeys){
+                if(downloadedKeyboards.containsKey(key)){
+                    KeyboardDataHandler.deleteKeyboardWithId(context, key);
+                }
+            }
+            // these will be invalidated after a keyboard is deleted
+            availableKeyboards = KeyboardDataHandler.getAvailableKeyboardsDictionary(context);
+            downloadedKeyboards = KeyboardDataHandler.getDownloadedKeyboardsDictionary(context);
+            installedKeyboards = KeyboardDataHandler.getInstalledKeyboardDictionary(context);
 
-        return isUpdated;
+            Log.i(TAG, "new availableKeyboards count: " + availableKeyboards.size());
+            Log.i(TAG, "new downloadedKeyboards count: " + downloadedKeyboards.size());
+            Log.i(TAG, "new installedKeyboards count: " + installedKeyboards.size());
+
+        }
+
+        for (String key : availableKeyboards.keySet()){
+
+            if(!downloadedKeyboards.keySet().contains(key) || ! TimeHelper.isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
+                Log.i(TAG, "Is downloading updated keyboard with id: " + key);
+                KeyboardDataHandler.updateAvailableKeyboard(context, availableKeyboards.get(key));
+
+                UpdateFragment.getSharedInstance().setProgress(40, "Downloading new keyboard for: " + availableKeyboards.get(key).getLanguageName());
+                Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
+                KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(key).getId()));
+            }
+        }
+
+
+        KeyboardDataHandler.updateKeyboardAvailability(context);
+
+        UpdateFragment.getSharedInstance().endProgress(true, "finished");
+        return true;
     }
 
     //endregion
