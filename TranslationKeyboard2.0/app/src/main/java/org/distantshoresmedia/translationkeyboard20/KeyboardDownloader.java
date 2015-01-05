@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
@@ -39,6 +40,15 @@ public class KeyboardDownloader {
 
     //region Public Methods
 
+    public static boolean canUseFragment(){
+        if (Build.VERSION.SDK_INT >= 11) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     static public KeyboardDownloader getSharedInstance(){
 
         if(sharedInstance == null){
@@ -51,7 +61,9 @@ public class KeyboardDownloader {
         System.out.println("Will Download");
         this.context = context;
 
-        UpdateFragment.getSharedInstance().setProgress(10, "Finding Most Recent Updates");
+        if(KeyboardDownloader.canUseFragment()){
+            UpdateFragment.getSharedInstance().setProgress(10, "Finding Most Recent Updates");
+        }
         getJSONFromUrl(this.context, getKeyboardUrl());
     }
 
@@ -81,7 +93,9 @@ public class KeyboardDownloader {
         if(!isConnected(context)){
 
             Log.e(TAG, "not connected to internet");
-            UpdateFragment.getSharedInstance().endProgress(false, "Not connected to internet");
+            if(KeyboardDownloader.canUseFragment()) {
+                UpdateFragment.getSharedInstance().endProgress(false, "Not connected to internet");
+            }
             return;
         }
 
@@ -120,7 +134,9 @@ public class KeyboardDownloader {
             }
             catch (JSONException ex) {
                 Log.e(TAG, " JSONException KeyboardDownloader: " + ex.toString());
-                UpdateFragment.getSharedInstance().endProgress(false, "Update Failed.");
+                if(KeyboardDownloader.canUseFragment()) {
+                    UpdateFragment.getSharedInstance().endProgress(false, "Update Failed.");
+                }
             }
         }
     }

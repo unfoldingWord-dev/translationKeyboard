@@ -105,7 +105,9 @@ public class KeyboardDatabaseHandler {
 
     public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
 
-        UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
+        if(KeyboardDownloader.canUseFragment()) {
+            UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
+        }
         Log.i(TAG, "Is updating available keyboards.");
 
         double currentUpdatedDate = KeyboardFileLoader.getUpdatedDate(context);
@@ -114,12 +116,16 @@ public class KeyboardDatabaseHandler {
         boolean isUpdated = Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate);
         if(isUpdated){
             Log.i(TAG, "keyboards up to date");
-            UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
+            if(KeyboardDownloader.canUseFragment()) {
+                UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
+            }
             return true;
         }
         else {
             Log.i(TAG, "Keyboards will be updated");
-            UpdateFragment.getSharedInstance().setProgress(30, "Updating");
+            if(KeyboardDownloader.canUseFragment()) {
+                UpdateFragment.getSharedInstance().setProgress(30, "Updating");
+            }
             return updateKeyboards(context, newKeyboardsJson);
         }
     }
@@ -140,7 +146,9 @@ public class KeyboardDatabaseHandler {
         KeyboardDataHandler.invalidateLoadedKeyboardsAvailable();
 
         KeyboardSwitcher.getInstance().makeKeyboards(true);
-        UpdateFragment.getSharedInstance().endProgress(true, "Updated");
+        if(KeyboardDownloader.canUseFragment()) {
+            UpdateFragment.getSharedInstance().endProgress(true, "Updated");
+        }
     }
 
     private static boolean updateKeyboards(Context context, String json){
@@ -190,7 +198,9 @@ public class KeyboardDatabaseHandler {
                 Log.i(TAG, "Is downloading updated keyboard with id: " + key);
                 KeyboardDataHandler.updateAvailableKeyboard(context, availableKeyboards.get(key));
 
-                UpdateFragment.getSharedInstance().setProgress(40, "Downloading new keyboard for: " + availableKeyboards.get(key).getLanguageName());
+                if(KeyboardDownloader.canUseFragment()) {
+                    UpdateFragment.getSharedInstance().setProgress(40, "Downloading new keyboard for: " + availableKeyboards.get(key).getLanguageName());
+                }
                 Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
                 KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(key).getId()));
             }
@@ -200,7 +210,9 @@ public class KeyboardDatabaseHandler {
         KeyboardDataHandler.updateKeyboardAvailability(context);
         KeyboardSwitcher.getInstance().makeKeyboards(true);
 
-        UpdateFragment.getSharedInstance().endProgress(true, "finished");
+        if(KeyboardDownloader.canUseFragment()) {
+            UpdateFragment.getSharedInstance().endProgress(true, "finished");
+        }
         return true;
     }
 

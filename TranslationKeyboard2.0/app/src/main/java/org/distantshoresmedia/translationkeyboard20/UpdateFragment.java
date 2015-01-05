@@ -2,6 +2,7 @@ package org.distantshoresmedia.translationkeyboard20;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
@@ -26,7 +27,12 @@ public class UpdateFragment extends Fragment {
     private static final String kProgressText = "Status: ";
 
     private static UpdateFragment sharedInstance = null;
+
     public static UpdateFragment getSharedInstance() {
+
+        if(!KeyboardDownloader.canUseFragment()){
+            return null;
+        }
 
         if(sharedInstance == null){
             sharedInstance = new UpdateFragment();

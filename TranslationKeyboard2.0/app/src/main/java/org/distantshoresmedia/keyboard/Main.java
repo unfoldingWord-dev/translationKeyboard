@@ -92,10 +92,10 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
 
     private void updateKeyboards() {
 
-        if (Build.VERSION.SDK_INT >= 11){
+        if (KeyboardDownloader.canUseFragment()) {
             UpdateFragment updateFragment = UpdateFragment.getSharedInstance();
 
-            if(!updateFragment.isShowing()) {
+            if (!updateFragment.isShowing()) {
 
 
                 FragmentManager manager = getFragmentManager();
@@ -106,9 +106,9 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
                 transaction.commit();
                 updateFragment.setProgress(5, "Initializing");
             }
-    }
-        KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
-        downloader.updateKeyboards(this.getApplicationContext());
+        }
+            KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
+            downloader.updateKeyboards(this.getApplicationContext());
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
 
         System.out.println("Fragment Closed");
 
-        if (Build.VERSION.SDK_INT >= 11) {
+        if(KeyboardDownloader.canUseFragment()){
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
