@@ -86,7 +86,7 @@ public class FileNameHelper {
      */
     public static String getKeyboardFileName(AvailableKeyboard keyboard){
 
-        String fileName = addKeyboardExtension(BaseKeyboard.getKeyboardNameFromJSONString(keyboard.getLanguageName()));
+        String fileName = addKeyboardExtension(Long.toString(keyboard.getId()));
         return fileName;
     }
 

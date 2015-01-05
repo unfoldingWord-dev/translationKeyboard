@@ -45,11 +45,7 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean needsUpdate = KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
-
-        if(needsUpdate) {
-            updateKeyboards();
-        }
+        KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
 
         setContentView(R.layout.main);
         String html = getString(R.string.main_body);
@@ -120,11 +116,13 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
 
         System.out.println("Fragment Closed");
 
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
+        if (Build.VERSION.SDK_INT >= 11) {
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction.remove(UpdateFragment.getSharedInstance());
-        transaction.commit();
+            transaction.remove(UpdateFragment.getSharedInstance());
+            transaction.commit();
+        }
     }
 }
 

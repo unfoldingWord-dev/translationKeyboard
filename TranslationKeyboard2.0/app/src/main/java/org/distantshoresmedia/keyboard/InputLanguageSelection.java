@@ -43,7 +43,7 @@ import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 public class InputLanguageSelection extends PreferenceActivity {
-    private static final String TAG = "PCKeyboardILS";
+    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
     private ArrayList<Loc> mAvailableLanguages = new ArrayList<Loc>();
     private static final String[] BLACKLIST_LANGUAGES = {
 

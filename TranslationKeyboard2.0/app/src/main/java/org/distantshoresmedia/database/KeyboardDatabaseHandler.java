@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class KeyboardDatabaseHandler {
 
-    private static final String TAG = "KeyboardDatabaseHandler";
+    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
 
     private static Context currentContext;
 
@@ -66,6 +66,7 @@ public class KeyboardDatabaseHandler {
 
     public static void installedKeyboardHasState(AvailableKeyboard keyboard, boolean isChecked){
 
+        KeyboardDataHandler.setKeyboardAvailabilityState(currentContext, keyboard, isChecked);
     }
 
     public static boolean hasDownloadedKeyboard(AvailableKeyboard keyboard){

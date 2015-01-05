@@ -24,7 +24,7 @@ import java.net.URL;
  */
 public class KeyboardDownloader {
 
-    static final String TAG = "KeyboardDownloader";
+    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
 
     static final String kBaseURL = "http://remote.actsmedia.com/api/";
     static final String kVersionUrlTag = "v1/";
@@ -78,6 +78,13 @@ public class KeyboardDownloader {
 
     public void getJSONFromUrl(Context context, String url) {
 
+        if(!isConnected(context)){
+
+            Log.e(TAG, "not connected to internet");
+            UpdateFragment.getSharedInstance().endProgress(false, "Not connected to internet");
+            return;
+        }
+
         Log.i(TAG, "will attempt to download URL: " + url);
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -112,7 +119,7 @@ public class KeyboardDownloader {
                 }
             }
             catch (JSONException ex) {
-                Log.e(TAG, " JSONException: " + ex.toString());
+                Log.e(TAG, " JSONException KeyboardDownloader: " + ex.toString());
                 UpdateFragment.getSharedInstance().endProgress(false, "Update Failed.");
             }
         }
@@ -141,6 +148,7 @@ public class KeyboardDownloader {
         }
 
         private String downloadUrl(String myUrl) throws IOException {
+
             InputStream is = null;
             // Only display the first 500 characters of the retrieved
             // web page content.
@@ -180,6 +188,22 @@ public class KeyboardDownloader {
             reader.read(buffer);
             return new String(buffer);
         }
+    }
+
+
+    public static boolean isConnected(Context context) {
+
+        NetworkInfo info = getNetworkInfo(context);
+
+        boolean isConnected = (info != null && info.isConnected());
+        Log.i(TAG, "is connected to web: " + isConnected);
+
+        return isConnected;
+    }
+
+    public static NetworkInfo getNetworkInfo(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo();
     }
 
     //endregion

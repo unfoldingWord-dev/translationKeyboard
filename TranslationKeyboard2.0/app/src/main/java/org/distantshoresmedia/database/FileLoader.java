@@ -17,7 +17,7 @@ import java.io.InputStream;
  */
 public class FileLoader {
 
-    private static final String TAG = "FileLoader";
+    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
 
 
 
@@ -35,15 +35,19 @@ public class FileLoader {
         try {
             File file = new File(context.getFilesDir(), fileName);
 
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
             FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             outputStream.write(fileString.getBytes());
             outputStream.close();
         }
         catch (FileNotFoundException e){
-            System.out.println("saveFileToApplicationFiles FileNotFoundException: " + e.toString());
+           Log.e(TAG, "saveFileToApplicationFiles FileNotFoundException: " + e.toString());
         }
         catch (IOException e){
-            System.out.println("saveFileToApplicationFiles IOException: " + e.toString());
+            Log.e(TAG, "saveFileToApplicationFiles IOException: " + e.toString());
         }
 
         Log.i(TAG, "File saving was successful.");

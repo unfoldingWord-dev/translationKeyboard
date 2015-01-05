@@ -75,6 +75,24 @@ public class KeyboardDataHandler {
     }
     //endregion
 
+    protected static void setKeyboardAvailabilityState(Context context, AvailableKeyboard keyboard, boolean installed){
+
+        String id = Long.toString(keyboard.getId());
+        boolean hasKey = getInstalledKeyboardDictionary(context).containsKey(id);
+        if( hasKey && !installed){
+
+            installedKeyboardDictionary.remove(id);
+            updateAvailableKeyboards(context);
+        }
+        else if(!hasKey && installed){
+
+            installedKeyboardDictionary.put(id, keyboard);
+            updateAvailableKeyboards(context);
+        }
+    }
+
+
+
     protected static AvailableKeyboard[] getInstalledKeyboardsArray(Context context){
 
         return getKeyboardsArrayFromDictionary(context, getAvailableKeyboardsDictionary(context));
@@ -214,7 +232,7 @@ public class KeyboardDataHandler {
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
 
         for(AvailableKeyboard keyboard : keyboards){
-            keyboardsDictionary.put(Integer.toString((int) keyboard.getId()), keyboard);
+            keyboardsDictionary.put(Long.toString(keyboard.getId()), keyboard);
         }
         return keyboardsDictionary;
     }

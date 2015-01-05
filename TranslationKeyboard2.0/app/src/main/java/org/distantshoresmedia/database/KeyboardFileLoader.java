@@ -19,26 +19,44 @@ public class KeyboardFileLoader {
      */
     public static void initializeKeyboards(Context context){
 
-        AvailableKeyboard[] keyboards = getPreloadedAvailableKeyboards(context);
+        preLoadAvailableKeyboards(context);
+        preLoadDownloadedKeyboards(context);
+        preLoadInstalledKeyboards(context);
+
+        String json = FileLoader.getJSONStringFromAssets(context, FileNameHelper.getAvailableKeyboardsFileName());
+        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
 
         savePreloadedKeyboards(context, keyboards);
     }
 
-    /**
-     *
-     * @param context
-     * @return returns the preloaded available keyboards
-     */
-    private static AvailableKeyboard[] getPreloadedAvailableKeyboards(Context context){
+    public static boolean preLoadAvailableKeyboards(Context context){
 
         String fileName = FileNameHelper.getAvailableKeyboardsFileName();
         String json = FileLoader.getJSONStringFromAssets(context, fileName);
         FileLoader.saveFileToApplicationFiles(context, json, fileName);
 
-        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
-
-        return keyboards;
+        return true;
     }
+
+    public static boolean preLoadDownloadedKeyboards(Context context){
+
+        String fileName = FileNameHelper.getDownloadedKeyboardsFileName();
+        String json = FileLoader.getJSONStringFromAssets(context, fileName);
+        FileLoader.saveFileToApplicationFiles(context, json, fileName);
+
+        return true;
+    }
+
+    public static boolean preLoadInstalledKeyboards(Context context){
+
+        String fileName = FileNameHelper.getInstalledKeyboardsFileName();
+        String json = FileLoader.getJSONStringFromAssets(context, fileName);
+        FileLoader.saveFileToApplicationFiles(context, json, fileName);
+
+        return true;
+    }
+
+
 
     /**
      *
