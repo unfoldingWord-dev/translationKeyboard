@@ -14,16 +14,33 @@ public class KeyboardDownloader {
     static final String kVersionUrlTag = "v1/";
     static final String kKeyboardUrlTag = "keyboard/";
     static final private String kKeyboardKey = "keyboards";
+    static final String kDirName = "assets";
 
     static final String kIdTag = "id";
     
     public static void updateKeyboards(){
+        
+        purgeDirectory(kDirName);
+        
         String json = getStringFromUrl(kBaseURL + kVersionUrlTag + kKeyboardUrlTag);
         
         saveFile(json, FileNameHelper.getAvailableKeyboardsFileName());
         saveFile(json, FileNameHelper.getDownloadedKeyboardsFileName());
         
         downloadKeyboards(json);
+    }
+    
+    public static void purgeDirectory(String directory){
+        
+        System.out.println("Will try to purge dir: " + directory);
+        File dir = new File(directory);
+        
+         for (File file: dir.listFiles()){ 
+             System.out.println("Name: " + file.getName());
+             if (!file.isDirectory() && !file.getName().equals("installed_keyboards.tk")){
+                 file.delete();
+             }
+         }
     }
     
     public static void downloadKeyboards(String availableKeyboardJson){
@@ -96,6 +113,8 @@ public class KeyboardDownloader {
 
     public static void saveFile(String fileString, String fileName) {
 
+        fileName = kDirName + File.separator + fileName;
+        System.out.println("fileName: " + fileName);
         try {
             File file = new File(fileName);
 
