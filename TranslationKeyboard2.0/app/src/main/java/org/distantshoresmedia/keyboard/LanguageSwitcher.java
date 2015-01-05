@@ -100,8 +100,10 @@ public class LanguageSwitcher {
         mLocales = new Locale[mSelectedLanguageArray.length];
         for (int i = 0; i < mLocales.length; i++) {
             final String lang = mSelectedLanguageArray[i];
-            mLocales[i] = new Locale(lang.substring(0, 2),
-                    lang.length() > 4 ? lang.substring(3, 5) : "");
+
+            String[] splitLan = lang.split("_");
+
+            mLocales[i] = new Locale(splitLan[1]);
         }
     }
 
