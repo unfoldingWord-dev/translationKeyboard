@@ -163,7 +163,7 @@ public class KeyboardDataHandler {
         Map<String, AvailableKeyboard> downKeys = getDownloadedKeyboardsDictionary(context);
         Map<String, AvailableKeyboard> instKeys = getInstalledKeyboardDictionary(context);
 
-        ArrayList<String> keysList = new ArrayList<>();
+        ArrayList<String> keysList = new ArrayList<String>();
         for(String id : downKeys.keySet()){
             if(! availKeys.containsKey(id)) {
                 keysList.add(id);
