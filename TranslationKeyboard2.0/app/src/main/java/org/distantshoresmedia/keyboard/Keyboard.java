@@ -1254,7 +1254,9 @@ public class Keyboard {
         Resources res = context.getResources();
         boolean skipRow = false;
         mRowCount = 0;
+        int numberOfRows = variant.getNumberOfRows();
 
+        int possibleRows = 0;
 
         try {
             int event;
@@ -1273,7 +1275,13 @@ public class Keyboard {
                         x = 0;
                         currentRow = createRowFromXml(res, parser, mRowCount);
                         skipRow = currentRow.mode != 0 && currentRow.mode != mKeyboardMode;
-                        if (currentRow.extension) {
+
+
+                        if(mRowCount == (numberOfRows - 2) && possibleRows < 3){
+                            skipRow = true;
+                            possibleRows++;
+                        }
+                        else if (currentRow.extension) {
                             if (mUseExtension) {
                                 ++mExtensionRowCount;
                             } else {
@@ -1390,6 +1398,7 @@ public class Keyboard {
                         y += currentRow.verticalGap;
                         y += currentRow.defaultHeight;
                         mRowCount++;
+                        possibleRows++;
                     } else {
                         // TODO: error or extend?
                     }

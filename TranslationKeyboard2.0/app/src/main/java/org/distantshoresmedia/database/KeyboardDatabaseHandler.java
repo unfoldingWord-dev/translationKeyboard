@@ -198,6 +198,7 @@ public class KeyboardDatabaseHandler {
 
 
         KeyboardDataHandler.updateKeyboardAvailability(context);
+        KeyboardSwitcher.getInstance().makeKeyboards(true);
 
         UpdateFragment.getSharedInstance().endProgress(true, "finished");
         return true;

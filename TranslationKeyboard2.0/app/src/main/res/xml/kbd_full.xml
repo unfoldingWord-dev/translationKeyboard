@@ -28,21 +28,31 @@
     <Row>
         <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
 		<Key android:codes="5" android:keyLabel="5" />
-		<Key android:codes="9" android:keyLabel="9" 						android:keyEdgeFlags="right"/>
+		<Key android:codes="9" android:keyLabel="9" 
+			android:keyEdgeFlags="right"/>
+
+    </Row>
+    <Row>
+        <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
+		<Key android:codes="5" android:keyLabel="5" />
+		<Key android:codes="9" android:keyLabel="9" 
+			android:keyEdgeFlags="right"/>
 
     </Row>
 	
     <Row>
         <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
 		<Key android:codes="5" android:keyLabel="5" />
-		<Key android:codes="9" android:keyLabel="9" 						android:keyEdgeFlags="right"/>
+		<Key android:codes="9" android:keyLabel="9" 
+			android:keyEdgeFlags="right"/>
 
     </Row>
 	
     <Row>
         <Key android:codes="1" android:keyLabel="1" android:keyEdgeFlags="left"/>
 		<Key android:codes="5" android:keyLabel="5" />
-		<Key android:codes="9" android:keyLabel="9" 						android:keyEdgeFlags="right"/>
+		<Key android:codes="9" android:keyLabel="9" 
+			android:keyEdgeFlags="right"/>
     </Row>
     
     <Row>
