@@ -100,7 +100,7 @@ public class TKKeyboard extends Keyboard {
 
     private TKKeyboard mExtensionKeyboard;
 
-    private static final float SPACEBAR_DRAG_THRESHOLD = 0.51f;
+    private static final float SPACEBAR_DRAG_THRESHOLD = 0.49f;
     private static final float OVERLAP_PERCENTAGE_LOW_PROB = 0.70f;
     private static final float OVERLAP_PERCENTAGE_HIGH_PROB = 0.85f;
     // Minimum width of space key preview (proportional to keyboard width)
@@ -806,8 +806,10 @@ public class TKKeyboard extends Keyboard {
     private int indexOf(int code) {
         List<Key> keys = getKeys();
         int count = keys.size();
-        for (int i = 0; i < count; i++) {
-            if (keys.get(i).codes[0] == code) return i;
+        for (int i = count - 1; i >= 0; i--) {
+            if (keys.get(i).codes[0] == code){
+                return i;
+            }
         }
         return -1;
     }
