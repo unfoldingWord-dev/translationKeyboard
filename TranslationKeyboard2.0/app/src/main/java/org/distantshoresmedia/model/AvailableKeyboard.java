@@ -11,7 +11,7 @@ import java.util.Locale;
 /**
  * Created by Fechner on 12/18/14.
  */
-public class AvailableKeyboard extends BaseDataClass{
+public class AvailableKeyboard extends BaseDataClass implements Comparable<AvailableKeyboard>{
 
     static final private String kKeyboardKey = "keyboards";
     static final private String kIdKey = "id";
@@ -145,4 +145,10 @@ public class AvailableKeyboard extends BaseDataClass{
         return finalKeyboards;
     }
 
+    @Override
+    public int compareTo(AvailableKeyboard another) {
+
+        int result = this.languageName.compareTo(another.languageName);
+        return result;
+    }
 }

@@ -8,7 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -239,11 +241,14 @@ public class KeyboardDataHandler {
 
         AvailableKeyboard[] keyboards = new AvailableKeyboard[keyboardsDictionary.size()];
 
+
         int i = 0;
         for(AvailableKeyboard keyboard : keyboardsDictionary.values()){
             keyboards[i] = keyboard;
             i++;
         }
+
+        Arrays.sort(keyboards);
 
         return keyboards;
     }
