@@ -103,7 +103,8 @@ public class LanguageSwitcher {
 
             String[] splitLan = lang.split("_");
 
-            mLocales[i] = new Locale(splitLan[1]);
+
+            mLocales[i] = new Locale(splitLan[0], splitLan[1]);
         }
     }
 

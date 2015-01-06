@@ -87,7 +87,7 @@ public class KeyboardFileLoader {
      */
     protected static double getUpdatedDate(Context context){
 
-        String fileName = FileNameHelper.getInstalledKeyboardsFileName();
+        String fileName = FileNameHelper.getAvailableKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
 
         double date = AvailableKeyboard.getUpdatedTimeFromJSONString(json);

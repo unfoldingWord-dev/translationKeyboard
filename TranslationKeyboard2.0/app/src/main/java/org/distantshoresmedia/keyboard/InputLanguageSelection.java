@@ -137,7 +137,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
 
         for(AvailableKeyboard keyboard : keyboards){
-            keyboardsDictionary.put( keyboard.getLanguageName().toLowerCase(), keyboard);
+            keyboardsDictionary.put( getCode(keyboard.getKeyboardAsLocale()), keyboard);
         }
 
 //        Set<String> languageSelections = new HashSet<String>();
@@ -158,10 +158,10 @@ public class InputLanguageSelection extends PreferenceActivity {
             pref.setTitle(mAvailableLanguages.get(i).label +
             		" [" + locale.toString() + "]");
             String fivecode = getCode(locale);
-            String language = locale.getLanguage();
+//            String language = locale.getLanguage();
 //            boolean checked = languageSelections.contains(fivecode);
-            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(language));
-            boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(keyboardsDictionary.get(language));
+            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(fivecode));
+            boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(keyboardsDictionary.get(fivecode));
             pref.setChecked(checked);
 //            boolean has4Row = arrayContains(KBD_4_ROW, fivecode) || arrayContains(KBD_4_ROW, language);
 //            boolean has5Row = arrayContains(KBD_5_ROW, fivecode) || arrayContains(KBD_5_ROW, language);
@@ -226,8 +226,7 @@ public class InputLanguageSelection extends PreferenceActivity {
             codeString = codeString + "_" + variant;
         }
 
-        return locale.getLanguage()
-                + (TextUtils.isEmpty(country) ? "" : "_" + country);
+        return codeString;
     }
 
     @Override

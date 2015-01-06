@@ -71,7 +71,7 @@ public class AvailableKeyboard extends BaseDataClass{
     }
 
     public Locale getKeyboardAsLocale(){
-        return new Locale(languageName, isoLanguage, isoRegion);
+        return new Locale(isoLanguage, isoRegion);
     }
 
     @Override

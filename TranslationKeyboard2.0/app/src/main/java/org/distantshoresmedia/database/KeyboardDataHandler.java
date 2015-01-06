@@ -211,14 +211,14 @@ public class KeyboardDataHandler {
 
             Locale keyboardLocal = keyboard.getKeyboardAsLocale();
 
-            String localeLanguage = locale.getLanguage();
+            String localLanguage = locale.getLanguage();
+            String localeCountry = locale.getCountry();
+            String keyboardLanguage = keyboardLocal.getLanguage();
             String keyboardCountry = keyboardLocal.getCountry();
 
-            if(localeLanguage.equals("iw")){
-                localeLanguage = "he";
-            }
+            boolean isCorrectKeyboard = (localeCountry.equalsIgnoreCase(keyboardCountry) && localLanguage.equalsIgnoreCase(keyboardLanguage));
 
-            if(localeLanguage.compareToIgnoreCase(keyboardCountry) == 0){
+            if(isCorrectKeyboard){
                 return Long.toString(keyboard.getId());
             }
             System.out.println("Desired locale: " + locale.toString() + " keyboardLocal: " + keyboardLocal.toString());

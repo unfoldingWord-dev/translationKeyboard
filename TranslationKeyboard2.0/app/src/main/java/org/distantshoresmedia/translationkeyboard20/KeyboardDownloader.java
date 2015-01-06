@@ -168,13 +168,13 @@ public class KeyboardDownloader {
             InputStream is = null;
             // Only display the first 500 characters of the retrieved
             // web page content.
-            int len = 400000;
+            int len = 500000;
 
             try {
                 URL url = new URL(myUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(20000 /* milliseconds */);
-                conn.setConnectTimeout(30000 /* milliseconds */);
+                conn.setReadTimeout(40000 /* milliseconds */);
+                conn.setConnectTimeout(40000 /* milliseconds */);
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
                 // Starts the query
