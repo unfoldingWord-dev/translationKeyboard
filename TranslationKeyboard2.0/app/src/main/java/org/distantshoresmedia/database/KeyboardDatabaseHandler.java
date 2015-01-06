@@ -87,6 +87,9 @@ public class KeyboardDatabaseHandler {
 
     public static BaseKeyboard getKeyboardWithID(String id){
 
+        if(id == null){
+            return null;
+        }
         String json = KeyboardFileLoader.loadKeyboardFromFiles(currentContext, id);
 
         BaseKeyboard keyboard = BaseKeyboard.getKeyboardFromJsonString(json);

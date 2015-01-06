@@ -206,12 +206,17 @@ public class KeyboardDataHandler {
      */
     protected static String findKeyboardIdForLocal(Context context, Locale locale){
 
+
         for(AvailableKeyboard keyboard : getInstalledKeyboardDictionary(context).values()){
 
             Locale keyboardLocal = keyboard.getKeyboardAsLocale();
 
             String localeLanguage = locale.getLanguage();
             String keyboardCountry = keyboardLocal.getCountry();
+
+            if(localeLanguage.equals("iw")){
+                localeLanguage = "he";
+            }
 
             if(localeLanguage.compareToIgnoreCase(keyboardCountry) == 0){
                 return Long.toString(keyboard.getId());

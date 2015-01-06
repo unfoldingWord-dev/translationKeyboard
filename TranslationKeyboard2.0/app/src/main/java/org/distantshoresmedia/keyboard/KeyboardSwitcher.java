@@ -331,6 +331,8 @@ public class KeyboardSwitcher implements
             Configuration conf = orig.getConfiguration();
             Locale saveLocale = conf.locale;
             conf.locale = TKIME.sKeyboardSettings.inputLocale;
+
+            Locale newLocal = new Locale(conf.locale.getLanguage());
             orig.updateConfiguration(conf, null);
 
 //            AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getAvailableKeyboards();

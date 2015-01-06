@@ -128,7 +128,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         Set<String> availableLanguages = new HashSet<String>();
         for (int i = 0; i < mAvailableLanguages.size(); i++) {
             Locale locale = mAvailableLanguages.get(i).locale;
-            availableLanguages.add(get5Code(locale));
+            availableLanguages.add(getCode(locale));
         }
 
         AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getInstalledKeyboards();
@@ -157,7 +157,7 @@ public class InputLanguageSelection extends PreferenceActivity {
             Locale locale = mAvailableLanguages.get(i).locale;
             pref.setTitle(mAvailableLanguages.get(i).label +
             		" [" + locale.toString() + "]");
-            String fivecode = get5Code(locale);
+            String fivecode = getCode(locale);
             String language = locale.getLanguage();
 //            boolean checked = languageSelections.contains(fivecode);
             boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(language));
@@ -213,8 +213,19 @@ public class InputLanguageSelection extends PreferenceActivity {
         return haveDictionary;
     }
 
-    private String get5Code(Locale locale) {
+    private String getCode(Locale locale) {
+
+        String codeString = locale.getLanguage();
+
         String country = locale.getCountry();
+        if(! TextUtils.isEmpty(country)){
+            codeString = codeString + "_" + country;
+        }
+        String variant = locale.getVariant();
+        if(! TextUtils.isEmpty(variant)){
+            codeString = codeString + "_" + variant;
+        }
+
         return locale.getLanguage()
                 + (TextUtils.isEmpty(country) ? "" : "_" + country);
     }
@@ -233,7 +244,9 @@ public class InputLanguageSelection extends PreferenceActivity {
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
 
         for(AvailableKeyboard keyboard : keyboards){
-            keyboardsDictionary.put( keyboard.getLanguageName().toLowerCase(), keyboard);
+            Locale keyboardLocal = keyboard.getKeyboardAsLocale();
+            String keyboardKey = keyboardLocal.getDisplayName();
+            keyboardsDictionary.put(keyboardKey, keyboard);
         }
 
         // Save the selected languages
@@ -245,10 +258,11 @@ public class InputLanguageSelection extends PreferenceActivity {
 
             Locale locale = mAvailableLanguages.get(i).locale;
             if (pref.isChecked()) {
-                checkedLanguages += get5Code(locale) + ",";
+                checkedLanguages += getCode(locale) + ",";
             }
 
-            AvailableKeyboard localKeyboard = keyboardsDictionary.get(locale.getLanguage());
+            String desiredKey = locale.getDisplayName();
+            AvailableKeyboard localKeyboard = keyboardsDictionary.get(desiredKey);
             KeyboardDatabaseHandler.installedKeyboardHasState(localKeyboard, pref.isChecked());
         }
         if (checkedLanguages.length() < 1) checkedLanguages = null; // Save null
