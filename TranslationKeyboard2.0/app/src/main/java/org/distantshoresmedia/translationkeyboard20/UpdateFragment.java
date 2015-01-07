@@ -159,7 +159,7 @@ public class UpdateFragment extends Fragment {
                         progress = -1;
                     }
                 }
-            }, 1500);
+            }, 3000);
 
 
     }

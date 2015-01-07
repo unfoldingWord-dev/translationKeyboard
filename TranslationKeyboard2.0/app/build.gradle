@@ -18,6 +18,7 @@ android {
         versionCode 13
         versionName '2.0.0'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
@@ -25,11 +26,11 @@ android {
             signingConfig signingConfigs.release
         }
     }
-
     lintOptions {
         abortOnError false
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {

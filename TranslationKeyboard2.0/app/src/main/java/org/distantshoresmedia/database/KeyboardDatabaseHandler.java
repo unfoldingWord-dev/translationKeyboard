@@ -228,7 +228,7 @@ private static void finishUpdate(){
         KeyboardSwitcher.getInstance().makeKeyboards(true);
 
         if(KeyboardDownloader.canUseFragment()) {
-            UpdateFragment.getSharedInstance().endProgress(true, "finished");
+            UpdateFragment.getSharedInstance().endProgress(true, "Finished Updating");
         }
     }
     //endregion

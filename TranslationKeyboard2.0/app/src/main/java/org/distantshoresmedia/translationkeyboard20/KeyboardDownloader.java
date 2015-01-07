@@ -118,13 +118,13 @@ public class KeyboardDownloader {
 
             new DownloadWebpageTask().execute(url);
         }else{
-            System.out.println("Network Error");
+            Log.e(TAG, "Network Error");
         }
     }
 
     public void parseJSONString(String json){
 
-
+        String failText = "Invalid update. Please try again";
         try{
             JSONObject jObject = new JSONObject(json);
             JSONArray keysArray = jObject.getJSONArray("keyboards");
@@ -143,11 +143,17 @@ public class KeyboardDownloader {
                 if(jArray.length() > 0){
                     KeyboardDatabaseHandler.updateOrSaveKeyboard(this.context, json);
                 }
+                else{
+                    Log.e(TAG, " JSONException KeyboardDownloader: " + e.toString());
+                    if(KeyboardDownloader.canUseFragment()) {
+                        UpdateFragment.getSharedInstance().endProgress(false, failText);
+                    }
+                }
             }
             catch (JSONException ex) {
                 Log.e(TAG, " JSONException KeyboardDownloader: " + ex.toString());
                 if(KeyboardDownloader.canUseFragment()) {
-                    UpdateFragment.getSharedInstance().endProgress(false, "Update Failed.");
+                    UpdateFragment.getSharedInstance().endProgress(false, failText);
                 }
             }
         }
