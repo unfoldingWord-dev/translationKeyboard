@@ -18,8 +18,8 @@ package org.distantshoresmedia.keyboard;
 
 //import com.google.android.voiceime.VoiceRecognitionTrigger;
 
-import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
+import org.distantshoresmedia.translationkeyboard20.TKIMESettings;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.AlertDialog;

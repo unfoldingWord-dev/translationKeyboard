@@ -147,7 +147,7 @@ public class UpdateFragment extends Fragment {
     public void endProgress(boolean success, String text){
 
         this.progress = (success)? 100 : 0;
-        this.currentText = (success)? "Finished" : "Error";
+        this.currentText = (success)? "Success" : "Error";
         this.currentText += ": " + text;
         updateDetails();
 

@@ -134,13 +134,13 @@ public class KeyboardDatabaseHandler {
         }
     }
 
-    public static void updateOrSaveKeyboard(Context context, String json){
+public static void updateOrSaveKeyboard(Context context, String json){
 
-        KeyboardFileLoader.saveKeyboardJson(context, json);
-        String id = Long.toString(BaseKeyboard.getKeyboardIDFromJSONString(json));
-        if(id.equalsIgnoreCase(lastUpdatedKeyboard)){
-            finishUpdate();
-}
+    KeyboardFileLoader.saveKeyboardJson(context, json);
+    String id = Long.toString(BaseKeyboard.getKeyboardIDFromJSONString(json));
+    if(id.equalsIgnoreCase(lastUpdatedKeyboard)){
+        finishUpdate();
+    }
 }
 
 //endregion

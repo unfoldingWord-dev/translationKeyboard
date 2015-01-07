@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.distantshoresmedia.keyboard;
+package org.distantshoresmedia.translationkeyboard20;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +34,7 @@ import android.text.AutoText;
 import android.text.InputType;
 import android.util.Log;
 
+import org.distantshoresmedia.keyboard.TKIME;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 public class TKIMESettings extends PreferenceActivity
@@ -43,7 +44,7 @@ public class TKIMESettings extends PreferenceActivity
     private static final String QUICK_FIXES_KEY = "quick_fixes";
     private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
     private static final String VOICE_SETTINGS_KEY = "voice_mode";
-    /* package */ static final String PREF_SETTINGS_KEY = "settings_key";
+    /* package */ public static final String PREF_SETTINGS_KEY = "settings_key";
     static final String INPUT_CONNECTION_INFO = "input_connection_info";    
 
     private static final String TAG = "TKIMESettings";

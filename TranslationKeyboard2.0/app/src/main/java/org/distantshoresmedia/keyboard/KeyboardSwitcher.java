@@ -24,6 +24,7 @@ import android.view.InflateException;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
+import org.distantshoresmedia.translationkeyboard20.TKIMESettings;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;

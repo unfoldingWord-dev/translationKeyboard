@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.distantshoresmedia.keyboard.TKIMESettings" android:label="@string/english_ime_settings">
+        <activity android:name=".TKIMESettings" android:label="@string/english_ime_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
