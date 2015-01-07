@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
@@ -69,6 +70,12 @@ public class KeyboardDownloader {
 
     public void downloadKeyboard(String keyboardID){
 
+        int progress = (keyboardID.equalsIgnoreCase(KeyboardDatabaseHandler.lastUpdatedKeyboard))? 60 : 30;
+
+        if(KeyboardDownloader.canUseFragment()){
+            UpdateFragment.getSharedInstance().setProgress(progress, "Updating Keyboard With Id: " + keyboardID);
+        }
+
         getJSONFromUrl(this.context, getKeyboardUrl(keyboardID));
     }
 
@@ -94,7 +101,12 @@ public class KeyboardDownloader {
 
             Log.e(TAG, "not connected to internet");
             if(KeyboardDownloader.canUseFragment()) {
-                UpdateFragment.getSharedInstance().endProgress(false, "Not connected to internet");
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        UpdateFragment.getSharedInstance().endProgress(false, "Not connected to internet");
+                    }
+                }, 500);
             }
             return;
         }

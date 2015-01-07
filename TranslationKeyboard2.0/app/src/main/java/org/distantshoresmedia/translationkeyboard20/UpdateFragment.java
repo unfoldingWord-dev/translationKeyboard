@@ -148,18 +148,20 @@ public class UpdateFragment extends Fragment {
 
         this.progress = (success)? 100 : 0;
         this.currentText = (success)? "Finished" : "Error";
+        this.currentText += ": " + text;
         updateDetails();
 
-        if(mListener != null){
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    mListener.endUpdate();
-                    progress = -1;
+                    if(mListener != null) {
+                        mListener.endUpdate();
+                        progress = -1;
+                    }
                 }
             }, 1500);
 
-        }
+
     }
 
     private void updateDetails(){

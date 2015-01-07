@@ -35,6 +35,7 @@ public class KeyboardDatabaseHandler {
 
     private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
 
+    public static String lastUpdatedKeyboard = null;
     private static Context currentContext;
 
     //region Public Setup
@@ -136,27 +137,31 @@ public class KeyboardDatabaseHandler {
     public static void updateOrSaveKeyboard(Context context, String json){
 
         KeyboardFileLoader.saveKeyboardJson(context, json);
-    }
+        String id = Long.toString(BaseKeyboard.getKeyboardIDFromJSONString(json));
+        if(id.equalsIgnoreCase(lastUpdatedKeyboard)){
+            finishUpdate();
+}
+}
 
-    //endregion
+//endregion
 
 
-    //region Private General Use
+//region Private General Use
 
 
-    private static void didInstallKeyboard() {
+private static void didInstallKeyboard() {
 
         KeyboardDataHandler.invalidateLoadedKeyboardsAvailable();
 
         KeyboardSwitcher.getInstance().makeKeyboards(true);
         if(KeyboardDownloader.canUseFragment()) {
-            UpdateFragment.getSharedInstance().endProgress(true, "Updated");
+        UpdateFragment.getSharedInstance().endProgress(true, "Updated");
         }
-    }
+        }
 
-    private static boolean updateKeyboards(Context context, String json){
+private static boolean updateKeyboards(Context context, String json){
 
-        KeyboardDataHandler.updateAvailableKeyboards(context, AvailableKeyboard.getKeyboardsFromJsonString(json));
+        KeyboardDataHandler.updateAvailableKeyboards(context, json);
 
         Map<String, AvailableKeyboard> availableKeyboards = KeyboardDataHandler.getAvailableKeyboardsDictionary(context);
         Map<String, AvailableKeyboard> downloadedKeyboards = KeyboardDataHandler.getDownloadedKeyboardsDictionary(context);
@@ -173,52 +178,59 @@ public class KeyboardDatabaseHandler {
         ArrayList<String> deleteKeys = new ArrayList<String>();
 
         for (String key : downloadedKeyboards.keySet()){
-            if(!availableKeyboards.containsKey(key)){
-                deleteKeys.add(key);
-            }
+        if(!availableKeyboards.containsKey(key)){
+        deleteKeys.add(key);
+        }
         }
 
         if(deleteKeys.size() > 0){
-            for(String key : deleteKeys){
-                if(downloadedKeyboards.containsKey(key)){
-                    KeyboardDataHandler.deleteKeyboardWithId(context, key);
-                }
-            }
-            // these will be invalidated after a keyboard is deleted
-            availableKeyboards = KeyboardDataHandler.getAvailableKeyboardsDictionary(context);
-            downloadedKeyboards = KeyboardDataHandler.getDownloadedKeyboardsDictionary(context);
-            installedKeyboards = KeyboardDataHandler.getInstalledKeyboardDictionary(context);
-
-            Log.i(TAG, "new availableKeyboards count: " + availableKeyboards.size());
-            Log.i(TAG, "new downloadedKeyboards count: " + downloadedKeyboards.size());
-            Log.i(TAG, "new installedKeyboards count: " + installedKeyboards.size());
-
+        for(String key : deleteKeys){
+        if(downloadedKeyboards.containsKey(key)){
+        KeyboardDataHandler.deleteKeyboardWithId(context, key);
         }
+        }
+        // these will be invalidated after a keyboard is deleted
+        availableKeyboards = KeyboardDataHandler.getAvailableKeyboardsDictionary(context);
+        downloadedKeyboards = KeyboardDataHandler.getDownloadedKeyboardsDictionary(context);
+        installedKeyboards = KeyboardDataHandler.getInstalledKeyboardDictionary(context);
+        }
+
+        ArrayList<String> updateIds = new ArrayList<String>();
 
         for (String key : availableKeyboards.keySet()){
 
             if(!downloadedKeyboards.keySet().contains(key) || ! TimeHelper.isCurrent(downloadedKeyboards.get(key).getUpdated(), availableKeyboards.get(key).getUpdated())){
+                updateIds.add(key);
                 Log.i(TAG, "Is downloading updated keyboard with id: " + key);
                 KeyboardDataHandler.updateAvailableKeyboard(context, availableKeyboards.get(key));
 
-                if(KeyboardDownloader.canUseFragment()) {
-                    UpdateFragment.getSharedInstance().setProgress(40, "Downloading new keyboard for: " + availableKeyboards.get(key).getLanguageName());
-                }
-                Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(key).getId());
-                KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(key).getId()));
+                lastUpdatedKeyboard = key;
+            }
+        }
+
+        KeyboardDataHandler.updateKeyboardAvailability(context);
+
+        if(!updateIds.isEmpty()){
+
+            for(String id : updateIds){
+
+                Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(id).getId());
+                KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(id).getId()));
             }
         }
 
 
-        KeyboardDataHandler.updateKeyboardAvailability(context);
+        return true;
+        }
+
+private static void finishUpdate(){
+
         KeyboardSwitcher.getInstance().makeKeyboards(true);
 
         if(KeyboardDownloader.canUseFragment()) {
             UpdateFragment.getSharedInstance().endProgress(true, "finished");
         }
-        return true;
     }
-
     //endregion
 
 }

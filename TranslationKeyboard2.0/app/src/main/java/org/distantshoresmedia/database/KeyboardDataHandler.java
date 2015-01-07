@@ -159,7 +159,7 @@ public class KeyboardDataHandler {
      */
     protected static void updateKeyboardAvailability(Context context){
 
-        KeyboardFileLoader.saveAvailableKeyboards(context, getKeyboardsArrayFromDictionary(context, getAvailableKeyboardsDictionary(context)));
+//        KeyboardFileLoader.saveAvailableKeyboards(context, getKeyboardsArrayFromDictionary(context, getAvailableKeyboardsDictionary(context)));
 
         Map<String, AvailableKeyboard> availKeys = getAvailableKeyboardsDictionary(context);
         Map<String, AvailableKeyboard> downKeys = getDownloadedKeyboardsDictionary(context);
@@ -195,9 +195,9 @@ public class KeyboardDataHandler {
         invalidateLoadedKeyboardsAvailable();
     }
 
-    protected static void updateAvailableKeyboards(Context context, AvailableKeyboard[] keyboards ){
+    protected static void updateAvailableKeyboards(Context context, String jsonString){
 
-        KeyboardFileLoader.saveAvailableKeyboards(context, keyboards);
+        KeyboardFileLoader.saveAvailableKeyboards(context, jsonString);
         invalidateLoadedKeyboardsAvailable();
     }
 

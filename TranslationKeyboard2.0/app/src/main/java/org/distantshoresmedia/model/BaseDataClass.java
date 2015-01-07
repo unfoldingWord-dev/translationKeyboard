@@ -1,5 +1,7 @@
 package org.distantshoresmedia.model;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +14,7 @@ import java.util.Date;
 public class BaseDataClass {
 
     static final private String kUpdatedKey = "updated_at";
+    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
 
     protected long id;
     public long getId() {
@@ -43,7 +46,7 @@ public class BaseDataClass {
             return time;
         }
         catch (JSONException e){
-            System.out.println("getUpdatedTimeFromJSONString JSONException: " + e.toString() + " json: " + json);
+            Log.e(TAG, "getUpdatedTimeFromJSONString JSONException: " + e.toString() + " json: " + json);
             return 140000000.3473752;
         }
     }

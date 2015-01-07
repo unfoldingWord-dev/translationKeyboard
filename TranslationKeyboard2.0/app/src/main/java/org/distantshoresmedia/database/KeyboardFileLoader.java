@@ -95,10 +95,15 @@ public class KeyboardFileLoader {
         return date;
     }
 
-    protected static void saveAvailableKeyboards(Context context, AvailableKeyboard[] keyboards){
+    protected static void saveAvailableKeyboards(Context context, String json){
 
-        saveKeyboards(context, keyboards, FileNameHelper.getAvailableKeyboardsFileName());
+        FileLoader.saveFileToApplicationFiles(context, json, FileNameHelper.getAvailableKeyboardsFileName());
     }
+
+//    protected static void saveAvailableKeyboards(Context context, AvailableKeyboard[] keyboards){
+//
+//        saveKeyboards(context, keyboards, FileNameHelper.getAvailableKeyboardsFileName());
+//    }
     protected static void saveDownloadedKeyboards(Context context, AvailableKeyboard[] keyboards){
 
         saveKeyboards(context, keyboards, FileNameHelper.getDownloadedKeyboardsFileName());
