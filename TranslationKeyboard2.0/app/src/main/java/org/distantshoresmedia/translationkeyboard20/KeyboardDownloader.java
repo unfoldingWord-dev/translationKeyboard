@@ -42,12 +42,13 @@ public class KeyboardDownloader {
     //region Public Methods
 
     public static boolean canUseFragment(){
-        if (Build.VERSION.SDK_INT >= 11) {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return true;
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
     }
 
     static public KeyboardDownloader getSharedInstance(){

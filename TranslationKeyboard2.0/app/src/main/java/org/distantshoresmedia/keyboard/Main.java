@@ -17,8 +17,9 @@
 package org.distantshoresmedia.keyboard;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -37,7 +38,7 @@ import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 
-public class Main extends Activity implements UpdateFragment.OnFragmentInteractionListener {
+public class Main extends FragmentActivity implements UpdateFragment.OnFragmentInteractionListener {
 
     private final static String MARKET_URI = "market://search?q=pub:\"Klaus Weidner\"";
 
@@ -98,7 +99,7 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
             if (!updateFragment.isShowing()) {
 
 
-                FragmentManager manager = getFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
 
 
@@ -117,7 +118,7 @@ public class Main extends Activity implements UpdateFragment.OnFragmentInteracti
         System.out.println("Fragment Closed");
 
         if(KeyboardDownloader.canUseFragment()){
-            FragmentManager manager = getFragmentManager();
+            FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
             transaction.remove(UpdateFragment.getSharedInstance());
