@@ -24,7 +24,7 @@ public class PluginManager extends BroadcastReceiver {
     private static String TAG = "PCKeyboard";
     private static String HK_INTENT_DICT = "org.pocketworkstation.DICT";
     private static String SOFTKEYBOARD_INTENT_DICT = "com.menny.android.anysoftkeyboard.DICTIONARY";
-    private TKIME mIME;
+    private LatinIME mIME;
     
     // Apparently anysoftkeyboard doesn't use ISO 639-1 language codes for its locales?
     // Add exceptions as needed.
@@ -33,7 +33,7 @@ public class PluginManager extends BroadcastReceiver {
         SOFTKEYBOARD_LANG_MAP.put("dk", "da");
     }
     
-    PluginManager(TKIME ime) {
+    PluginManager(LatinIME ime) {
     	super();
     	mIME = ime;
     }

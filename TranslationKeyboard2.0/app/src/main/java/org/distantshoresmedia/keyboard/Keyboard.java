@@ -246,7 +246,7 @@ public class Keyboard {
 
             if (parent.mLayoutRows >= 5) {
                 boolean isTop = (extension || parent.mRowCount - parent.mExtensionRowCount <= 0);
-                float topScale = TKIME.sKeyboardSettings.topRowScale;
+                float topScale = LatinIME.sKeyboardSettings.topRowScale;
                 float scale = isTop ? topScale : 1.0f + (1.0f - topScale) / (parent.mLayoutRows - 1);
                 defaultHeight = Math.round(defaultHeight * scale);
             }
@@ -478,7 +478,7 @@ public class Keyboard {
             if (codes == null && !TextUtils.isEmpty(label)) {
                 codes = getFromString(label);
                 if (codes != null && codes.length == 1) {
-                    final Locale locale = TKIME.sKeyboardSettings.inputLocale;
+                    final Locale locale = LatinIME.sKeyboardSettings.inputLocale;
                     String upperLabel = label.toString().toUpperCase(locale);
                     if (shiftLabel == null) {
                         // No shiftLabel supplied, auto-set to uppercase if possible.
@@ -500,11 +500,11 @@ public class Keyboard {
                         }
                     }
                 }
-                if ((TKIME.sKeyboardSettings.popupKeyboardFlags & POPUP_DISABLE) != 0) {
+                if ((LatinIME.sKeyboardSettings.popupKeyboardFlags & POPUP_DISABLE) != 0) {
                     popupCharacters = null;
                     popupResId = 0;
                 }
-                if ((TKIME.sKeyboardSettings.popupKeyboardFlags & POPUP_AUTOREPEAT) != 0) {
+                if ((LatinIME.sKeyboardSettings.popupKeyboardFlags & POPUP_AUTOREPEAT) != 0) {
                     // Assume POPUP_DISABLED is set too, otherwise things may get weird.
                     repeatable = true;
                 }
@@ -616,7 +616,7 @@ public class Keyboard {
             for (int i = 0; i < popupLen; ++i) {
                 char c = popupCharacters.charAt(i);
                 if (isShifted || isShiftCaps) {
-                    String upper = Character.toString(c).toUpperCase(TKIME.sKeyboardSettings.inputLocale);
+                    String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
                     if (upper.length() == 1) c = upper.charAt(0);
                 }
 
@@ -626,7 +626,7 @@ public class Keyboard {
 
             if (addExtra) {
                 StringBuilder extra = new StringBuilder(3 + popup.length());
-                int flags = TKIME.sKeyboardSettings.popupKeyboardFlags;
+                int flags = LatinIME.sKeyboardSettings.popupKeyboardFlags;
                 if ((flags & POPUP_ADD_SELF) != 0) {
                     // if shifted, add unshifted key to extra, and vice versa
                     if (isDistinctUppercase && isShiftCaps) {
@@ -677,7 +677,7 @@ public class Keyboard {
                 }
             }
 
-            if ((TKIME.sKeyboardSettings.popupKeyboardFlags & POPUP_DISABLE) != 0) return null;
+            if ((LatinIME.sKeyboardSettings.popupKeyboardFlags & POPUP_DISABLE) != 0) return null;
 
             String popup = getPopupKeyboardContent(keyboard.isShiftCaps(), keyboard.isShifted(isSimpleUppercase), true);
             //Log.i(TAG, "getPopupKeyboard: popup='" + popup + "' for " + this);
@@ -889,10 +889,10 @@ public class Keyboard {
         mKeys = new ArrayList<Key>();
         mModifierKeys = new ArrayList<Key>();
         mKeyboardMode = modeId;
-        mUseExtension = TKIME.sKeyboardSettings.useExtension;
+        mUseExtension = LatinIME.sKeyboardSettings.useExtension;
         loadKeyboard(context, context.getResources().getXml(xmlLayoutResId));
         setEdgeFlags();
-        fixAltChars(TKIME.sKeyboardSettings.inputLocale);
+        fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
     }
 
     public Keyboard(Context context, int defaultHeight, int xmlLayoutResId, int modeId, float kbHeightPercent,
@@ -912,10 +912,10 @@ public class Keyboard {
         mKeys = new ArrayList<Key>();
         mModifierKeys = new ArrayList<Key>();
         mKeyboardMode = modeId;
-        mUseExtension = TKIME.sKeyboardSettings.useExtension;
+        mUseExtension = LatinIME.sKeyboardSettings.useExtension;
         loadKeyboard(context, context.getResources().getXml(xmlLayoutResId), keyVariant);
         setEdgeFlags();
-        fixAltChars(TKIME.sKeyboardSettings.inputLocale);
+        fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
     }
 
     /**
@@ -1182,7 +1182,7 @@ public class Keyboard {
                 for (int i = 0; i < mKeys.size(); i++) {
                     final Key key = mKeys.get(i);
                     boolean isSpace = key.codes != null && key.codes.length > 0 &&
-                    		key.codes[0] == TKIME.ASCII_SPACE;
+                    		key.codes[0] == LatinIME.ASCII_SPACE;
                     if (key.squaredDistanceFrom(x, y) < mProximityThreshold ||
                             key.squaredDistanceFrom(x + mCellWidth - 1, y) < mProximityThreshold ||
                             key.squaredDistanceFrom(x + mCellWidth - 1, y + mCellHeight - 1)

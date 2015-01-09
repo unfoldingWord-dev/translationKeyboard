@@ -38,7 +38,7 @@ public class PrefScreenView extends PreferenceActivity
         addPreferencesFromResource(R.xml.prefs_view);
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         prefs.registerOnSharedPreferenceChangeListener(this);
-        mRenderModePreference = (ListPreference) findPreference(TKIME.PREF_RENDER_MODE);
+        mRenderModePreference = (ListPreference) findPreference(LatinIME.PREF_RENDER_MODE);
     }
 
     public static class TKSettingsFragment extends PreferenceFragment {

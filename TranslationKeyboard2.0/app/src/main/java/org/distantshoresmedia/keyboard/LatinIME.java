@@ -82,7 +82,7 @@ import java.util.regex.Matcher;
 /**
  * Input method implementation for Qwerty'ish keyboard.
  */
-public class TKIME extends InputMethodService implements
+public class LatinIME extends InputMethodService implements
         ComposeSequencing,
         BaseKeyboardView.OnKeyboardActionListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -190,7 +190,7 @@ public class TKIME extends InputMethodService implements
     // Bigram Suggestion is disabled in this version.
     private final boolean mBigramSuggestionEnabled = false;
     private boolean mAutoCorrectOn;
-    // TODO move this state variable outside TKIME
+    // TODO move this state variable outside LatinIME
     private boolean mModCtrl;
     private boolean mModAlt;
     private boolean mModMeta;
@@ -223,7 +223,7 @@ public class TKIME extends InputMethodService implements
     private String mVolDownAction;
 
     public static final GlobalKeyboardSettings sKeyboardSettings = new GlobalKeyboardSettings(); 
-    static TKIME sInstance;
+    static LatinIME sInstance;
     
     private int mHeightPortrait;
     private int mHeightLandscape;
@@ -351,7 +351,7 @@ public class TKIME extends InputMethodService implements
             case MSG_START_TUTORIAL:
                 if (mTutorial == null) {
                     if (mKeyboardSwitcher.getInputView().isShown()) {
-                        mTutorial = new Tutorial(TKIME.this,
+                        mTutorial = new Tutorial(LatinIME.this,
                                 mKeyboardSwitcher.getInputView());
                         mTutorial.start();
                     } else {
@@ -406,9 +406,9 @@ public class TKIME extends InputMethodService implements
                 res.getBoolean(R.bool.default_suggestions_in_landscape));
         mHeightPortrait = getHeight(prefs, PREF_HEIGHT_PORTRAIT, res.getString(R.string.default_height_portrait));
         mHeightLandscape = getHeight(prefs, PREF_HEIGHT_LANDSCAPE, res.getString(R.string.default_height_landscape));
-        TKIME.sKeyboardSettings.hintMode = Integer.parseInt(prefs.getString(PREF_HINT_MODE, res.getString(R.string.default_hint_mode)));
-        TKIME.sKeyboardSettings.longpressTimeout = getPrefInt(prefs, PREF_LONGPRESS_TIMEOUT, res.getString(R.string.default_long_press_duration));
-        TKIME.sKeyboardSettings.renderMode = getPrefInt(prefs, PREF_RENDER_MODE, res.getString(R.string.default_render_mode));
+        LatinIME.sKeyboardSettings.hintMode = Integer.parseInt(prefs.getString(PREF_HINT_MODE, res.getString(R.string.default_hint_mode)));
+        LatinIME.sKeyboardSettings.longpressTimeout = getPrefInt(prefs, PREF_LONGPRESS_TIMEOUT, res.getString(R.string.default_long_press_duration));
+        LatinIME.sKeyboardSettings.renderMode = getPrefInt(prefs, PREF_RENDER_MODE, res.getString(R.string.default_render_mode));
         mSwipeUpAction = prefs.getString(PREF_SWIPE_UP, res.getString(R.string.default_swipe_up));
         mSwipeDownAction = prefs.getString(PREF_SWIPE_DOWN, res.getString(R.string.default_swipe_down));
         mSwipeLeftAction = prefs.getString(PREF_SWIPE_LEFT, res.getString(R.string.default_swipe_left));
@@ -471,8 +471,8 @@ public class TKIME extends InputMethodService implements
         }
         // Convert overall keyboard height to per-row percentage
         int screenHeightPercent = isPortrait ? mHeightPortrait : mHeightLandscape;
-        TKIME.sKeyboardSettings.keyboardMode = kbMode;
-        TKIME.sKeyboardSettings.keyboardHeightPercent = (float) screenHeightPercent;
+        LatinIME.sKeyboardSettings.keyboardMode = kbMode;
+        LatinIME.sKeyboardSettings.keyboardHeightPercent = (float) screenHeightPercent;
     }
     
     private void setNotification(boolean visible) {
@@ -526,7 +526,7 @@ public class TKIME extends InputMethodService implements
      * @return returns array of dictionary resource ids
      */
     /* package */static int[] getDictionary(Resources res) {
-        String packageName = TKIME.class.getPackage().getName();
+        String packageName = LatinIME.class.getPackage().getName();
         XmlResourceParser xrp = res.getXml(R.xml.dictionary);
         ArrayList<Integer> dictionaries = new ArrayList<Integer>();
 
@@ -2151,25 +2151,25 @@ public class TKIME extends InputMethodService implements
     }
 
     private void setModCtrl(boolean val) {
-        // Log.i("TKIME", "setModCtrl "+ mModCtrl + "->" + val + ", chording=" + mCtrlKeyState.isChording());
+        // Log.i("LatinIME", "setModCtrl "+ mModCtrl + "->" + val + ", chording=" + mCtrlKeyState.isChording());
         mKeyboardSwitcher.setCtrlIndicator(val);
         mModCtrl = val;
     }
 
     private void setModAlt(boolean val) {
-        //Log.i("TKIME", "setModAlt "+ mModAlt + "->" + val + ", chording=" + mAltKeyState.isChording());
+        //Log.i("LatinIME", "setModAlt "+ mModAlt + "->" + val + ", chording=" + mAltKeyState.isChording());
         mKeyboardSwitcher.setAltIndicator(val);
         mModAlt = val;
     }
 
     private void setModMeta(boolean val) {
-        //Log.i("TKIME", "setModMeta "+ mModMeta + "->" + val + ", chording=" + mMetaKeyState.isChording());
+        //Log.i("LatinIME", "setModMeta "+ mModMeta + "->" + val + ", chording=" + mMetaKeyState.isChording());
         mKeyboardSwitcher.setMetaIndicator(val);
         mModMeta = val;
     }
 
     private void setModFn(boolean val) {
-        //Log.i("TKIME", "setModFn " + mModFn + "->" + val + ", chording=" + mFnKeyState.isChording());
+        //Log.i("LatinIME", "setModFn " + mModFn + "->" + val + ", chording=" + mFnKeyState.isChording());
         mModFn = val;
         mKeyboardSwitcher.setFn(val);
         mKeyboardSwitcher.setCtrlIndicator(mModCtrl);
@@ -2302,7 +2302,7 @@ public class TKIME extends InputMethodService implements
             sendModifiableKeyChar((char) primaryCode);
         }
         updateShiftKeyState(getCurrentInputEditorInfo());
-        if (TKIME.PERF_DEBUG)
+        if (LatinIME.PERF_DEBUG)
             measureCps();
         TextEntryState.typedCharacter((char) primaryCode,
                 isWordSeparator(primaryCode));
@@ -2509,7 +2509,7 @@ public class TKIME extends InputMethodService implements
         List<CharSequence> stringList = mSuggest.getSuggestions(
                 mKeyboardSwitcher.getInputView(), word, false, prevWord);
         // long stopTime = System.currentTimeMillis(); // TIME MEASUREMENT!
-        // Log.d("TKIME","Suggest Total Time - " + (stopTime - startTime));
+        // Log.d("LatinIME","Suggest Total Time - " + (stopTime - startTime));
 
         int[] nextLettersFrequencies = mSuggest.getNextLettersFrequencies();
 
@@ -2992,14 +2992,14 @@ public class TKIME extends InputMethodService implements
                     PREF_HEIGHT_LANDSCAPE, res.getString(R.string.default_height_landscape));
             needReload = true;
         } else if (PREF_HINT_MODE.equals(key)) {
-            TKIME.sKeyboardSettings.hintMode = Integer.parseInt(sharedPreferences.getString(PREF_HINT_MODE,
+            LatinIME.sKeyboardSettings.hintMode = Integer.parseInt(sharedPreferences.getString(PREF_HINT_MODE,
                     res.getString(R.string.default_hint_mode)));
             needReload = true;
         } else if (PREF_LONGPRESS_TIMEOUT.equals(key)) {
-               TKIME.sKeyboardSettings.longpressTimeout = getPrefInt(sharedPreferences, PREF_LONGPRESS_TIMEOUT,
+               LatinIME.sKeyboardSettings.longpressTimeout = getPrefInt(sharedPreferences, PREF_LONGPRESS_TIMEOUT,
                        res.getString(R.string.default_long_press_duration));
         } else if (PREF_RENDER_MODE.equals(key)) {
-            TKIME.sKeyboardSettings.renderMode = getPrefInt(sharedPreferences, PREF_RENDER_MODE,
+            LatinIME.sKeyboardSettings.renderMode = getPrefInt(sharedPreferences, PREF_RENDER_MODE,
                     res.getString(R.string.default_render_mode));
             needReload = true;
         } else if (PREF_SWIPE_UP.equals(key)) {
@@ -3388,7 +3388,7 @@ public class TKIME extends InputMethodService implements
             Class<? extends PreferenceActivity> settingsClass) {
         handleClose();
         Intent intent = new Intent();
-        intent.setClass(TKIME.this, settingsClass);
+        intent.setClass(LatinIME.this, settingsClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -3515,7 +3515,7 @@ public class TKIME extends InputMethodService implements
         super.dump(fd, fout, args);
 
         final Printer p = new PrintWriterPrinter(fout);
-        p.println("TKIME state :");
+        p.println("LatinIME state :");
         p.println("  Keyboard mode = " + mKeyboardSwitcher.getKeyboardMode());
         p.println("  mComposing=" + mComposing.toString());
         p.println("  mPredictionOnForMode=" + mPredictionOnForMode);

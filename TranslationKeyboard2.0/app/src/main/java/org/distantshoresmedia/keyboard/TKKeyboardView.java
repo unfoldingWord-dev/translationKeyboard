@@ -324,7 +324,7 @@ public class TKKeyboardView extends BaseKeyboardView {
     @Override
     public boolean onTouchEvent(MotionEvent me) {
         TKKeyboard keyboard = (TKKeyboard) getKeyboard();
-        if (TKIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
+        if (LatinIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
             mLastX = (int) me.getX();
             mLastY = (int) me.getY();
             invalidate();
@@ -639,7 +639,7 @@ public class TKKeyboardView extends BaseKeyboardView {
                 }
             }
         }
-        if (TKIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
+        if (LatinIME.sKeyboardSettings.showTouchPos || DEBUG_LINE) {
             if (mPaint == null) {
                 mPaint = new Paint();
                 mPaint.setColor(0x80FFFFFF);

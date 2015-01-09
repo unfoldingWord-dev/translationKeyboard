@@ -40,7 +40,7 @@ public class Tutorial implements OnTouchListener {
     
     private List<Bubble> mBubbles = new ArrayList<Bubble>();
     private View mInputView;
-    private TKIME mIme;
+    private LatinIME mIme;
     private int[] mLocation = new int[2];
     
     private static final int MSG_SHOW_BUBBLE = 0;
@@ -159,7 +159,7 @@ public class Tutorial implements OnTouchListener {
         }
     }
     
-    public Tutorial(TKIME ime, TKKeyboardView inputView) {
+    public Tutorial(LatinIME ime, TKKeyboardView inputView) {
         Context context = inputView.getContext();
         mIme = ime;
         int inputWidth = inputView.getWidth();

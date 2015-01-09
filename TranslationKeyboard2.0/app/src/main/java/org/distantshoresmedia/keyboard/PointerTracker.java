@@ -242,7 +242,7 @@ public class PointerTracker {
 
     public boolean isSpaceKey(int keyIndex) {
         Key key = getKey(keyIndex);
-        return key != null && key.codes != null && key.codes[0] == TKIME.ASCII_SPACE;
+        return key != null && key.codes != null && key.codes[0] == LatinIME.ASCII_SPACE;
     }
 
     public void updateKey(int keyIndex) {
@@ -321,7 +321,7 @@ public class PointerTracker {
     }
 
     private static void addSlideKey(Key key) {
-        if (!sSlideKeyHack || TKIME.sKeyboardSettings.sendSlideKeys == 0) return;
+        if (!sSlideKeyHack || LatinIME.sKeyboardSettings.sendSlideKeys == 0) return;
         if (key == null) return;
         if (key.modifier) {
             clearSlideKeys();
@@ -336,7 +336,7 @@ public class PointerTracker {
     
     void sendSlideKeys() {
         if (!sSlideKeyHack) return;
-        int slideMode = TKIME.sKeyboardSettings.sendSlideKeys;
+        int slideMode = LatinIME.sKeyboardSettings.sendSlideKeys;
         if ((slideMode & 4) > 0) {
             // send all
             for (Key key : sSlideKeys) {
@@ -530,9 +530,9 @@ public class PointerTracker {
     private void startLongPressTimer(int keyIndex) {
         if (mKeyboardSwitcher.isInMomentaryAutoModeSwitchState()) {
             // We use longer timeout for sliding finger input started from the symbols mode key.
-            mHandler.startLongPressTimer(TKIME.sKeyboardSettings.longpressTimeout * 3, keyIndex, this);
+            mHandler.startLongPressTimer(LatinIME.sKeyboardSettings.longpressTimeout * 3, keyIndex, this);
         } else {
-            mHandler.startLongPressTimer(TKIME.sKeyboardSettings.longpressTimeout, keyIndex, this);
+            mHandler.startLongPressTimer(LatinIME.sKeyboardSettings.longpressTimeout, keyIndex, this);
         }
     }
 

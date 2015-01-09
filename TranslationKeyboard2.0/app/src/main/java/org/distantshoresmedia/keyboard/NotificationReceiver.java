@@ -8,9 +8,9 @@ import android.view.inputmethod.InputMethodManager;
 
 public class NotificationReceiver extends BroadcastReceiver {
 	static final String TAG = "PCKeyboard/Notification";
-    private TKIME mIME;
+    private LatinIME mIME;
 
-	NotificationReceiver(TKIME ime) {
+	NotificationReceiver(LatinIME ime) {
 	 	super();
     	mIME = ime;
 		Log.i(TAG, "NotificationReceiver created, ime=" + mIME);

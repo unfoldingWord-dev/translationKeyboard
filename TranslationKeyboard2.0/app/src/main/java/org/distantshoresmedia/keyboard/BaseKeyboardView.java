@@ -25,7 +25,6 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Paint.Align;
 import android.graphics.PorterDuff;
@@ -44,7 +43,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -446,7 +444,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             try {
                 sSetRenderMode.invoke(this, mode, null);
                 sPrevRenderMode = mode;
-                Log.i(TAG, "render mode set to " + TKIME.sKeyboardSettings.renderMode);
+                Log.i(TAG, "render mode set to " + LatinIME.sKeyboardSettings.renderMode);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -465,7 +463,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
         super(context, attrs, defStyle);
 
         Log.i(TAG, "Creating new BaseKeyboardView " + this);
-        setRenderModeIfPossible(TKIME.sKeyboardSettings.renderMode);
+        setRenderModeIfPossible(LatinIME.sKeyboardSettings.renderMode);
 
         TypedArray a = context.obtainStyledAttributes(
                 attrs, R.styleable.BaseKeyboardView, defStyle, R.style.LatinKeyboardBaseView);
@@ -615,11 +613,11 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
     }
 
     private boolean showHints7Bit() {
-        return TKIME.sKeyboardSettings.hintMode >= 1;
+        return LatinIME.sKeyboardSettings.hintMode >= 1;
     }
 
     private boolean showHintsAll() {
-        return TKIME.sKeyboardSettings.hintMode >= 2;
+        return LatinIME.sKeyboardSettings.hintMode >= 2;
     }
 
     public void setOnKeyboardActionListener(OnKeyboardActionListener listener) {
@@ -660,7 +658,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
         for (PointerTracker tracker : mPointerTrackers) {
             tracker.setKeyboard(mKeys, mKeyHysteresisDistance);
         }
-        mLabelScale = TKIME.sKeyboardSettings.labelScalePref;
+        mLabelScale = LatinIME.sKeyboardSettings.labelScalePref;
         if (keyboard.mLayoutRows >= 4) mLabelScale *= 5.0f / keyboard.mLayoutRows;
         requestLayout();
         // Hint to reallocate the buffer if the size changed
@@ -670,7 +668,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
         mMiniKeyboardCacheMain.clear();
         mMiniKeyboardCacheShift.clear();
         mMiniKeyboardCacheCaps.clear();
-        setRenderModeIfPossible(TKIME.sKeyboardSettings.renderMode);
+        setRenderModeIfPossible(LatinIME.sKeyboardSettings.renderMode);
         mIgnoreMove = true;
     }
     
@@ -743,7 +741,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
 
     public boolean isShiftAll() {
         int state = getShiftState();
-        if (TKIME.sKeyboardSettings.shiftLockModifiers) {
+        if (LatinIME.sKeyboardSettings.shiftLockModifiers) {
             return state == Keyboard.SHIFT_ON || state == Keyboard.SHIFT_LOCKED;
         } else {
             return state == Keyboard.SHIFT_ON;            
@@ -992,7 +990,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
                 // For characters, use large font. For labels like "Done", use small font.
                 final int labelSize;
                 if (label.length() > 1 && key.codes.length < 2) {
-                    //Log.i(TAG, "mLabelTextSize=" + mLabelTextSize + " TKIME.sKeyboardSettings.labelScale=" + TKIME.sKeyboardSettings.labelScale);
+                    //Log.i(TAG, "mLabelTextSize=" + mLabelTextSize + " LatinIME.sKeyboardSettings.labelScale=" + LatinIME.sKeyboardSettings.labelScale);
                     labelSize = (int)(mLabelTextSize * mLabelScale);
                     paint.setTypeface(Typeface.DEFAULT);
                 } else {
@@ -1125,8 +1123,8 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
         }
 
-        if (TKIME.sKeyboardSettings.showTouchPos || DEBUG) {
-            if (TKIME.sKeyboardSettings.showTouchPos || mShowTouchPoints) {
+        if (LatinIME.sKeyboardSettings.showTouchPos || DEBUG) {
+            if (LatinIME.sKeyboardSettings.showTouchPos || mShowTouchPoints) {
                 for (PointerTracker tracker : mPointerTrackers) {
                     int startX = tracker.getStartX();
                     int startY = tracker.getStartY();

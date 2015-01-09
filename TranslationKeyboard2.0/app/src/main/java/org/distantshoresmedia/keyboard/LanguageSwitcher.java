@@ -31,7 +31,7 @@ public class LanguageSwitcher {
 
     private static final String TAG = "TK/LanguageSwitcher";
     private Locale[] mLocales;
-    private TKIME mIme;
+    private LatinIME mIme;
     private String[] mSelectedLanguageArray;
     private String   mSelectedLanguages;
     private int      mCurrentIndex = 0;
@@ -39,7 +39,7 @@ public class LanguageSwitcher {
     private Locale   mDefaultInputLocale;
     private Locale   mSystemLocale;
 
-    public LanguageSwitcher(TKIME ime) {
+    public LanguageSwitcher(LatinIME ime) {
         mIme = ime;
         mLocales = new Locale[0];
     }
@@ -58,8 +58,8 @@ public class LanguageSwitcher {
      * @return whether there was any change
      */
     public boolean loadLocales(SharedPreferences sp) {
-        String selectedLanguages = sp.getString(TKIME.PREF_SELECTED_LANGUAGES, null);
-        String currentLanguage   = sp.getString(TKIME.PREF_INPUT_LANGUAGE, null);
+        String selectedLanguages = sp.getString(LatinIME.PREF_SELECTED_LANGUAGES, null);
+        String currentLanguage   = sp.getString(LatinIME.PREF_INPUT_LANGUAGE, null);
         if (selectedLanguages == null || selectedLanguages.length() < 1) {
             loadDefaults();
             if (mLocales.length == 0) {
@@ -155,7 +155,7 @@ public class LanguageSwitcher {
         } else {
             locale = mLocales[mCurrentIndex];
         }
-        TKIME.sKeyboardSettings.inputLocale = (locale != null) ? locale : Locale.getDefault();
+        LatinIME.sKeyboardSettings.inputLocale = (locale != null) ? locale : Locale.getDefault();
         return locale;
     }
 
@@ -216,7 +216,7 @@ public class LanguageSwitcher {
     public void persist() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mIme);
         Editor editor = sp.edit();
-        editor.putString(TKIME.PREF_INPUT_LANGUAGE, getInputLanguage());
+        editor.putString(LatinIME.PREF_INPUT_LANGUAGE, getInputLanguage());
         SharedPreferencesCompat.apply(editor);
     }
 

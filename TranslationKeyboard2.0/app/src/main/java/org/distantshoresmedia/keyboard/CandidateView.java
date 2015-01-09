@@ -45,7 +45,7 @@ public class CandidateView extends View {
     private static final int OUT_OF_BOUNDS_WORD_INDEX = -1;
     private static final int OUT_OF_BOUNDS_X_COORD = -1;
 
-    private TKIME mService;
+    private LatinIME mService;
     private final ArrayList<CharSequence> mSuggestions = new ArrayList<CharSequence>();
     private boolean mShowingCompletions;
     private CharSequence mSelectedString;
@@ -119,7 +119,7 @@ public class CandidateView extends View {
         mPaint = new Paint();
         mPaint.setColor(mColorNormal);
         mPaint.setAntiAlias(true);
-        mPaint.setTextSize(mPreviewText.getTextSize() * TKIME.sKeyboardSettings.candidateScalePref);
+        mPaint.setTextSize(mPreviewText.getTextSize() * LatinIME.sKeyboardSettings.candidateScalePref);
         mPaint.setStrokeWidth(0);
         mPaint.setTextAlign(Align.CENTER);
         mDescent = (int) mPaint.descent();
@@ -192,7 +192,7 @@ public class CandidateView extends View {
      * A connection back to the service to communicate with the text field
      * @param listener
      */
-    public void setService(TKIME listener) {
+    public void setService(LatinIME listener) {
         mService = listener;
     }
     
@@ -361,7 +361,7 @@ public class CandidateView extends View {
 
     public void clear() {
         // Don't call mSuggestions.clear() because it's being used for logging
-        // in TKIME.pickSuggestionManually().
+        // in LatinIME.pickSuggestionManually().
         mSuggestions.clear();
         mTouchX = OUT_OF_BOUNDS_X_COORD;
         mSelectedString = null;

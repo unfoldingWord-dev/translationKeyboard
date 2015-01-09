@@ -150,7 +150,7 @@ public class TKKeyboard extends Keyboard {
         mIsAlphaFullKeyboard = xmlLayoutResId == R.xml.kbd_full;
         mIsFnFullKeyboard = xmlLayoutResId == R.xml.kbd_full_fn || xmlLayoutResId == R.xml.kbd_compact_fn;
         // The index of space key is available only after Keyboard constructor has finished.
-        mSpaceKeyIndexArray = new int[] { indexOf(TKIME.ASCII_SPACE) };
+        mSpaceKeyIndexArray = new int[] { indexOf(LatinIME.ASCII_SPACE) };
         // TODO remove this initialization after cleanup
         mVerticalGap = super.getVerticalGap();
     }
@@ -186,7 +186,7 @@ public class TKKeyboard extends Keyboard {
         mIsAlphaFullKeyboard = xmlLayoutResId == R.xml.kbd_full;
         mIsFnFullKeyboard = xmlLayoutResId == R.xml.kbd_full_fn || xmlLayoutResId == R.xml.kbd_compact_fn;
         // The index of space key is available only after Keyboard constructor has finished.
-        mSpaceKeyIndexArray = new int[] { indexOf(TKIME.ASCII_SPACE) };
+        mSpaceKeyIndexArray = new int[] { indexOf(LatinIME.ASCII_SPACE) };
         // TODO remove this initialization after cleanup
         mVerticalGap = super.getVerticalGap();
     }
@@ -197,13 +197,13 @@ public class TKKeyboard extends Keyboard {
         Key key = new TKKey(res, parent, x, y, parser);
         if (key.codes == null) return key;
         switch (key.codes[0]) {
-        case TKIME.ASCII_ENTER:
+        case LatinIME.ASCII_ENTER:
             mEnterKey = key;
             break;
         case TKKeyboardView.KEYCODE_F1:
             mF1Key = key;
             break;
-        case TKIME.ASCII_SPACE:
+        case LatinIME.ASCII_SPACE:
             mSpaceKey = key;
             break;
         case KEYCODE_MODE_CHANGE:
@@ -677,7 +677,7 @@ public class TKKeyboard extends Keyboard {
             	}
             }
             if (code == KEYCODE_DELETE) x -= key.width / 6;
-        } else if (code == TKIME.ASCII_SPACE) {
+        } else if (code == LatinIME.ASCII_SPACE) {
             y += TKKeyboard.sSpacebarVerticalCorrection;
             if (mLanguageSwitcher.getLocaleCount() > 1) {
                 if (mCurrentlyInSpace) {

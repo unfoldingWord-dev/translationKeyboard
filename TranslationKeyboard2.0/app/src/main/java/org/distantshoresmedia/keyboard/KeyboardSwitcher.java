@@ -91,7 +91,7 @@ public class KeyboardSwitcher implements
             KEYBOARDMODE_IM_WITH_SETTINGS_KEY,
             KEYBOARDMODE_WEB_WITH_SETTINGS_KEY };
 
-    private TKIME mInputMethodService;
+    private LatinIME mInputMethodService;
 
     private KeyboardId mSymbolsId;
     private KeyboardId mSymbolsShiftedId;
@@ -147,7 +147,7 @@ public class KeyboardSwitcher implements
         // Intentional empty constructor for singleton.
     }
 
-    public static void init(TKIME ims) {
+    public static void init(LatinIME ims) {
         sInstance.mInputMethodService = ims;
 
         final SharedPreferences prefs = PreferenceManager
@@ -197,7 +197,7 @@ public class KeyboardSwitcher implements
         if(mInputMethodService == null){
             return;
         }
-        mFullMode = TKIME.sKeyboardSettings.keyboardMode;
+        mFullMode = LatinIME.sKeyboardSettings.keyboardMode;
         mSymbolsId = makeSymbolsId(mHasVoice && !mVoiceOnPrimary);
         mSymbolsShiftedId = makeSymbolsShiftedId(mHasVoice && !mVoiceOnPrimary);
 
@@ -239,8 +239,8 @@ public class KeyboardSwitcher implements
             this.mKeyboardMode = mode;
             this.mEnableShiftLock = enableShiftLock;
             this.mHasVoice = hasVoice;
-            this.mKeyboardHeightPercent = TKIME.sKeyboardSettings.keyboardHeightPercent;
-            this.mUsingExtension = TKIME.sKeyboardSettings.useExtension;
+            this.mKeyboardHeightPercent = LatinIME.sKeyboardSettings.keyboardHeightPercent;
+            this.mUsingExtension = LatinIME.sKeyboardSettings.useExtension;
 
             this.mHashCode = Arrays.hashCode(new Object[] { xml, mode,
                     enableShiftLock, hasVoice });
@@ -331,7 +331,7 @@ public class KeyboardSwitcher implements
             Resources orig = mInputMethodService.getResources();
             Configuration conf = orig.getConfiguration();
             Locale saveLocale = conf.locale;
-            conf.locale = TKIME.sKeyboardSettings.inputLocale;
+            conf.locale = LatinIME.sKeyboardSettings.inputLocale;
             orig.updateConfiguration(conf, null);
 
 //            AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getAvailableKeyboards();
@@ -608,7 +608,7 @@ public class KeyboardSwitcher implements
             }
             break;
         case AUTO_MODE_SWITCH_STATE_SYMBOL_BEGIN:
-            if (key != TKIME.ASCII_SPACE && key != TKIME.ASCII_ENTER
+            if (key != LatinIME.ASCII_SPACE && key != LatinIME.ASCII_ENTER
                     && key >= 0) {
                 mAutoModeSwitchState = AUTO_MODE_SWITCH_STATE_SYMBOL;
             }
@@ -617,7 +617,7 @@ public class KeyboardSwitcher implements
             // Snap back to alpha keyboard mode if user types one or more
             // non-space/enter
             // characters followed by a space/enter.
-            if (key == TKIME.ASCII_ENTER || key == TKIME.ASCII_SPACE) {
+            if (key == LatinIME.ASCII_ENTER || key == LatinIME.ASCII_SPACE) {
                 mInputMethodService.changeKeyboardMode();
             }
             break;

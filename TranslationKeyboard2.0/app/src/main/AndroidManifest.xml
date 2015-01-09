@@ -26,7 +26,7 @@
         android:logo="@drawable/icon"
         android:icon="@drawable/icon">
 
-        <service android:name="org.distantshoresmedia.keyboard.TKIME"
+        <service android:name="org.distantshoresmedia.keyboard.LatinIME"
             android:label="@string/english_ime_name"
             android:permission="android.permission.BIND_INPUT_METHOD"
             android:logo="@drawable/icon"

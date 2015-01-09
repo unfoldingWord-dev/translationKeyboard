@@ -116,7 +116,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         addPreferencesFromResource(R.xml.language_prefs);
         // Get the settings preferences
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String selectedLanguagePref = sp.getString(TKIME.PREF_SELECTED_LANGUAGES, "");
+        String selectedLanguagePref = sp.getString(LatinIME.PREF_SELECTED_LANGUAGES, "");
         Log.i(TAG, "selected languages: " + selectedLanguagePref);
         String[] languageList = selectedLanguagePref.split(",");
         
@@ -191,7 +191,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         conf.locale = locale;
         res.updateConfiguration(conf, res.getDisplayMetrics());
 
-        int[] dictionaries = TKIME.getDictionary(res);
+        int[] dictionaries = LatinIME.getDictionary(res);
         BinaryDictionary bd = new BinaryDictionary(this, dictionaries, Suggest.DIC_MAIN);
 
         // Is the dictionary larger than a placeholder? Arbitrarily chose a lower limit of
@@ -267,7 +267,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         if (checkedLanguages.length() < 1) checkedLanguages = null; // Save null
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sp.edit();
-        editor.putString(TKIME.PREF_SELECTED_LANGUAGES, checkedLanguages);
+        editor.putString(LatinIME.PREF_SELECTED_LANGUAGES, checkedLanguages);
         SharedPreferencesCompat.apply(editor);
     }
 
@@ -360,7 +360,7 @@ public class InputLanguageSelection extends PreferenceActivity {
 //                    l = new Locale(language);
 //                }
 //
-//                // Exclude languages that are not relevant to TKIME
+//                // Exclude languages that are not relevant to LatinIME
 //                if (arrayContains(BLACKLIST_LANGUAGES, language)) continue;
 //
 //                if (finalSize == 0) {

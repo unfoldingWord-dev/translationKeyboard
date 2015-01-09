@@ -42,7 +42,7 @@ public final class GlobalKeyboardSettings {
     // Read by LatinKeyboardView
     public boolean showTouchPos = false;
     //
-    // Read by TKIME
+    // Read by LatinIME
     public String suggestedPunctuation = "!?,.";
     public int keyboardModePortrait = 2;
     public int keyboardModeLandscape = 2;
@@ -64,7 +64,7 @@ public final class GlobalKeyboardSettings {
     // Read by PointerTracker
     public int sendSlideKeys = 0;
     
-    /* Updated by TKIME */
+    /* Updated by LatinIME */
     //
     // Read by KeyboardSwitcher
     public int keyboardMode = 0;
@@ -89,7 +89,7 @@ public final class GlobalKeyboardSettings {
 
     /* Updated by KeyboardSwitcher */
     //
-    // Used by BaseKeyboardView and TKIME
+    // Used by BaseKeyboardView and LatinIME
 
     /* Updated by LanguageSwitcher */
     //

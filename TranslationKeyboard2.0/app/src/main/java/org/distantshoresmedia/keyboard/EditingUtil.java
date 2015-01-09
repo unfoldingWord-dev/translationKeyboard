@@ -305,7 +305,7 @@ public class EditingUtil {
         // Reflection didn't work, try it the poor way, by moving the cursor to the start,
         // getting the text after the cursor and moving the text back to selected mode.
         // TODO: Verify that this works properly in conjunction with 
-        // TKIME#onUpdateSelection
+        // LatinIME#onUpdateSelection
         ic.setSelection(selStart, selEnd);
         result = ic.getTextAfterCursor(selEnd - selStart, 0);
         ic.setSelection(selStart, selEnd);

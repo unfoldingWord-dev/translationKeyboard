@@ -34,8 +34,7 @@ import android.text.AutoText;
 import android.text.InputType;
 import android.util.Log;
 
-import org.distantshoresmedia.keyboard.TKIME;
-import org.distantshoresmedia.translationkeyboard20.R;
+import org.distantshoresmedia.keyboard.LatinIME;
 
 public class TKIMESettings extends PreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener,
@@ -94,8 +93,8 @@ public class TKIMESettings extends PreferenceActivity
                     .removePreference(mQuickFixes);
         }
         
-        Log.i(TAG, "compactModeEnabled=" + TKIME.sKeyboardSettings.compactModeEnabled);
-        if (!TKIME.sKeyboardSettings.compactModeEnabled) {
+        Log.i(TAG, "compactModeEnabled=" + LatinIME.sKeyboardSettings.compactModeEnabled);
+        if (!LatinIME.sKeyboardSettings.compactModeEnabled) {
             CharSequence[] oldEntries = mKeyboardModePortraitPreference.getEntries();
             CharSequence[] oldValues = mKeyboardModePortraitPreference.getEntryValues();
             
@@ -221,8 +220,8 @@ public class TKIMESettings extends PreferenceActivity
                 [mSettingsKeyPreference.findIndexOfValue(mSettingsKeyPreference.getValue())]);
 
         mInputConnectionInfo.setSummary(String.format("%s type=%s",
-                TKIME.sKeyboardSettings.editorPackageName,
-                inputTypeDesc(TKIME.sKeyboardSettings.editorInputType)
+                LatinIME.sKeyboardSettings.editorPackageName,
+                inputTypeDesc(LatinIME.sKeyboardSettings.editorInputType)
                 ));
     }
 

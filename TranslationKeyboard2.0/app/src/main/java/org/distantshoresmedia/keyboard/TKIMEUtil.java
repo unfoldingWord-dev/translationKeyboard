@@ -149,7 +149,7 @@ public class TKIMEUtil {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < mLength; ++i) {
                 char c = mCharBuf[normalize(mEnd - 1 - i)];
-                if (!((TKIME)mContext).isWordSeparator(c)) {
+                if (!((LatinIME)mContext).isWordSeparator(c)) {
                     sb.append(c);
                 } else {
                     break;
