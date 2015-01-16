@@ -548,12 +548,12 @@ public class PointerTracker {
             if (listener != null)
                 listener.onCancel();
         } else {
-            if (key.text != null) {
-                if (listener != null) {
-                    listener.onText(key.text);
-                    listener.onRelease(0); // dummy key code
-                }
-            } else {
+//            if (key.text != null) {
+//                if (listener != null) {
+//                    listener.onText(key.text);
+//                    listener.onRelease(0); // dummy key code
+//                }
+//            } else {
                 if (key.codes == null) return;
                 int code = key.getPrimaryCode();
                 int[] codes = mKeyDetector.newCodeArray();
@@ -580,7 +580,7 @@ public class PointerTracker {
                     listener.onKey(code, codes, x, y);
                     listener.onRelease(code);
                 }
-            }
+//            }
             mLastTapTime = eventTime;
         }
     }
