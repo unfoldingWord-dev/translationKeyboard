@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
+import org.distantshoresmedia.database.TKFontFinder;
 import org.distantshoresmedia.keyboard.Keyboard.Key;
 
 import org.distantshoresmedia.translationkeyboard20.R;
@@ -177,7 +178,21 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
     private int mKeyHintColor;
     private int mKeyCursorColor;
     private boolean mRecolorSymbols;
-    private Typeface mKeyTextStyle = Typeface.DEFAULT;
+
+    private Typeface mKeyTextStyle = null;
+    private String mostRecentLanguage = "";
+    private Typeface getTypeface(){
+
+        String currentLanguage = LatinIME.sKeyboardSettings.inputLocale.getLanguage();
+
+        if(mKeyTextStyle == null  || (mostRecentLanguage.length() < 1) || mostRecentLanguage.equalsIgnoreCase(currentLanguage)){
+            mKeyTextStyle = TKFontFinder.findTypefaceForLocal(getContext(), currentLanguage);
+        }
+
+        mostRecentLanguage = currentLanguage;
+        return mKeyTextStyle;
+    }
+
     private float mLabelTextSize;
     private int mSymbolColorScheme = 0;
     private int mShadowColor;
@@ -552,7 +567,7 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
         mPaintHint.setAntiAlias(true);
         mPaintHint.setTextAlign(Align.RIGHT);
         mPaintHint.setAlpha(255);
-        mPaintHint.setTypeface(Typeface.DEFAULT_BOLD);
+        mPaintHint.setTypeface(getTypeface());
 
         mPadding = new Rect(0, 0, 0, 0);
         mKeyBackground.getPadding(mPadding);
@@ -992,11 +1007,10 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
                 if (label.length() > 1 && key.codes.length < 2) {
                     //Log.i(TAG, "mLabelTextSize=" + mLabelTextSize + " LatinIME.sKeyboardSettings.labelScale=" + LatinIME.sKeyboardSettings.labelScale);
                     labelSize = (int)(mLabelTextSize * mLabelScale);
-                    paint.setTypeface(Typeface.DEFAULT);
                 } else {
                     labelSize = (int)(mKeyTextSize * mLabelScale);
-                    paint.setTypeface(mKeyTextStyle);
                 }
+                paint.setTypeface(getTypeface());
                 paint.setFakeBoldText(key.isCursor);
                 paint.setTextSize(labelSize);
 
@@ -1194,12 +1208,11 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
             mPreviewText.setText(key.getCaseLabel());
             if (key.label.length() > 1 && key.codes.length < 2) {
                 mPreviewText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mKeyTextSize);
-                mPreviewText.setTypeface(Typeface.DEFAULT_BOLD);
             } else {
                 mPreviewText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mPreviewTextSizeLarge);
-                mPreviewText.setTypeface(mKeyTextStyle);
             }
         }
+        mPreviewText.setTypeface(getTypeface());
         mPreviewText.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         int popupWidth = Math.max(mPreviewText.getMeasuredWidth(), key.width

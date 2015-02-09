@@ -19,14 +19,18 @@ package org.distantshoresmedia.keyboard;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import org.distantshoresmedia.database.TKFontFinder;
 import org.distantshoresmedia.keyboard.Keyboard.Key;
 
 import org.distantshoresmedia.translationkeyboard20.R;
 
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -117,6 +121,19 @@ public class TKKeyboardView extends BaseKeyboardView {
     private int mExtensionLayoutResId = 0;
     private TKKeyboard mExtensionKeyboard;
 
+    private Typeface mKeyTextStyle = null;
+    private String mostRecentLanguage = "";
+    private Typeface getTypeface(){
+
+        String currentLanguage = LatinIME.sKeyboardSettings.inputLocale.getLanguage();
+
+        if(mKeyTextStyle == null  || (mostRecentLanguage.length() < 1) || mostRecentLanguage.equalsIgnoreCase(currentLanguage)){
+            mKeyTextStyle = TKFontFinder.findTypefaceForLocal(getContext(), currentLanguage);
+        }
+
+        mostRecentLanguage = currentLanguage;
+        return mKeyTextStyle;
+    }
     public TKKeyboardView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -158,6 +175,8 @@ public class TKKeyboardView extends BaseKeyboardView {
             mPreviewPopup = new PopupWindow(context);
             Log.i(TAG, "new mPreviewPopup " + mPreviewPopup + " from " + this);
             mPreviewText = (TextView) inflate.inflate(previewLayout, null);
+            Typeface tf = getTypeface();
+            mPreviewText.setTypeface(tf);
             mPreviewTextSizeLarge = (int) res.getDimension(R.dimen.key_preview_text_size_large);
             mPreviewPopup.setContentView(mPreviewText);
             mPreviewPopup.setBackgroundDrawable(null);
