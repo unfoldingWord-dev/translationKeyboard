@@ -208,6 +208,9 @@ public class KeyboardDataHandler {
      */
     protected static String findKeyboardIdForLocal(Context context, Locale locale){
 
+        if(context == null || locale == null){
+            return null;
+        }
 
         for(AvailableKeyboard keyboard : getInstalledKeyboardDictionary(context).values()){
 
@@ -279,6 +282,10 @@ public class KeyboardDataHandler {
      * @return
      */
     private static Map<String, AvailableKeyboard> makeKeyboardsDictionary(Context context, AvailableKeyboard[] keyboards){
+
+        if(keyboards == null){
+            return null;
+        }
 
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
 

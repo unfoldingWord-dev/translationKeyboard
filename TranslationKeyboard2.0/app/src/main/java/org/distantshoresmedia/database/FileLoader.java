@@ -67,7 +67,11 @@ public class FileLoader {
      */
     protected static String getJSONStringFromApplicationFiles(Context context, String fileName){
 
+        if(context == null || fileName == null){
+            return null;
+        }
         try{
+
             InputStream fileStream = context.openFileInput(fileName);
 
             String resultString =  getStringFromInputStream(fileStream, fileName);

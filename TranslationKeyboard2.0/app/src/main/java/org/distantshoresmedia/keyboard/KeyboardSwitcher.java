@@ -20,13 +20,17 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.InflateException;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
+import org.distantshoresmedia.model.BaseKeyboard;
+import org.distantshoresmedia.model.KeyboardVariant;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.TKIMESettings;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -308,6 +312,11 @@ public class KeyboardSwitcher implements
         mInputView.setPreviewEnabled(mInputMethodService.getPopupOn());
 
         KeyboardId id = getKeyboardId(mode, imeOptions, isSymbols);
+
+        if(id == null){
+            Log.e(TAG, "no keyboardID");
+        }
+
         TKKeyboard keyboard = null;
         keyboard = getKeyboard(id);
 
@@ -324,6 +333,9 @@ public class KeyboardSwitcher implements
     }
 
     private TKKeyboard getKeyboard(KeyboardId id) {
+        if(id == null){
+            return null;
+        }
         SoftReference<TKKeyboard> ref = mKeyboards.get(id);
 
         TKKeyboard keyboard = (ref == null) ? null : ref.get();
@@ -349,7 +361,24 @@ public class KeyboardSwitcher implements
 
             String keyboardID = KeyboardDatabaseHandler.getKeyboardIdWithLocal(conf.locale);
 //            System.out.println("desired Language ID: " + language);
-            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, KeyboardDatabaseHandler.getKeyboardWithID(keyboardID).getKeyboardVariants()[0]);
+            BaseKeyboard keys = KeyboardDatabaseHandler.getKeyboardWithID(keyboardID);
+
+            if(keys == null){
+                Log.e(TAG, "error in getKeyboard. keyboard ID: " + keyboardID);
+            }
+            KeyboardVariant[] variants;
+            try {
+                variants = keys.getKeyboardVariants();
+            }
+            catch (NullPointerException e){
+                Log.e(TAG, "variants:" + keys.getKeyboardVariants());
+                e.printStackTrace();
+                return null;
+            }
+            if(variants == null){
+                Log.e(TAG, "error in variants" + variants.toString());
+            }
+            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent, variants[0]);
 //            keyboard = new TKKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode, id.mKeyboardHeightPercent);
             keyboard.setVoiceMode(hasVoiceButton(id.mXml == R.xml.kbd_symbols), mHasVoice);
             keyboard.setLanguageSwitcher(mLanguageSwitcher, mIsAutoCompletionActive);

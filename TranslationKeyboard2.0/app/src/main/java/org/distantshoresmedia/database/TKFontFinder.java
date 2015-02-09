@@ -15,9 +15,11 @@ public class TKFontFinder {
 
     static public Typeface findTypefaceForLocal(Context context, String language){
 
+//        Log.i(TAG, "Language: " + language);
+
         Typeface typeface;
 
-        if(language.equalsIgnoreCase("bu")){
+        if(language.equalsIgnoreCase("my")){
 //            Log.i(TAG, "selected bu");
             typeface = Typeface.createFromAsset(context.getAssets(), "fonts/bu.ttf");
         }
