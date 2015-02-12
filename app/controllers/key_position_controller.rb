@@ -5,6 +5,10 @@ class KeyPositionController < ApplicationController
   end
 
   def update
+
+   # redirect_to "/keyboard/variant/#{params[:id]}"
+
+
     @a_key_position = KeyPosition.find(params[:id])
     @characters = @a_key_position.characters
 
@@ -19,7 +23,6 @@ class KeyPositionController < ApplicationController
       else
         @array_of_character_ids.push(k.to_i)
         character_to_update = @characters.find(k)
-
         character_to_update.unicode_character_id = associated_unicode_record.id
         character_to_update.save
         @a_key_position.keyboard_variant.touch
@@ -39,6 +42,7 @@ class KeyPositionController < ApplicationController
       format.json { render json: @a_key_position, status: :updated, location: @a_key_position}
       format.js {}
     end
+
 
 
 

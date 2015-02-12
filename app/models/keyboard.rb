@@ -12,14 +12,16 @@ class Keyboard < ActiveRecord::Base
 	has_many :keyboard_variants
 
   def language_name
-    language_iso_obj.name
+   # language_iso_obj.name
+     language_iso_obj.ln
   end
 
   def language_iso_639_1
     if language_iso_obj.nil?
       iso_language
     else
-      language_iso_obj.iso_639_1
+      #language_iso_obj.iso_639_1
+      language_iso_obj.lc
     end
   end
 
@@ -37,11 +39,14 @@ class Keyboard < ActiveRecord::Base
   end
 
   def language_iso_obj
-    LanguageList::LanguageInfo.find(iso_language)
+    #LanguageList::LanguageInfo.find(iso_language)
+    lang = KeyboardLanguages.where(:lc => iso_language)
+    lang_details = KeyboardLanguages.find(lang)
   end
 
   def region_name
-    region_obj.name
+    #region_obj.name
+    region_obj.lr
   end
 
   def created_at_epoch
@@ -54,13 +59,23 @@ class Keyboard < ActiveRecord::Base
 
   def region_obj
     if iso_region == '00'
-      c = Country.new({alpha2: '00', name:"Default Region"})
+      c = KeyboardLanguages.new({:lr => "Unknown Region"})
     else
-      c = Country.find_country_by_alpha2(iso_region)
+      #c = Country.find_country_by_alpha2(iso_region)
+      arr = Array.new
+      arr[0] = iso_region
+      country = KeyboardCountry.where(:cc => arr).first
+      country_lang = LangRegions.where(:keyboardCountry_id => country)
+      country_lang.each do |p|
+        lang_id = p.keyboardLanguages_id
+        c = KeyboardLanguages.find(lang_id)
+      end
       if c.nil?
-        c = Country.new({alpha2: iso_region, name:"Unknown Name"})
+        country = KeyboardCountry.new({:cc => arr})
+        c = KeyboardLanguages.new({:lr => "Unknown Name"})
       end
     end
     c
+	#country
   end
 end

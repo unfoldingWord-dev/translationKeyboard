@@ -1,14 +1,14 @@
 
-
 readyEditKey = function() {
+	
     $(".single-char").on('input', singleCharKeyUp);
     $(".single-utf8hex").on('input', singleUtf8KeyUp);
 
-    $(".save-key").click(function(){
-        $(this).addClass("disabled");
-        $("#edit_key_position_"+$(this).data("keypos")).submit();
+    $(".save-key").click(function(){ 
+	$(this).addClass("disabled");
+	$("#edit_key_position_"+$(this).data("keypos")).submit();
     });
-
+	
     $(".edit-key-btn").hide();
 
     $(".delete-key-char").click(deleteChar);
@@ -27,6 +27,13 @@ readyEditKey = function() {
         });
 
     })
+
+    $(".single-char").focus(function(){
+       if($(this).val() == " "){
+           $(this).val("");
+       }
+    });
+
 };
 
 function singleCharKeyUp(){
@@ -39,6 +46,7 @@ function singleCharKeyUp(){
 }
 
 function singleUtf8KeyUp(){
+	
     var singleChar = $(this).parent().parent().parent().find(".single-char");
     if($(this).val().length<=6 && $(this).val().length>0){
         singleChar.val(String.fromCharCode(parseInt($(this).val(), 16)));

@@ -22,3 +22,4 @@ module KeyboardApp
     config.encoding = "utf-8"
   end
 end
+Rails.application.config.assets.precompile += %w( autocomplete-rails.js )

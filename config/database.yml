@@ -22,12 +22,16 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  username: postgres
+  password: postgres
+  host: localhost
+  encoding: UTF8
   database: keyboard_test
 
 production:
   <<: *default
   database: keyboard_dev
-  username: localuser
-  password: localuser
+  username: postgres
+  password: postgres
   host: localhost
   encoding: UTF8

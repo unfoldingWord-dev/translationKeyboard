@@ -12,7 +12,7 @@
 #
 
 class KeyPosition < ActiveRecord::Base
-	has_many :characters
+	has_many :characters, dependent: :destroy
 	belongs_to :keyboard_variant
 
   def get_characters_sorted_by_modmask

@@ -11,7 +11,7 @@
 #
 
 class KeyboardVariant < ActiveRecord::Base
-	has_many :key_positions
+	has_many :key_positions, dependent: :destroy
 	belongs_to :keyboard
   belongs_to :keyboard_type
 
@@ -25,7 +25,7 @@ class KeyboardVariant < ActiveRecord::Base
 		row_index = ordered_key_positions.first.row_index
 		column_index = ordered_key_positions.first.column_index
 
-		ordered_key_positions.each do |key_position|
+		ordered_key_positions.each_with_index do |key_position, index|
 			if key_position.row_index == row_index
 				key_position_columns.push(key_position)
 			else
@@ -33,6 +33,9 @@ class KeyboardVariant < ActiveRecord::Base
 				key_position_columns = Array.new
 				row_index = key_position.row_index
         key_position_columns.push(key_position)
+			end
+			if index == ordered_key_positions.size - 1
+				key_position_rows.push(key_position_columns)
 			end
 		end
 

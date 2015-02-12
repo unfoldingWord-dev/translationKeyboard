@@ -1,3 +1,4 @@
+
 <div id="key_new_modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -16,24 +17,34 @@
                 </div>
             </div>
             <% #languages_array = ISO::Language.all %>
-            <% languages_array = LanguageList::COMMON_LANGUAGES %>
+            <% #languages_array = LanguageList::COMMON_LANGUAGES
+               languages_array = get_languages
+
+            %>
+
+
             <div class="row">
               <div class="col-xs-7">
                 ISO <b>LANGUAGE</b> Code
               </div>
               <div class="col-xs-7">
-            <%= select_tag "keyboard[iso_language]", options_from_collection_for_select(languages_array.collect, 'iso_639_1', 'iso_and_name' ),
-                           class: "form-control selectpicker", :data => {:'live-search' => 'true'} %>
+                   <!-- <input id="autocomplete-1" onkeypress="select_lang()"> -->
+		   <input type="text" data-autocomplete="/../keyboard/autocomplete_keyboard_languages_lc" id="keyboard_iso_language" name="keyboard[iso_language]" >
               </div>
             </div>
-            <% countries_array = Country.all %>
+            <% #countries_array = Country.all
+               #countries_array = LangRegion::all_regions
+               countries_array = get_regions
+            %>
             <div class="row">
               <div class="col-xs-7">
                 ISO <b>REGION</b> Code
               </div>
               <div class="col-xs-7">
-                <%= select_tag "keyboard[iso_region]", options_from_collection_for_select(countries_array, :last, :first),
-                               class: "form-control selectpicker", :data => {:'live-search' => 'true'} %>
+                <%= select_tag "keyboard[iso_region]", options_for_select(countries_array.collect {|p| [ "#{p['cc']}-#{p['lr']}", p['cc'] ] }),
+                               class: "form-control selectpicker", :data => {:'live-search' => 'true'}
+
+                %>
               </div>
             </div>
 
@@ -52,7 +63,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary new-keyboard-save" >Go</button>
+        <button type="button" class="btn btn-primary new-keyboard-save" onclick="getlang()">Go</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

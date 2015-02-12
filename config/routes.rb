@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'keyboard/index'
   get 'language/:iso_language', to: 'language#index', as: :language
   get 'keyboard/variant/:keyboard_variant_id', to: 'keyboard#variant', as: :keyboard_variant
+  match 'keyboard/variant/:keyboard_variant_id', to: 'keyboard#variant_destroy', :via => :delete
 
   get 'keyboard_convertor/convert'
 
@@ -17,6 +18,21 @@ Rails.application.routes.draw do
 
   get 'characters/new_block'
 
+  resources :keyboard do
+  get :autocomplete_keyboard_languages_lc, :on => :collection
+  get :autocomplete_keyboard_languages_lc_ln, :on => :collection
+  end
+
+ # get 'keyboard/addKey'
+  #get 'keyboard/removeKey'
+  #get 'post/:id' => 'posts#show'
+  match '/add_key' => 'keyboard#add_row_key', :via => [:post]
+  match '/remove_key' => 'keyboard#remove_row_key', :via => [:post]
+  match '/view_modal' => 'keyboard#key_edit', :via => [:post]
+  match '/load_character' => 'keyboard#load_char', :via => [:post]
+  match '/import_lang_region' => 'keyboard#import_lang_region', :via => [:get]
+  match '/save_new_position' => 'keyboard#update_position', :via => [:post]
+  match '/save_region_name' => 'language#update_region_name', :via => [:post]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -2828,6 +2828,7 @@ select[multiple].input-lg {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  
 }
 .btn:focus,
 .btn:active:focus,

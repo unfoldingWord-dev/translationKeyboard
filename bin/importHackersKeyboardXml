@@ -8,7 +8,7 @@ require APP_PATH
 Rails.env = 'development'
 Rails.application.require_environment!
 
-Dir.chdir("S:/Web/Ruby/keyboard_app/hacker_keyboard_data/")
+Dir.chdir("/users/simeon/translationKeybaordWeb/hacker_keyboard_data/")
 print(Dir.pwd)
 
 Dir.entries('.').each do|f|
@@ -24,17 +24,17 @@ Dir.entries('.').each do|f|
       locale = f[start_index..f.length]
       if locale.index("-") == nil
         keyboard_to_add = Keyboard.find_or_create_by({name: "#{locale}", iso_language: "#{locale}", iso_region: "00"})
-        @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 5 Row"), name: "Android 5 Row" })
+        @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 4 Row"), name: "Android 4 Row" })
       else
         locale_start_index = locale.index("-")
         first_locale = locale[0..locale_start_index-1]
         second_locale = locale[locale_start_index+2..locale.length]
         keyboard_to_add = Keyboard.find_or_create_by({name: "#{locale}", iso_language: "#{first_locale}", iso_region: "#{second_locale}"})
-        @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 5 Row"), name: "Android 5 Row" })
+        @the_keyboard_variant = KeyboardVariant.find_or_create_by({keyboard: keyboard_to_add, keyboard_type: KeyboardType.find_by_name("Android 4 Row"), name: "Android 4 Row" })
       end
 
       @row_num = 0
-      @column_num = -1
+      @column_num = 0
 
       doc.xpath("//string").each do |node|
 
@@ -51,10 +51,6 @@ Dir.entries('.').each do|f|
 
             if node.xpath("@name").first.value.index("_alt") != nil
               mod_mask = '10'.to_i(2)
-            end
-
-            if mod_mask == '0'.to_i(2)
-              @column_num += 1
             end
 
             current_row_num = @row_num
@@ -97,23 +93,6 @@ Dir.entries('.').each do|f|
                     character_to_add = Character.find_or_create_by({modmask: mod_mask, sortnumber:1, unicode_character: unicode_character_to_add, key_position: the_key_position})
                     print(a_char.ord.to_s << a_char << "\n")
                   end
-                else
-                  if File.exists?("#{f}/donottranslate-altchars.xml")
-                    altchars_file = File.open("#{f}/donottranslate-altchars.xml")
-                    alt_chars_doc = Nokogiri::XML(altchars_file)
-                    altchars_file.close
-                    alt_char_string_search = string_node[8..string_node.length]
-                    alt_chars_doc.xpath("//string").each do |node_altchar|
-                      if node_altchar.xpath("@name").first.value.index(alt_char_string_search)
-                        string_node_altchar = CGI.unescapeHTML(node_altchar.inner_html)
-                        string_node_altchar.split("").each do |a_char_alt|
-                          unicode_character_to_add_alt = UnicodeCharacter.find_or_create_by( {utf8hex:a_char_alt.ord})
-                          character_to_add_alt = Character.find_or_create_by({modmask: mod_mask, sortnumber:1, unicode_character: unicode_character_to_add_alt, key_position: the_key_position})
-                          print(a_char_alt.ord.to_s << a_char_alt << "\n")
-                        end
-                      end
-                    end
-                  end
                 end
               else
                 print("main or shift\n")
@@ -123,6 +102,11 @@ Dir.entries('.').each do|f|
 
                 print(string_node.ord.to_s << string_node << "\n")
               end
+
+              if mod_mask == '10'.to_i(2)
+                @column_num += 1
+              end
+
             end
 
           end

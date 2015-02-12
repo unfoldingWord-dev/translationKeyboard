@@ -17,6 +17,7 @@
  *= require signin.css
  *= require bootstrap-select.min
  *= require icomoon.css
+ *= require jquery-ui
  */
 
 
@@ -57,10 +58,12 @@ h4 {
 }
 .row {
     margin-bottom: 20px;
+	 
 }
 .row .row {
     margin-top: 10px;
     margin-bottom: 0;
+    	
 }
 body.keyboard > .container,
 body.dashboard > .container{
@@ -69,6 +72,7 @@ body.dashboard > .container{
     background: #fff;
     border-width:1px;
     border-radius: 4px;
+	
 }
 .keyboard-edit-btn {
     margin-top:0.4em;
@@ -103,4 +107,67 @@ hr {
 }
 .edit-key-btn {
     display:none;
+}
+.btn {
+    margin-top: 6px;
+}
+.col-xs-111 {
+    /*width: 20%;*/
+    -moz-box-sizing: border-box;
+    float:right;
+    padding:5px 15px 0 15px;
+}
+
+.button-div {
+    max-width:1086px;
+    /*display: inline-block;
+    width:1170px;*/
+    min-width: 20px;
+    width: auto;
+}
+.samplediv {
+    width: 1px;
+    height: 1px;
+    -moz-box-sizing: border-box;
+    float:left;
+}
+@media (max-width: 430px) {
+	.col-xs-111 {
+	    width: 32%;
+	}
+}
+
+.reg_name {
+   float:left !important;
+   width:120px !important;
+   margin-left:10px;
+   margin-top: 4px;
+}
+
+.update-button {
+   float:left;
+   width:50px;
+   margin-left:10px;
+}
+
+.col-xs-7 {
+   float:left !important;
+}
+
+.col-xs-9 {
+   float:right !important;
+}
+
+.update-btn {
+   float:left;
+   display: inline-block;
+   background-image: #ffffff !important;
+}
+#ui-id-1 {
+z-index:10000;
+}
+
+
+.ui-autocomplete {
+    z-index:100000 !important;
 }

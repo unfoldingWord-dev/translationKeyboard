@@ -18,6 +18,10 @@ class Character < ActiveRecord::Base
     unicode_character.utf8hex.to_s(16)
   end
 
+  def unicode_int_value
+    unicode_character.utf8hex.to_i
+  end
+
   def character_char
     unicode_character.utf8hex.chr
   end

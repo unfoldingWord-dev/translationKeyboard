@@ -4,6 +4,7 @@
   <title>KeyboardApp</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'autocomplete-rails.js' %>
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= controller.controller_name %>">
@@ -55,9 +56,18 @@
         <li>
           <button type="button" class="btn btn-primary navbar-btn create-keyboard" data-toggle="modal" data-target="#key_new_modal">Create New Keyboard</button>
         </li>
+
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
+        <li style="margin:0 1em;">
+          <%= link_to 'Find Unicode Characters', 'http://unicode-table.com/', { target: '_blank', class: '' } %>
+        </li>
+
+        <li>
+	 
+          <%= button_to 'Mobile App', 'https://distantshores.org/translationKeyboard', { target: '_blank', class: 'btn btn-primary navbar-btn' } %>
+        </li>
         <li>
           <%
              require 'digest/md5'
@@ -100,8 +110,7 @@
 <% if user_signed_in? %>
 </div>
 
-<%= render "modals/key_new" %>
-
+<%= render "modals/key_new", :locals => {:get_regions => get_regions, :get_languages => get_languages} %>
 <% end %>
 
 </body>

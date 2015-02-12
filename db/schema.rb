@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141011181745) do
+ActiveRecord::Schema.define(version: 20150211225229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,20 @@ ActiveRecord::Schema.define(version: 20141011181745) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "keyboard_variant_id"
+  end
+
+  create_table "keyboard_countries", force: true do |t|
+    t.string   "cc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "keyboard_languages", force: true do |t|
+    t.string   "ln"
+    t.string   "lc"
+    t.string   "lr"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "keyboard_type_default_key_positions", force: true do |t|
@@ -66,6 +80,16 @@ ActiveRecord::Schema.define(version: 20141011181745) do
     t.string   "iso_language"
   end
 
+  create_table "lang_regions", force: true do |t|
+    t.integer  "keyboardCountry_id"
+    t.integer  "keyboardLanguages_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "lang_regions", ["keyboardCountry_id"], name: "index_lang_regions_on_keyboardCountry_id", using: :btree
+  add_index "lang_regions", ["keyboardLanguages_id"], name: "index_lang_regions_on_keyboardLanguages_id", using: :btree
+
   create_table "unicode_characters", force: true do |t|
     t.string   "englishDesc"
     t.integer  "utf8hex"
@@ -74,18 +98,19 @@ ActiveRecord::Schema.define(version: 20141011181745) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "admin",                  default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -14,16 +14,16 @@
             <div class="panel-group" id="accordion" >
               <div class="panel panel-default">
                 <div class="panel-heading"><h4 class="panel-title"><a href="#collapse_key_information_<%= key_position.id %>" data-toggle="collapse">Key Information</a></h4></div>
-            <div id="collapse_key_information_<%= key_position.id %>" class="panel-collapse collapse">
+                    <div id="collapse_key_information_<%= key_position.id %>" class="panel-collapse collapse">
               <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-1">&nbsp;</div>
-                    <div class="col-xs-6"><b>Row Index:</b> <%= key_position.row_index %></div>
-                    <div class="col-xs-6"><b>Column Index:</b> <%= key_position.column_index %></div>
-                <div class="col-xs-1">&nbsp;</div>
-            </div>
-            </div>
-            </div>
+                    <div class="row">
+                        <div class="col-xs-1">&nbsp;</div>
+                        <div class="col-xs-6"><b>Row Index:</b> <%= key_position.row_index %></div>
+                        <div class="col-xs-6"><b>Column Index:</b> <%= key_position.column_index %></div>
+                        <div class="col-xs-1">&nbsp;</div>
+                    </div>
+                </div>
+             </div>
             </div>
               <% key_position.get_characters_sorted_by_modmask.each.with_index(1) do |character, i| %>
                 <div class="chars">

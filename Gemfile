@@ -59,4 +59,6 @@ gem 'language_list'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
+gem 'sprockets', '2.11.0'
+gem 'rails4-autocomplete'
+gem 'jquery-ui-rails'

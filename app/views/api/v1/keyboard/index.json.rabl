@@ -2,6 +2,8 @@
 
 object false
 
+node(:updated_at) { |m|  @updated_at_epoch }
+
 child @keyboards, :object_root => false do
   attributes :id, :iso_language, :iso_region, :language_name
   attributes :updated_at_epoch => :updated_at
