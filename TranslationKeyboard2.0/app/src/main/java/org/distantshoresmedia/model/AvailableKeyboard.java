@@ -21,6 +21,8 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
     static final private String kUpdatedKey = "updated_at";
 
 
+    public int id;
+
     private String isoLanguage;
 
     public String getIsoLanguage() {
@@ -57,6 +59,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         this.isoLanguage = isoLanguage;
         this.isoRegion = isoRegion;
         this.languageName = language;
+        this.id = id;
     }
 
     public String getObjectAsJSONString(){

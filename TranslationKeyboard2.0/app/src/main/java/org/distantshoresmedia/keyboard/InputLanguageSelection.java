@@ -38,8 +38,10 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.distantshoresmedia.database.KeyboardDataHandler;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
+import org.distantshoresmedia.model.BaseKeyboard;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 public class InputLanguageSelection extends PreferenceActivity {
@@ -155,7 +157,9 @@ public class InputLanguageSelection extends PreferenceActivity {
         for (int i = 0; i < mAvailableLanguages.size(); i++) {
             CheckBoxPreference pref = new CheckBoxPreference(this);
             Locale locale = mAvailableLanguages.get(i).locale;
-            pref.setTitle(mAvailableLanguages.get(i).label +
+            AvailableKeyboard availKey = keyboardsDictionary.get(locale.toString());
+            BaseKeyboard keyboard = KeyboardDatabaseHandler.getKeyboardWithID(Integer.toString(availKey.id));
+            pref.setTitle(keyboard.getKeyboardVariants()[0].getName() +
             		" [" + locale.toString() + "]");
             String fivecode = getCode(locale);
 //            String language = locale.getLanguage();
