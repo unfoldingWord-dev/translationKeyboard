@@ -4,10 +4,45 @@
 
 readyNewKeyboard = function() {
 
-
+    $("#keyboard_name").keyup(function(){
+        $('#keyboard_name').parent().removeClass("has-error")
+        $('#keyboard_name').removeAttr('style');
+        $('#keyboard_name').css('border-color','')
+    });
+    $("#auto-lang").change(function(){
+        $('#auto-lang').css('border-color','')
+        $('#auto-lang').removeAttr('style');
+        $('#auto-lang').parent().removeClass("has-error")
+    });
     $(".new-keyboard-save").click(function(){
+        var lang = $('#auto-lang').val();
+        var keyboard_name = $('#keyboard_name').val();
+        if(keyboard_name.trim() == "") {
+            $('#keyboard_name').val('');
+            $('#keyboard_name').focus();
+            $('#keyboard_name').attr("required", "true");
+            $('#keyboard_name').parent().addClass("has-error")
+            $('#keyboard_name').css('border-color','red')
+            $('#keyboard_name').attr("placeholder", "Enter valid name for keyboard");
+            return false;
+        }
+        if(lang.trim() == "") {
+            $('#keyboard_name').parent().removeClass("has-error")
+            $('#auto-lang').val('');
+            $('#auto-lang').focus();
+            $('#auto-lang').attr("required", "true");
+            $('#auto-lang').css('border-color','red')
+            $('#auto-lang').parent().addClass("has-error")
+            $('#auto-lang').attr("placeholder", "Enter valid language");
+            return false;
+        }
+        $('#keyboard_name').css('border-color','')
+        $('#auto-lang').css('border-color','')
+        $('#keyboard_name').parent().removeClass("has-error")
+        $('#auto-lang').parent().removeClass("has-error")
         $(this).addClass("disabled");
         $("#new_keyboard").submit();
+
     });
 
 

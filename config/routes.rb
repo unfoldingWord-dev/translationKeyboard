@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get 'characters/new'
 
   get 'characters/new_block'
-
+  get 'language/get_reg'
   resources :keyboard do
   get :autocomplete_keyboard_languages_lc, :on => :collection
   get :autocomplete_keyboard_languages_lc_ln, :on => :collection
@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   match '/import_lang_region' => 'keyboard#import_lang_region', :via => [:get]
   match '/save_new_position' => 'keyboard#update_position', :via => [:post]
   match '/save_region_name' => 'language#update_region_name', :via => [:post]
+  match '/get_reg_name' => 'language#get_reg_name', :via => [:post]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

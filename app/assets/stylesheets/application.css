@@ -171,3 +171,7 @@ z-index:10000;
 .ui-autocomplete {
     z-index:100000 !important;
 }
+.ui-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+}
