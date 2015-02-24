@@ -3,7 +3,6 @@ package org.distantshoresmedia.database;
 import android.content.Context;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -122,8 +121,6 @@ public class KeyboardDataHandler {
         getAvailableKeyboardsDictionary(context).put(id, keyboard);
 
         if(getDownloadedKeyboardsDictionary(context).containsKey(id)){
-
-            KeyboardDownloader.getSharedInstance().downloadKeyboard(id);
 
             downloadedKeyboardsDictionary.put(id, keyboard);
             installedKeyboardDictionary.put(id, keyboard);

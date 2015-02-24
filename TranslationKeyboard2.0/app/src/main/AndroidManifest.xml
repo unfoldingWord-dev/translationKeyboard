@@ -40,6 +40,8 @@
 
         </service>
 
+        <service android:name=".UpdateService" />
+
         <activity android:name="org.distantshoresmedia.keyboard.Main" android:label="translationKeyboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

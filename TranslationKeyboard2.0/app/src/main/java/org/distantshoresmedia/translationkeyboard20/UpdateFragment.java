@@ -30,10 +30,6 @@ public class UpdateFragment extends Fragment {
 
     public static UpdateFragment getSharedInstance() {
 
-        if(!KeyboardDownloader.canUseFragment()){
-            return null;
-        }
-
         if(sharedInstance == null){
             sharedInstance = new UpdateFragment();
         }
@@ -170,7 +166,7 @@ public class UpdateFragment extends Fragment {
             this.progressBar.setProgress(progress);
         }
         if(this.statusTextView != null){
-            this.statusTextView.setText(kProgressText + currentText);
+//            this.statusTextView.setText(kProgressText + currentText);
         }
     }
 

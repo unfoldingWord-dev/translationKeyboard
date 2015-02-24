@@ -17,6 +17,7 @@
 package org.distantshoresmedia.keyboard;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -34,17 +35,25 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
+import org.distantshoresmedia.translationkeyboard20.NetWorkUtil;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
+import org.distantshoresmedia.translationkeyboard20.UpdateService;
 
 public class Main extends FragmentActivity implements UpdateFragment.OnFragmentInteractionListener {
+
+    private static Context context;
+    public static Context getAppContext() {
+        return Main.context;
+    }
 
     private final static String MARKET_URI = "market://search?q=pub:\"Klaus Weidner\"";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Main.context = getApplicationContext();
 
         KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
 
@@ -93,7 +102,6 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
 
     private void updateKeyboards() {
 
-        if (KeyboardDownloader.canUseFragment()) {
             UpdateFragment updateFragment = UpdateFragment.getSharedInstance();
 
             if (!updateFragment.isShowing()) {
@@ -107,9 +115,16 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
                 transaction.commit();
                 updateFragment.setProgress(5, "Initializing");
             }
+        if (!NetWorkUtil.isConnected(this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Alert");
+            builder.setMessage("Unable to perform update at this time");
+            builder.setPositiveButton("OK", null);
+            builder.create().show();
+        } else {
+            // to handle new data from network
+            startService(new Intent(this, UpdateService.class));
         }
-            KeyboardDownloader downloader = KeyboardDownloader.getSharedInstance();
-            downloader.updateKeyboards(this.getApplicationContext());
     }
 
     @Override
@@ -117,13 +132,11 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
 
         System.out.println("Fragment Closed");
 
-        if(KeyboardDownloader.canUseFragment()){
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
             transaction.remove(UpdateFragment.getSharedInstance());
             transaction.commit();
-        }
     }
 }
 

@@ -17,7 +17,7 @@ import java.io.InputStream;
  */
 public class FileLoader {
 
-    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
+    private static final String TAG = "FileLoader";
 
 
 

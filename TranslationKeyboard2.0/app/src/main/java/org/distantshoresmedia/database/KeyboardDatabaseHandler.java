@@ -8,7 +8,6 @@ import android.util.Log;
 import org.distantshoresmedia.keyboard.KeyboardSwitcher;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
-import org.distantshoresmedia.translationkeyboard20.KeyboardDownloader;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +32,7 @@ import java.util.Map;
  */
 public class KeyboardDatabaseHandler {
 
-    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
+    private static final String TAG = "KeyboardDatabaseHandler";
 
     public static String lastUpdatedKeyboard = null;
     private static Context currentContext;
@@ -107,11 +106,9 @@ public class KeyboardDatabaseHandler {
         return KeyboardDataHandler.getInstalledKeyboardsArray(currentContext);
     }
 
-    public static boolean updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
+    public static ArrayList<String> updateKeyboardsDatabaseWithJSON(Context context, String newKeyboardsJson){
 
-        if(KeyboardDownloader.canUseFragment()) {
-            UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
-        }
+        UpdateFragment.getSharedInstance().setProgress(20, "Comparing Updates");
         Log.i(TAG, "Is updating available keyboards.");
 
         double currentUpdatedDate = KeyboardFileLoader.getUpdatedDate(context);
@@ -120,16 +117,12 @@ public class KeyboardDatabaseHandler {
         boolean isUpdated = Math.round(currentUpdatedDate) >= Math.round(newUpdatedDate);
         if(isUpdated){
             Log.i(TAG, "keyboards up to date");
-            if(KeyboardDownloader.canUseFragment()) {
-                UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
-            }
-            return true;
+            UpdateFragment.getSharedInstance().endProgress(true, "Up To Date");
+            return null;
         }
         else {
             Log.i(TAG, "Keyboards will be updated");
-            if(KeyboardDownloader.canUseFragment()) {
-                UpdateFragment.getSharedInstance().setProgress(30, "Updating");
-            }
+            UpdateFragment.getSharedInstance().setProgress(30, "Updating");
             return updateKeyboards(context, newKeyboardsJson);
         }
     }
@@ -154,12 +147,10 @@ private static void didInstallKeyboard() {
         KeyboardDataHandler.invalidateLoadedKeyboardsAvailable();
 
         KeyboardSwitcher.getInstance().makeKeyboards(true);
-        if(KeyboardDownloader.canUseFragment()) {
         UpdateFragment.getSharedInstance().endProgress(true, "Updated");
         }
-        }
 
-private static boolean updateKeyboards(Context context, String json){
+private static ArrayList<String> updateKeyboards(Context context, String json){
 
         KeyboardDataHandler.updateAvailableKeyboards(context, json);
 
@@ -210,26 +201,24 @@ private static boolean updateKeyboards(Context context, String json){
 
         KeyboardDataHandler.updateKeyboardAvailability(context);
 
-        if(!updateIds.isEmpty()){
+//        if(!updateIds.isEmpty()){
+//
+//            for(String id : updateIds){
+//
+//                Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(id).getId());
+////                KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(id).getId()));
+//            }
+//        }
 
-            for(String id : updateIds){
 
-                Log.i(TAG, "Will Download/update keyboard id: " + availableKeyboards.get(id).getId());
-                KeyboardDownloader.getSharedInstance().downloadKeyboard(Long.toString(availableKeyboards.get(id).getId()));
-            }
-        }
-
-
-        return true;
+        return updateIds;
         }
 
 private static void finishUpdate(){
 
         KeyboardSwitcher.getInstance().makeKeyboards(true);
 
-        if(KeyboardDownloader.canUseFragment()) {
             UpdateFragment.getSharedInstance().endProgress(true, "Finished Updating");
-        }
     }
     //endregion
 
