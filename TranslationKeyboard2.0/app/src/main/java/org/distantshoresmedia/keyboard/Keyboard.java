@@ -312,7 +312,7 @@ public class Keyboard {
         /** Text to output when pressed. This can be multiple characters, like ".com" */
         public CharSequence text;
         /** Popup characters */
-        public CharSequence popupCharacters;
+        public CharSequence[] popupCharacters = null;
         public boolean popupReversed;
         public boolean isCursor;
         public String hint; // Set by BaseKeyboardView
@@ -452,8 +452,8 @@ public class Keyboard {
                 iconPreview.setBounds(0, 0, iconPreview.getIntrinsicWidth(),
                         iconPreview.getIntrinsicHeight());
             }
-            popupCharacters = a.getText(
-                    R.styleable.Keyboard_Key_popupCharacters);
+//            popupCharacters = new CharSequence[]{ a.getText(
+//                    R.styleable.Keyboard_Key_popupCharacters)};
             popupResId = a.getResourceId(
                     R.styleable.Keyboard_Key_popupKeyboard, 0);
             repeatable = a.getBoolean(
@@ -539,16 +539,27 @@ public class Keyboard {
             this.text = stringFromIntegers(valuesList.get(0));
             this.shiftLabel = stringFromIntegers(valuesList.get(1));
 
-            String popChars = "";
+            ArrayList<String> popStrings = new ArrayList<String>();
             if(position.getCharacters().length > 2){
 
                 for(KeyCharacter character : characters){
                     if(character.getModmask() == 2) {
-                        popChars += stringFromIntegers(character.getUnicodeAsIntegerObjects());
+                        popStrings.add(stringFromIntegers(character.getUnicodeAsIntegerObjects()));
                     }
                 }
 
-                this.popupCharacters = popChars;
+                CharSequence[] sequence = new CharSequence[popStrings.size()];
+                for(int i = 0; i < popStrings.size(); i++){
+                    sequence[i] = popStrings.get(i);
+                }
+
+                this.popupCharacters = sequence;
+                if(this.popupCharacters[0] == null){
+                    this.popupCharacters = null;
+                }
+            }
+            else{
+                this.popupCharacters = null;
             }
         }
 
@@ -675,17 +686,17 @@ public class Keyboard {
             if (shiftChar == mainChar) shiftChar = 0;
             if (capsChar == shiftChar || capsChar == mainChar) capsChar = 0;
 
-            int popupLen = (popupCharacters == null) ? 0 : popupCharacters.length();
+            int popupLen = (popupCharacters == null) ? 0 : popupCharacters.length;
 
             for (int i = 0; i < popupLen; ++i) {
-                char c = popupCharacters.charAt(i);
-                if (isShifted || isShiftCaps) {
-                    String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
-                    if (upper.length() == 1) c = upper.charAt(0);
+                char c = popupCharacters[i].charAt(0);
+//                if (isShifted || isShiftCaps) {
+//                    String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
+//                    if (upper.length() == 1) c = upper.charAt(0);
+//                }
+                if (c != mainChar && c != shiftChar && c != capsChar){
+                    sequenceList.add(popupCharacters[i]);
                 }
-
-                if (c == mainChar || c == shiftChar || c == capsChar) continue;
-                sequenceList.add(String.valueOf(c));
             }
 
             if (addExtra) {
@@ -744,10 +755,10 @@ public class Keyboard {
             if (shiftChar == mainChar) shiftChar = 0;
             if (capsChar == shiftChar || capsChar == mainChar) capsChar = 0;
 
-            int popupLen = (popupCharacters == null) ? 0 : popupCharacters.length();
+            int popupLen = (popupCharacters == null || popupCharacters[0] == null) ? 0 : popupCharacters.length;
             StringBuilder popup = new StringBuilder(popupLen);
             for (int i = 0; i < popupLen; ++i) {
-                char c = popupCharacters.charAt(i);
+                char c = popupCharacters[i].charAt(0);
                 if (isShifted || isShiftCaps) {
                     String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
                     if (upper.length() == 1) c = upper.charAt(0);
@@ -1048,7 +1059,7 @@ public class Keyboard {
         mUseExtension = LatinIME.sKeyboardSettings.useExtension;
         loadKeyboard(context, context.getResources().getXml(xmlLayoutResId), keyVariant);
         setEdgeFlags();
-        fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
+//        fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
     }
 
     private Keyboard(Context context, int defaultHeight, int layoutTemplateResId,
@@ -1204,8 +1215,8 @@ public class Keyboard {
 
         for (Key key : mKeys) {
             if (key.popupCharacters == null) continue;
-            int popupLen = key.popupCharacters.length();
-            if (popupLen == 0) {
+            int popupLen = key.popupCharacters.length;
+            if (popupLen == 0 || key.popupCharacters[0] == null) {
                 continue;
             }
             if (key.x >= mTotalWidth / 2) {
@@ -1215,13 +1226,16 @@ public class Keyboard {
             // Uppercase the alt chars if the main key is uppercase
             boolean needUpcase = key.label != null && key.label.length() == 1 && Character.isUpperCase(key.label.charAt(0));
             if (needUpcase) {
-                key.popupCharacters = key.popupCharacters.toString().toUpperCase();
-                popupLen = key.popupCharacters.length();
+                for(int i = 0; i < key.popupCharacters.length; i++) {
+                    key.popupCharacters[i] = key.popupCharacters[i].toString().toUpperCase();
+                }
+                popupLen = key.popupCharacters.length;
             }
 
             StringBuilder newPopup = new StringBuilder(popupLen);
+
             for (int i = 0; i < popupLen; ++i) {
-                char c = key.popupCharacters.charAt(i);
+                char c = key.popupCharacters[i].charAt(0);
 
                 if (Character.isDigit(c) && mainKeys.contains(c)) continue;  // already present elsewhere
 
@@ -1231,8 +1245,16 @@ public class Keyboard {
                 newPopup.append(c);
             }
             //Log.i("PCKeyboard", "popup for " + key.label + " '" + key.popupCharacters + "' => '"+ newPopup + "' length " + newPopup.length());
+            String popupString = newPopup.toString();
+            CharSequence[] sequences = new CharSequence[popupString.length()];
 
-            key.popupCharacters = newPopup.toString();
+            for(int i = 0; i < popupString.length(); i++){
+                sequences[i] = popupString.substring(i, i + 1);
+            }
+
+
+
+            key.popupCharacters = sequences;
         }
     }
 

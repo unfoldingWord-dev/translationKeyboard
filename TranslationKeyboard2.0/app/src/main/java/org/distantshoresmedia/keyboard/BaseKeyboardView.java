@@ -1523,16 +1523,18 @@ public class BaseKeyboardView extends View implements PointerTracker.UIProxy {
     }
 
     /* package */ static boolean isNumberAtLeftmostPopupChar(Key key) {
-        if (key.popupCharacters != null && key.popupCharacters.length() > 0
-                && isAsciiDigit(key.popupCharacters.charAt(0))) {
-            return true;
+        if (key.popupCharacters != null && key.popupCharacters[0] != null){
+            if(key.popupCharacters.length > 0 && isAsciiDigit(key.popupCharacters[0].charAt(0))){
+                return true;
+            }
+
         }
         return false;
     }
 
     /* package */ static boolean isNumberAtRightmostPopupChar(Key key) {
-        if (key.popupCharacters != null && key.popupCharacters.length() > 0
-                && isAsciiDigit(key.popupCharacters.charAt(key.popupCharacters.length() - 1))) {
+        if (key.popupCharacters != null && key.popupCharacters[0] != null && key.popupCharacters.length > 0
+                && isAsciiDigit(key.popupCharacters[key.popupCharacters.length - 1].charAt(0))) {
             return true;
         }
         return false;

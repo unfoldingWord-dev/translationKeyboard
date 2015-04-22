@@ -378,7 +378,7 @@ public class TKKeyboard extends Keyboard {
         } else {
             key.modifier = true;
             if (key.label != null) {
-                key.popupCharacters = (key.popupCharacters == null) ?
+                key.popupCharacters[0] = (key.popupCharacters == null) ?
                         key.label + key.shiftLabel.toString() :
                             key.label + key.shiftLabel.toString() + key.popupCharacters.toString();
             }
