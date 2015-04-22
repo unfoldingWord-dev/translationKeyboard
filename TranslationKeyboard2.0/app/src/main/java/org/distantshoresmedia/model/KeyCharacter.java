@@ -3,6 +3,7 @@
 
 package org.distantshoresmedia.model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,14 +52,27 @@ public class KeyCharacter {
         this.modMask = modMask;
     }
 
+    public Integer[] getUnicodeAsIntegerObjects(){
+        Integer[] integers = new Integer[unicodeValue.length];
+
+        for(int i = 0; i < unicodeValue.length; i++){
+            integers[i] = unicodeValue[i];
+        }
+        return integers;
+    }
+
 
     static public KeyCharacter getCharacterFromJsonObject(JSONObject jsonObj){
 
         try {
             int mask = jsonObj.getInt(kModeMaskKey);
-            int[] hexes = {jsonObj.getInt(kUnicodeValue)};
+            JSONArray jsonHexes = jsonObj.getJSONArray(kUnicodeValue);
+            int[] hexes = new int[jsonHexes.length()];
 
-//            String[] parts = hexes.split(";");
+            for(int i = 0; i < jsonHexes.length(); i++){
+                hexes[i] = (Integer) jsonHexes.get(i);
+            }
+
             KeyCharacter newChar = new KeyCharacter(mask, hexes);
             return newChar;
         }

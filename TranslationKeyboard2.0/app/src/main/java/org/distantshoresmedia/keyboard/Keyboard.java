@@ -34,7 +34,9 @@ import android.util.Xml;
 import android.util.DisplayMetrics;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -516,30 +518,59 @@ public class Keyboard {
         public void setCharactersTo(KeyPosition position){
 
             KeyCharacter[] characters = position.getCharacters();
-            int[] characterValues = new int[characters.length];
 
-            for(KeyCharacter character : characters){
-                characterValues[character.getModmask()] = character.getUnicodeValue()[0];
+            ArrayList<Integer[]> valuesList = new ArrayList<Integer[]>();
+
+            for(int i = 0; i < characters.length; i++){
+                valuesList.add(new Integer[]{-1});
             }
 
-            this.codes = new int[] {characterValues[0]};
-            this.label = Character.toString((char) characterValues[0]);
-            this.text = Character.toString((char) characterValues[0]);
-            this.shiftLabel = Character.toString((char) characterValues[1]);
+            try {
+                for (KeyCharacter character : characters) {
+                    valuesList.add(character.getModmask(), character.getUnicodeAsIntegerObjects());
+                }
+            }
+            catch(IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+
+            this.codes = intsFromInteger(valuesList.get(0));
+            this.label = stringFromIntegers(valuesList.get(0));
+            this.text = stringFromIntegers(valuesList.get(0));
+            this.shiftLabel = stringFromIntegers(valuesList.get(1));
 
             String popChars = "";
             if(position.getCharacters().length > 2){
 
                 for(KeyCharacter character : characters){
                     if(character.getModmask() == 2) {
-                        popChars += Character.toString((char) character.getUnicodeValue()[0]);
+                        popChars += stringFromIntegers(character.getUnicodeAsIntegerObjects());
                     }
                 }
 
                 this.popupCharacters = popChars;
             }
-
         }
+
+        private String stringFromIntegers(Integer[] integers){
+            String parsedString = "";
+
+            for(int i = 0; i < integers.length; i++){
+                parsedString += Character.toString((char) integers[i].intValue());
+            }
+            return parsedString;
+        }
+
+
+        private int[] intsFromInteger(Integer[] integers){
+
+            int[] parsedIntegers = new int[integers.length];
+            for(int i = 0; i < integers.length; i++){
+                parsedIntegers[i] = integers[i];
+            }
+            return parsedIntegers;
+        }
+
 
         public boolean isDistinctCaps() {
             return isDistinctUppercase && keyboard.isShiftCaps();
@@ -567,13 +598,45 @@ public class Keyboard {
             }
         }
 
+
+
         public int getPrimaryCode() {
             return getPrimaryCode(keyboard.isShiftCaps(), keyboard.isShifted(isSimpleUppercase));
+        }
+
+        public CharSequence getPrimarySequence(boolean isShiftCaps, boolean isShifted) {
+            if (isDistinctUppercase || isShiftCaps) {
+                return shiftLabel;
+            }
+            //Log.i(TAG, "getPrimaryCode(), shifted=" + shifted);
+            if (isShifted && shiftLabel != null) {
+                if (shiftLabel.charAt(0) == DEAD_KEY_PLACEHOLDER && shiftLabel.length() >= 2) {
+                    return shiftLabel.subSequence(1, 2);
+                } else {
+                    return shiftLabel;
+                }
+            } else {
+                return label;
+            }
+        }
+
+        public CharSequence getPrimarySequence(){
+            return getPrimarySequence(keyboard.isShiftCaps(), keyboard.isShifted(isSimpleUppercase));
         }
 
         public boolean isDeadKey() {
             if (codes == null || codes.length < 1) return false;
             return Character.getType(codes[0]) == Character.NON_SPACING_MARK;
+        }
+
+        public int[] getIntArrayFromCharSequence(CharSequence str){
+
+            int[] charArray = new int[str.length()];
+
+            for(int i = 0; i < str.length(); i++){
+                charArray[i] = str.charAt(i);
+            }
+            return charArray;
         }
 
         public int[] getFromString(CharSequence str) {
@@ -600,6 +663,76 @@ public class Keyboard {
             } else {
                 return label != null ? label.toString() : null;
             }
+        }
+
+        private CharSequence[] getPopupKeyboardContentSequences(boolean isShiftCaps, boolean isShifted, boolean addExtra) {
+            ArrayList<CharSequence> sequenceList = new ArrayList<CharSequence>();
+            int mainChar = getPrimaryCode(false, false);
+            int shiftChar = getPrimaryCode(false, true);
+            int capsChar = getPrimaryCode(true, true);
+
+            // Remove duplicates
+            if (shiftChar == mainChar) shiftChar = 0;
+            if (capsChar == shiftChar || capsChar == mainChar) capsChar = 0;
+
+            int popupLen = (popupCharacters == null) ? 0 : popupCharacters.length();
+
+            for (int i = 0; i < popupLen; ++i) {
+                char c = popupCharacters.charAt(i);
+                if (isShifted || isShiftCaps) {
+                    String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
+                    if (upper.length() == 1) c = upper.charAt(0);
+                }
+
+                if (c == mainChar || c == shiftChar || c == capsChar) continue;
+                sequenceList.add(String.valueOf(c));
+            }
+
+            if (addExtra) {
+                int flags = LatinIME.sKeyboardSettings.popupKeyboardFlags;
+                if ((flags & POPUP_ADD_SELF) != 0) {
+                    // if shifted, add unshifted key to extra, and vice versa
+                    if (isDistinctUppercase && isShiftCaps) {
+                        if (capsChar > 0) { sequenceList.add(String.valueOf((char) capsChar)); capsChar = 0; }
+                    } else if (isShifted) {
+                        if (shiftChar > 0) { sequenceList.add(String.valueOf((char) shiftChar)); shiftChar = 0; }
+                    } else {
+                        if (mainChar > 0) { sequenceList.add(String.valueOf((char) mainChar)); mainChar = 0; }
+                    }
+                }
+
+                if ((flags & POPUP_ADD_CASE) != 0) {
+                    // if shifted, add unshifted key to popup, and vice versa
+                    if (isDistinctUppercase && isShiftCaps) {
+                        if (mainChar > 0) { sequenceList.add(String.valueOf((char) mainChar)); mainChar = 0; }
+                        if (shiftChar > 0) { sequenceList.add(String.valueOf((char) shiftChar)); shiftChar = 0; }
+                    } else if (isShifted) {
+                        if (mainChar > 0) { sequenceList.add(String.valueOf((char) mainChar)); mainChar = 0; }
+                        if (capsChar > 0) { sequenceList.add(String.valueOf((char) capsChar)); capsChar = 0; }
+                    } else {
+                        if (shiftChar > 0) { sequenceList.add(String.valueOf((char) shiftChar)); shiftChar = 0; }
+                        if (capsChar > 0) { sequenceList.add(String.valueOf((char) capsChar)); capsChar = 0; }
+                    }
+                }
+
+                if (!isSimpleUppercase && (flags & POPUP_ADD_SHIFT) != 0) {
+                    // if shifted, add unshifted key to popup, and vice versa
+                    if (isShifted) {
+                        if (mainChar > 0) { sequenceList.add(label); mainChar = 0; }
+                    } else {
+                        if (shiftChar > 0) { sequenceList.add(shiftLabel); shiftChar = 0; }
+                    }
+                }
+            }
+
+            CharSequence[] sequences = new CharSequence[sequenceList.size()];
+
+            for(int i = 0; i < sequenceList.size(); i++){
+                sequences[i] = sequenceList.get(i);
+            }
+
+
+            return sequences;
         }
 
         private String getPopupKeyboardContent(boolean isShiftCaps, boolean isShifted, boolean addExtra) {
@@ -679,9 +812,9 @@ public class Keyboard {
 
             if ((LatinIME.sKeyboardSettings.popupKeyboardFlags & POPUP_DISABLE) != 0) return null;
 
-            String popup = getPopupKeyboardContent(keyboard.isShiftCaps(), keyboard.isShifted(isSimpleUppercase), true);
+            CharSequence[] popup = getPopupKeyboardContentSequences(keyboard.isShiftCaps(), keyboard.isShifted(isSimpleUppercase), true);
             //Log.i(TAG, "getPopupKeyboard: popup='" + popup + "' for " + this);
-            if (popup.length() > 0) {
+            if (popup.length > 0) {
                 int resId = popupResId;
                 if (resId == 0) resId = R.xml.kbd_popup_template;
                 return new Keyboard(context, keyboard.mDefaultHeight, resId, popup, popupReversed, -1, padding);
@@ -916,6 +1049,49 @@ public class Keyboard {
         loadKeyboard(context, context.getResources().getXml(xmlLayoutResId), keyVariant);
         setEdgeFlags();
         fixAltChars(LatinIME.sKeyboardSettings.inputLocale);
+    }
+
+    private Keyboard(Context context, int defaultHeight, int layoutTemplateResId,
+                     CharSequence[] characters, boolean reversed, int columns, int horizontalPadding) {
+        this(context, defaultHeight, layoutTemplateResId);
+        int x = 0;
+        int y = 0;
+        int column = 0;
+        mTotalWidth = 0;
+
+        Row row = new Row(this);
+        row.defaultHeight = mDefaultHeight;
+        row.defaultWidth = mDefaultWidth;
+        row.defaultHorizontalGap = mDefaultHorizontalGap;
+        row.verticalGap = mDefaultVerticalGap;
+        final int maxColumns = columns == -1 ? Integer.MAX_VALUE : columns;
+        mLayoutRows = 1;
+
+        for (int i = 0; i < characters.length; i++) {
+            CharSequence c = characters[i];
+            if (column >= maxColumns
+                    || x + mDefaultWidth + horizontalPadding > mDisplayWidth) {
+                x = 0;
+                y += mDefaultVerticalGap + mDefaultHeight;
+                column = 0;
+                ++mLayoutRows;
+            }
+            final Key key = new Key(row);
+            key.x = x;
+            key.realX = x;
+            key.y = y;
+            key.label = c;
+            key.codes = key.getIntArrayFromCharSequence(key.label);
+            column++;
+            x += key.width + key.gap;
+            mKeys.add(key);
+            if (x > mTotalWidth) {
+                mTotalWidth = x;
+            }
+        }
+        mTotalHeight = y + mDefaultHeight;
+        mLayoutColumns = columns == -1 ? column : maxColumns;
+        setEdgeFlags();
     }
 
     /**

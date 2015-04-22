@@ -56,12 +56,12 @@
     </Row>
     
     <Row>
-        <Key 	android:codes="@integer/key_shift" 
-				android:keyIcon="@drawable/sym_keyboard_shift" 
+        <Key 	android:codes="@integer/key_shift"
+				android:keyIcon="@drawable/sym_keyboard_shift"
 				android:iconPreview="@drawable/sym_keyboard_feedback_shift"
-            	android:keyWidth="10%p" 
+            	android:keyWidth="10%p"
 				android:isModifier="true"
-            	android:isSticky="true" 
+            	android:isSticky="true"
 				android:keyEdgeFlags="left"/>
 				
 		<Key android:codes="1" android:keyLabel="1" />
@@ -80,23 +80,17 @@
     
     <Row
         android:rowEdgeFlags="bottom">
-        <Key
-            android:codes="@integer/key_symbol"
-            android:keyLabel="@string/label_symbol_key"
-            android:keyWidth="20%p"
-            android:isModifier="true"
-            android:keyEdgeFlags="left" />
 	    <Key
 	        android:codes="@integer/key_settings"
    			android:keyIcon="@drawable/sym_keyboard_settings"
 	        android:iconPreview="@drawable/sym_keyboard_feedback_settings"
-			android:keyWidth="10%p"
+			android:keyWidth="20%p"
 	        android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
             android:keyIcon="@drawable/sym_keyboard_space"
             android:iconPreview="@drawable/sym_keyboard_feedback_space"
-            android:keyWidth="40%p"
+            android:keyWidth="50%p"
             android:isModifier="true" />
         <Key
             android:keyLabel="."

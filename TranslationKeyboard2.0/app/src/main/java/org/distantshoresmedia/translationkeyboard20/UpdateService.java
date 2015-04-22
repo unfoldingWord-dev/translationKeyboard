@@ -40,7 +40,7 @@ public class UpdateService extends Service {
     public static final String BROAD_CAST_DOWN_ERROR = "org.distantshoresmedia.translationkeyboard20.DOWNLOAD_WHILE_ERROR";
 
     static final String kBaseURL = "http://remote.actsmedia.com/api/";
-    static final String kVersionUrlTag = "v1/";
+    static final String kVersionUrlTag = "v2/";
     static final String kKeyboardUrlTag = "keyboard/";
 
     static final String kIdTag = "id";

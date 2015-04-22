@@ -561,7 +561,7 @@ public class PointerTracker {
                 // Multi-tap
                 if (mInMultiTap) {
                     if (mTapCount != -1) {
-                        mListener.onKey(Keyboard.KEYCODE_DELETE, KEY_DELETE, x, y);
+//                        mListener.onKey(Keyboard.KEYCODE_DELETE, KEY_DELETE, x, y);
                     } else {
                         mTapCount = 0;
                     }
@@ -577,7 +577,14 @@ public class PointerTracker {
                     codes[0] = code;
                 }
                 if (listener != null) {
-                    listener.onKey(code, codes, x, y);
+
+                    CharSequence sequence = key.getPrimarySequence();
+                    if(sequence != null && sequence.length() > 1 && code > 0){
+                        listener.onText(sequence);
+                    }
+                    else {
+                        listener.onKey(code, codes, x, y);
+                    }
                     listener.onRelease(code);
                 }
 //            }

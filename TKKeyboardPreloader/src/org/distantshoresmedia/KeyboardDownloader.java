@@ -11,10 +11,10 @@ import org.json.*;
 public class KeyboardDownloader {
 
     static final String kBaseURL = "http://remote.actsmedia.com/api/";
-    static final String kVersionUrlTag = "v1/";
+    static final String kVersionUrlTag = "v2/";
     static final String kKeyboardUrlTag = "keyboard/";
     static final private String kKeyboardKey = "keyboards";
-    static final String kDirName = "assets";
+    static final String kDirName = "../assets";
 
     static final String kIdTag = "id";
     
