@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150211225229) do
+ActiveRecord::Schema.define(version: 20150421124918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "character_unicode_mappings", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "unicode_character_id"
+    t.integer  "order"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "character_unicode_mappings", ["character_id"], name: "index_character_unicode_mappings_on_character_id", using: :btree
+  add_index "character_unicode_mappings", ["unicode_character_id"], name: "index_character_unicode_mappings_on_unicode_character_id", using: :btree
 
   create_table "characters", force: true do |t|
     t.integer  "modmask"

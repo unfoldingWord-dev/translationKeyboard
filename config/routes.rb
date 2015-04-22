@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   match '/save_new_position' => 'keyboard#update_position', :via => [:post]
   match '/save_region_name' => 'language#update_region_name', :via => [:post]
   match '/get_reg_name' => 'language#get_reg_name', :via => [:post]
+  match '/update_keyboard_name' => 'keyboard#update_keyboard_name', :via => [:post]
+  match '/load_all_keyboard' => 'keyboard#load_all_keyboard', :via => [:get]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -45,6 +47,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :keyboard
+    end
+    namespace :v2 do
       resources :keyboard
     end
   end

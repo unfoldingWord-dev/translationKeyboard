@@ -2,6 +2,72 @@
  * Created by simeon on 10/10/14.
  */
 
+
+$(function() {
+    var elementText = $(".js-example-responsive").attr('data-initvalue');
+    var arr = [];
+    if(elementText != undefined){
+        var keyboard = JSON.parse(elementText);
+        for(var i = 0, len = keyboard .length; i < len; i++) {
+            arr.push( {"id" : keyboard[i].id,"text": keyboard[i].name});
+        }
+    }
+
+    //console.log(arr);
+    $('.edit').editable('/../update_keyboard_name', {
+        data    : function(string) {return string.replace('<button class="glyphicon glyphicon-edit "></button>','');},
+        type      : 'text',
+        cancel    : ' <button class="glyphicon glyphicon-remove editbtn btnsuccess" ></button>',
+        submit    : ' <button class="glyphicon glyphicon-ok editbtn " ></button>',
+        style      : "display: inline",
+        method    : 'post',
+        tooltip   : 'Click to edit...',
+        callback: function(value) {
+            $(this).html(value+'<button class="glyphicon glyphicon-edit "></button>');
+        }
+    });
+
+    $(".js-example-responsive").select2({
+        placeholder: "Select a keyboard",
+        data: arr
+    });
+
+    $('#auto-lang').autocomplete({
+        minLength: 2,
+        source: $('#auto-lang').data('autocomplete-source'),
+        response: function(event, ui) {
+            // ui.content is the array that's about to be sent to the response callback.
+            if (ui.content.length === 0) {
+                $('#auto-lang').val('');
+                $('#auto-lang').focus();
+                $('#auto-lang').attr("placeholder", "Not a valid language");
+            }
+        },
+        select: function(event, ui) {
+            $('#auto-lang').removeAttr('style');
+            var language = ui.item.value;
+            var code = language.split('-');
+            $('#keyboard_iso_language').val(code[0]);
+            $.ajax({
+                type: "POST",
+                url: "/get_reg_name",
+                data: {lang: code[0]},
+                success: function(response) {
+                    //console.log(response.region_name);
+                    if(response.region_name != 'no_region'){
+                        $('#auto-region').val(response.region_name);
+                        var reg = response.region_name.split('-');
+                        $('#keyboard_iso_region').val(reg[0]);
+                    }else {
+                        $('#auto-region').val('No Region');
+                    }
+                }
+            });
+        }
+    })
+
+});
+
 readyNewKeyboard = function() {
 
     $("#keyboard_name").keyup(function(){

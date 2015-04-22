@@ -13,31 +13,53 @@ class KeyboardController < ApplicationController
 
   def create
 
+
       if Keyboard.where(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region]).count < 1
         new_keyboard = Keyboard.create(keyboard_params)
       else
         new_keyboard = Keyboard.find_by(iso_language: keyboard_params[:iso_language],iso_region: keyboard_params[:iso_region])
       end
-      the_keyboard_type = KeyboardType.find(params[:keyboard_type_id])
+       if params[:load_another_keyboard].blank?
+         the_keyboard_type = KeyboardType.find(params[:keyboard_type_id])
+       else
+        the_keyboard_variant =  Keyboard.find(params[:load_another_keyboard]).keyboard_variants
+        the_keyboard_type = KeyboardType.find(the_keyboard_variant.first.keyboard_type_id)
+       end
       new_keyboard_variant = KeyboardVariant.create([{keyboard: new_keyboard, keyboard_type: the_keyboard_type,
-                                                      name: new_keyboard.name + ' ' + the_keyboard_type.name }])
+                                                     name: new_keyboard.name + ' ' + the_keyboard_type.name }])
+      if params[:load_another_keyboard].blank?
 
-      the_keyboard_type.keyboard_type_default_key_positions.each do |default_key_pos|
-        increment = 0
-        until increment >= default_key_pos.col_count do
-          new_key_pos = KeyPosition.create([{row_index: default_key_pos.row_index, column_index:increment, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
-          unicode_char = UnicodeCharacter.find_or_create_by(utf8hex:'20'.hex)
-          new_characters = Character.create([{modmask: '0'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first},
-                                             {modmask: '1'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first}])
-          increment += 1
+        the_keyboard_type.keyboard_type_default_key_positions.each do |default_key_pos|
+          increment = 0
+          until increment >= default_key_pos.col_count do
+            new_key_pos = KeyPosition.create([{row_index: default_key_pos.row_index, column_index:increment, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
+            unicode_char = UnicodeCharacter.find_or_create_by(utf8hex:'20'.hex)
+            new_characters = Character.create([{modmask: '0'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first},
+                                               {modmask: '1'.to_i(2), sortnumber: 1, unicode_character:unicode_char, key_position:new_key_pos.first}])
+            increment += 1
+          end
+
+        end
+      else
+
+        @existing_key_positions = KeyPosition.where(:keyboard_variant_id => the_keyboard_variant.first.id)
+        @existing_key_positions.each do |key_pos|
+          new_key_pos = KeyPosition.create([{row_index: key_pos.row_index, column_index: key_pos.column_index, percent_width:1, keyboard_variant: new_keyboard_variant.first}])
+          #@keyboard_characters = Character.where(:key_position_id => key_pos.id)
+          @keyboard_characters = key_pos.characters
+          @keyboard_characters.each do |key_char|
+            Character.create([{modmask: key_char.modmask, sortnumber: 1, unicode_character_id: key_char.unicode_character_id, key_position:new_key_pos.first}])
+          end
         end
 
       end
-    respond_to do |format|
-      format.html #update.html.erb
-      format.json { render json: new_keyboard, status: :created, location: new_keyboard_variant}
-      format.js {render :json => new_keyboard_variant}
-    end
+
+      #render plain: @existing_key_positions.first.characters.last.unicode_character_id
+      respond_to do |format|
+        format.html #update.html.erb
+        format.json { render json: new_keyboard, status: :created, location: new_keyboard_variant}
+        format.js {render :json => new_keyboard_variant}
+      end
 
    end
 
@@ -45,6 +67,18 @@ class KeyboardController < ApplicationController
 
   def edit
   
+  end
+
+  def update_keyboard_name
+    keyboard_id = params[:id]
+    name = params[:value]
+    @result = Keyboard.update(keyboard_id, :name => name)
+    @keyboard_variants = Keyboard.find(@result.id).keyboard_variants
+    @keyboard_variants.each do |variant|
+      variant_name = variant.keyboard_type.name
+      variant.update(:name => name )
+    end
+    render plain: name
   end
   def variant
     get_all_keyboards
@@ -171,6 +205,14 @@ class KeyboardController < ApplicationController
     response = true
     respond_to do |format|
       format.json {render :json => response}
+    end
+  end
+
+  def load_all_keyboard
+    @keyboards = Keyboard.select('id, name')
+    respond_to do |format|
+      format.html
+      format.json { render json: @keyboards.where('name like ?', "%#{params[:term]}%") }
     end
   end
 

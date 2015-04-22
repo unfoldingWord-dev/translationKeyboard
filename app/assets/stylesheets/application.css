@@ -175,3 +175,24 @@ z-index:10000;
     max-height: 300px;
     overflow-y: auto;
 }
+.edit_keyboard_name {
+    display: inline-block;
+    width: 250px;
+    height: 21px;
+}
+
+.refer_keyboard {
+    width: 268px;
+}
+
+.editbtn {
+width: 25px;
+}
+
+.glyphicon-ok {
+    color: green;
+}
+
+.glyphicon-remove {
+    color: brown;
+}

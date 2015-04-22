@@ -78,4 +78,23 @@ class Keyboard < ActiveRecord::Base
     c
 	#country
   end
+
+  def self.move_to_new_structure (keyboard_id)
+    @keyboard = Keyboard.find(keyboard_id)
+    @selected_keyboard_variant = @keyboard.keyboard_variants
+    @selected_keyboard_variant.each do |variant|
+      @key_positions = KeyPosition.where(keyboard_variant: variant).order(:row_index, column_index: :asc)
+      @key_positions.each do |a_key_position|
+        @characters = a_key_position.characters
+        @characters.each do |character|
+          character_unicode = character.character_unicode_mapping
+          if character_unicode
+            character_unicode.each{|char_unicode| char_unicode.destroy}
+          end
+          CharacterUnicodeMapping.create([{character_id: character.id, unicode_character_id: character.unicode_character_id, order: 1}])
+        end
+      end
+    end
+    puts 'migration completed'
+  end
 end

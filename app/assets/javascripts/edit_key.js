@@ -23,6 +23,9 @@ readyEditKey = function() {
             addBtn.parent().parent().parent().find(".single-char").on('input', singleCharKeyUp);
             addBtn.parent().parent().parent().find(".single-utf8hex").on('input', singleUtf8KeyUp);
             addBtn.parent().parent().parent().find(".delete-key-char").click(deleteChar);
+            $('input[type=text]').bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(event) {
+                event.stopImmediatePropagation();
+            })
             //alert( "Load was performed." );
         });
 
@@ -36,11 +39,23 @@ readyEditKey = function() {
 
 };
 
-function singleCharKeyUp(){
+function singleCharKeyUp() {
     var utf8Elem = $(this).parent().parent().parent().find(".single-utf8hex");
-    if($(this).val().length==1){
+    var hex_code_value = ''
+    if ($(this).val().length == 1) {
         utf8Elem.val($(this).val().charCodeAt(0).toString(16));
-    } else {
+    }else if($(this).val().length > 1) {
+        var char_array =  $(this).val().split('')
+        for(var i=0; i<char_array.length; i++) {
+            if (i != char_array.length -1) {
+                hex_code_value += char_array[i].charCodeAt(0).toString(16);
+                hex_code_value += ';';
+            }else {
+                hex_code_value += char_array[i].charCodeAt(0).toString(16);
+            }
+        }
+        utf8Elem.val(hex_code_value);
+    }else {
         utf8Elem.val("");
     }
 }
@@ -48,7 +63,15 @@ function singleCharKeyUp(){
 function singleUtf8KeyUp(){
 	
     var singleChar = $(this).parent().parent().parent().find(".single-char");
-    if($(this).val().length<=6 && $(this).val().length>0){
+    if ($(this).val().indexOf(';') != -1 && $(this).val().length>0) {
+        var segments = $(this).val().split(';');
+        var char_hex = '';
+        for(var i=0; i<segments.length;i++) {
+            char_hex += String.fromCharCode(parseInt(segments[i], 16));
+
+        }
+        singleChar.val(char_hex);
+    }else if($(this).val().length<=6 && $(this).val().length>0){
         singleChar.val(String.fromCharCode(parseInt($(this).val(), 16)));
     } else {
         singleChar.val("");

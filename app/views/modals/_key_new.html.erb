@@ -57,6 +57,14 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-xs-7">
+                Load another keyboard
+              </div>
+              <div class="col-xs-7">
+                <%= select_tag "load_another_keyboard", nil, class: "js-example-responsive refer_keyboard" , data: {initvalue: Keyboard.select(:id,:name)}, include_blank: true %>
+              </div>
+            </div>
         <% end %>
 
       </div>

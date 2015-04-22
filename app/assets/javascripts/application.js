@@ -21,43 +21,10 @@
 //= require autocomplete-rails
 
 
+
+
+
 $('#keyboard_lang').autocomplete("option", "appendTo", ".modal-dialog");
-$(function() {
-   $('#auto-lang').autocomplete({
-        minLength: 2,
-	source: $('#auto-lang').data('autocomplete-source'),
-       response: function(event, ui) {
-           // ui.content is the array that's about to be sent to the response callback.
-           if (ui.content.length === 0) {
-               $('#auto-lang').val('');
-               $('#auto-lang').focus();
-               $('#auto-lang').attr("placeholder", "Not a valid language");
-           }
-       },
-        select: function(event, ui) {
-            $('#auto-lang').removeAttr('style');
-		var language = ui.item.value;
-		var code = language.split('-');
-		$('#keyboard_iso_language').val(code[0]);
-                $.ajax({
-		    type: "POST", 
-		    url: "/get_reg_name",
-		    data: {lang: code[0]},
-		    success: function(response) {
-			//console.log(response.region_name);
-			if(response.region_name != 'no_region'){
-				$('#auto-region').val(response.region_name);
-				var reg = response.region_name.split('-');
-				$('#keyboard_iso_region').val(reg[0]);	
-			}else {
-			   $('#auto-region').val('No Region');	
-			}
-		    }
-		});
-            }    
-    })
-   
-});
 
 function update_region_name(keyboard_id,btn_id) 
 {

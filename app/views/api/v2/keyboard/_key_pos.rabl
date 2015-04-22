@@ -5,5 +5,5 @@ attributes :percent_width
 
 child :characters do
     attributes  :modmask
-    attributes :unicode_value => :unicode
+    attributes :unicode_array_value => :unicode
 end

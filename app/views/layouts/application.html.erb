@@ -5,8 +5,14 @@
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= javascript_include_tag 'autocomplete-rails.js' %>
-  
+  <%= stylesheet_link_tag    'select2.min', media: 'all' %>
+  <%= javascript_include_tag 'select2.min' %>
+
   <%= csrf_meta_tags %>
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
 </head>
 <body class="<%= controller.controller_name %>">
 <% if user_signed_in? %>
@@ -108,9 +114,16 @@
 <div class="container">
 <% end %>
 <%= content_for?(:content) ? yield(:content) : yield %>
-<% if user_signed_in? %>
+
+
+
 </div>
 
+<div class="text-muted text-center">Except where otherwise noted, content of this site is licensed under the following license:
+  <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+</div>
+
+<% if user_signed_in? %>
 <%= render "modals/key_new", :locals => {:get_regions => get_regions, :get_languages => get_languages} %>
 <% end %>
 
