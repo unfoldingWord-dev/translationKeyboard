@@ -1,6 +1,11 @@
-out
-.idea
-.metadata
-app/java/bin
-TranslationKeyboard/app/build
-TranslationKeyboard/build
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/TranslationKeyboard2.0/TKDaoGenerator/nbproject/private/
+/TranslationKeyboard2.0/TKDaoGenerator/build/
+/TranslationKeyboard2.0/TKDaoGenerator/dist/
+/TranslationKeyboard2.0/TKKeyboardPreloader/nbproject/private/
+/TranslationKeyboard2.0/TKKeyboardPreloader/build/
