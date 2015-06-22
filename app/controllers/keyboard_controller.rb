@@ -1,4 +1,5 @@
 class KeyboardController < ApplicationController
+  require 'rqrcode'
   autocomplete :keyboard_languages, :lc, :full=> true, :extra_data => [:ln], :display_value => :funky_method
   before_action :authenticate_user!
   def index
@@ -86,6 +87,7 @@ class KeyboardController < ApplicationController
     @parent_keyboard = @selected_keyboard_variant.keyboard
     @parent_keyboard_list = Keyboard.where(id: @parent_keyboard.id)
     set_key_positions
+    set_qr_code
 
     render 'keyboard/index'
   end
@@ -139,7 +141,9 @@ class KeyboardController < ApplicationController
   def key_edit
 	item_id = params["id"]
 	@key_position = KeyPosition.find(item_id)
-	render :partial => 'modals/key_edit', :locals => {:key_position => @key_position}
+  language_code = @key_position.keyboard_variant.keyboard.iso_language
+  unicode_url = KeyboardLanguages.find_language(language_code).search_unicode_url
+	render :partial => 'modals/key_edit', :locals => {:key_position => @key_position, :unicode_url => unicode_url}
 	
   end
 
@@ -231,6 +235,31 @@ class KeyboardController < ApplicationController
 
   def keyboard_params
     params.require(:keyboard).permit(:name, :iso_language, :iso_region)
+  end
+
+  def set_qr_code
+
+
+    url_contents = Net::HTTP.get(URI.parse('http://remote.actsmedia.com/api/v3/keyboard/' + @parent_keyboard.id.to_s))
+    qr_generation_string = url_contents.to_s
+    qr_generation_string = qr_generation_string.gsub('{', '$')
+    qr_generation_string = qr_generation_string.gsub('}', '%')
+    qr_generation_string = qr_generation_string.gsub('[', '*')
+    qr_generation_string = qr_generation_string.gsub(']', '+')
+    qr_generation_string = qr_generation_string.gsub('"', '-')
+
+    # some_params = {'cht'=>'qr','chs'=>'500x500','chl'=> qr_generation_string}
+    # uri = URI('https://chart.googleapis.com/chart')
+    # res = Net::HTTP.post_form(uri, some_params)
+    # qr_file = File.new(Rails.root.join('public', 'qrcode.png'), 'w')
+    # File.open(qr_file.path, 'w') do |f|
+    #   f.write(res.body)
+    # end
+
+    #@qrcode = RQRCode::QRCode.new(qr_generation_string)
+    #@qr_string = qr_generation_string
+    #@qrcode = RQRCode::QRCode.new(qr_generation_string)
+    @qrcode = RQRCode::QRCode.new('http://remote.actsmedia.com/api/v3/keyboard/' + @parent_keyboard.id.to_s)
   end
 
 end

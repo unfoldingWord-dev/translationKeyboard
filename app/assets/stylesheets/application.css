@@ -18,6 +18,7 @@
  *= require bootstrap-select.min
  *= require icomoon.css
  *= require jquery-ui
+ *= require keyboard
  */
 
 
@@ -195,4 +196,11 @@ width: 25px;
 
 .glyphicon-remove {
     color: brown;
+}
+
+.unicode-edit {
+    padding-top: 4%;
+}
+.unicode-edit-text {
+    padding-top: 5%;
 }

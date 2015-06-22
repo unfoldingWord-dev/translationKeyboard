@@ -26,19 +26,48 @@
 
 $('#keyboard_lang').autocomplete("option", "appendTo", ".modal-dialog");
 
-function update_region_name(keyboard_id,btn_id) 
+function update_region_name(keyboard_id,btn_id,page_type)
 {
 	var index = $(btn_id).attr('id');
 	var reg_name = $('#iso_region_'+index).val();
 	$.ajax({
 		    type: "POST", 
 		    url: "/save_region_name",
-		    data: {id: keyboard_id,region:reg_name},
+		    data: {id: keyboard_id,region:reg_name,type: page_type},
 		    success: function(response) {
-			$('#accordion').empty();
-			$('#accordion').append(response);
+                $('#accordion').empty();
+                $('#accordion').append(response);
 		    }
 	});
+}
+
+function update_unicode_url(language_id)
+{
+    var unicode_url = $('#unicode_search_url').val()
+    if (unicode_url.trim() == '') {
+        alert('Please enter url');
+        return false
+    }else if (!is_valid_url(unicode_url)) {
+        alert('Please enter valid url');
+        return false
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/save_unicode_url",
+        data: {id: language_id,url:unicode_url},
+        success: function(response) {
+            if (response == true) {
+                alert('Unicode Search Url successfully Updated');
+            }
+        }
+    });
+
+}
+//For validating url format
+function is_valid_url(url)
+{
+    return url.match(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/);
 }
 
 ready = function(){

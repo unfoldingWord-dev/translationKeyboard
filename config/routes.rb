@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   devise_for :users
   get 'keyboard/index'
   get 'language/:iso_language', to: 'language#index', as: :language
+  get 'region/:iso_region', to: 'region#index', as: :region
   get 'keyboard/variant/:keyboard_variant_id', to: 'keyboard#variant', as: :keyboard_variant
   match 'keyboard/variant/:keyboard_variant_id', to: 'keyboard#variant_destroy', :via => :delete
 
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
   match '/import_lang_region' => 'keyboard#import_lang_region', :via => [:get]
   match '/save_new_position' => 'keyboard#update_position', :via => [:post]
   match '/save_region_name' => 'language#update_region_name', :via => [:post]
+  match '/save_unicode_url' => 'language#update_unicode_url', :via => [:post]
   match '/get_reg_name' => 'language#get_reg_name', :via => [:post]
   match '/update_keyboard_name' => 'keyboard#update_keyboard_name', :via => [:post]
   match '/load_all_keyboard' => 'keyboard#load_all_keyboard', :via => [:get]
@@ -50,6 +52,9 @@ Rails.application.routes.draw do
       resources :keyboard
     end
     namespace :v2 do
+      resources :keyboard
+    end
+    namespace :v3 do
       resources :keyboard
     end
   end

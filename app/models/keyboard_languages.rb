@@ -5,4 +5,8 @@ class KeyboardLanguages < ActiveRecord::Base
   def funky_method
     "#{self.lc}-#{self.ln}"
   end
+
+  def self.find_language(lc)
+    self.where(:lc => lc).first
+  end
 end

@@ -58,4 +58,36 @@
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Regions with Keyboards</div>
+      <div class="panel-body">
+        <div class="row">
+          <% item_count = 0 %>
+          <% total_item_count = 1 %>
+          <% get_all_regions_distinct.each do |region| %>
+
+              <% if item_count == 0  %>
+                  <div class="col-md-4">
+              <% end %>
+              <% if !region.iso_region.nil? %>
+
+                <div class="row"><div class="col-md-14"><%= link_to (region.region_name.to_s+'('+region.iso_region+')'), region_path(iso_region: region.iso_region) %></div></div>
+              <% end %>
+              <% if item_count == languages_per_column || total_item_count == languages_count %>
+                  </div>
+              <%
+                 item_count = 0
+                 else
+                   item_count += 1
+                 end
+                 total_item_count += 1
+              %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 

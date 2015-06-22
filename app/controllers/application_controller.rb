@@ -38,5 +38,20 @@ class ApplicationController < ActionController::Base
     Keyboard.new
   end
 
+  helper_method :get_all_regions_distinct
+  def get_all_regions_distinct
+    Keyboard.select(:iso_region).order(:iso_region).uniq
+  end
+
+  helper_method :languages_count
+  def regions_count
+    get_all_regions_distinct.count
+  end
+
+  helper_method :languages_per_column
+  def regions_per_column
+    get_all_regions_distinct.count / 3
+  end
+
 end
 

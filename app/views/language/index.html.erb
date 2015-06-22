@@ -1,9 +1,16 @@
 
+<div class="row">
 <% if @language_obj != nil %>
-<h1>Keyboards for <%= @language_obj.name %></h1>
-    <% else %>
-    <h1>Keyboards</h1>
+    <div class="col-md-6"><h1>Keyboards for <%= @language_obj.name %></h1></div>
+<% else %>
+      <div class="col-md-6"><h1>Keyboards</h1></div>
 <% end %>
+  <div class="col-md-8 ">
+    <div class="col-sm-5 unicode-edit"><h4> Unicode Search Url:</h4></div>
+    <div class="col-sm-6 unicode-edit-text"><%= text_field :unicode, :search_url, :class => 'form-control', :value => @language_details.search_unicode_url %></div>
+    <div class="col-sm-3 unicode-edit-text"><button onclick="update_unicode_url(<%= @language_details.id %>)" class="btn btn-success btn-xs update-btn" type="button"  id='update_unicode_btn'>Update unicode Url</button></div>
+  </div>
+</div>
 
 <div class="panel-group" id="accordion">
 
@@ -56,7 +63,7 @@
 				<%= select_tag "iso_region_#{j}", options_for_select(@all_regions.collect {|p| [ "#{p['cc']}-#{p['lr']}", p['cc'] ] },a_keyboard.iso_region),:data => {:'live-search' => 'true'} %>
 				</div>
 				<div class="update-button" >
-					<button onclick="update_region_name(<%= a_keyboard.id %>,this)" class="btn btn-primary btn-xs update-btn" type="button"  id=<%= j %>>Update Region
+					<button onclick="update_region_name(<%= a_keyboard.id %>,this,'lang')" class="btn btn-primary btn-xs update-btn" type="button"  id=<%= j %>>Update Region
 					</button>
 		       		</div>
 			</div>

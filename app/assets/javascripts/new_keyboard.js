@@ -2,6 +2,21 @@
  * Created by simeon on 10/10/14.
  */
 
+$(document).on("click", '.edit', function(){
+    $('.edit').editable('/../update_keyboard_name', {
+        data    : function(string) {return string.replace('<button class="glyphicon glyphicon-edit "></button>','');},
+        type      : 'text',
+        cancel    : ' <button class="glyphicon glyphicon-remove editbtn btnsuccess" ></button>',
+        submit    : ' <button class="glyphicon glyphicon-ok editbtn " ></button>',
+        style      : "display: inline",
+        method    : 'post',
+        tooltip   : 'Click to edit...',
+        callback: function(value) {
+            $(this).html(value+'<button class="glyphicon glyphicon-edit "></button>');
+        }
+    });
+
+})
 
 $(function() {
     var elementText = $(".js-example-responsive").attr('data-initvalue');
@@ -14,6 +29,8 @@ $(function() {
     }
 
     //console.log(arr);
+
+
     $('.edit').editable('/../update_keyboard_name', {
         data    : function(string) {return string.replace('<button class="glyphicon glyphicon-edit "></button>','');},
         type      : 'text',

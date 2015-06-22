@@ -48,6 +48,8 @@ gem 'countries'
 
 gem 'language_list'
 
+gem 'rqrcode'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

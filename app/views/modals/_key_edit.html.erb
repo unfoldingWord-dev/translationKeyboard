@@ -9,7 +9,12 @@
         <h4 class="modal-title">Key Edit</h4>
       </div>
       <div class="modal-body">
-
+        <% if unicode_url
+              search_url = unicode_url
+            else
+              search_url = "http://unicode-table.com/"
+            end
+        %>
         <%= form_for key_position, html: {class: 'key_position_form'}, remote: true do |f| %>
             <div class="panel-group" id="accordion" >
               <div class="panel panel-default">
@@ -86,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
-        <a href="http://unicode-table.com/" target="_blank" class="btn btn-info find-unicode-chars">Search for Characters</a>
+        <a href=<%= search_url %> target="_blank" class="btn btn-info find-unicode-chars">Search for Characters</a>
         <button type="button" class="btn btn-primary save-key" data-keypos="<%= key_position.id %>">Save changes</button>
       </div>
     </div><!-- /.modal-content -->

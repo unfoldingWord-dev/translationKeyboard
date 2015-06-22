@@ -122,8 +122,11 @@
 		        	</ul>
 		    	</span>
         	<% end %>
-
-                 <%= render 'modals/key_edit', key_position: key_position %>
+            <%
+               language_code = KeyPosition.find(key_position.id).keyboard_variant.keyboard.iso_language
+               unicode_url = KeyboardLanguages.find_language(language_code).search_unicode_url
+            %>
+                 <%= render 'modals/key_edit', key_position: key_position, unicode_url: unicode_url %>
 	      </div>
 	<% if @key_positions.last == key_position  %>
          	<% row_pos = key_position.row_index %>
@@ -137,6 +140,7 @@
 	<% end %>
 		  
 <% end %>
+
 
 
 

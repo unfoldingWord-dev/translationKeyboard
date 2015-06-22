@@ -1,24 +1,28 @@
 class LanguageController < ApplicationController
   before_action :authenticate_user!
+  include LanguageHelper
   def index
     @language_obj = LanguageList::LanguageInfo.find(params[:iso_language])
-    @keyboards_for_language_iso = Keyboard.where(iso_language: params[:iso_language])
-    sql = 'SELECT kc.cc,kl.lr FROM keyboard_countries kc, keyboard_languages kl, (SELECT DISTINCT ON("keyboardCountry_id") "keyboardCountry_id", "keyboardLanguages_id" FROM lang_regions ORDER BY "keyboardCountry_id") lg WHERE kc.id=lg."keyboardCountry_id" AND kl.id=lg."keyboardLanguages_id";'
-    @all_regions = ActiveRecord::Base.connection.execute(sql)
+    get_keyboards_for_language(params[:iso_language])
   end
 
   def update_region_name
     keyboard_id = params["id"]
     region_code = params["region"]
+    call_type = params["type"]
     #@keyboard_details = KeyPosition.find(id)
     #@key_details.update_attributes(:column_index => index)
     @keyboard_details = Keyboard.find(keyboard_id)
+    previous_region = Keyboard.find(keyboard_id).iso_region
     @keyboard_details.update_attributes(:iso_region => region_code )
     language = @keyboard_details.iso_language
-    @keyboards_for_language_iso = Keyboard.where(iso_language: language)
-    sql = 'SELECT kc.cc,kl.lr FROM keyboard_countries kc, keyboard_languages kl, (SELECT DISTINCT ON("keyboardCountry_id") "keyboardCountry_id", "keyboardLanguages_id" FROM lang_regions ORDER BY "keyboardCountry_id") lg WHERE kc.id=lg."keyboardCountry_id" AND kl.id=lg."keyboardLanguages_id";'
-    @all_regions = ActiveRecord::Base.connection.execute(sql)
-    render :partial => 'language/key_with_diff_region', :locals => {:keyboards_for_language_iso => @keyboards_for_language_iso,:all_regions => @all_regions}
+    if call_type == 'lang'
+      get_keyboards_for_language(language)
+      render :partial => 'language/key_with_diff_region', :locals => {:keyboards_for_language_iso => @keyboards_for_language_iso,:all_regions => @all_regions}
+    elsif call_type == 'reg'
+      get_keyboards_for_region(previous_region)
+      render :partial => 'language/key_with_diff_lang', :locals => {:keyboards_for_region_iso => @keyboards_for_region_iso,:all_regions => @all_regions}
+    end
   end
 
   def get_reg
@@ -50,6 +54,16 @@ class LanguageController < ApplicationController
     response = {:region_name => region_with_code}
     respond_to do |format|
       format.json {render :json => response}
+    end
+  end
+
+  def update_unicode_url
+    language_id = params[:id]
+    unicode_url = params[:url]
+    @language = KeyboardLanguages.find(language_id)
+    @language.update_attributes(:search_unicode_url => unicode_url )
+    respond_to do |format|
+      format.json {render :json => true}
     end
   end
 end
