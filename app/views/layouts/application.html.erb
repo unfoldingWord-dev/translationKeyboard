@@ -60,6 +60,40 @@
 
           </ul>
         </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Regions<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li style="width:700px;">
+              <div class="row" style="width: 100%;padding:0 0 0 1em;">
+                <% item_count = 0 %>
+                <% total_item_count = 1 %>
+                <% get_regions_with_code_name.each do |regions| %>
+                    <% if item_count == 0  %>
+                        <ul class="list-unstyled col-md-4">
+                    <% end %>
+                    <li><a href="" data-toggle="modal" data-target="#region_code_modal" data-source="<%= regions[:region_code] %>" data-id="<%= regions[:region_name] %>"><%= regions[:region_name] %></a>
+
+                    </li>
+                    <% if item_count == regions_name_per_column || total_item_count == regions_name_count %>
+                        </ul>
+                    <%
+                       item_count = 0
+                       else
+                         item_count += 1
+                       end
+                       total_item_count += 1
+                    %>
+
+                <% end %>
+              </div>
+
+            </li>
+
+          </ul>
+        </li>
+
+
         <li>
           <button type="button" class="btn btn-primary navbar-btn create-keyboard" data-toggle="modal" data-target="#key_new_modal">Create New Keyboard</button>
         </li>
@@ -129,3 +163,5 @@
 
 </body>
 </html>
+
+<%= render 'dashboard/reg_with_code' %>

@@ -49,6 +49,10 @@ class Keyboard < ActiveRecord::Base
     region_obj.lr
   end
 
+  def region_id
+    region_obj.id
+  end
+
   def created_at_epoch
     created_at.to_f
   end
