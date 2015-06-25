@@ -257,9 +257,9 @@ class KeyboardController < ApplicationController
     # end
 
     #@qrcode = RQRCode::QRCode.new(qr_generation_string)
-    #@qr_string = qr_generation_string
-    #@qrcode = RQRCode::QRCode.new(qr_generation_string)
-    @qrcode = RQRCode::QRCode.new('http://remote.actsmedia.com/api/v3/keyboard/' + @parent_keyboard.id.to_s)
+    @qr_string = qr_generation_string
+    @qrcode = RQRCode::QRCode.new(url_contents, :size => 40, :level => :l).as_png(:size => 3000).save(Rails.root.join('public', 'qr.png'))
+    #@qrcode = RQRCode::QRCode.new('http://remote.actsmedia.com/api/v3/keyboard/' + @parent_keyboard.id.to_s)
   end
 
 end

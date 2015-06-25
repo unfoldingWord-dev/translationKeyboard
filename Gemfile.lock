@@ -151,6 +151,7 @@ PLATFORMS
 DEPENDENCIES
   annotate
   apipie-rails
+  chunky_png
   coffee-rails (~> 4.0.0)
   countries
   devise

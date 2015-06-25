@@ -28,19 +28,21 @@ $('#keyboard_lang').autocomplete("option", "appendTo", ".modal-dialog");
 
 $(document).on('show.bs.modal', '#region_code_modal', function(event) {
     var region_name = $(event.relatedTarget).attr('data-id');
+    $('#region_name').empty();
     $('#region_name').append(region_name+" Region Codes");
     //var array = $(event.relatedTarget).attr('data-source');
     var obj = $.parseJSON($(event.relatedTarget).attr('data-source'));
     var count = obj.length;
-    var per_column = count/3;
+    var per_column = Math.floor(count/3);
     var item_count = 0;
     var total_item_count = 1;
     var string = '';
+    $('#code_list').empty();
     $.each(obj, function( i, val ) {
         if(item_count == 0) {
             string += "<ul class='list-unstyled col-md-4'>";
         }
-        string += "<li><a href='../region/"+val+"'>"+val+"</a></li>";
+        string += "<li><a href='../../region/"+val+"'>"+val+"</a></li>";
         if(item_count == per_column || total_item_count == count) {
             string += "</ul>";
             item_count = 0;

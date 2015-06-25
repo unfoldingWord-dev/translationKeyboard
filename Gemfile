@@ -48,6 +48,7 @@ gem 'countries'
 
 gem 'language_list'
 
+gem 'chunky_png'
 gem 'rqrcode'
 
 # Use ActiveModel has_secure_password

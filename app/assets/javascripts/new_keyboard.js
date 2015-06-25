@@ -49,6 +49,8 @@ $(function() {
         data: arr
     });
 
+    var aCleanData = $('#auto-lang').data('autocomplete-source');
+
     $('#auto-lang').autocomplete({
         minLength: 2,
         source: $('#auto-lang').data('autocomplete-source'),
@@ -59,6 +61,23 @@ $(function() {
                 $('#auto-lang').focus();
                 $('#auto-lang').attr("placeholder", "Not a valid language");
             }
+
+        },
+        search: function(oEvent, oUi) {
+            // get current input value
+            var sValue = $(oEvent.target).val();
+            // init new search array
+            var aSearch = [];
+            // for each element in the main array ...
+            $(aCleanData).each(function(iIndex, sElement) {
+                // ... if element starts with input value ...
+                if (sElement.substr(0, sValue.length) == sValue) {
+                    // ... add element
+                    aSearch.push(sElement);
+                }
+            });
+            // change search array
+            $(this).autocomplete('option', 'source', aSearch);
         },
         select: function(event, ui) {
             $('#auto-lang').removeAttr('style');
