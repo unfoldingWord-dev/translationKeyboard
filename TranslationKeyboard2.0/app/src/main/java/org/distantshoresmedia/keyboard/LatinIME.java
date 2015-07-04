@@ -671,7 +671,7 @@ public class LatinIME extends InputMethodService implements
         mKeyboardSwitcher.recreateInputView();
         mKeyboardSwitcher.makeKeyboards(true);
         mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, 0,
-                shouldShowVoiceButton(getCurrentInputEditorInfo()));
+                shouldShowVoiceButton(getCurrentInputEditorInfo()), getApplicationContext());
         return mKeyboardSwitcher.getInputView();
     }
 
@@ -799,11 +799,11 @@ public class LatinIME extends InputMethodService implements
             // TODO: Use a dedicated number entry keypad here when we get one.
         case EditorInfo.TYPE_CLASS_PHONE:
             mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_PHONE,
-                    attribute.imeOptions, enableVoiceButton);
+                    attribute.imeOptions, enableVoiceButton, null);
             break;
         case EditorInfo.TYPE_CLASS_TEXT:
             mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT,
-                    attribute.imeOptions, enableVoiceButton);
+                    attribute.imeOptions, enableVoiceButton, null);
             // startPrediction();
             mPredictionOnForMode = true;
             // Make sure that passwords are not displayed in candidate view
@@ -820,19 +820,19 @@ public class LatinIME extends InputMethodService implements
             if (variation == EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) {
                 mPredictionOnForMode = false;
                 mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_EMAIL,
-                        attribute.imeOptions, enableVoiceButton);
+                        attribute.imeOptions, enableVoiceButton, null);
             } else if (variation == EditorInfo.TYPE_TEXT_VARIATION_URI) {
                 mPredictionOnForMode = false;
                 mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_URL,
-                        attribute.imeOptions, enableVoiceButton);
+                        attribute.imeOptions, enableVoiceButton, null);
             } else if (variation == EditorInfo.TYPE_TEXT_VARIATION_SHORT_MESSAGE) {
                 mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_IM,
-                        attribute.imeOptions, enableVoiceButton);
+                        attribute.imeOptions, enableVoiceButton, null);
             } else if (variation == EditorInfo.TYPE_TEXT_VARIATION_FILTER) {
                 mPredictionOnForMode = false;
             } else if (variation == EditorInfo.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT) {
                 mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_WEB,
-                        attribute.imeOptions, enableVoiceButton);
+                        attribute.imeOptions, enableVoiceButton, null);
                 // If it's a browser edit field and auto correct is not ON
                 // explicitly, then
                 // disable auto correction, but keep suggestions on.
@@ -859,7 +859,7 @@ public class LatinIME extends InputMethodService implements
             break;
         default:
             mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT,
-                    attribute.imeOptions, enableVoiceButton);
+                    attribute.imeOptions, enableVoiceButton, null);
         }
         inputView.closing();
         resetPrediction();
@@ -1266,7 +1266,7 @@ public class LatinIME extends InputMethodService implements
         if (mKeyboardSwitcher.getInputView() != null
                 && mKeyboardSwitcher.getKeyboardMode() != KeyboardSwitcher.MODE_NONE) {
             mKeyboardSwitcher.setVoiceMode(mEnableVoice && mEnableVoiceButton,
-                    mVoiceOnPrimary);
+                    mVoiceOnPrimary, null);
         }
         updateKeyboardOptions();
         mKeyboardSwitcher.makeKeyboards(true);
@@ -2473,7 +2473,9 @@ public class LatinIME extends InputMethodService implements
 
     private void updateSuggestions() {
         TKKeyboardView inputView = mKeyboardSwitcher.getInputView();
-        ((TKKeyboard) inputView.getKeyboard()).setPreferredLetters(null);
+        if(inputView != null) {
+            ((TKKeyboard) inputView.getKeyboard()).setPreferredLetters(null);
+        }
 
         // Check if we have a suggestion engine attached.
         if ((mSuggest == null || !isPredictionOn())) {
@@ -2898,7 +2900,7 @@ public class LatinIME extends InputMethodService implements
         reloadKeyboards();
         mKeyboardSwitcher.makeKeyboards(true);
         mKeyboardSwitcher.setKeyboardMode(currentKeyboardMode, 0,
-                mEnableVoiceButton && mEnableVoice);
+                mEnableVoiceButton && mEnableVoice, null);
         initSuggest(mLanguageSwitcher.getInputLanguage());
         mLanguageSwitcher.persist();
         mAutoCapActive = mAutoCapPref && mLanguageSwitcher.allowAutoCap();
@@ -3418,7 +3420,7 @@ public class LatinIME extends InputMethodService implements
                 .equals(getString(R.string.voice_mode_main));
         if (mKeyboardSwitcher != null
                 && (enableVoice != mEnableVoice || voiceOnPrimary != mVoiceOnPrimary)) {
-            mKeyboardSwitcher.setVoiceMode(enableVoice, voiceOnPrimary);
+            mKeyboardSwitcher.setVoiceMode(enableVoice, voiceOnPrimary, null);
         }
         mEnableVoice = enableVoice;
         mVoiceOnPrimary = voiceOnPrimary;

@@ -1,6 +1,7 @@
 package org.distantshoresmedia.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.json.JSONException;
@@ -17,6 +18,8 @@ import java.util.Map;
  * Created by Fechner on 1/2/15.
  */
 public class KeyboardDataHandler {
+
+    private static final String TAG = "KeyboardDataHandler";
 
     private static Map<String, AvailableKeyboard> availableKeyboardsDictionary = null;
     private static Map<String, AvailableKeyboard> downloadedKeyboardsDictionary = null;
@@ -206,6 +209,7 @@ public class KeyboardDataHandler {
     protected static String findKeyboardIdForLocal(Context context, Locale locale){
 
         if(context == null || locale == null){
+            Log.i(TAG, "Context or Locale was null");
             return null;
         }
 

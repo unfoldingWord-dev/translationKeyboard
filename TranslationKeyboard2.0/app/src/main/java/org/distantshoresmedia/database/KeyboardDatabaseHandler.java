@@ -101,6 +101,14 @@ public class KeyboardDatabaseHandler {
         return KeyboardDataHandler.findKeyboardIdForLocal(currentContext, locale);
     }
 
+    public static String getKeyboardIdWithLocal(Locale locale, Context context){
+
+        if(context != null) {
+            currentContext = context;
+        }
+        return KeyboardDataHandler.findKeyboardIdForLocal(currentContext, locale);
+    }
+
     public static AvailableKeyboard[] getInstalledKeyboards(){
 
         return KeyboardDataHandler.getInstalledKeyboardsArray(currentContext);
