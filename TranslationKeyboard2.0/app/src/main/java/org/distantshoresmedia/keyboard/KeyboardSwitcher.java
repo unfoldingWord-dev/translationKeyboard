@@ -16,6 +16,7 @@
 
 package org.distantshoresmedia.keyboard;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -270,27 +271,27 @@ public class KeyboardSwitcher implements
         }
     }
 
-    public void setVoiceMode(boolean enableVoice, boolean voiceOnPrimary) {
+    public void setVoiceMode(boolean enableVoice, boolean voiceOnPrimary, Context contextOrNull) {
         if (enableVoice != mHasVoice || voiceOnPrimary != mVoiceOnPrimary) {
             mKeyboards.clear();
         }
         mHasVoice = enableVoice;
         mVoiceOnPrimary = voiceOnPrimary;
-        setKeyboardMode(mMode, mImeOptions, mHasVoice, mIsSymbols);
+        setKeyboardMode(mMode, mImeOptions, mHasVoice, mIsSymbols, contextOrNull);
     }
 
     private boolean hasVoiceButton(boolean isSymbols) {
         return mHasVoice && (isSymbols != mVoiceOnPrimary);
     }
 
-    public void setKeyboardMode(int mode, int imeOptions, boolean enableVoice) {
+    public void setKeyboardMode(int mode, int imeOptions, boolean enableVoice, Context contextOrNull) {
         mAutoModeSwitchState = AUTO_MODE_SWITCH_STATE_ALPHA;
         mPreferSymbols = mode == MODE_SYMBOLS;
         if (mode == MODE_SYMBOLS) {
             mode = MODE_TEXT;
         }
         try {
-            setKeyboardMode(mode, imeOptions, enableVoice, mPreferSymbols);
+            setKeyboardMode(mode, imeOptions, enableVoice, mPreferSymbols, contextOrNull);
         } catch (RuntimeException e) {
             TKIMELogger.logOnException(mode + "," + imeOptions + ","
                     + mPreferSymbols, e);
@@ -298,14 +299,14 @@ public class KeyboardSwitcher implements
     }
 
     private void setKeyboardMode(int mode, int imeOptions, boolean enableVoice,
-            boolean isSymbols) {
+            boolean isSymbols, Context contextOrNull) {
         if (mInputView == null)
             return;
         mMode = mode;
         mImeOptions = imeOptions;
         if (enableVoice != mHasVoice) {
             // TODO clean up this unnecessary recursive call.
-            setVoiceMode(enableVoice, mVoiceOnPrimary);
+            setVoiceMode(enableVoice, mVoiceOnPrimary, contextOrNull);
         }
         mIsSymbols = isSymbols;
 
@@ -318,7 +319,7 @@ public class KeyboardSwitcher implements
         }
 
         TKKeyboard keyboard = null;
-        keyboard = getKeyboard(id);
+        keyboard = getKeyboard(id, contextOrNull);
 
         if (mode == MODE_PHONE) {
             mInputView.setPhoneKeyboard(keyboard);
@@ -332,7 +333,7 @@ public class KeyboardSwitcher implements
         keyboard.updateSymbolIcons(mIsAutoCompletionActive);
     }
 
-    private TKKeyboard getKeyboard(KeyboardId id) {
+    private TKKeyboard getKeyboard(KeyboardId id, Context contextOrNull) {
         if(id == null){
             return null;
         }
@@ -358,8 +359,13 @@ public class KeyboardSwitcher implements
 //
 //            System.out.println("desired Language: " + language);
 //            AvailableKeyboard desiredKeyboard = keyboardsDictionary.get(language);
-
-            String keyboardID = KeyboardDatabaseHandler.getKeyboardIdWithLocal(conf.locale);
+            String keyboardID;
+            if(contextOrNull != null){
+                keyboardID = KeyboardDatabaseHandler.getKeyboardIdWithLocal(conf.locale, contextOrNull);
+            }
+            else{
+                keyboardID = KeyboardDatabaseHandler.getKeyboardIdWithLocal(conf.locale);
+            }
 //            System.out.println("desired Language ID: " + language);
             BaseKeyboard keys = KeyboardDatabaseHandler.getKeyboardWithID(keyboardID);
 
@@ -371,7 +377,6 @@ public class KeyboardSwitcher implements
                 variants = keys.getKeyboardVariants();
             }
             catch (NullPointerException e){
-                Log.e(TAG, "variants:" + keys.getKeyboardVariants());
                 e.printStackTrace();
                 return null;
             }
@@ -494,14 +499,14 @@ public class KeyboardSwitcher implements
         if (mInputView == null) return;
         int oldShiftState = mInputView.getShiftState();
         if (useFn) {
-            TKKeyboard kbd = getKeyboard(mSymbolsId);
+            TKKeyboard kbd = getKeyboard(mSymbolsId, null);
             kbd.enableShiftLock();
             mCurrentId = mSymbolsId;
             mInputView.setKeyboard(kbd);
             mInputView.setShiftState(oldShiftState);
         } else {
             // Return to default keyboard state
-            setKeyboardMode(mMode, mImeOptions, mHasVoice, false);
+            setKeyboardMode(mMode, mImeOptions, mHasVoice, false, null);
             mInputView.setShiftState(oldShiftState);
         }
     }
@@ -532,7 +537,7 @@ public class KeyboardSwitcher implements
         }
         if (mCurrentId.equals(mSymbolsId)
                 || !mCurrentId.equals(mSymbolsShiftedId)) {
-            TKKeyboard symbolsShiftedKeyboard = getKeyboard(mSymbolsShiftedId);
+            TKKeyboard symbolsShiftedKeyboard = getKeyboard(mSymbolsShiftedId, null);
             mCurrentId = mSymbolsShiftedId;
             mInputView.setKeyboard(symbolsShiftedKeyboard);
             // Symbol shifted keyboard has a ALT_SYM key that has a caps lock style indicator.
@@ -542,7 +547,7 @@ public class KeyboardSwitcher implements
             symbolsShiftedKeyboard.setImeOptions(mInputMethodService
                     .getResources(), mMode, mImeOptions);
         } else {
-            TKKeyboard symbolsKeyboard = getKeyboard(mSymbolsId);
+            TKKeyboard symbolsKeyboard = getKeyboard(mSymbolsId, null);
             mCurrentId = mSymbolsId;
             mInputView.setKeyboard(symbolsKeyboard);
             symbolsKeyboard.enableShiftLock();
@@ -561,7 +566,7 @@ public class KeyboardSwitcher implements
     }
 
     public void toggleSymbols() {
-        setKeyboardMode(mMode, mImeOptions, mHasVoice, !mIsSymbols);
+        setKeyboardMode(mMode, mImeOptions, mHasVoice, !mIsSymbols, null);
         if (mIsSymbols && !mPreferSymbols) {
             mAutoModeSwitchState = AUTO_MODE_SWITCH_STATE_SYMBOL_BEGIN;
         } else {
