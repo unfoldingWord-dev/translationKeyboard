@@ -689,16 +689,16 @@ public class Keyboard {
             if (shiftChar == mainChar) shiftChar = 0;
             if (capsChar == shiftChar || capsChar == mainChar) capsChar = 0;
 
-            int popupLen = (popupCharacters == null) ? 0 : popupCharacters.length;
-
-            for (int i = 0; i < popupLen; ++i) {
-                char c = popupCharacters[i].charAt(0);
+            if((popupCharacters != null) && popupCharacters[0].length() > 0) {
+                for (int i = 0; i < popupCharacters.length; ++i) {
+                    char c = popupCharacters[i].charAt(0);
 //                if (isShifted || isShiftCaps) {
 //                    String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
 //                    if (upper.length() == 1) c = upper.charAt(0);
 //                }
-                if (c != mainChar && c != shiftChar && c != capsChar){
-                    sequenceList.add(popupCharacters[i]);
+                    if (c != mainChar && c != shiftChar && c != capsChar) {
+                        sequenceList.add(popupCharacters[i]);
+                    }
                 }
             }
 

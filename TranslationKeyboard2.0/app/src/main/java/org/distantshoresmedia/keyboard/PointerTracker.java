@@ -221,7 +221,7 @@ public class PointerTracker {
 
     private boolean isModifierInternal(int keyIndex) {
         Key key = getKey(keyIndex);
-        if (key == null || key.codes == null)
+        if (key == null || key.codes == null || key.codes.length < 1)
             return false;
         int primaryCode = key.codes[0];
         return primaryCode == Keyboard.KEYCODE_SHIFT
@@ -242,7 +242,7 @@ public class PointerTracker {
 
     public boolean isSpaceKey(int keyIndex) {
         Key key = getKey(keyIndex);
-        return key != null && key.codes != null && key.codes[0] == LatinIME.ASCII_SPACE;
+        return key != null && key.codes != null && key.codes.length > 0 && key.codes[0] == LatinIME.ASCII_SPACE;
     }
 
     public void updateKey(int keyIndex) {

@@ -664,6 +664,9 @@ public class TKKeyboard extends Keyboard {
      * switching input languages.
      */
     boolean isInside(TKKey key, int x, int y) {
+        if(key.codes.length < 1){
+            return false;
+        }
         final int code = key.codes[0];
         if (code == KEYCODE_SHIFT ||
                 code == KEYCODE_DELETE) {

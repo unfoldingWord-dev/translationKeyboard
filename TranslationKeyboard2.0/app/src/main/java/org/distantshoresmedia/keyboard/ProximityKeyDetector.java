@@ -51,7 +51,7 @@ class ProximityKeyDetector extends KeyDetector {
                 primaryIndex = nearestKeyIndices[i];
             }
 
-            if (((mProximityCorrectOn
+            if (key.codes.length > 0 && ((mProximityCorrectOn
                     && (dist = key.squaredDistanceFrom(touchX, touchY)) < mProximityThresholdSquare)
                     || isInside)
                     && key.codes[0] > 32) {
