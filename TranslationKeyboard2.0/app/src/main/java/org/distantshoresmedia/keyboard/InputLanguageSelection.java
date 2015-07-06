@@ -45,7 +45,7 @@ import org.distantshoresmedia.model.BaseKeyboard;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 public class InputLanguageSelection extends PreferenceActivity {
-    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
+    private static final String TAG = "InputLanguageSelection";
     private ArrayList<Loc> mAvailableLanguages = new ArrayList<Loc>();
     private static final String[] BLACKLIST_LANGUAGES = {
 
@@ -159,13 +159,13 @@ public class InputLanguageSelection extends PreferenceActivity {
             Locale locale = mAvailableLanguages.get(i).locale;
             AvailableKeyboard availKey = keyboardsDictionary.get(locale.toString());
             BaseKeyboard keyboard = KeyboardDatabaseHandler.getKeyboardWithID(Integer.toString(availKey.id));
-            pref.setTitle(keyboard.getKeyboardVariants()[0].getName() +
-            		" [" + locale.toString() + "]");
-            String fivecode = getCode(locale);
+            CharSequence name = keyboard.getKeyboardVariants()[0].getName();
+            pref.setTitle(name + " [" + locale.toString() + "]");
+            String fiveCode = getCode(locale);
 //            String language = locale.getLanguage();
 //            boolean checked = languageSelections.contains(fivecode);
-            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(fivecode));
-            boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(keyboardsDictionary.get(fivecode));
+            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(fiveCode));
+            boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(keyboardsDictionary.get(fiveCode));
             pref.setChecked(checked);
 //            boolean has4Row = arrayContains(KBD_4_ROW, fivecode) || arrayContains(KBD_4_ROW, language);
 //            boolean has5Row = arrayContains(KBD_5_ROW, fivecode) || arrayContains(KBD_5_ROW, language);

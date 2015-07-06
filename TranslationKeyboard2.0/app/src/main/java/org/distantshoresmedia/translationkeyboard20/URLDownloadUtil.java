@@ -18,9 +18,9 @@ import java.io.IOException;
  */
 public class URLDownloadUtil {
 
-    private static String TAG = "URLDownloadUtil";
-    static int connectionTimeout = 20000;
-    static int socketTimeout = 10000;
+    private static final String TAG = "URLDownloadUtil";
+    static final int connectionTimeout = 20000;
+    static final int socketTimeout = 10000;
 
     /**
      * Download JSON data from url

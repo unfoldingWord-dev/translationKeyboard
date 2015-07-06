@@ -6,11 +6,16 @@ import android.util.Log;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * Created by Fechner on 12/31/14.
@@ -24,11 +29,11 @@ public class FileLoader {
     //region Out Methods
     /**
      *
-     * @param fileString
+     * @param fileSequence
      * @param fileName
      * @param context
      */
-    protected static void saveFileToApplicationFiles(Context context, String fileString, String fileName){
+    protected static void saveFileToApplicationFiles(Context context, CharSequence fileSequence, String fileName){
 
         Log.i(TAG, "Attempting to save file named:" + fileName);
 
@@ -38,13 +43,18 @@ public class FileLoader {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            String fileString = fileSequence.toString();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(fileString);
+            bw.close();
 
-            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            outputStream.write(fileString.getBytes());
-            outputStream.close();
+//            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+//            outputStream.write(fileString.getBytes());
+//            outputStream.close();
         }
         catch (FileNotFoundException e){
-           Log.e(TAG, "saveFileToApplicationFiles FileNotFoundException: " + e.toString());
+            Log.e(TAG, "saveFileToApplicationFiles FileNotFoundException: " + e.toString());
         }
         catch (IOException e){
             Log.e(TAG, "saveFileToApplicationFiles IOException: " + e.toString());
@@ -74,7 +84,7 @@ public class FileLoader {
 
             InputStream fileStream = context.openFileInput(fileName);
 
-            String resultString =  getStringFromInputStream(fileStream, fileName);
+            String resultString =  getStringFromInputStream(fileStream, fileName).toString();
             return resultString;
         }
         catch (IOException e){
@@ -94,7 +104,7 @@ public class FileLoader {
         try{
             InputStream fileStream = context.getAssets().open(fileName);
 
-            String resultString =  getStringFromInputStream(fileStream, fileName);
+            String resultString = getStringFromInputStream(fileStream, fileName).toString();
             return resultString;
         }
         catch (IOException e){
@@ -109,20 +119,20 @@ public class FileLoader {
      * @param fileName
      * @return The String from the Stream or null if there's an error.
      */
-    private static String getStringFromInputStream(InputStream fileStream, String fileName){
+    private static CharSequence getStringFromInputStream(InputStream fileStream, String fileName){
 
         String resultString = "";
 
         try{
-            int size = fileStream.available();
-            byte[] buffer = new byte[size];
 
-            fileStream.read(buffer);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fileStream, "utf-8"));
+            String str;
 
-            fileStream.close();
+            while ((str = in.readLine()) != null) {
+                resultString += str;
+            }
 
-            resultString = new String(buffer, "UTF-8");
-
+            in.close();
         }
         catch (FileNotFoundException e){
             System.out.println("getStringFromInputStream file name: " + fileName + " FileNotFoundException: " + e.toString());
