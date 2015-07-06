@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KeyboardApp</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'autocomplete-rails.js' %>
+  <%= stylesheet_link_tag    'select2.min', media: 'all' %>
+  <%= javascript_include_tag 'select2.min' %>
+
+  <%= csrf_meta_tags %>
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+</head>
+<body class="<%= controller.controller_name %>">
+<% if user_signed_in? %>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to "Home", root_url, class: "navbar-brand" %>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Languages<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li style="width:700px;">
+              <div class="row" style="width: 100%;padding:0 0 0 1em;">
+             <% item_count = 0 %>
+             <% total_item_count = 1 %>
+            <% get_all_languages_distinct.each do |lang| %>
+                <% if item_count == 0  %>
+                    <ul class="list-unstyled col-md-4">
+                <% end %>
+                <li><%= link_to lang.language_name_and_iso_639_1, language_path(iso_language: lang.language_iso_639_1) %></li>
+                    <% if item_count == languages_per_column || total_item_count == languages_count %>
+                        </ul>
+                    <%
+                       item_count = 0
+                       else
+                     item_count += 1
+                    end
+                    total_item_count += 1
+                    %>
+            <% end %>
+            </div>
+        </li>
+
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Regions<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li style="width:700px;">
+              <div class="row" style="width: 100%;padding:0 0 0 1em;">
+                <% item_count = 0 %>
+                <% total_item_count = 1 %>
+                <% get_regions_with_code_name.each do |regions| %>
+                    <% if item_count == 0  %>
+                        <ul class="list-unstyled col-md-4">
+                    <% end %>
+                    <li><a href="" data-toggle="modal" data-target="#region_code_modal" data-source="<%= regions[:region_code] %>" data-id="<%= regions[:region_name] %>"><%= regions[:region_name] %></a>
+
+                    </li>
+                    <% if item_count == regions_name_per_column || total_item_count == regions_name_count %>
+                        </ul>
+                    <%
+                       item_count = 0
+                       else
+                         item_count += 1
+                       end
+                       total_item_count += 1
+                    %>
+
+                <% end %>
+              </div>
+
+            </li>
+
+          </ul>
+        </li>
+
+
+        <li>
+          <button type="button" class="btn btn-primary navbar-btn create-keyboard" data-toggle="modal" data-target="#key_new_modal">Create New Keyboard</button>
+        </li>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li style="margin:0 1em;">
+          <%= link_to 'Find Unicode Characters', 'http://unicode-table.com/', { target: '_blank', class: '' } %>
+        </li>
+
+        <li>
+	 
+          <%= button_to 'Mobile App', 'https://distantshores.org/translationKeyboard', { target: '_blank', class: 'btn btn-primary navbar-btn' } %>
+        </li>
+        <li>
+          <%
+             require 'digest/md5'
+             email_address = current_user.email.downcase
+             hash = Digest::MD5.hexdigest(email_address)
+             image_src = "http://www.gravatar.com/avatar/#{hash}"
+          %>
+          <%= image_tag(image_src, class:"gravatar img-responsive") %>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <%= current_user.email %>
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#"><%= link_to("User Profile", edit_user_registration_path) %></a></li>
+            <li class="divider"></li>
+                <li>
+                  <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
+                </li>
+          </ul>
+        </li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    <% end %>
+
+<% if notice %>
+    <div class="alert alert-success"><%= notice %></div>
+<% end %>
+<% if alert %>
+    <div class="alert alert-danger"><%= alert %></div>
+<% end %>
+
+<% if user_signed_in? %>
+<div class="container">
+<% end %>
+<%= content_for?(:content) ? yield(:content) : yield %>
+
+
+
+</div>
+
+<div class="text-muted text-center">Except where otherwise noted, content of this site is licensed under the following license:
+  <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+</div>
+
+<% if user_signed_in? %>
+<%= render "modals/key_new", :locals => {:get_regions => get_regions, :get_languages => get_languages} %>
+<% end %>
+
+</body>
+</html>
+
+<%= render 'dashboard/reg_with_code' %>

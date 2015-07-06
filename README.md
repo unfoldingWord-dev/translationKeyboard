@@ -1,18 +1,29 @@
-translationKeyboard
+Translation Keyboard 1.0
 --
 
-unfoldingWord translationKeyboard is an Android app for creating keyboards in any language to be used on an Android device.
+A GUI interface to build your own keyboard that can be deployed to a mobile device.
 
 ###Contributing
-Below are the technical specifications regarding this Android app and instructions for setting up your development environment.
 
-* **Minimum SDK**: 8 (4.0.3 Ice Cream Sandwich)
-* **Target SDK**: 21
-* **Target Devices**: Nexus 7, 10" Tablets
-* **IDE**: [Android Studio]
+* **Minimum Ruby Version**: 1.9.3p545
+* **Minimum Rails Version**: 4.1.5
+* **Database**: PostgresSQL 9.3
+* **IDE**: Anything you want, even just a text editor. RubyMine is the best IDE I have found.
 
-First you need to fork the repository! Go ahead and do so now.
 
-The current app is in the TranslationKeyboard 2.0 folder.
+###Setup
 
-Next before you can start developing you must install [Android Studio]. 8 is currently the standard minimum sdk version so it is likely you will have it once [Android Studio] has been installed. If not then you will need to download it following the instructions in [Adding SDK Packages].
+If you are familiar with writing Rails code there should not really be anything out of the ordinary to set this up app.
+
+If your Rails environment is setup you should be able to run the following commands and then be up and running
+
+1. bundle install
+2. rake db:load
+
+That's it!
+
+###Import Hackers Keyboard Files
+
+In the bin folder there is a file called importHackersKeyboardXml. Change the directory path on line 11 to point to the directory on your local machine and then run the script by typing ruby importHackersKeyboardXml.
+
+Running this will automatically import all of the keyboards contained in the hacker_keyboard_data folder

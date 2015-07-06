@@ -1,0 +1,99 @@
+
+
+<div id="key_edit_modal_<%= key_position.id %>" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Key Edit</h4>
+      </div>
+      <div class="modal-body">
+        <% if unicode_url
+              search_url = unicode_url
+            else
+              search_url = "http://unicode-table.com/"
+            end
+        %>
+        <%= form_for key_position, html: {class: 'key_position_form'}, remote: true do |f| %>
+            <div class="panel-group" id="accordion" >
+              <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="panel-title"><a href="#collapse_key_information_<%= key_position.id %>" data-toggle="collapse">Key Information</a></h4></div>
+                    <div id="collapse_key_information_<%= key_position.id %>" class="panel-collapse collapse">
+              <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-1">&nbsp;</div>
+                        <div class="col-xs-6"><b>Row Index:</b> <%= key_position.row_index %></div>
+                        <div class="col-xs-6"><b>Column Index:</b> <%= key_position.column_index %></div>
+                        <div class="col-xs-1">&nbsp;</div>
+                    </div>
+                </div>
+             </div>
+            </div>
+              <% key_position.get_characters_sorted_by_modmask.each.with_index(1) do |character, i| %>
+                <div class="chars">
+                <%= f.fields_for character, index: character.id do |character_form| %>
+                      <% if character.modmask != 2 # don't show long press characters here %>
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a href="#collapse_key_char_<%= key_position.id %>-<%= character.modmask %>" data-toggle="collapse">
+                              <% if character.modmask == 0 %>
+                                  Default Character
+                              <% elsif character.modmask == 1 %>
+                                  Shift Character
+                              <% end %>
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapse_key_char_<%= key_position.id %>-<%= character.modmask %>" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <%= render 'modals/key_edit_char_block', character_form: character_form, character: character %>
+
+                        </div>
+                        </div>
+                    </div>
+
+                <% end %>
+                <% end %>
+                </div>
+            <% end %>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a href="#collapse_key_char_longpress_<%= key_position.row_index %>_<%= key_position.column_index %>" data-toggle="collapse">
+                      Long Press Character(s)
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapse_key_char_longpress_<%= key_position.row_index %>_<%= key_position.column_index %>" class="panel-collapse collapse in">
+                  <div class="panel-body">
+              <% key_position.get_longpress_characters.each.with_index(1) do |character, i| %>
+                    <%= f.fields_for character, index: character.id do |character_form| %>
+                        <%= render 'modals/key_edit_char_block', character_form: character_form, character: character %>
+                    <% end %>
+              <% end %>
+                   <div class="row">
+                     <div class="col-md-7"></div>
+                     <div class="col-md-7">
+                       <button type="button" class="btn btn-primary pull-right btn-sm add-character-btn">
+                         <span class="glyphicon glyphicon-plus-sign"></span>
+                         Longpress Character
+                       </button>
+                     </div>
+                   </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+        <% end %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+        <a href=<%= search_url %> target="_blank" class="btn btn-info find-unicode-chars">Search for Characters</a>
+        <button type="button" class="btn btn-primary save-key" data-keypos="<%= key_position.id %>">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

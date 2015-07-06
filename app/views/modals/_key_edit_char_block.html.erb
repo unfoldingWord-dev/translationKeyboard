@@ -1,0 +1,23 @@
+
+<div id="char-<%= character.id %>" class="char-row">
+
+<div class="row">
+  <div class="col-xs-7">Character</div>
+  <div class="col-xs-2">
+    <%= character_form.text_field :uft8HexHtml, class: "single-char", :maxlength => 4 %></div>
+  <% if character.modmask == 2 %>
+  <div class="col-xs-5">
+    <button type="button" class="btn btn-danger btn-sm pull-right delete-key-char">
+      <span class="glyphicon glyphicon-minus-sign"></span>
+      Delete Key
+    </button>
+  </div>
+  <% end %>
+</div>
+
+<div class="row">
+  <div class="col-xs-7">UTF-8 Hex</div>
+  <div class="col-xs-7"><%= character_form.text_field :utf8hex, class: "single-utf8hex", :maxlength => 27 %></div>
+</div>
+
+</div>

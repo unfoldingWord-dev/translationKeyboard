@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: characters
+#
+#  id              :integer          not null, primary key
+#  englishDesc     :string(255)
+#  utf8hex         :string(255)
+#  modmask         :integer
+#  sortnumber      :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#  key_position_id :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  englishDesc: MyString
+  utf8hex: MyString
+  modmask: 1
+  sortnumber: 1
+
+two:
+  englishDesc: MyString
+  utf8hex: MyString
+  modmask: 1
+  sortnumber: 1

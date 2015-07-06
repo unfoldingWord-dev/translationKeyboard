@@ -1,0 +1,103 @@
+
+<h1>Dashboard</h1>
+<div class="row">
+
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-14">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Regions with Keyboards</div>
+          <div class="panel-body">
+            <div class="row">
+              <% item_count = 0 %>
+              <% total_item_count = 1 %>
+              <% get_regions_with_code_name.each do |regions| %>
+
+                  <% if item_count == 0  %>
+                      <div class="col-md-4">
+                  <% end %>
+                  <div class="row"><div class="col-md-14"><a href="" data-toggle="modal" data-target="#region_code_modal" data-source="<%= regions[:region_code] %>" data-id="<%= regions[:region_name] %>"><%= regions[:region_name] %></a></div></div>
+
+                  <% if item_count == regions_name_per_column || total_item_count == regions_name_count %>
+                      </div>
+                  <%
+                     item_count = 0
+                     else
+                       item_count += 1
+                     end
+                     total_item_count += 1
+                  %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-14">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Languages with Keyboards</div>
+        <div class="panel-body">
+          <div class="row">
+            <% item_count = 0 %>
+            <% total_item_count = 1 %>
+            <% get_all_languages_distinct.each do |lang| %>
+                <% if item_count == 0  %>
+                    <div class="col-md-4">
+                <% end %>
+                <div class="row"><div class="col-md-14"><%= link_to lang.language_name_and_iso_639_1, language_path(iso_language: lang.language_iso_639_1) %></div></div>
+                <% if item_count == languages_per_column || total_item_count == languages_count %>
+                    </div>
+                <%
+                   item_count = 0
+                   else
+                     item_count += 1
+                   end
+                   total_item_count += 1
+                %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="col-md-8">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Recently Updated Keyboards</div>
+
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <td></td>
+          <th>Language</th>
+          <th>Region</th>
+          <th>Name</th>
+          <th>Updated</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @recently_added_keyboards.each do |keyboard| %>
+            <tr>
+              <td><%= link_to 'View', keyboard_variant_path(keyboard.id), class: "btn btn-primary btn-xs" %></td>
+              <td><%= link_to keyboard.keyboard.language_name + ' ('+ keyboard.keyboard.iso_language + ')', language_path(keyboard.keyboard.iso_language) %></td>
+              <td><%= keyboard.keyboard.region_name %> (<%= keyboard.keyboard.iso_region %>)</td>
+              <td><%= keyboard.name %></td>
+              <td><%= keyboard.updated_at.to_formatted_s(:month_day_year) %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+</div>
+
+

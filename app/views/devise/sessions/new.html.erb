@@ -1,0 +1,29 @@
+
+<h3><%= link_to 'Get the Mobile App!', 'https://distantshores.org/translationKeyboard', { target: '_blank' } %></h3>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <h2 class="form-signin-heading">Log in</h2>
+  <%= f.email_field :email, autofocus: true, class: "form-control", :placeholder => "Email Address" %>
+
+  <%= f.password_field :password, autocomplete: "off", class: "form-control", :placeholder => "Password" %>
+
+  <% if devise_mapping.rememberable? -%>
+    <label class="checkbox"><%= f.check_box :remember_me %> Remember Me</label>
+  <% end %>
+
+    <%= content_tag :button, :type => :submit, :class => "btn btn-lg btn-primary btn-block" do %>
+    Log In
+    <% end %>
+
+
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+
+<!--  <input type="email" class="form-control" placeholder="Email address" required="" autofocus="">
+  <input type="password" class="form-control" placeholder="Password" required="">
+  <label class="checkbox">
+    <input type="checkbox" value="remember-me"> Remember me
+  </label>
+  -->
