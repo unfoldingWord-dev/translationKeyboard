@@ -141,7 +141,7 @@ public class InputLanguageSelection extends PreferenceActivity {
         for(AvailableKeyboard keyboard : keyboards){
             keyboardsDictionary.put( getCode(keyboard.getKeyboardAsLocale()), keyboard);
         }
-        
+
         PreferenceGroup parent = getPreferenceScreen();
         for (int i = 0; i < mAvailableLanguages.size(); i++) {
             CheckBoxPreference pref = new CheckBoxPreference(this);

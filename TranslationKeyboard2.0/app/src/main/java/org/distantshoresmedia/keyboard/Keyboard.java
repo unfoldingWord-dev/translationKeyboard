@@ -598,14 +598,17 @@ public class Keyboard {
                 return capsLabel.charAt(0);
             }
             //Log.i(TAG, "getPrimaryCode(), shifted=" + shifted);
-            if (isShifted && shiftLabel != null) {
+            if (isShifted && shiftLabel != null && shiftLabel.length() > 0) {
                 if (shiftLabel.charAt(0) == DEAD_KEY_PLACEHOLDER && shiftLabel.length() >= 2) {
                     return shiftLabel.charAt(1);
                 } else {
                     return shiftLabel.charAt(0);
                 }
-            } else {
+            } else if(codes.length > 0){
                 return codes[0];
+            }
+            else{
+                return 0;
             }
         }
 
@@ -755,17 +758,27 @@ public class Keyboard {
             if (shiftChar == mainChar) shiftChar = 0;
             if (capsChar == shiftChar || capsChar == mainChar) capsChar = 0;
 
-            int popupLen = (popupCharacters == null || popupCharacters[0] == null) ? 0 : popupCharacters.length;
-            StringBuilder popup = new StringBuilder(popupLen);
-            for (int i = 0; i < popupLen; ++i) {
-                char c = popupCharacters[i].charAt(0);
-                if (isShifted || isShiftCaps) {
-                    String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
-                    if (upper.length() == 1) c = upper.charAt(0);
-                }
+            StringBuilder popup = new StringBuilder();
 
-                if (c == mainChar || c == shiftChar || c == capsChar) continue;
-                popup.append(c);
+            if(popupCharacters != null && popupCharacters.length > 0 && popupCharacters[0] != null) {
+
+                popup = new StringBuilder(popupCharacters.length);
+                for (CharSequence popupCharacter : popupCharacters) {
+
+                    if(popupCharacter.length() > 0) {
+                        char c = popupCharacter.charAt(0);
+                        if (isShifted || isShiftCaps) {
+                            String upper = Character.toString(c).toUpperCase(LatinIME.sKeyboardSettings.inputLocale);
+                            if (upper.length() == 1) c = upper.charAt(0);
+                        }
+
+                        if (c == mainChar || c == shiftChar || c == capsChar) continue;
+                        popup.append(c);
+                    }
+                }
+            }
+            else{
+                addExtra = false;
             }
 
             if (addExtra) {
@@ -837,7 +850,7 @@ public class Keyboard {
         public String getHintLabel(boolean wantAscii, boolean wantAll) {
             if (hint == null) {
                 hint = "";
-                if (shiftLabel != null && !isSimpleUppercase) {
+                if (shiftLabel != null && !isSimpleUppercase && shiftLabel.length() > 0) {
                     char c = shiftLabel.charAt(0);
                     if (wantAll || wantAscii && is7BitAscii(c)) {
                         hint = Character.toString(c);
