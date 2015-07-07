@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.Schema;
 
 public class MyDaoGenerator {
 
-//    private static final String UW_DATABASE_MODEL_PROTOCOL = "model.UWDatabaseModel";
+    private static final String UW_DATABASE_MODEL_CLASS_NAME = "org.distantshoresmedia.model.TKDatabaseModel";
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(100, "org.distantshoresmedia.model.daoModels");
@@ -32,7 +32,7 @@ public class MyDaoGenerator {
                 new DaoHelperMethods.EntityInformation(ModelNames.AVAILABLE_KEYBOARD, ModelNames.AVAILABLE_KEYBOARD_STRING_ATTRIBUTES,
                         ModelNames.AVAILABLE_KEYBOARD_DATE_ATTRIBUTES );
         Entity availableKeyboard = DaoHelperMethods.createEntity(schema, availableKeyboardInfo);
-//        project.setSuperclass(UW_DATABASE_MODEL_PROTOCOL);
+        availableKeyboard.setSuperclass(UW_DATABASE_MODEL_CLASS_NAME);
         return availableKeyboard;
     }
 
@@ -43,7 +43,7 @@ public class MyDaoGenerator {
                         ModelNames.BASE_KEYBOARD_DATE_ATTRIBUTES);
         Entity baseKeyboard = DaoHelperMethods.createEntity(schema, baseKeyboardInfo);
 
-//        language.setSuperclass(UW_DATABASE_MODEL_PROTOCOL);
+        baseKeyboard.setSuperclass(UW_DATABASE_MODEL_CLASS_NAME);
         DaoHelperMethods.createParentChildRelationship(
                 availableKeyboard, ModelNames.AVAILABLE_KEYBOARD_BASE_KEYBOARDS_ATTRIBUTE,
                 baseKeyboard, ModelNames.BASE_KEYBOARD_AVAILABLE_KEYBOARD_ATTRIBUTE);
@@ -58,7 +58,7 @@ public class MyDaoGenerator {
                         ModelNames.KEYBOARD_VARIANT_DATE_ATTRIBUTES);
         Entity keyboardVariant = DaoHelperMethods.createEntity(schema, keyboardVariantInfo);
 
-//        version.setSuperclass(UW_DATABASE_MODEL_PROTOCOL);
+        keyboardVariant.setSuperclass(UW_DATABASE_MODEL_CLASS_NAME);
         DaoHelperMethods.createParentChildRelationship(
                 baseKeyboard, ModelNames.BASE_KEYBOARD_KEYBOARD_VARIANT_ATTRIBUTE,
                 keyboardVariant, ModelNames.KEYBOARD_VARIANT_BASE_KEYBOARD_ATTRIBUTE);
@@ -73,7 +73,7 @@ public class MyDaoGenerator {
         keyPositionInfo.intAttributes = ModelNames.KEY_POSITION_INT_ATTRIBUTES;
         Entity keyPosition = DaoHelperMethods.createEntity(schema, keyPositionInfo);
 
-//        book.setSuperclass(UW_DATABASE_MODEL_PROTOCOL);
+        keyPosition.setSuperclass(UW_DATABASE_MODEL_CLASS_NAME);
         DaoHelperMethods.createParentChildRelationship(
                 keyboardVariant, ModelNames.KEYBOARD_VARIANT_KEY_POSITION_ATTRIBUTE,
                 keyPosition, ModelNames.KEY_POSITION_KEYBOARD_VARIANT_ATTRIBUTE);
@@ -87,7 +87,7 @@ public class MyDaoGenerator {
                 new DaoHelperMethods.EntityInformation(ModelNames.KEY_CHARACTER);
         keyCharacterInfo.intAttributes = ModelNames.KEY_CHARACTER_INT_ATTRIBUTES;
         Entity keyCharacter = DaoHelperMethods.createEntity(schema, keyCharacterInfo);
-//        verification.setSuperclass(UW_DATABASE_MODEL_PROTOCOL);
+        keyCharacter.setSuperclass(UW_DATABASE_MODEL_CLASS_NAME);
 
         DaoHelperMethods.createParentChildRelationship(
                 keyPosition, ModelNames.KEY_POSITION_KEY_CHARACTER_ATTRIBUTE,
