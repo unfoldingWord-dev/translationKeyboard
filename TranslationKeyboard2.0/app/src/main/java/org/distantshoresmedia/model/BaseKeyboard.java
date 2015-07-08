@@ -4,6 +4,8 @@
 package org.distantshoresmedia.model;
 
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import java.util.Date;
 
 public class BaseKeyboard extends BaseDataClass{
 
+    private static final String TAG = "BaseKeyboard";
     static final private String kUIDKey = "keyboard_id";
     static final private String kKeyboardNameKey = "keyboard_name";
     static final private String kCreatedKey = "created_at";
@@ -80,7 +83,7 @@ public class BaseKeyboard extends BaseDataClass{
             return name;
         }
         catch (JSONException e){
-            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString() + "json: " + json);
+            Log.e(TAG, "getKeyboardNameFromJSONString JSONException: " + e.toString() + "json: " + json);
         }
 
         return null;
@@ -95,7 +98,7 @@ public class BaseKeyboard extends BaseDataClass{
             return name;
         }
         catch (JSONException e){
-            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString() + "json: " + json);
+            Log.e(TAG, "getKeyboardNameFromJSONString JSONException: " + e.toString() + "json: " + json);
         }
 
         return null;
@@ -104,7 +107,7 @@ public class BaseKeyboard extends BaseDataClass{
     static public BaseKeyboard getKeyboardFromJsonString(String json){
 
 
-        System.out.println("Got to BaseKeyboard");
+//        Log.i(TAG, "Got to BaseKeyboard");
         try {
 
             JSONObject jsonObj = new JSONObject(json);
@@ -131,7 +134,7 @@ public class BaseKeyboard extends BaseDataClass{
         }
 
         catch (JSONException e) {
-            System.out.println("BaseKeyboard JSONException: " + e.toString());
+            Log.e(TAG, "BaseKeyboard JSONException: " + e.toString());
             return null;
         }
     }

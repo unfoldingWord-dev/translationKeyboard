@@ -1,5 +1,7 @@
 package org.distantshoresmedia.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +14,8 @@ import java.util.Locale;
  * Created by Fechner on 12/18/14.
  */
 public class AvailableKeyboard extends BaseDataClass implements Comparable<AvailableKeyboard>{
+
+    private static final String TAG = "AvailableKeyboard";
 
     static final private String kKeyboardKey = "keyboards";
     static final private String kIdKey = "id";
@@ -99,7 +103,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
             return name;
         }
         catch (JSONException e){
-            System.out.println("getKeyboardNameFromJSONString JSONException: " + e.toString());
+            Log.e(TAG, "getKeyboardNameFromJSONString JSONException: " + e.toString());
         }
 
         return null;
@@ -107,7 +111,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
 
     static public AvailableKeyboard[] getKeyboardsFromJsonString(String json) {
 
-        System.out.println("Got to KeyboardVariant");
+//        Log.i(TAG, "Got to KeyboardVariant");
 
         ArrayList<AvailableKeyboard> keyboardObjects = new ArrayList<AvailableKeyboard>();
 
@@ -132,7 +136,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
             }
 
         } catch (JSONException e) {
-            System.out.println("AvailableKeyboard JSONException: " + e.toString());
+            Log.e(TAG, "AvailableKeyboard JSONException: " + e.toString());
             return null;
         }
 

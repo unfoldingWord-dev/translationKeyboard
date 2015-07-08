@@ -5,6 +5,7 @@ package org.distantshoresmedia.model;
 
 import android.util.JsonReader;
 import android.util.JsonWriter;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +15,8 @@ import java.util.Arrays;
 
 
 public class KeyPosition {
+
+    private static final String TAG = "KeyPosition";
 
     static final private String kPercentWidthKey = "percent_width";
     static final private String kCharactersKey = "characters";
@@ -79,7 +82,7 @@ public class KeyPosition {
 
     static public KeyPosition getKeyboardFromJsonObject(JSONObject jsonObj, int row, int column){
 
-//        System.out.println("Got to KeyPosition");
+//        Log.i(TAG, "Got to KeyPosition");
 
         try {
             double width = jsonObj.getDouble(kPercentWidthKey);
@@ -99,7 +102,8 @@ public class KeyPosition {
         }
 
         catch (JSONException e) {
-            System.out.println("KeyPosition JSONException: " + e.toString());
+            Log.e(TAG, "KeyPosition JSONException: " + e.toString());
+            e.printStackTrace();
             return null;
         }
     }

@@ -130,7 +130,7 @@ public final class GlobalKeyboardSettings {
         });
 
         addStringPref("pref_keyboard_mode_portrait", new StringPref() {
-            public void set(String val) { System.out.println("Value" + val); keyboardModePortrait = Integer.valueOf(val); }
+            public void set(String val) { Log.i(TAG, "Value" + val); keyboardModePortrait = Integer.valueOf(val); }
             public String getDefault() { return "2";}//res.getString(R.string.default_keyboard_mode_portrait); }
             public int getFlags() { return FLAG_PREF_RESET_KEYBOARDS | FLAG_PREF_RESET_MODE_OVERRIDE; }
         });

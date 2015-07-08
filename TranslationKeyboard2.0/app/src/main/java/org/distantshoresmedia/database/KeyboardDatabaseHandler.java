@@ -50,10 +50,10 @@ public class KeyboardDatabaseHandler {
 
         boolean hasBeenSaved = KeyboardFileLoader.hasSavedKeyboards(context);
         if(hasBeenSaved){
-            System.out.println("KeyboardsAlreadySaved");
+            Log.i(TAG, "KeyboardsAlreadySaved");
         }
         else{
-            System.out.println("Keyboards Will Be Initialized");
+            Log.i(TAG, "Keyboards Will Be Initialized");
             KeyboardFileLoader.initializeKeyboards(context);
         }
 
@@ -172,7 +172,7 @@ private static ArrayList<String> updateKeyboards(Context context, String json){
         Log.i(TAG, "installedKeyboards count: " + installedKeyboards.size());
 
 
-        System.out.println("is updating downloaded Keyboards");
+        Log.i(TAG, "is updating downloaded Keyboards");
 
         ArrayList<String> deleteKeys = new ArrayList<String>();
 

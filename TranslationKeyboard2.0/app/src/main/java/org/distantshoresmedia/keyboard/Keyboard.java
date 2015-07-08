@@ -1474,7 +1474,7 @@ public class Keyboard {
             Key prevKey = null;
             while ((event = parser.next()) != XmlResourceParser.END_DOCUMENT) {
 
-//                System.out.println("Current x: " + x);
+//                Log.i(TAG, "Current x: " + x);
                 if (event == XmlResourceParser.START_TAG) {
                     String tag = parser.getName();
 
@@ -1538,7 +1538,7 @@ public class Keyboard {
                                             if (x > mTotalWidth) {
                                                 mTotalWidth = Math.round(x);
                                             }
-//                                            System.out.println("Current x: " + x);
+//                                            Log.i(TAG, "Current x: " + x);
                                         }
                                     }
                                     break;

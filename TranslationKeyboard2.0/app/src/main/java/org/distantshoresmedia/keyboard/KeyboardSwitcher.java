@@ -357,7 +357,7 @@ public class KeyboardSwitcher implements
 //            }
 //            String language = saveLocale.getLanguage();
 //
-//            System.out.println("desired Language: " + language);
+//            Log.i(TAG, "desired Language: " + language);
 //            AvailableKeyboard desiredKeyboard = keyboardsDictionary.get(language);
             String keyboardID;
             if(contextOrNull != null){
@@ -366,7 +366,7 @@ public class KeyboardSwitcher implements
             else{
                 keyboardID = KeyboardDatabaseHandler.getKeyboardIdWithLocal(conf.locale);
             }
-//            System.out.println("desired Language ID: " + language);
+//            Log.i(TAG, "desired Language ID: " + language);
             BaseKeyboard keys = KeyboardDatabaseHandler.getKeyboardWithID(keyboardID);
 
             if(keys == null){

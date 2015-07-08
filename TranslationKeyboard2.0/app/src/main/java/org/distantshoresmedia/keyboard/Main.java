@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -42,6 +43,7 @@ import org.distantshoresmedia.translationkeyboard20.UpdateService;
 
 public class Main extends FragmentActivity implements UpdateFragment.OnFragmentInteractionListener {
 
+    private static final String TAG = "Main";
     private static Context context;
     public static Context getAppContext() {
         return Main.context;
@@ -130,7 +132,7 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
     @Override
     public void endUpdate() {
 
-        System.out.println("Fragment Closed");
+        Log.i(TAG, "Fragment Closed");
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();

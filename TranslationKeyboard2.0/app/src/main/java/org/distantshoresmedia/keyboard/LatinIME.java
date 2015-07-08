@@ -3550,7 +3550,7 @@ public class LatinIME extends InputMethodService implements
         long total = 0;
         for (int i = 0; i < CPS_BUFFER_SIZE; i++)
             total += mCpsIntervals[i];
-        System.out.println("CPS = " + ((CPS_BUFFER_SIZE * 1000f) / total));
+        Log.i(TAG, "CPS = " + ((CPS_BUFFER_SIZE * 1000f) / total));
     }
 
     public void onAutoCompletionStateChanged(boolean isAutoCompletion) {
