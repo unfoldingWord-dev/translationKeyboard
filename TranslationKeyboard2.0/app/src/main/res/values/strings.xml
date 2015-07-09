@@ -624,6 +624,7 @@
     <string name="prefs_debug_mode" translatable="false">Debug Mode</string>
     <string name="main_setup_configure_imes">Enable keyboard</string>
     <string name="main_setup_set_ime">Set input method</string>
+    <string name="main_setup_share_button_text">Keyboard Sharing</string>
     <string name="main_setup_get_dicts">Get dictionaries</string>
     <string name="main_setup_input_lang">Input languages</string>
     <string name="main_setup_update_keyboards">Update Keyboards</string>
@@ -664,5 +665,7 @@
     <string name="seek_pref_max">100%</string>
     <string name="title_activity_update">UpdateActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_share">ShareActivity</string>
+    <string name="share_keyboards_button_text">Share Keyboards</string>
 
 </resources>

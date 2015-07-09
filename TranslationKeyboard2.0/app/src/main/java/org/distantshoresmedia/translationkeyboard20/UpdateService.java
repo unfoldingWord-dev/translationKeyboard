@@ -11,7 +11,7 @@ import android.os.Message;
 import android.util.Log;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
-import org.distantshoresmedia.keyboard.Main;
+import org.distantshoresmedia.activities.Main;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

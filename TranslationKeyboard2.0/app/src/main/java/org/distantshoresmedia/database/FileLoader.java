@@ -24,8 +24,6 @@ public class FileLoader {
 
     private static final String TAG = "FileLoader";
 
-
-
     //region Out Methods
     /**
      *
@@ -88,7 +86,7 @@ public class FileLoader {
             return resultString;
         }
         catch (IOException e){
-            System.out.println("initializeKeyboards IOException: " + e.toString());
+            Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
             return null;
         }
     }
@@ -108,7 +106,7 @@ public class FileLoader {
             return resultString;
         }
         catch (IOException e){
-            System.out.println("initializeKeyboards IOException: " + e.toString());
+            Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
             return null;
         }
     }
@@ -135,11 +133,11 @@ public class FileLoader {
             in.close();
         }
         catch (FileNotFoundException e){
-            System.out.println("getStringFromInputStream file name: " + fileName + " FileNotFoundException: " + e.toString());
+            Log.e(TAG, "getStringFromInputStream file name: " + fileName + " FileNotFoundException: " + e.toString());
             return null;
         }
         catch (IOException e){
-            System.out.println("getStringFromInputStream file name: " + fileName + " IOException: " + e.toString());
+            Log.e(TAG, "getStringFromInputStream file name: " + fileName + " IOException: " + e.toString());
             return null;
         }
 

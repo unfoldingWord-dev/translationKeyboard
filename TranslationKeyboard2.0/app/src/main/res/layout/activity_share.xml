@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.distantshoresmedia.activities.ShareActivity">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/share_fragment_frame"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/share_activity_share_button">
+
+
+    </FrameLayout>
+
+    <Button
+
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/share_keyboards_button_text"
+        android:id="@+id/share_activity_share_button"
+        android:onClick="shareClicked"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

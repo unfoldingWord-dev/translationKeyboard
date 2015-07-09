@@ -3,6 +3,8 @@
 
 package org.distantshoresmedia.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +13,7 @@ import java.util.Arrays;
 
 public class KeyCharacter {
 
+    static final private String TAG = "KeyCharacter";
     static final private String kModeMaskKey = "modmask";
     static final private String kUnicodeValue = "unicode";
 
@@ -76,9 +79,12 @@ public class KeyCharacter {
             KeyCharacter newChar = new KeyCharacter(mask, hexes);
             return newChar;
         }
-
         catch (JSONException e) {
-            System.out.println(" KeyCharacter JsonExcepetion; " + e.toString());
+            Log.e(TAG, "KeyCharacter JsonExcepetion; " + e.toString());
+            if(jsonObj != null){
+                Log.e(TAG, "Error Json:" + jsonObj.toString());
+            }
+            e.printStackTrace();
             return null;
         }
     }

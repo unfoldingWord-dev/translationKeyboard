@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.distantshoresmedia.keyboard;
+package org.distantshoresmedia.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,11 +23,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
+import org.distantshoresmedia.keyboard.InputLanguageSelection;
 import org.distantshoresmedia.translationkeyboard20.NetWorkUtil;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
@@ -42,6 +43,7 @@ import org.distantshoresmedia.translationkeyboard20.UpdateService;
 
 public class Main extends FragmentActivity implements UpdateFragment.OnFragmentInteractionListener {
 
+    private static final String TAG = "Main";
     private static Context context;
     public static Context getAppContext() {
         return Main.context;
@@ -98,6 +100,17 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
             }
         });
 
+        final Button setup6 = (Button) findViewById(R.id.main_setup_btn_keyboard_sharing);
+        setup6.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sharePressed();
+            }
+        });
+    }
+
+    private void sharePressed(){
+
+        startActivity(new Intent(getApplicationContext(), ShareActivity.class));
     }
 
     private void updateKeyboards() {
@@ -130,7 +143,7 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
     @Override
     public void endUpdate() {
 
-        System.out.println("Fragment Closed");
+        Log.i(TAG, "Fragment Closed");
 
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();

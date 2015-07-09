@@ -2,106 +2,125 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.distantshoresmedia.translationkeyboard20" >
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
     <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.microphone" android:required="false" />
-    <uses-feature android:name="android.hardware.faketouch" android:required="false" />
-    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.faketouch"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
-
-    <application android:label="@string/english_ime_name"
-
+    <application
         android:allowBackup="true"
         android:backupAgent="org.distantshoresmedia.keyboard.TKIMEBackupAgent"
-        android:restoreAnyVersion="true"
         android:hardwareAccelerated="false"
+        android:icon="@drawable/icon"
         android:killAfterRestore="false"
+        android:label="@string/english_ime_name"
         android:logo="@drawable/icon"
-        android:icon="@drawable/icon">
-
-        <service android:name="org.distantshoresmedia.keyboard.LatinIME"
+        android:restoreAnyVersion="true" >
+        <service
+            android:name="org.distantshoresmedia.keyboard.LatinIME"
+            android:icon="@drawable/icon"
             android:label="@string/english_ime_name"
-            android:permission="android.permission.BIND_INPUT_METHOD"
             android:logo="@drawable/icon"
-            android:icon="@drawable/icon">
-
+            android:permission="android.permission.BIND_INPUT_METHOD" >
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
 
-            <meta-data android:name="android.view.im" android:resource="@xml/method" />
-
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
         </service>
-
         <service android:name=".UpdateService" />
 
-        <activity android:name="org.distantshoresmedia.keyboard.Main" android:label="translationKeyboard">
+        <activity
+            android:name="org.distantshoresmedia.activities.Main"
+            android:label="translationKeyboard" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".TKIMESettings" android:label="@string/english_ime_settings">
+        <activity
+            android:name=".TKIMESettings"
+            android:label="@string/english_ime_settings" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
-        <activity android:name="org.distantshoresmedia.keyboard.TKIMEDebugSettings" android:label="@string/english_ime_debug_settings">
+        <activity
+            android:name="org.distantshoresmedia.keyboard.TKIMEDebugSettings"
+            android:label="@string/english_ime_debug_settings" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
-        <activity android:name="org.distantshoresmedia.keyboard.InputLanguageSelection"
-            android:label="@string/language_selection_title">
+        <activity
+            android:name="org.distantshoresmedia.keyboard.InputLanguageSelection"
+            android:label="@string/language_selection_title" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.keyboard.INPUT_LANGUAGE_SELECTION"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="org.distantshoresmedia.keyboard.INPUT_LANGUAGE_SELECTION" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name="org.distantshoresmedia.keyboard.PrefScreenActions"
+        <activity
+            android:name="org.distantshoresmedia.keyboard.PrefScreenActions"
+            android:icon="@drawable/icon"
             android:label="@string/pref_screen_actions_title"
-            android:logo="@drawable/icon"
-            android:icon="@drawable/icon">
+            android:logo="@drawable/icon" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_ACTIONS"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_ACTIONS" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name="org.distantshoresmedia.keyboard.PrefScreenView"
+        <activity
+            android:name="org.distantshoresmedia.keyboard.PrefScreenView"
+            android:icon="@drawable/icon"
             android:label="@string/pref_screen_actions_title"
-            android:logo="@drawable/icon"
-            android:icon="@drawable/icon">
+            android:logo="@drawable/icon" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_VIEW"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name="org.distantshoresmedia.keyboard.PrefScreenFeedback"
+        <activity
+            android:name="org.distantshoresmedia.keyboard.PrefScreenFeedback"
+            android:icon="@drawable/icon"
             android:label="@string/pref_screen_feedback_title"
-            android:logo="@drawable/icon"
-            android:icon="@drawable/icon">
+            android:logo="@drawable/icon" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_FEEDBACK"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_FEEDBACK" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.distantshoresmedia.activities.ShareActivity"
+            android:label="@string/title_activity_share"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
+
 </manifest>

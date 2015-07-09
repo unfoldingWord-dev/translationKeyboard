@@ -5,13 +5,14 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 /**
  * Created by Fechner on 12/19/14.
  */
-public class BaseDataClass {
+public class BaseDataClass implements Serializable{
 
     static final private String kUpdatedKey = "updated_at";
     private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";

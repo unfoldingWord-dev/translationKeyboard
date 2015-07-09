@@ -4,6 +4,7 @@
 package org.distantshoresmedia.model;
 
 import android.inputmethodservice.Keyboard;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KeyboardVariant {
+
+    private static final String TAG = "KeyboardVariant";
 
     static final private String kNameKey = "name";
     static final private String kCreatedKey = "created_at";
@@ -80,7 +83,7 @@ public class KeyboardVariant {
 
     static public KeyboardVariant getKeyboardFromJsonObject(JSONObject jsonObj){
 
-        System.out.println("Got to KeyboardVariant");
+//        Log.i(TAG, "Got to KeyboardVariant");
 
         try {
             // basic elements
@@ -117,8 +120,8 @@ public class KeyboardVariant {
         }
 
         catch (JSONException e) {
-            System.out.println("bummer");
-            System.out.println("KeyboardVariant JSONException: " + e.toString());
+            Log.e(TAG, "KeyboardVariant JSONException: " + e.toString());
+            e.printStackTrace();
             return null;
         }
     }

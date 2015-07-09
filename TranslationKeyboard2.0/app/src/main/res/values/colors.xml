@@ -33,4 +33,7 @@
     <color name="latinkeyboard_feedback_language_text">#FFFFFFFF</color>
     <color name="latinkeyboard_key_color_white">#FFFFFFFF</color>
     <color name="latinkeyboard_key_color_black">#FF000000</color>
+
+    <color name="clear_color">#0000</color>
+    <color name="basic_button_pressed">#9aaa</color>
 </resources>

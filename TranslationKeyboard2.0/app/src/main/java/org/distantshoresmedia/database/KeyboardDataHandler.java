@@ -227,7 +227,7 @@ public class KeyboardDataHandler {
             if(isCorrectKeyboard){
                 return Long.toString(keyboard.getId());
             }
-            System.out.println("Desired locale: " + locale.toString() + " keyboardLocal: " + keyboardLocal.toString());
+//            Log.i(TAG, "Desired locale: " + locale.toString() + " keyboardLocal: " + keyboardLocal.toString());
         }
 
         return null;

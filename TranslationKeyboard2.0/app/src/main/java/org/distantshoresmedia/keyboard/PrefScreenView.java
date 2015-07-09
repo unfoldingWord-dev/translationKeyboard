@@ -34,7 +34,6 @@ public class PrefScreenView extends PreferenceActivity
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        System.out.println("Got here. preferences onCreate");
         addPreferencesFromResource(R.xml.prefs_view);
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         prefs.registerOnSharedPreferenceChangeListener(this);
