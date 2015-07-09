@@ -89,6 +89,20 @@ public class KeyCharacter {
         }
     }
 
+    public JSONObject getAsJson() {
+
+        try{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(kModeMaskKey, modMask);
+            jsonObject.put(kUnicodeValue, unicodeValue);
+            return jsonObject;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
         return "KeyCharacter{" +

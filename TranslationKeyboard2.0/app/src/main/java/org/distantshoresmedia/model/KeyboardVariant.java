@@ -3,7 +3,6 @@
 
 package org.distantshoresmedia.model;
 
-import android.inputmethodservice.Keyboard;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -11,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class KeyboardVariant {
 
@@ -21,7 +20,7 @@ public class KeyboardVariant {
     static final private String kCreatedKey = "created_at";
     static final private String kUpdatedKey = "updated_at";
     static final private String kKeyboardPositionRowKey = "key_position_rows";
-    static final private String kKeyboardPositionCollumnKey = "key_position_columns";
+    static final private String kKeyboardPositionColumnKey = "key_position_columns";
 
     private String name;
     public void setName(String name) {
@@ -51,12 +50,7 @@ public class KeyboardVariant {
     public ArrayList<KeyPosition[]> getKeys() {
         return keys;
     }
-    // 	public void setKeys(KeyPosition[] keys) {
-//		this.keys = keys;
-//	}
-//	public KeyPosition[] getKeysAtIndex(int index) {
-//        return this.keys.get(index);
-//    }
+
 
     public int getNumberOfRows(){
 
@@ -99,7 +93,7 @@ public class KeyboardVariant {
 
             for(int i = 0; i < rows.length(); i++){
                 JSONObject rowObj = rows.getJSONObject(i);
-                JSONArray columns = rowObj.getJSONArray(kKeyboardPositionCollumnKey);
+                JSONArray columns = rowObj.getJSONArray(kKeyboardPositionColumnKey);
 
                 KeyPosition[] row = new KeyPosition[columns.length()];
 
@@ -125,6 +119,66 @@ public class KeyboardVariant {
             return null;
         }
     }
+
+    public JSONObject getAsJson() {
+
+        try{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(kNameKey, name);
+            jsonObject.put(kCreatedKey, createdAt);
+            jsonObject.put(kUpdatedKey, updatedAt);
+            jsonObject.put(kKeyboardPositionRowKey, getKeyPositionJson());
+            return jsonObject;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private JSONArray getKeyPositionJson(){
+
+        List<List<JSONObject>> positions = getOrderedPositions();
+
+        JSONArray positionsJson = new JSONArray();
+
+        for(List<JSONObject> row : positions){
+
+            JSONArray rows = new JSONArray();
+
+            for(JSONObject column : row){
+                rows.put(column);
+            }
+            JSONObject rowsObject = new JSONObject();
+
+            try {
+                rowsObject.put(kKeyboardPositionColumnKey, rows);
+                positionsJson.put(rowsObject);
+            }
+            catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+
+        return positionsJson;
+    }
+
+    private List<List<JSONObject>> getOrderedPositions(){
+
+        List<List<JSONObject>> positionsList = new ArrayList<List<JSONObject>>();
+
+        for(KeyPosition[] positionArray : getKeys()){
+            for(KeyPosition position : positionArray){
+
+                if(positionsList.size() <= position.getRow()){
+                    positionsList.add(position.getRow(),  new ArrayList<JSONObject>());
+                }
+                positionsList.get(position.getRow()).add(position.getColumn(), position.getAsJson());
+            }
+        }
+        return positionsList;
+    }
+
 
     @Override
     public String toString() {

@@ -108,6 +108,32 @@ public class KeyPosition {
         }
     }
 
+    public JSONObject getAsJson() {
+
+        try{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(kPercentWidthKey, percentWidth);
+            jsonObject.put(kCharactersKey, getCharactersJson());
+            return jsonObject;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private JSONArray getCharactersJson(){
+
+        JSONArray jsonArray = new JSONArray();
+
+        for(KeyCharacter character : getCharacters()){
+
+            jsonArray.put(character);
+        }
+
+        return jsonArray;
+    }
+
     @Override
     public String toString() {
         return "KeyPosition{" +

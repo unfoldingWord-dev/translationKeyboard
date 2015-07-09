@@ -14,7 +14,7 @@ import java.util.Locale;
 /**
  * Created by Fechner on 12/18/14.
  */
-public class AvailableKeyboard extends BaseDataClass implements Comparable<AvailableKeyboard>, Serializable{
+public class AvailableKeyboard extends BaseDataClass implements Comparable<AvailableKeyboard>, Serializable {
 
     private static final String TAG = "AvailableKeyboard";
 
@@ -24,7 +24,6 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
     static final private String kIsoRegionKey = "iso_region";
     static final private String kLanguageNameKey = "language_name";
     static final private String kUpdatedKey = "updated_at";
-
 
     public int id;
     private String isoLanguage;
@@ -40,7 +39,6 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
     }
 
 
-
     public String getIsoRegion() {
         return isoRegion;
     }
@@ -48,7 +46,6 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
     public void setIsoRegion(String isoRegion) {
         this.isoRegion = isoRegion;
     }
-
 
 
     public String getLanguageName() {
@@ -68,7 +65,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         this.id = id;
     }
 
-    public String getObjectAsJSONString(){
+    public String getObjectAsJSONString() {
 
         String jsonString = "{\n" + kIdKey + ": " + this.id + ","
                 + kIsoLanguageKey + ": \"" + this.isoLanguage + "\","
@@ -79,7 +76,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         return jsonString;
     }
 
-    public Locale getKeyboardAsLocale(){
+    public Locale getKeyboardAsLocale() {
         return new Locale(isoLanguage, isoRegion);
     }
 
@@ -96,15 +93,14 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
 
     }
 
-    static public String getKeyboardNameFromJSONString(String json){
+    static public String getKeyboardNameFromJSONString(String json) {
 
         try {
             JSONObject jObject = new JSONObject(json);
             String name = jObject.getString(kLanguageNameKey);
 
             return name;
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             Log.e(TAG, "getKeyboardNameFromJSONString JSONException: " + e.toString());
         }
 
@@ -118,7 +114,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         ArrayList<AvailableKeyboard> keyboardObjects = new ArrayList<AvailableKeyboard>();
 
         try {
-            JSONObject jsonObj= new JSONObject(json);
+            JSONObject jsonObj = new JSONObject(json);
 
             JSONArray keyboards = jsonObj.getJSONArray(kKeyboardKey);
 
@@ -145,7 +141,7 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         AvailableKeyboard[] finalKeyboards = new AvailableKeyboard[keyboardObjects.size()];
 
         int i = 0;
-        for(AvailableKeyboard keyboard : keyboardObjects){
+        for (AvailableKeyboard keyboard : keyboardObjects) {
 
             finalKeyboards[i] = keyboard;
             i++;
@@ -159,5 +155,23 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
 
         int result = this.languageName.compareTo(another.languageName);
         return result;
+    }
+
+    public JSONObject getAsJson() {
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(kIdKey, id);
+            jsonObject.put(kIsoLanguageKey, isoLanguage);
+            jsonObject.put(kIsoRegionKey, isoRegion);
+            jsonObject.put(kLanguageNameKey, languageName);
+            jsonObject.put(kUpdatedKey, updated);
+            return jsonObject;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }

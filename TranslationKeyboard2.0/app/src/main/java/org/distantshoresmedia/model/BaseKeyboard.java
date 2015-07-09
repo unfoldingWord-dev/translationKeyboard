@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class BaseKeyboard extends BaseDataClass{
 
@@ -22,7 +21,7 @@ public class BaseKeyboard extends BaseDataClass{
     static final private String kUpdatedKey = "updated_at";
     static final private String kIsoRegionKey = "iso_region";
     static final private String kIsoLanguageKey = "iso_language";
-    static final private String kKeybaordVariantKey = "keyboard_variants";
+    static final private String kKeyboardVariantKey = "keyboard_variants";
 
     private String Name;
     public void setName(String name) {
@@ -119,7 +118,7 @@ public class BaseKeyboard extends BaseDataClass{
             String isoRegion = jsonObj.getString(kIsoRegionKey);
             String isoLanguage = jsonObj.getString(kIsoLanguageKey);
 
-            JSONArray rows = jsonObj.getJSONArray(kKeybaordVariantKey);
+            JSONArray rows = jsonObj.getJSONArray(kKeyboardVariantKey);
             KeyboardVariant[] variants = new KeyboardVariant[rows.length()];
 
             for(int i = 0; i < rows.length(); i++) {
@@ -137,6 +136,37 @@ public class BaseKeyboard extends BaseDataClass{
             Log.e(TAG, "BaseKeyboard JSONException: " + e.toString());
             return null;
         }
+    }
+
+    public JSONObject getAsJson(){
+
+        try{
+            JSONObject jsonObject = new JSONObject();
+
+            jsonObject.put(kUIDKey, id);
+            jsonObject.put(kKeyboardNameKey, getName());
+            jsonObject.put(kCreatedKey, createdAt);
+            jsonObject.put(kUpdatedKey, updated);
+            jsonObject.put(kIsoRegionKey, getIsoRegion());
+            jsonObject.put(kIsoLanguageKey, isoLanguage);
+            jsonObject.put(kKeyboardVariantKey, getVariantsAsJson());
+            return jsonObject;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private JSONArray getVariantsAsJson(){
+
+        JSONArray jsonArray = new JSONArray();
+
+        for(KeyboardVariant variant : getKeyboardVariants()){
+            jsonArray.put(variant.getAsJson());
+        }
+
+        return jsonArray;
     }
 
     @Override
