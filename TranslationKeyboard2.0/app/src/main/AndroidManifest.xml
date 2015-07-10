@@ -30,6 +30,7 @@
         android:label="@string/english_ime_name"
         android:logo="@drawable/icon"
         android:restoreAnyVersion="true" >
+
         <service
             android:name="org.distantshoresmedia.keyboard.LatinIME"
             android:icon="@drawable/icon"
@@ -44,6 +45,7 @@
                 android:name="android.view.im"
                 android:resource="@xml/method" />
         </service>
+
         <service android:name=".UpdateService" />
 
         <activity
@@ -53,7 +55,43 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="content"
+                    android:pathPattern=".*\\.tk"
+                    android:mimeType="application/octet-stream"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="file"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.tk"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.tk" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file"
+                    android:host="*"
+                    android:pathPattern=".*\\.tk"
+                    android:mimeType="*/*"  />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".TKIMESettings"
@@ -121,6 +159,10 @@
             android:label="@string/title_activity_share"
             android:theme="@style/AppTheme">
         </activity>
+
+        <activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
+
+
     </application>
 
 </manifest>

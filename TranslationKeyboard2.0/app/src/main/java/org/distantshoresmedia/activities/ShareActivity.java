@@ -1,7 +1,9 @@
 package org.distantshoresmedia.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.distantshoresmedia.adapters.ShareAdapter;
+import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.fragments.ShareSelectionFragment;
 import org.distantshoresmedia.model.AvailableKeyboard;
@@ -20,6 +24,8 @@ import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -31,6 +37,9 @@ import java.util.zip.Inflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import ar.com.daidalos.afiledialog.FileChooserActivity;
+import ar.com.daidalos.afiledialog.FileChooserDialog;
 
 public class ShareActivity extends ActionBarActivity {
 
@@ -78,7 +87,7 @@ public class ShareActivity extends ActionBarActivity {
 
                                 switch (which) {
                                     case 0: {
-//                                        startActivity(Sharer.getEmailShareIntent(getApplicationContext(), shareText));
+                                        chooseDirectory();
                                         break;
                                     }
                                     case 1: {
@@ -89,7 +98,7 @@ public class ShareActivity extends ActionBarActivity {
                                         dialog.cancel();
                                     }
                                 }
-                                prepareData();
+//                                prepareData();
                             }
                         })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -101,16 +110,61 @@ public class ShareActivity extends ActionBarActivity {
         dialogue.show();
     }
 
-    private void prepareData(){
+    private void chooseDirectory(){
+
+        Intent intent = new Intent(this, FileChooserActivity.class);
+        intent.putExtra(FileChooserActivity.INPUT_FOLDER_MODE, true);
+        intent.putExtra(FileChooserActivity.INPUT_SHOW_CONFIRMATION_ON_SELECT, true);
+        this.startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK) {
+            boolean fileCreated = false;
+            String filePath = "";
+
+            Bundle bundle = data.getExtras();
+            if(bundle != null)
+            {
+                if(bundle.containsKey(FileChooserActivity.OUTPUT_NEW_FILE_NAME)) {
+                    fileCreated = true;
+                    File folder = (File) bundle.get(FileChooserActivity.OUTPUT_FILE_OBJECT);
+                    String name = bundle.getString(FileChooserActivity.OUTPUT_NEW_FILE_NAME);
+                    filePath = folder.getAbsolutePath() + "/" + name;
+                } else {
+                    fileCreated = false;
+                    File file = (File) bundle.get(FileChooserActivity.OUTPUT_FILE_OBJECT);
+                    filePath = file.getAbsolutePath();
+                }
+                saveToFile(filePath, getData());
+            }
+//
+//            String message = fileCreated? "File created" : "File opened";
+//            message += ": " + filePath;
+//            Toast toast = Toast.makeText(AFileDialogTestingActivity.this, message, Toast.LENGTH_LONG);
+//            toast.show();
+        }
+    }
+
+    private String getData(){
 
         JSONArray ar = SideLoadingDataPreparer.getSideLoadingJson(getApplicationContext(), selectionFragment.getSelectedKeyboards());
 
         String data = ar.toString();
+        return data;
 
-        String zipString = compressData(data);
-        String unCompressedString = deCompressData(zipString);
-        compressText(data);
-        Log.i(TAG, "Done");
+//        String zipString = compressData(data);
+//        String unCompressedString = deCompressData(zipString);
+//        compressText(data);
+//        Log.i(TAG, "Done");
+    }
+
+    private void saveToFile(String path, String text){
+
+        FileLoader.saveFile(text, path, "test.tk");
+
     }
 
     private String compressData(String uncompressedData) {

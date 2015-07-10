@@ -61,6 +61,32 @@ public class FileLoader {
         Log.i(TAG, "File saving was successful.");
     }
 
+    public static void saveFile(CharSequence fileSequence, String dirName, String fileName){
+
+        Log.i(TAG, "Attempting to save file named:" + fileName);
+
+        try {
+            File file = new File(dirName, fileName);
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            String fileString = fileSequence.toString();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(fileString);
+            bw.close();
+        }
+        catch (FileNotFoundException e){
+            Log.e(TAG, "saveFileToApplicationFiles FileNotFoundException: " + e.toString());
+        }
+        catch (IOException e){
+            Log.e(TAG, "saveFileToApplicationFiles IOException: " + e.toString());
+        }
+
+        Log.i(TAG, "File saving was successful.");
+    }
+
     //endregion
 
 
