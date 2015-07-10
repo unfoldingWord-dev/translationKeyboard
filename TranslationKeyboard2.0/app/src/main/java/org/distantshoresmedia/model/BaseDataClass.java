@@ -15,7 +15,7 @@ import java.util.Date;
 public class BaseDataClass implements Serializable{
 
     static final private String kUpdatedKey = "updated_at";
-    private static final String TAG = "org.distantshoresmedia.model.translationkeyboard20";
+    private static final String TAG = "BaseDataClass";
 
     protected long id;
     public long getId() {
