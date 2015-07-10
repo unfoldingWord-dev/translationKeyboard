@@ -128,7 +128,7 @@ public class KeyPosition {
 
         for(KeyCharacter character : getCharacters()){
 
-            jsonArray.put(character);
+            jsonArray.put(character.getAsJson());
         }
 
         return jsonArray;

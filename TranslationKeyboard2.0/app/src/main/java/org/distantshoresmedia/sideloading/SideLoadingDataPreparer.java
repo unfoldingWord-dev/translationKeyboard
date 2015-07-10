@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SideLoadingDataPreparer {
 
-    public static JSONArray getSideLoadingJson(Context context, List<AvailableKeyboard> keyboards){
+    public static JSONObject getSideLoadingJson(Context context, List<AvailableKeyboard> keyboards){
 
         JSONArray jsonArray = new JSONArray();
 
@@ -29,8 +29,18 @@ public class SideLoadingDataPreparer {
                 jsonArray.put(getModelsAsJson(keyboard, keyboardModel));
             }
         }
+        JSONObject finalObject = new JSONObject();
 
-        return jsonArray;
+        try {
+            finalObject.put("keyboards", jsonArray);
+            return finalObject;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+
+
     }
 
     private static JSONObject getModelsAsJson(AvailableKeyboard parentKeyboard, BaseKeyboard baseKeyboard){

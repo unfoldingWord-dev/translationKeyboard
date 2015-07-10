@@ -9,6 +9,7 @@ import org.distantshoresmedia.model.BaseKeyboard;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -129,6 +130,20 @@ public class FileLoader {
             InputStream fileStream = context.getAssets().open(fileName);
 
             String resultString = getStringFromInputStream(fileStream, fileName).toString();
+            return resultString;
+        }
+        catch (IOException e){
+            Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
+            return null;
+        }
+    }
+
+    public static String getJSONStringFromFile(File file){
+
+        try{
+            FileInputStream fileStream = new FileInputStream(file);
+
+            String resultString = getStringFromInputStream(fileStream, file.getName()).toString();
             return resultString;
         }
         catch (IOException e){

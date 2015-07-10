@@ -18,6 +18,7 @@ package org.distantshoresmedia.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -34,12 +35,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.keyboard.InputLanguageSelection;
 import org.distantshoresmedia.translationkeyboard20.NetWorkUtil;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.distantshoresmedia.translationkeyboard20.UpdateService;
+
+import java.util.Arrays;
 
 public class Main extends FragmentActivity implements UpdateFragment.OnFragmentInteractionListener {
 
@@ -110,7 +114,40 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
 
     private void sharePressed(){
 
-        startActivity(new Intent(getApplicationContext(), ShareActivity.class));
+        View titleView = View.inflate(getApplicationContext(), R.layout.alert_title, null);
+        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
+
+        AlertDialog dialogue = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
+                .setCustomTitle(titleView)
+                .setAdapter(new ShareAdapter(getApplicationContext(), Arrays.asList(new String[]{"Send/Save Keyboards", "Receive/Load Keyboards"})),
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                switch (which) {
+                                    case 0: {
+                                        startActivity(new Intent(getApplicationContext(), ShareActivity.class));
+                                        break;
+                                    }
+                                    case 1: {
+                                        startActivity(new Intent(getApplicationContext(), LoadActivity.class));
+                                        break;
+                                    }
+                                    default: {
+                                        dialog.cancel();
+                                    }
+                                }
+                            }
+                        })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).create();
+        dialogue.show();
+
     }
 
     private void updateKeyboards() {

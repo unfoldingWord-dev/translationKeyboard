@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,7 +98,42 @@ public class KeyboardDataHandler {
         }
     }
 
+    public static void sideLoadKeyboards(Context context, String keyboardsJson){
 
+        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(keyboardsJson);
+        if(keyboards == null){
+            return;
+        }
+        getAvailableKeyboardsDictionary(context);
+        getDownloadedKeyboardsDictionary(context);
+
+        for(AvailableKeyboard keyboard : keyboards){
+            availableKeyboardsDictionary.put(Long.toString(keyboard.getId()), keyboard);
+            downloadedKeyboardsDictionary.put(Long.toString(keyboard.getId()), keyboard);
+        }
+
+        KeyboardFileLoader.saveAvailableKeyboards(context, getKeyboardsArrayFromDictionary(context, availableKeyboardsDictionary));
+        KeyboardFileLoader.saveDownloadedKeyboards(context, getKeyboardsArrayFromDictionary(context, downloadedKeyboardsDictionary));
+        createSideLoadedKeyboards(context, keyboardsJson);
+    }
+
+    private static void createSideLoadedKeyboards(Context context, String json){
+
+        getAvailableKeyboardsDictionary(context);
+        getDownloadedKeyboardsDictionary(context);
+
+        try{
+            JSONArray jsonArray = new JSONObject(json).getJSONArray("keyboards");
+            for(int i = 0; i < jsonArray.length(); i++){
+
+                JSONObject baseKeyboard = jsonArray.getJSONObject(i).getJSONObject("keyboards");
+                KeyboardFileLoader.saveKeyboardJson(context, baseKeyboard.toString());
+            }
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
 
     protected static AvailableKeyboard[] getInstalledKeyboardsArray(Context context){
 

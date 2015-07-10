@@ -100,14 +100,15 @@ public class KeyboardFileLoader {
         FileLoader.saveFileToApplicationFiles(context, json, FileNameHelper.getAvailableKeyboardsFileName());
     }
 
-//    protected static void saveAvailableKeyboards(Context context, AvailableKeyboard[] keyboards){
-//
-//        saveKeyboards(context, keyboards, FileNameHelper.getAvailableKeyboardsFileName());
-//    }
+    protected static void saveAvailableKeyboards(Context context, AvailableKeyboard[] keyboards){
+
+        saveKeyboards(context, keyboards, FileNameHelper.getAvailableKeyboardsFileName());
+    }
     protected static void saveDownloadedKeyboards(Context context, AvailableKeyboard[] keyboards){
 
         saveKeyboards(context, keyboards, FileNameHelper.getDownloadedKeyboardsFileName());
     }
+
     protected static void saveInstalledKeyboards(Context context, AvailableKeyboard[] keyboards){
 
         saveKeyboards(context, keyboards, FileNameHelper.getInstalledKeyboardsFileName());

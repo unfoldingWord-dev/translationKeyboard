@@ -33,12 +33,12 @@ public class KeyCharacter {
         return name;
     }
 
-	private int[] unicodeValue;
- 	public void setUnicodeValue(int[] unicodeValue) {
-		this.unicodeValue = unicodeValue;
+	private int[] unicodeValues;
+ 	public void setUnicodeValues(int[] unicodeValues) {
+		this.unicodeValues = unicodeValues;
 	}
-	public int[] getUnicodeValue() {
-		return unicodeValue;
+	public int[] getUnicodeValues() {
+		return unicodeValues;
 	}
 
 	private Integer modMask;
@@ -51,15 +51,15 @@ public class KeyCharacter {
 
 
     public KeyCharacter(Integer modMask, int[] unicodeValue){
-        this.unicodeValue = unicodeValue;
+        this.unicodeValues = unicodeValue;
         this.modMask = modMask;
     }
 
     public Integer[] getUnicodeAsIntegerObjects(){
-        Integer[] integers = new Integer[unicodeValue.length];
+        Integer[] integers = new Integer[unicodeValues.length];
 
-        for(int i = 0; i < unicodeValue.length; i++){
-            integers[i] = unicodeValue[i];
+        for(int i = 0; i < unicodeValues.length; i++){
+            integers[i] = unicodeValues[i];
         }
         return integers;
     }
@@ -94,7 +94,12 @@ public class KeyCharacter {
         try{
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(kModeMaskKey, modMask);
-            jsonObject.put(kUnicodeValue, unicodeValue);
+            JSONArray unicodeArray = new JSONArray();
+
+            for(long unicode : unicodeValues){
+                unicodeArray.put(unicode);
+            }
+            jsonObject.put(kUnicodeValue, unicodeArray);
             return jsonObject;
         }
         catch (JSONException e){
@@ -108,7 +113,7 @@ public class KeyCharacter {
         return "KeyCharacter{" +
                 ", id=" + id +
                 ", name='" + name + '\'' +
-                ", unicodeValue=" + Arrays.toString(unicodeValue) +
+                ", unicodeValues=" + Arrays.toString(unicodeValues) +
                 ", modMask=" + modMask +
                 '}';
     }

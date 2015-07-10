@@ -160,6 +160,12 @@
             android:theme="@style/AppTheme">
         </activity>
 
+        <activity
+            android:name="org.distantshoresmedia.activities.LoadActivity"
+            android:label="@string/title_activity_share"
+            android:theme="@style/AppTheme">
+        </activity>
+
         <activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
 
 

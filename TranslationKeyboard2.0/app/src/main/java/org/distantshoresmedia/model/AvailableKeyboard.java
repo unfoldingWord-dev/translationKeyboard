@@ -38,7 +38,6 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         this.isoLanguage = isoLanguage;
     }
 
-
     public String getIsoRegion() {
         return isoRegion;
     }

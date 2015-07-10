@@ -21,6 +21,7 @@ import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.sideloading.SideLoadingDataPreparer;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -148,23 +149,22 @@ public class ShareActivity extends ActionBarActivity {
         }
     }
 
-    private String getData(){
+    private String getData() {
 
-        JSONArray ar = SideLoadingDataPreparer.getSideLoadingJson(getApplicationContext(), selectionFragment.getSelectedKeyboards());
+        JSONObject requestedKeyboardData = SideLoadingDataPreparer.getSideLoadingJson(getApplicationContext(), selectionFragment.getSelectedKeyboards());
 
-        String data = ar.toString();
-        return data;
-
-//        String zipString = compressData(data);
-//        String unCompressedString = deCompressData(zipString);
-//        compressText(data);
-//        Log.i(TAG, "Done");
+        if (requestedKeyboardData != null){
+            String data = requestedKeyboardData.toString();
+            return data;
+        }
+        else{
+            return null;
+        }
     }
 
     private void saveToFile(String path, String text){
 
         FileLoader.saveFile(text, path, "test.tk");
-
     }
 
     private String compressData(String uncompressedData) {
