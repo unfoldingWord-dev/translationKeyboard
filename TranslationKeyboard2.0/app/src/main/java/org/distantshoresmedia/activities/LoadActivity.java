@@ -76,7 +76,7 @@ public class LoadActivity extends ActionBarActivity {
                                         break;
                                     }
                                     case 1: {
-//                                        startActivity(Sharer.getSMSShareIntent(getApplicationContext(), shareText));
+                                        startActivity(new Intent(getApplicationContext(), QRReaderActivity.class));
                                         break;
                                     }
                                     default: {

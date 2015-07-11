@@ -38,5 +38,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.joanzapata.android:android-iconify-parent:1.0.9'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
+    compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     compile project(':FileDialog')
 }
