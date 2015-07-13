@@ -4,12 +4,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.Base64;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
@@ -159,9 +167,29 @@ public class ShareActivity extends ActionBarActivity {
     private void encodeAndDecode(String text){
 
         String encodedText = Zipper.encodeToBase64ZippedString(text);
-        String decodedText = Zipper.decodeFromBase64EncodedString(encodedText);
+//        String decodedText = Zipper.decodeFromBase64EncodedString(encodedText);
+//
+//        Log.i(TAG, "Did it worked!");
 
-        Log.i(TAG, "Did it worked!");
+
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(encodedText, BarcodeFormat.QR_CODE, 1000, 1000);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            ImageView qrView = (ImageView) findViewById(R.id.qr_code_image_view);
+            qrView.setImageBitmap(bmp);
+            qrView.setVisibility(View.VISIBLE);
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
 
 //        try {

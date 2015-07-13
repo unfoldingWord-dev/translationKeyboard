@@ -40,4 +40,7 @@ dependencies {
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     compile project(':FileDialog')
+    compile 'com.google.zxing:android-core:3.2.0'
+    compile 'com.google.zxing:android-integration:3.2.0'
+    compile 'com.akexorcist:bluetoothspp:1.0.0'
 }
