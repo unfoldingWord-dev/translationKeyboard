@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
+import org.distantshoresmedia.sideloading.SideLoader;
+import org.distantshoresmedia.sideloading.Zipper;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.io.ByteArrayOutputStream;
@@ -65,39 +67,9 @@ public class QRReaderActivity extends Activity implements QRCodeReaderView.OnQRC
 
     private void handleTextFound(String text){
 
-        byte[] data = Base64.decode(text, Base64.DEFAULT);
-        String finalText = deCompressData(data);
-
-//        String text1 = null;
-//        try {
-//            text1 = new String(data1, "UTF-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    private String deCompressData(byte[] compressedBytes) {
-
-        String deCompressedData = null;
-        try {
-//            if (compressedBytes.length() > 200) {
-            byte[] output = new byte[10000];
-            Inflater decompresser = new Inflater();
-            decompresser.setInput(compressedBytes);
-//            byte[] result = str.getBytes();
-            int resultLength = decompresser.inflate(output);
-            decompresser.end();
-
-            // Decode the bytes into a String
-            String outputString = new String(output, 0, resultLength, "UTF-8");
-            System.out.println("Deflated String:" + outputString);
-//            }
+        String decodedText = Zipper.decodeFromBase64EncodedString(text);
+        if(decodedText != null) {
+            SideLoader.loadedContent(this, decodedText);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            deCompressedData = null;
-        }
-
-        return deCompressedData;
     }
 }

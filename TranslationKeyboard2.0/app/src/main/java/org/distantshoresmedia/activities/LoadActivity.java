@@ -17,6 +17,8 @@ import org.distantshoresmedia.database.KeyboardDataHandler;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.fragments.ShareSelectionFragment;
 import org.distantshoresmedia.model.AvailableKeyboard;
+import org.distantshoresmedia.sideloading.SideLoadType;
+import org.distantshoresmedia.sideloading.SideLoader;
 import org.distantshoresmedia.sideloading.SideLoadingDataPreparer;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONArray;
@@ -133,7 +135,7 @@ public class LoadActivity extends ActionBarActivity {
 
         String fileText = FileLoader.getJSONStringFromFile(file);
 
-        findKeyboards(fileText);
+        SideLoader.loadedContent(this, fileText);
     }
 
     private void findKeyboards(final String json){

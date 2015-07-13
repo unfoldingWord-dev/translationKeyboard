@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.util.Base64;
@@ -16,6 +17,7 @@ import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.fragments.ShareSelectionFragment;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.sideloading.SideLoadingDataPreparer;
+import org.distantshoresmedia.sideloading.Zipper;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONObject;
 
@@ -155,49 +157,66 @@ public class ShareActivity extends ActionBarActivity {
     }
 
     private void encodeAndDecode(String text){
-        try {
-            // Encode a String into bytes
-            String inputString = text;
-            byte[] input = inputString.getBytes("UTF-8");
 
-            // Compress the bytes
-            byte[] output1 = new byte[input.length];
-            Deflater compresser = new Deflater();
-            compresser.setInput(input);
-            compresser.finish();
-            int compressedDataLength = compresser.deflate(output1);
-            compresser.end();
+        String encodedText = Zipper.encodeToBase64ZippedString(text);
+        String decodedText = Zipper.decodeFromBase64EncodedString(encodedText);
 
-            String str = Base64.encodeToString(output1, Base64.DEFAULT);
-            System.out.println("Deflated String:" + str);
-
-            byte[] output2 = Base64.decode(str, Base64.DEFAULT);
+        Log.i(TAG, "Did it worked!");
 
 
-
-            // Decompress the bytes
-            Inflater decompresser = new Inflater();
-            decompresser.setInput(output2);
-            byte[] result = new byte[10000];
-            int resultLength = decompresser.inflate(result);
-            decompresser.end();
-
-            // Decode the bytes into a String
-            String outputString = new String(result, 0, resultLength, "UTF-8");
-            System.out.println("Deflated String:" + outputString);
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (DataFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-//        byte[] result = new byte[8192];
-//        while (!decompresser.finished()) {
-//            int byteCount = decompresser.inflate(result);
-//            dec.write(result, 0, byteCount);
+//        try {
+//            // Encode a String into bytes
+//            String inputString = text;
+//            byte[] input = inputString.getBytes("UTF-8");
+//
+//            // Compress the bytes
+//            byte[] output1 = new byte[input.length];
+//            Deflater compresser = new Deflater();
+//            compresser.setInput(input);
+//            compresser.finish();
+//            int compressedDataLength = compresser.deflate(output1);
+//            compresser.end();
+//
+//            String str = Base64.encodeToString(output1, Base64.DEFAULT);
+//            System.out.println("Deflated String:" + str);
+//
+//            byte[] output2 = Base64.decode(str, Base64.DEFAULT);
+//
+//            Inflater decompresser = new Inflater();
+//            decompresser.setInput(output2);
+//
+//            byte[] finalResult = new byte[0];
+//            byte[] result = new byte[8192];
+//            while (!decompresser.finished()) {
+//                int byteCount = decompresser.inflate(result, 0, 8192);
+//                byte[] currentResult = new byte[finalResult.length + result.length];
+//
+//                System.arraycopy(finalResult, 0, currentResult, 0, finalResult.length);
+//                System.arraycopy(result, finalResult.length, currentResult, 0, result.length);
+//                finalResult = currentResult;
+//
+//            }
+////            byte[] result = new byte[10000];
+////            int resultLength = decompresser.inflate(result);
+//            decompresser.end();
+//
+//            // Decode the bytes into a String
+//            String outputString = new String(finalResult, "UTF-8");
+//            outputString = outputString.trim();
+//            System.out.println("Deflated String:" + outputString);
+//        } catch (UnsupportedEncodingException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (DataFormatException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
 //        }
+//
+////        byte[] result = new byte[8192];
+////        while (!decompresser.finished()) {
+////            int byteCount = decompresser.inflate(result);
+////            dec.write(result, 0, byteCount);
+////        }
 
     }
 
