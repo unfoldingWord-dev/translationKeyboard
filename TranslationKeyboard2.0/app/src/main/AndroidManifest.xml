@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <uses-feature
         android:name="android.hardware.microphone"
@@ -169,6 +171,12 @@
         <activity
             android:name="org.distantshoresmedia.activities.QRReaderActivity"
             android:label="@string/title_activity_qrreader" >
+        </activity>
+        <activity
+            android:name="org.distantshoresmedia.activities.BluetoothSharingActivity"
+            android:label="@string/title_activity_bluetooth_sharing"
+            android:theme="@style/AppTheme"
+            >
         </activity>
     </application>
 

@@ -668,5 +668,6 @@
     <string name="title_activity_share">ShareActivity</string>
     <string name="share_keyboards_button_text">Share Keyboards</string>
     <string name="title_activity_qrreader">QRReaderActivity</string>
+    <string name="title_activity_bluetooth_sharing">BluetoothSharingActivity</string>
 
 </resources>

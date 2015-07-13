@@ -92,6 +92,9 @@ public class ShareActivity extends ActionBarActivity {
                                         encodeAndDecode(getData());
                                         break;
                                     }
+                                    case 2: {
+                                        startBluetoothSharing();
+                                    }
                                     default: {
                                         dialog.cancel();
                                     }
@@ -106,6 +109,11 @@ public class ShareActivity extends ActionBarActivity {
                     }
                 }).create();
         dialogue.show();
+    }
+
+    private void startBluetoothSharing(){
+
+        startActivity(new Intent(getApplicationContext(), BluetoothSharingActivity.class));
     }
 
     private void chooseDirectory(){
@@ -174,7 +182,7 @@ public class ShareActivity extends ActionBarActivity {
 
         QRCodeWriter writer = new QRCodeWriter();
         try {
-            BitMatrix bitMatrix = writer.encode(encodedText, BarcodeFormat.QR_CODE, 1000, 1000);
+            BitMatrix bitMatrix = writer.encode(encodedText, BarcodeFormat.QR_CODE, 800, 800);
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
