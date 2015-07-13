@@ -4,6 +4,9 @@ import android.content.Context;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
+import org.distantshoresmedia.utilities.TKPreferenceManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Fechner on 12/31/14.
@@ -56,7 +59,33 @@ public class KeyboardFileLoader {
         return true;
     }
 
+    public static boolean preloadIsUpdated(Context context){
 
+        String fileName = FileNameHelper.getAvailableKeyboardsFileName();
+        String preloadedJson = FileLoader.getJSONStringFromAssets(context, fileName);
+
+        try {
+            double preloadUpdated = (new JSONObject(preloadedJson)).getDouble("updated_at");
+            boolean hasBeenUpdated = (TKPreferenceManager.getLastUpdatedDate(context) < preloadUpdated);
+            return hasBeenUpdated;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean reloadPreload(Context context){
+
+        preLoadAvailableKeyboards(context);
+        preLoadDownloadedKeyboards(context);
+
+        String json = FileLoader.getJSONStringFromAssets(context, FileNameHelper.getAvailableKeyboardsFileName());
+        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
+
+        savePreloadedKeyboards(context, keyboards);
+        return true;
+    }
 
     /**
      *
@@ -76,7 +105,6 @@ public class KeyboardFileLoader {
     }
 
     //endregion
-
 
     //region General Use
 
