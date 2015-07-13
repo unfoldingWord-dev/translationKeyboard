@@ -12,7 +12,8 @@ public class TKPreferenceManager {
 
     private static final String LAST_UPDATED_ID = "last_updated_date";
     public static double getLastUpdatedDate(Context context){
-        return Double.longBitsToDouble(PreferenceManager.getDefaultSharedPreferences(context).getLong(LAST_UPDATED_ID, -1));
+        double updated =  Double.longBitsToDouble(PreferenceManager.getDefaultSharedPreferences(context).getLong(LAST_UPDATED_ID, Double.doubleToRawLongBits(0)));
+        return updated;
     }
     public static void setLastUpdatedDate(Context context, double newValue){
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(LAST_UPDATED_ID, Double.doubleToRawLongBits(newValue)).commit();

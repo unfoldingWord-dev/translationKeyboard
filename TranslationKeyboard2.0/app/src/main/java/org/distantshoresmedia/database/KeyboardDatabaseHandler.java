@@ -49,15 +49,16 @@ public class KeyboardDatabaseHandler {
         currentContext = context;
 
         boolean hasBeenSaved = KeyboardFileLoader.hasSavedKeyboards(context);
-        if(hasBeenSaved){
-            Log.i(TAG, "KeyboardsAlreadySaved");
+        if(!hasBeenSaved){
+            Log.i(TAG, "Keyboards Will Be Initialized");
+            KeyboardFileLoader.initializeKeyboards(context);
         }
         else if (KeyboardFileLoader.preloadIsUpdated(context)){
             KeyboardFileLoader.reloadPreload(context);
+            Log.i(TAG, "reloaded preload");
         }
         else{
-            Log.i(TAG, "Keyboards Will Be Initialized");
-            KeyboardFileLoader.initializeKeyboards(context);
+            Log.i(TAG, "KeyboardsAlreadySaved");
         }
 
         boolean didInitialize = ! hasBeenSaved;
