@@ -2,22 +2,13 @@ package org.distantshoresmedia.activities;
 
 import android.app.Activity;
 import android.graphics.PointF;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
-import org.distantshoresmedia.sideloading.SideLoader;
+import org.distantshoresmedia.sideloading.SideLoadingSharer;
 import org.distantshoresmedia.sideloading.Zipper;
 import org.distantshoresmedia.translationkeyboard20.R;
-
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.zip.Inflater;
 
 public class QRReaderActivity extends Activity implements QRCodeReaderView.OnQRCodeReadListener {
 
@@ -73,7 +64,7 @@ public class QRReaderActivity extends Activity implements QRCodeReaderView.OnQRC
 
         String decodedText = Zipper.decodeFromBase64EncodedString(text);
         if(decodedText != null) {
-            SideLoader.loadedContent(this, decodedText);
+//            SideLoadingSharer.loadedContent(this, decodedText);
         }
     }
 }

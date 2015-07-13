@@ -14,24 +14,16 @@ import android.widget.TextView;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.database.KeyboardDataHandler;
-import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.fragments.ShareSelectionFragment;
 import org.distantshoresmedia.model.AvailableKeyboard;
-import org.distantshoresmedia.sideloading.SideLoadType;
-import org.distantshoresmedia.sideloading.SideLoader;
-import org.distantshoresmedia.sideloading.SideLoadingDataPreparer;
+import org.distantshoresmedia.sideloading.SideLoadingSharer;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
 
 import ar.com.daidalos.afiledialog.FileChooserActivity;
 
@@ -135,7 +127,7 @@ public class LoadActivity extends ActionBarActivity {
 
         String fileText = FileLoader.getJSONStringFromFile(file);
 
-        SideLoader.loadedContent(this, fileText);
+//        SideLoadingSharer.loadedContent(this, fileText);
     }
 
     private void findKeyboards(final String json){

@@ -2,11 +2,9 @@ package org.distantshoresmedia.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import org.distantshoresmedia.translationkeyboard20.R;
 
@@ -14,7 +12,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class BluetoothSharingActivity extends ActionBarActivity {
+public class BluetoothReceivingActivity extends ActionBarActivity {
 
     private static final String TAG = "BluetoothSharingAct";
     private BluetoothSPP bluetooth;

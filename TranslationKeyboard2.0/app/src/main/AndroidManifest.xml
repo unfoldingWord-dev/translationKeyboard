@@ -50,6 +50,7 @@
 
         <activity
             android:name="org.distantshoresmedia.activities.Main"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:label="translationKeyboard" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -121,6 +122,11 @@
             android:name="org.distantshoresmedia.activities.ShareActivity"
             android:label="@string/title_activity_share"
             android:theme="@style/AppTheme" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.distantshoresmedia.keyboard.PrefScreenView" />
+
         </activity>
         <activity
             android:name="org.distantshoresmedia.activities.LoadActivity"
@@ -170,14 +176,34 @@
         <activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
         <activity
             android:name="org.distantshoresmedia.activities.QRReaderActivity"
-            android:label="@string/title_activity_qrreader" >
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:label="@string/title_activity_qrreader"
+            android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name="org.distantshoresmedia.activities.BluetoothSharingActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:label="@string/title_activity_bluetooth_sharing"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name="org.distantshoresmedia.activities.BluetoothReceivingActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:label="@string/title_activity_bluetooth_sharing"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:name="org.distantshoresmedia.activities.ShowQrCodeActivity"
+            android:label="@string/title_activity_show_qr_code"
             android:theme="@style/AppTheme"
             >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.distantshoresmedia.activities.ShareActivity" />
         </activity>
+
     </application>
 
 </manifest>

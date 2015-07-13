@@ -1,10 +1,12 @@
 package org.distantshoresmedia.database;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
+import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,7 +42,7 @@ public class FileLoader {
             File file = new File(context.getFilesDir(), fileName);
 
             if (!file.exists()) {
-                file.createNewFile();
+                boolean success = file.createNewFile();
             }
             String fileString = fileSequence.toString();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
@@ -77,6 +79,43 @@ public class FileLoader {
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(fileString);
             bw.close();
+        }
+        catch (FileNotFoundException e){
+            Log.e(TAG, "saveFileToApplicationFiles FileNotFoundException: " + e.toString());
+        }
+        catch (IOException e){
+            Log.e(TAG, "saveFileToApplicationFiles IOException: " + e.toString());
+        }
+
+        Log.i(TAG, "File saving was successful.");
+    }
+
+    /**
+     *
+     * @param fileSequence
+     * @param fileName
+     * @param context
+     */
+    public static void saveFileToSDCard(Context context, CharSequence fileSequence, String fileName){
+
+        Log.i(TAG, "Attempting to save file named:" + fileName);
+
+        try {
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name), fileName);
+
+            if (!file.exists()) {
+                boolean madeDirs = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name)).mkdirs();
+                boolean madeFile = file.createNewFile();
+            }
+            String fileString = fileSequence.toString();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(fileString);
+            bw.close();
+
+//            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+//            outputStream.write(fileString.getBytes());
+//            outputStream.close();
         }
         catch (FileNotFoundException e){
             Log.e(TAG, "saveFileToApplicationFiles FileNotFoundException: " + e.toString());
