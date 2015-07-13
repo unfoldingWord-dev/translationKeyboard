@@ -23,7 +23,7 @@ import ar.com.daidalos.afiledialog.FileChooserDialog;
 /**
  * Created by Fechner on 7/6/15.
  */
-public class SideLoadingSharer {
+public class SideSharer {
 
     private static final String TAG = "SideLoader";
 
@@ -40,7 +40,7 @@ public class SideLoadingSharer {
         boolean confirmSideLoadingType(SideLoadType type);
     }
 
-    public SideLoadingSharer(Activity activity, SideLoaderListener listener) {
+    public SideSharer(Activity activity, SideLoaderListener listener) {
         this.activity = activity;
         this.listener = listener;
 
@@ -187,6 +187,7 @@ public class SideLoadingSharer {
 
     private void saveToFile(String dir){
         FileLoader.saveFile(getZippedText(), dir, fileName);
+        showSuccessAlert(true);
     }
 
     private String getZippedText(){

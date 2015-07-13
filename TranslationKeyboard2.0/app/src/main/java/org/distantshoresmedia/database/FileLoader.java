@@ -177,7 +177,7 @@ public class FileLoader {
         }
     }
 
-    public static String getJSONStringFromFile(File file){
+    public static String getStringFromFile(File file){
 
         try{
             FileInputStream fileStream = new FileInputStream(file);

@@ -172,6 +172,11 @@
                     android:pathPattern=".*\\.tk"
                     android:scheme="file" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.distantshoresmedia.keyboard.PrefScreenView" />
+
         </activity>
         <activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
         <activity

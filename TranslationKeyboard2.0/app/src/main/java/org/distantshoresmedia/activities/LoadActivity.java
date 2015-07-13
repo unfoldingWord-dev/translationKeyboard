@@ -1,182 +1,77 @@
 package org.distantshoresmedia.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
-import org.distantshoresmedia.adapters.ShareAdapter;
+import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
+
 import org.distantshoresmedia.database.FileLoader;
-import org.distantshoresmedia.database.KeyboardDataHandler;
-import org.distantshoresmedia.fragments.ShareSelectionFragment;
-import org.distantshoresmedia.model.AvailableKeyboard;
-import org.distantshoresmedia.sideloading.SideLoadingSharer;
+import org.distantshoresmedia.sideloading.SideLoader;
 import org.distantshoresmedia.translationkeyboard20.R;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.util.Arrays;
 
-import ar.com.daidalos.afiledialog.FileChooserActivity;
-
-public class LoadActivity extends ActionBarActivity {
+public class LoadActivity extends ActionBarActivity implements QRCodeReaderView.OnQRCodeReadListener{
 
     private static final String TAG = "LoadActivity";
-    private ShareSelectionFragment selectionFragment;
 
-    AvailableKeyboard[] keyboards;
+    private boolean hasFoundData = false;
+    SideLoader loader;
+
+    private QRCodeReaderView decoderView;
+    public QRCodeReaderView getDecoderView() {
+        return decoderView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
 
+        loader = new SideLoader(this);
+
         Uri uri = getIntent().getData();
 
         if(uri != null){
+
             File keyboardFile = new File(uri.getPath());
-            loadFile(keyboardFile);
+            loader.textWasFound(loader.unzipText(FileLoader.getStringFromFile(keyboardFile)));
         }
         else {
-            showShareSelector();
+            decoderView = (QRCodeReaderView) findViewById(R.id.qr_decoder_view);
+            decoderView.setOnQRCodeReadListener(this);
+            loader.startLoading();
         }
-    }
-
-
-    private void showShareSelector(){
-
-        View titleView = View.inflate(getApplicationContext(), R.layout.alert_title, null);
-        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
-
-        AlertDialog dialogue = new AlertDialog.Builder(this, R.style.ActionBarTheme)
-                .setCustomTitle(titleView)
-                .setAdapter(new ShareAdapter(getApplicationContext(), Arrays.asList(new String[]{"Load From Storage", "QR Code", "Bluetooth", "NFC"})),
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                switch (which) {
-                                    case 0: {
-                                        findKeyboards();
-                                        break;
-                                    }
-                                    case 1: {
-                                        startActivity(new Intent(getApplicationContext(), QRReaderActivity.class));
-                                        break;
-                                    }
-                                    default: {
-                                        dialog.cancel();
-                                    }
-                                }
-//                                prepareData();
-                            }
-                        })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).create();
-        dialogue.show();
-    }
-
-    private void findKeyboards(){
-
-        Intent intent = new Intent(this, FileChooserActivity.class);
-        intent.putExtra(FileChooserActivity.INPUT_SHOW_CONFIRMATION_ON_SELECT, true);
-        intent.putExtra(FileChooserActivity.INPUT_REGEX_FILTER, ".*tk");
-        this.startActivityForResult(intent, 0);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onPause() {
+        super.onPause();
+        decoderView.getCameraManager().stopPreview();
+    }
 
-        if (resultCode == Activity.RESULT_OK) {
-            boolean fileCreated = false;
-            String filePath = "";
+    @Override
+    public void cameraNotFound() {
 
-            Bundle bundle = data.getExtras();
-            if(bundle != null)
-            {
-                if(bundle.containsKey(FileChooserActivity.OUTPUT_NEW_FILE_NAME)) {
-                    fileCreated = true;
-                    File folder = (File) bundle.get(FileChooserActivity.OUTPUT_FILE_OBJECT);
-                    String name = bundle.getString(FileChooserActivity.OUTPUT_NEW_FILE_NAME);
-                    filePath = folder.getAbsolutePath() + "/" + name;
-                    loadFile(new File(folder.getAbsolutePath(), name));
-                } else {
-                    fileCreated = false;
-                    File file = (File) bundle.get(FileChooserActivity.OUTPUT_FILE_OBJECT);
-                    filePath = file.getAbsolutePath();
-                    loadFile(file);
-                }
-            }
+    }
+
+    @Override
+    public void onQRCodeRead(String s, PointF[] pointFs) {
+        if (!hasFoundData) {
+
+            decoderView.getCameraManager().stopPreview();
+            hasFoundData = true;
+            loader.textWasFound(loader.unzipText(s));
+
+            decoderView.setVisibility(View.GONE);
         }
     }
 
-    private void loadFile(File file){
+    @Override
+    public void QRCodeNotFoundOnCamImage() {
 
-        String fileText = FileLoader.getJSONStringFromFile(file);
-
-//        SideLoadingSharer.loadedContent(this, fileText);
-    }
-
-    private void findKeyboards(final String json){
-
-        int numberOfKeyboards = getNumberOfKeyboards(json);
-        String keyboardText = (numberOfKeyboards == 1)? "Keyboard" : "Keyboards";
-
-        View titleView = View.inflate(getApplicationContext(), R.layout.alert_title, null);
-        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Import " + numberOfKeyboards + " " + keyboardText + "?");
-
-        AlertDialog dialogue = new AlertDialog.Builder(this)
-                .setCustomTitle(titleView)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        saveKeyboards(json);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-
-    }
-
-    private int getNumberOfKeyboards(String json){
-
-        int numberOfKeyboards = 0;
-        try {
-            JSONArray availableKeyboards = new JSONObject(json).getJSONArray("keyboards");
-
-            for(int i = 0; i < availableKeyboards.length(); i++){
-                JSONObject available = availableKeyboards.getJSONObject(i);
-                JSONObject keyboards = available.getJSONObject("keyboards");
-                JSONArray variants = keyboards.getJSONArray("keyboard_variants");
-                numberOfKeyboards += variants.length();
-            }
-        }
-        catch (JSONException e){
-            e.printStackTrace();
-        }
-
-        return numberOfKeyboards;
-    }
-
-    private void saveKeyboards(String json){
-
-        KeyboardDataHandler.sideLoadKeyboards(getApplicationContext(), json);
-        Log.i(TAG, "keyboard Loaded");
     }
 }

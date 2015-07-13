@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,7 +12,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import org.distantshoresmedia.sideloading.SideLoadingSharer;
+import org.distantshoresmedia.sideloading.SideSharer;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 public class ShowQrCodeActivity extends ActionBarActivity {
@@ -27,7 +25,7 @@ public class ShowQrCodeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_qr_code);
-        this.text = getIntent().getStringExtra(SideLoadingSharer.SHARE_TEXT_PARAM);
+        this.text = getIntent().getStringExtra(SideSharer.SHARE_TEXT_PARAM);
         setupView();
     }
 

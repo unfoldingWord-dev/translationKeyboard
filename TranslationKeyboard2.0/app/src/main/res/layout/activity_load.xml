@@ -4,14 +4,10 @@
     tools:context="org.distantshoresmedia.activities.ShareActivity">
 
 
-    <FrameLayout
+    <com.dlazaro66.qrcodereaderview.QRCodeReaderView
+        android:id="@+id/qr_decoder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/share_fragment_frame"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/share_activity_share_button">
-
-
-    </FrameLayout>
+        android:visibility="gone"/>
 
 </RelativeLayout>

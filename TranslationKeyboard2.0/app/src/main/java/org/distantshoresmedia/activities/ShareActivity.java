@@ -1,41 +1,19 @@
 package org.distantshoresmedia.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import org.distantshoresmedia.adapters.ShareAdapter;
-import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.fragments.ShareSelectionFragment;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.sideloading.SideLoadType;
 import org.distantshoresmedia.sideloading.SideLoadingDataPreparer;
-import org.distantshoresmedia.sideloading.SideLoadingSharer;
-import org.distantshoresmedia.sideloading.Zipper;
+import org.distantshoresmedia.sideloading.SideSharer;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONObject;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import ar.com.daidalos.afiledialog.FileChooserActivity;
 
 public class ShareActivity extends ActionBarActivity {
 
@@ -65,7 +43,7 @@ public class ShareActivity extends ActionBarActivity {
 
     public void shareClicked(View view) {
 
-        SideLoadingSharer sharer = new SideLoadingSharer(this, new SideLoadingSharer.SideLoaderListener() {
+        SideSharer sharer = new SideSharer(this, new SideSharer.SideLoaderListener() {
             @Override
             public void sideLoadingSucceeded(String response) {
 

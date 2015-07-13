@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
-import org.distantshoresmedia.sideloading.SideLoadingSharer;
 import org.distantshoresmedia.sideloading.Zipper;
 import org.distantshoresmedia.translationkeyboard20.R;
 
