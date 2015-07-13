@@ -101,7 +101,25 @@
                 <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_FEEDBACK"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
+
+        <receiver android:name="org.distantshoresmedia.UpdateBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <data android:scheme="package"  />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package"  />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <data android:scheme="package"  />
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>
