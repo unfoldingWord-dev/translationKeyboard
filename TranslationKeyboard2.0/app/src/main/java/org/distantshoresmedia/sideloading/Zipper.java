@@ -76,7 +76,7 @@ public class Zipper {
                 // adds current bytes to currentResult
                 System.arraycopy(result, 0, currentResult, 0, result.length);
                 // copies buffer content to currentResult
-                System.arraycopy(buffer, result.length, currentResult, 0, buffer.length);
+                System.arraycopy(buffer, 0, currentResult, result.length, buffer.length);
 
                 // makes result current
                 result = currentResult;

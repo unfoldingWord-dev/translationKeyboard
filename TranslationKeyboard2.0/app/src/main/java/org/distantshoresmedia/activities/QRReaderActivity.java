@@ -25,6 +25,8 @@ public class QRReaderActivity extends Activity implements QRCodeReaderView.OnQRC
 
     private QRCodeReaderView mydecoderview;
 
+    private boolean hasFoundData = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +38,10 @@ public class QRReaderActivity extends Activity implements QRCodeReaderView.OnQRC
 
     @Override
     public void onQRCodeRead(String text, PointF[] points) {
-
-        handleTextFound(text);
+        if(!hasFoundData) {
+            handleTextFound(text);
+            hasFoundData = true;
+        }
     }
 
 
