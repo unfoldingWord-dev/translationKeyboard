@@ -53,7 +53,7 @@ public class KeyboardDatabaseHandler {
             Log.i(TAG, "KeyboardsAlreadySaved");
         }
         else if (KeyboardFileLoader.preloadIsUpdated(context)){
-
+            KeyboardFileLoader.reloadPreload(context);
         }
         else{
             Log.i(TAG, "Keyboards Will Be Initialized");
