@@ -1,6 +1,8 @@
 package org.distantshoresmedia.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -36,6 +38,26 @@ public class BluetoothReceivingActivity extends ActionBarActivity {
 
         if(!bluetooth.isBluetoothEnabled()) {
 
+            new AlertDialog.Builder(this)
+                    .setTitle("Bluetooth")
+                    .setMessage("Enable Bluetooth?")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            bluetooth.enable();
+                            startBluetoothService();
+                        }
+                    })
+                    .setNegativeButton("false", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    })
+                    .show();
+
         } else {
             startBluetoothService();
         }
@@ -46,8 +68,8 @@ public class BluetoothReceivingActivity extends ActionBarActivity {
         bluetooth.setupService();
         bluetooth.startService(BluetoothState.DEVICE_ANDROID);
 
-        Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-        startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+//        Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+//        startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -56,7 +78,6 @@ public class BluetoothReceivingActivity extends ActionBarActivity {
 
                 String address = data.getExtras().getString(BluetoothState.EXTRA_DEVICE_ADDRESS);
                 bluetooth.connect(address);
-                bluetooth.send("Message", true);
             }
         } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
             if(resultCode == Activity.RESULT_OK) {
@@ -64,7 +85,8 @@ public class BluetoothReceivingActivity extends ActionBarActivity {
                 bluetooth.startService(BluetoothState.DEVICE_ANDROID);
                 startBluetoothService();
             } else {
-                // Do something if user doesn't choose any device (Pressed back)
+                setResult(1);
+                finish();
             }
         }
     }

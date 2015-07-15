@@ -50,7 +50,9 @@ public class LoadActivity extends ActionBarActivity implements QRCodeReaderView.
     @Override
     protected void onPause() {
         super.onPause();
-        decoderView.getCameraManager().stopPreview();
+        if(decoderView != null && decoderView.getCameraManager() != null) {
+            decoderView.getCameraManager().stopPreview();
+        }
     }
 
     @Override

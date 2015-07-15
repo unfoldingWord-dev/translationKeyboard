@@ -3,6 +3,7 @@ package org.distantshoresmedia.sideloading;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
+import org.distantshoresmedia.activities.BluetoothReceivingActivity;
 import org.distantshoresmedia.activities.LoadActivity;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
@@ -43,7 +45,7 @@ public class SideLoader {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = (sdCardIsPresent())? Arrays.asList("QR Code", "Choose Directory", "Load from SD Card")
+        List<String> optionsList = (sdCardIsPresent())? Arrays.asList("QR Code", "Choose Directory", "Save to SD Card")
                 : Arrays.asList("QR Code", "Choose Directory");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
@@ -59,16 +61,16 @@ public class SideLoader {
                                         type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
                                         break;
                                     }
+//                                    case 1: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_BLUETOOTH;
+//                                        break;
+//                                    }
                                     case 1: {
                                         type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
                                         break;
                                     }
                                     case 2: {
                                         type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
-                                        break;
-                                    }
-                                    case 3: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_BLUETOOTH;
                                         break;
                                     }
                                     default: {
@@ -125,6 +127,9 @@ public class SideLoader {
 
     private void startBluetoothLoadAction(){
 
+        Intent intent = new Intent(activity.getApplicationContext(), BluetoothReceivingActivity.class);
+
+        activity.startActivityForResult(intent, 0);
     }
 
     private void startNFCLoadAction(){

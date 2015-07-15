@@ -3,18 +3,30 @@ package org.distantshoresmedia.sideloading;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.distantshoresmedia.activities.BluetoothSharingActivity;
 import org.distantshoresmedia.activities.ShowQrCodeActivity;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.translationkeyboard20.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,8 +65,8 @@ public class SideSharer {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = (sdCardIsPresent())? Arrays.asList("QR Code", "Choose Directory", "Save to SD Card")
-                : Arrays.asList("QR Code", "Choose Directory");
+        List<String> optionsList = (sdCardIsPresent())? Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card")
+                : Arrays.asList("QR Code", "Bluetooth", "Choose Directory");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
                 .setCustomTitle(titleView)
@@ -70,17 +82,18 @@ public class SideSharer {
                                         break;
                                     }
                                     case 1: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
-                                        break;
-                                    }
-                                    case 2: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
-                                        break;
-                                    }
-                                    case 3: {
                                         type = SideLoadType.SIDE_LOAD_TYPE_BLUETOOTH;
                                         break;
                                     }
+                                    case 2: {
+                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
+                                        break;
+                                    }
+                                    case 3: {
+                                        type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
+                                        break;
+                                    }
+
                                     default: {
                                         type = SideLoadType.SIDE_LOAD_TYPE_NONE;
                                         dialog.cancel();
@@ -138,6 +151,37 @@ public class SideSharer {
 
     private void startBluetoothShareAction(){
 
+//        Intent intent = new Intent(activity.getApplicationContext(), BluetoothSharingActivity.class)
+//                .putExtra(BluetoothSharingActivity.TEXT_PARAM, shareText);
+//
+//        activity.startActivityForResult(intent, 0);
+
+        Uri fileUri = FileLoader.createTemporaryFile(activity.getApplicationContext(), getZippedText(), fileName);
+
+        int currentAPIVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            Intent sharingIntent = new Intent(
+                    android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent
+                    .setComponent(new ComponentName(
+                            "com.android.bluetooth",
+                            "com.android.bluetooth.opp.BluetoothOppLauncherActivity"));
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            activity.startActivity(sharingIntent);
+        } else {
+//            ContentValues values = new ContentValues();
+//            values.put(BluetoothShare.URI, uri.toString());
+//            Toast.makeText(getBaseContext(), "URi : " + uri,
+//                    Toast.LENGTH_LONG).show();
+//            values.put(BluetoothShare.DESTINATION, deviceAddress);
+//            values.put(BluetoothShare.DIRECTION,
+//                    BluetoothShare.DIRECTION_OUTBOUND);
+//            Long ts = System.currentTimeMillis();
+//            values.put(BluetoothShare.TIMESTAMP, ts);
+//            getContentResolver().insert(BluetoothShare.CONTENT_URI,
+//                    values);
+        }
     }
 
     private void startNFCShareAction(){
@@ -146,6 +190,33 @@ public class SideSharer {
 
     private void startWIFIShareAction(){
 
+//       new AsyncTask<Void, Void, String>(){
+//           protected String doInBackground(Void... params) {
+//               try {
+//                   ServerSocket serverSocket = new ServerSocket(8988);
+//                   Log.d(TAG, "Server: Socket opened");
+//                   Socket client = serverSocket.accept();
+//                   Log.d(TAG, "Server: connection done");
+//                   String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+//                   File folder = new File(extStorageDirectory, "Download");
+//                   File file = new File(folder,"wifixyz-" + System.currentTimeMillis()+".apk");
+//                   try {
+//                       file.createNewFile();
+//                   } catch (IOException e1) {
+//                       e1.printStackTrace();
+//                   }
+//
+//                   Log.d(TAG, "server: copying files " + file.toString());
+//                   InputStream inputstream = client.getInputStream();
+//                   copyFile(inputstream, new FileOutputStream(file));
+//                   serverSocket.close();
+//                   return file.getAbsolutePath();
+//               } catch(IOException e) {
+//                   Log.e(TAG, e.getMessage());
+//                   return null;
+//               }
+//           }
+//       }.execute();
     }
 
     private void startStorageShareAction(){

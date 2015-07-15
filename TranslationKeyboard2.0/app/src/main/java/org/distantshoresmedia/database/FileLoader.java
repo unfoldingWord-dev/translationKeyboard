@@ -1,6 +1,7 @@
 package org.distantshoresmedia.database;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -125,6 +126,50 @@ public class FileLoader {
         }
 
         Log.i(TAG, "File saving was successful.");
+    }
+
+    public static Uri createTemporaryFile(Context context, CharSequence fileSequence, String fileName){
+
+        Log.i(TAG, "Attempting to save temporary file named:" + fileName);
+
+        try {
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/" + context.getString(R.string.app_name) + "/temp", fileName);
+
+            if (!file.exists()) {
+                boolean madeDirs = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/" + context.getString(R.string.app_name) + "/temp").mkdirs();
+                boolean madeFile = file.createNewFile();
+            }
+            String fileString = fileSequence.toString();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(fileString);
+            bw.close();
+            Log.i(TAG, "createTemporaryFile saving was successful.");
+            return Uri.fromFile(file);
+
+//            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+//            outputStream.write(fileString.getBytes());
+//            outputStream.close();
+        }
+        catch (FileNotFoundException e){
+            Log.e(TAG, "createTemporaryFile FileNotFoundException: " + e.toString());
+        }
+        catch (IOException e){
+            Log.e(TAG, "createTemporaryFile IOException: " + e.toString());
+        }
+        Log.i(TAG, "createTemporaryFile saving was unsuccessful.");
+        return null;
+    }
+
+    public static void clearTemporaryFiles(Context context){
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/" + context.getString(R.string.app_name) + "/temp");
+        if(file.exists()){
+            boolean success = file.delete();
+        }
     }
 
     //endregion
