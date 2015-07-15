@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import org.distantshoresmedia.adapters.KeyboardsAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.fragments.ShareSelectionFragment;
 import org.distantshoresmedia.model.AvailableKeyboard;
@@ -15,7 +16,7 @@ import org.distantshoresmedia.sideloading.SideSharer;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONObject;
 
-public class ShareActivity extends ActionBarActivity {
+public class ShareActivity extends ActionBarActivity implements KeyboardsAdapter.KeyboardAdapterListener {
 
     private static final String TAG = "ShareActivity";
     private ShareSelectionFragment selectionFragment;
@@ -67,7 +68,9 @@ public class ShareActivity extends ActionBarActivity {
             }
         });
 
-        sharer.startSharing(getData(), getFileName());
+        if(selectionFragment.getSelectedKeyboards() != null && selectionFragment.getSelectedKeyboards().size() > 0) {
+            sharer.startSharing(getData(), getFileName());
+        }
 
     }
 
@@ -79,12 +82,14 @@ public class ShareActivity extends ActionBarActivity {
             String data = requestedKeyboardData.toString();
             return data;
         }
-        else{
+        else
+        {
             return null;
         }
     }
 
     private String getFileName(){
+
         return selectionFragment.getSelectedKeyboards().get(0).getLanguageName() + ".tk";
     }
 
@@ -100,5 +105,10 @@ public class ShareActivity extends ActionBarActivity {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void rowSelectedOrDeselected() {
+//        int numOfKeyboards = selectionFragment.getSelectedKeyboards().size();
     }
 }

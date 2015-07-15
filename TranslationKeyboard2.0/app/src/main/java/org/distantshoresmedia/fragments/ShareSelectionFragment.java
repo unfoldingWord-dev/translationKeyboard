@@ -55,7 +55,8 @@ public class ShareSelectionFragment extends ListFragment {
             keyboards = (AvailableKeyboard[]) getArguments().getSerializable(KEYBOARDS_PARAM);
         }
 
-        setListAdapter(new KeyboardsAdapter(getActivity().getApplicationContext(), Arrays.asList(keyboards)));
+        setListAdapter(new KeyboardsAdapter(getActivity().getApplicationContext(), Arrays.asList(keyboards),
+                (KeyboardsAdapter.KeyboardAdapterListener) getActivity()));
     }
 
 

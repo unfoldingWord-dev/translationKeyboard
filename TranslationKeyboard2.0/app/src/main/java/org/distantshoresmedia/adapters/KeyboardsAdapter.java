@@ -1,9 +1,6 @@
 package org.distantshoresmedia.adapters;
 
 import android.content.Context;
-import android.graphics.Paint;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +22,23 @@ import java.util.Locale;
  */
 public class KeyboardsAdapter extends ArrayAdapter<AvailableKeyboard> {
 
+    private KeyboardAdapterListener listener;
+
+    public interface KeyboardAdapterListener {
+        void rowSelectedOrDeselected();
+    }
+
     protected List<AvailableKeyboard> models;
     protected Context context;
 
     private Boolean[] selections;
 
-    public KeyboardsAdapter(Context context, List<AvailableKeyboard> models) {
+    public KeyboardsAdapter(Context context, List<AvailableKeyboard> models, KeyboardAdapterListener listener) {
         super(context, R.layout.row_keyboard_selection, models);
         this.context = context;
         this.models = models;
         seedSelections();
+        this.listener = listener;
     }
 
     private void seedSelections(){
@@ -104,6 +108,7 @@ public class KeyboardsAdapter extends ArrayAdapter<AvailableKeyboard> {
         public void onClick(View v) {
             selections[pos] = ! selections[pos];
             viewGroup.completedImageView.setImageResource((selections[pos])? R.drawable.checkbox_selected : R.drawable.checkbox);
+            listener.rowSelectedOrDeselected();
         }
     }
 
