@@ -1,5 +1,6 @@
 package org.distantshoresmedia.sideloading;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
 import org.distantshoresmedia.activities.BluetoothReceivingActivity;
-import org.distantshoresmedia.activities.LoadActivity;
+import org.distantshoresmedia.activities.FileFinderActivity;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.database.KeyboardDataHandler;
@@ -34,9 +35,9 @@ public class SideLoader {
 
     private static final String TAG = "SideLoader";
 
-    private LoadActivity activity;
+    private Activity activity;
 
-    public SideLoader(LoadActivity activity) {
+    public SideLoader(Activity activity) {
         this.activity = activity;
 
     }
@@ -45,8 +46,7 @@ public class SideLoader {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = (sdCardIsPresent())? Arrays.asList("QR Code", "Choose Directory", "Save to SD Card")
-                : Arrays.asList("QR Code", "Choose Directory");
+        List<String> optionsList = Arrays.asList("QR Code", "Auto-Find", "Choose Directory");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
                 .setCustomTitle(titleView)
@@ -61,18 +61,18 @@ public class SideLoader {
                                         type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
                                         break;
                                     }
-//                                    case 1: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_BLUETOOTH;
-//                                        break;
-//                                    }
                                     case 1: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
+                                        type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
                                         break;
                                     }
                                     case 2: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
+                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
                                         break;
                                     }
+//                                    case 3: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
+//                                        break;
+//                                    }
                                     default: {
                                         type = SideLoadType.SIDE_LOAD_TYPE_NONE;
                                         dialog.cancel();
@@ -119,6 +119,10 @@ public class SideLoader {
                 startQRCodeAction();
                 break;
             }
+            case SIDE_LOAD_TYPE_AUTO_FIND:{
+                startAutoFindAction();
+                break;
+            }
             default: {
 
             }
@@ -142,9 +146,14 @@ public class SideLoader {
 
     private void startQRCodeAction(){
 
-        QRCodeReaderView readerView = activity.getDecoderView();
+        QRCodeReaderView readerView = (QRCodeReaderView) activity.findViewById(R.id.qr_decoder_view);
         readerView.setVisibility(View.VISIBLE);
         readerView.getCameraManager().startPreview();
+    }
+
+    private void startAutoFindAction(){
+        activity.startActivity(new Intent(activity.getApplicationContext(), FileFinderActivity.class));
+        activity.finish();
     }
 
     private void startStorageLoadAction(){
@@ -179,7 +188,7 @@ public class SideLoader {
         dialog.show();
     }
 
-    private void loadFile(File file){
+    public void loadFile(File file){
 
         String fileText = FileLoader.getStringFromFile(file);
         textWasFound(unzipText(fileText));

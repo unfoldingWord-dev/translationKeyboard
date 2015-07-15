@@ -117,17 +117,14 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="org.distantshoresmedia.activities.ShareActivity"
             android:label="@string/title_activity_share"
             android:theme="@style/AppTheme" >
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.distantshoresmedia.keyboard.PrefScreenView" />
-
         </activity>
         <activity
             android:name="org.distantshoresmedia.activities.LoadActivity"
@@ -177,7 +174,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.distantshoresmedia.keyboard.PrefScreenView" />
-
         </activity>
         <activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
         <activity
@@ -199,34 +195,43 @@
             android:theme="@style/AppTheme" >
         </activity>
         <activity
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:name="org.distantshoresmedia.activities.ShowQrCodeActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:label="@string/title_activity_show_qr_code"
-            android:theme="@style/AppTheme"
-            >
-
+            android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.distantshoresmedia.activities.ShareActivity" />
         </activity>
 
-        <receiver android:name="org.distantshoresmedia.UpdateBroadcastReceiver">
+        <receiver android:name="org.distantshoresmedia.UpdateBroadcastReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-                <data android:scheme="package"  />
-            </intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"  />
+                <data android:scheme="package" />
             </intent-filter>
-
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <data android:scheme="package"  />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name="org.distantshoresmedia.activities.FileFinderActivity"
+            android:label="@string/title_activity_file_finder"
+            android:theme="@style/AppTheme"
+            >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.distantshoresmedia.activities.Main" />
+        </activity>
     </application>
 
 </manifest>
