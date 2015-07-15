@@ -8,8 +8,7 @@
 
     <TextView
         android:gravity="center"
-        android:layout_toEndOf="@+id/share_icon"
-        android:layout_toRightOf="@+id/share_icon"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -21,18 +20,18 @@
         android:layout_marginStart="16dp"
         />
 
-    <IconTextView
-        android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:id="@+id/share_icon"
-        android:layout_height="wrap_content"
-        android:layout_width="40dp"
-        android:text="{fa-envelope-o}"
-        android:textSize="30dp"
-        android:textColor="#000"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        />
+    <!--<IconTextView-->
+        <!--android:gravity="center"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginStart="20dp"-->
+        <!--android:id="@+id/share_icon"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:text="{fa-envelope-o}"-->
+        <!--android:textSize="30dp"-->
+        <!--android:textColor="#000"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--/>-->
 </RelativeLayout>

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import android.widget.IconTextView;
+//import android.widget.IconTextView;
 import android.widget.TextView;
 
 import org.distantshoresmedia.translationkeyboard20.R;
@@ -33,7 +33,7 @@ public class ShareAdapter extends ArrayAdapter<String> {
             view = inflater.inflate(R.layout.row_share, parent, false);
 
             holder.labelTextView = (TextView) view.findViewById(R.id.share_label);
-            holder.iconView = (IconTextView) view.findViewById(R.id.share_icon);
+//            holder.iconView = (IconTextView) view.findViewById(R.id.share_icon);
 
 
             view.setTag(holder);
@@ -42,13 +42,13 @@ public class ShareAdapter extends ArrayAdapter<String> {
         }
 
         holder.labelTextView.setText(currentRow);
-        holder.iconView.setText((currentRow.contains("SMS"))? "{fa-comment-o}" : "{fa-envelope-o}");
+//        holder.iconView.setText((currentRow.contains("SMS"))? "{fa-comment-o}" : "{fa-envelope-o}");
         return view;
     }
 
     private class ViewHolderForGroup {
 
         private TextView labelTextView;
-        private IconTextView iconView;
+//        private IconTextView iconView;
     }
 }
