@@ -65,8 +65,7 @@ public class SideSharer {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = (sdCardIsPresent())? Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card")
-                : Arrays.asList("QR Code", "Bluetooth", "Choose Directory");
+        List<String> optionsList = Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card", "Other");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
                 .setCustomTitle(titleView)
@@ -91,6 +90,10 @@ public class SideSharer {
                                     }
                                     case 3: {
                                         type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
+                                        break;
+                                    }
+                                    case 4: {
+                                        type = SideLoadType.SIDE_LOAD_TYPE_NFC;
                                         break;
                                     }
 
@@ -186,37 +189,51 @@ public class SideSharer {
 
     private void startNFCShareAction(){
 
+        Uri fileUri = FileLoader.createTemporaryFile(activity.getApplicationContext(), getZippedText(), fileName);
+
+        Intent sharingIntent = new Intent(
+                android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+//        sharingIntent
+//                .setComponent(new ComponentName(
+//                        "com.android.nfchip" +
+//                                "",
+//                        "com.android.nfc.opp.BeamShareActivity"));
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        activity.startActivity(sharingIntent);
+
     }
 
     private void startWIFIShareAction(){
 
-//       new AsyncTask<Void, Void, String>(){
-//           protected String doInBackground(Void... params) {
-//               try {
-//                   ServerSocket serverSocket = new ServerSocket(8988);
-//                   Log.d(TAG, "Server: Socket opened");
-//                   Socket client = serverSocket.accept();
-//                   Log.d(TAG, "Server: connection done");
-//                   String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-//                   File folder = new File(extStorageDirectory, "Download");
-//                   File file = new File(folder,"wifixyz-" + System.currentTimeMillis()+".apk");
-//                   try {
-//                       file.createNewFile();
-//                   } catch (IOException e1) {
-//                       e1.printStackTrace();
-//                   }
-//
-//                   Log.d(TAG, "server: copying files " + file.toString());
-//                   InputStream inputstream = client.getInputStream();
+       new AsyncTask<Void, Void, String>(){
+           protected String doInBackground(Void... params) {
+               try {
+                   ServerSocket serverSocket = new ServerSocket(8988);
+                   Log.d(TAG, "Server: Socket opened");
+                   Socket client = serverSocket.accept();
+                   Log.d(TAG, "Server: connection done");
+                   String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+                   File folder = new File(extStorageDirectory, "Download");
+                   File file = new File(folder,"wifixyz-" + System.currentTimeMillis()+".apk");
+                   try {
+                       file.createNewFile();
+                   } catch (IOException e1) {
+                       e1.printStackTrace();
+                   }
+
+                   Log.d(TAG, "server: copying files " + file.toString());
+                   InputStream inputstream = client.getInputStream();
 //                   copyFile(inputstream, new FileOutputStream(file));
-//                   serverSocket.close();
-//                   return file.getAbsolutePath();
-//               } catch(IOException e) {
-//                   Log.e(TAG, e.getMessage());
-//                   return null;
-//               }
-//           }
-//       }.execute();
+                   serverSocket.close();
+                   return file.getAbsolutePath();
+               } catch(IOException e) {
+                   Log.e(TAG, e.getMessage());
+                   e.printStackTrace();
+                   return null;
+               }
+           }
+       }.execute();
     }
 
     private void startStorageShareAction(){
