@@ -20,6 +20,7 @@ import org.distantshoresmedia.activities.ShowQrCodeActivity;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.translationkeyboard20.R;
+import org.distantshoresmedia.wifiDirect.WiFiDirectActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,7 +66,7 @@ public class SideSharer {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card", "Other");
+        List<String> optionsList = Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card", "WiFi Direct", "Other");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
                 .setCustomTitle(titleView)
@@ -93,7 +94,7 @@ public class SideSharer {
                                         break;
                                     }
                                     case 4: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_NFC;
+                                        type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
                                         break;
                                     }
 
@@ -206,34 +207,40 @@ public class SideSharer {
 
     private void startWIFIShareAction(){
 
-       new AsyncTask<Void, Void, String>(){
-           protected String doInBackground(Void... params) {
-               try {
-                   ServerSocket serverSocket = new ServerSocket(8988);
-                   Log.d(TAG, "Server: Socket opened");
-                   Socket client = serverSocket.accept();
-                   Log.d(TAG, "Server: connection done");
-                   String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-                   File folder = new File(extStorageDirectory, "Download");
-                   File file = new File(folder,"wifixyz-" + System.currentTimeMillis()+".apk");
-                   try {
-                       file.createNewFile();
-                   } catch (IOException e1) {
-                       e1.printStackTrace();
-                   }
+        Uri fileUri = FileLoader.createTemporaryFile(activity.getApplicationContext(), getZippedText(), fileName);
 
-                   Log.d(TAG, "server: copying files " + file.toString());
-                   InputStream inputstream = client.getInputStream();
-//                   copyFile(inputstream, new FileOutputStream(file));
-                   serverSocket.close();
-                   return file.getAbsolutePath();
-               } catch(IOException e) {
-                   Log.e(TAG, e.getMessage());
-                   e.printStackTrace();
-                   return null;
-               }
-           }
-       }.execute();
+        Intent intent = new Intent(activity.getApplicationContext(), WiFiDirectActivity.class)
+                .setData(fileUri);
+        activity.startActivity(intent);
+
+//       new AsyncTask<Void, Void, String>(){
+//           protected String doInBackground(Void... params) {
+//               try {
+//                   ServerSocket serverSocket = new ServerSocket(8988);
+//                   Log.d(TAG, "Server: Socket opened");
+//                   Socket client = serverSocket.accept();
+//                   Log.d(TAG, "Server: connection done");
+//                   String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+//                   File folder = new File(extStorageDirectory, "Download");
+//                   File file = new File(folder,"wifixyz-" + System.currentTimeMillis()+".apk");
+//                   try {
+//                       file.createNewFile();
+//                   } catch (IOException e1) {
+//                       e1.printStackTrace();
+//                   }
+//
+//                   Log.d(TAG, "server: copying files " + file.toString());
+//                   InputStream inputstream = client.getInputStream();
+////                   copyFile(inputstream, new FileOutputStream(file));
+//                   serverSocket.close();
+//                   return file.getAbsolutePath();
+//               } catch(IOException e) {
+//                   Log.e(TAG, e.getMessage());
+//                   e.printStackTrace();
+//                   return null;
+//               }
+//           }
+//       }.execute();
     }
 
     private void startStorageShareAction(){
