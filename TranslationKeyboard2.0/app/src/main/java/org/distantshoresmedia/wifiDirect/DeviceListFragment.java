@@ -69,7 +69,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.device_list, null);
+        mContentView = inflater.inflate(R.layout.wifi_device_list, null);
         setupViews();
         return mContentView;
     }
@@ -86,7 +86,6 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         nameTextView = (TextView) mContentView.findViewById(R.id.my_name);
         statusTextView = (TextView) mContentView.findViewById(R.id.my_status);
     }
-
 
     /**
      * Initiate a connection with the peer.
@@ -144,6 +143,12 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
                     public void onCancel(DialogInterface dialog) {
                     }
                 });
+    }
+
+    public void cancelDiscovery() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     /**

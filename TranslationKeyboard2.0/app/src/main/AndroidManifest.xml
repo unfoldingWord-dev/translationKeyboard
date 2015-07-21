@@ -196,6 +196,7 @@
         <activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
         <activity
             android:name="org.distantshoresmedia.activities.QRReaderActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:label="@string/title_activity_qrreader"
             android:theme="@style/AppTheme" >
@@ -244,6 +245,7 @@
             android:name="org.distantshoresmedia.activities.FileFinderActivity"
             android:label="@string/title_activity_file_finder"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             >
 
             <meta-data

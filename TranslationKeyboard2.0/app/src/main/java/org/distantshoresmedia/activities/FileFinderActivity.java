@@ -55,7 +55,7 @@ public class FileFinderActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new SideLoader(getSelf()).loadFile(listAdapter.getItem(position));
+                new SideLoader(getSelf(), null).loadFile(listAdapter.getItem(position));
             }
         });
     }

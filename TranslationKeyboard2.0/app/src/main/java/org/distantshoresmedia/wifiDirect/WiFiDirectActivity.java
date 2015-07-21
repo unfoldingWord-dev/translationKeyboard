@@ -17,7 +17,6 @@
 package org.distantshoresmedia.wifiDirect;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -62,8 +61,8 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
     private Channel channel;
     private BroadcastReceiver receiver = null;
 
-    DeviceDetailFragment fragmentDetails;
-    DeviceListFragment fragmentList;
+    private DeviceDetailFragment fragmentDetails;
+    private DeviceListFragment fragmentList;
 
     private Uri selectedUri;
     /**
@@ -71,12 +70,19 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
      */
     public void setIsWifiP2pEnabled(boolean isWifiP2pEnabled) {
         this.isWifiP2pEnabled = isWifiP2pEnabled;
+        if(fragmentDetails != null){
+            fragmentDetails.manageButtons();
+        }
+    }
+
+    public boolean isWifiP2pEnabled() {
+        return isWifiP2pEnabled;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wifi_sharing_main);
+        setContentView(R.layout.activity_wifi_sharing_main);
 
         if (getIntent().getData() != null) {
             selectedUri = getIntent().getData();
@@ -85,14 +91,20 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
         }
 
         doSetup();
+        setupViews();
     }
 
     private void setupViews(){
 
         fragmentList = (DeviceListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frag_list);
+
         fragmentDetails = (DeviceDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frag_detail);
+
+        if(selectedUri == null){
+            findViewById(R.id.device_detail_fragment_base_view).setVisibility(View.GONE);
+        }
     }
 
     private void doSetup(){
@@ -167,7 +179,7 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
         }
     }
 
-    private void openWifiPreferences(){
+    public void openWifiPreferences(){
 
         if (manager != null && channel != null) {
 
@@ -181,16 +193,14 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
         }
     }
 
-    private void startDiscovery(){
+    public void startDiscovery(){
 
         if (!isWifiP2pEnabled) {
             Toast.makeText(WiFiDirectActivity.this, R.string.p2p_off_warning,
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        final DeviceListFragment fragment = (DeviceListFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.frag_list);
-        fragment.onInitiateDiscovery();
+        fragmentList.onInitiateDiscovery();
         manager.discoverPeers(channel, new ActionListener() {
 
             @Override
@@ -203,6 +213,7 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
             public void onFailure(int reasonCode) {
                 Toast.makeText(WiFiDirectActivity.this, "Discovery Failed : " + reasonCode,
                         Toast.LENGTH_SHORT).show();
+                fragmentList.cancelDiscovery();
             }
         });
     }
@@ -280,13 +291,11 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
          * request
          */
         if (manager != null) {
-            final DeviceListFragment fragment = (DeviceListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.frag_list);
-            if (fragment.getDevice() == null
-                    || fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
+            if (fragmentList == null
+                    || fragmentList.getDevice().status == WifiP2pDevice.CONNECTED) {
                 disconnect();
-            } else if (fragment.getDevice().status == WifiP2pDevice.AVAILABLE
-                    || fragment.getDevice().status == WifiP2pDevice.INVITED) {
+            } else if (fragmentList.getDevice().status == WifiP2pDevice.AVAILABLE
+                    || fragmentList.getDevice().status == WifiP2pDevice.INVITED) {
 
                 manager.cancelConnect(channel, new ActionListener() {
 

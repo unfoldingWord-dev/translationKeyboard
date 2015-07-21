@@ -21,7 +21,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -61,13 +64,16 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     private View mContentView = null;
     private WifiP2pDevice device;
     private WifiP2pInfo info;
-    ProgressDialog progressDialog = null;
+    private ProgressDialog progressDialog = null;
 
-    Button connectButton;
-    Button disconnectButton;
-    Button startTransferButton;
+    private Button findDevicesButton;
+    private Button activateWifiButton;
+    private Button connectButton;
+    private Button disconnectButton;
+    private Button startTransferButton;
 
-    TextView statusTextView;
+    private TextView statusTextView;
+    private TextView deviceInfoTextView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -78,13 +84,37 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mContentView = inflater.inflate(R.layout.device_detail, null);
-
+        setupViews();
+        manageButtons();
         return mContentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        manageButtons();
     }
 
     private void setupViews(){
 
+        findDevicesButton = (Button) mContentView.findViewById(R.id.btn_find_devices);
+        findDevicesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findDevices();
+            }
+        });
+
+        activateWifiButton = (Button) mContentView.findViewById(R.id.btn_activate_wifi);
+        activateWifiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWifi();
+            }
+        });
+
         statusTextView = (TextView) mContentView.findViewById(R.id.status_text);
+        deviceInfoTextView = (TextView) mContentView.findViewById(R.id.device_info);
 
         connectButton = (Button) mContentView.findViewById(R.id.btn_connect);
         connectButton.setOnClickListener(new View.OnClickListener() {
@@ -116,12 +146,33 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                 });
     }
 
+    private void findDevices(){
+        ((WiFiDirectActivity) getActivity()).startDiscovery();
+    }
+
+    private void openWifi(){
+        ((WiFiDirectActivity) getActivity()).openWifiPreferences();
+    }
+
     private void startTransfer(){
         ((WiFiDirectActivity) getActivity()).transferFile();
     }
 
     private void disconnect(){
         ((DeviceListFragment.DeviceActionListener) getActivity()).disconnect();
+    }
+
+    public void manageButtons(){
+
+        boolean hasDevice = device != null;
+        boolean hasConnected = info != null;
+
+        findDevicesButton.setVisibility((!hasDevice &&!hasConnected && wifiIsOn())? View.VISIBLE : View.GONE);
+        activateWifiButton.setVisibility((!wifiIsOn())? View.VISIBLE : View.GONE);
+
+        connectButton.setVisibility((hasDevice && !hasConnected)? View.VISIBLE : View.GONE);
+        disconnectButton.setVisibility((hasDevice && hasConnected)? View.VISIBLE : View.GONE);
+        startTransferButton.setVisibility((hasDevice && hasConnected) ? View.VISIBLE : View.GONE);
     }
 
     private void connect(){
@@ -164,17 +215,15 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             progressDialog.dismiss();
         }
         this.info = info;
-        this.getView().setVisibility(View.VISIBLE);
 
         // The owner IP is now known.
-        TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
-        view.setText(getResources().getString(R.string.group_owner_text)
-                + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
-                        : getResources().getString(R.string.no)));
+//        TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
+//        view.setText(getResources().getString(R.string.group_owner_text)
+//                + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
+//                        : getResources().getString(R.string.no)));
 
         // InetAddress from WifiP2pInfo struct.
-        view = (TextView) mContentView.findViewById(R.id.device_info);
-        view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
+        deviceInfoTextView.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
 
         // After the group negotiation, we assign the group owner as the file
         // server. The file server is single threaded, single connection server
@@ -189,7 +238,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         }
 
         // hide the connect button
-        mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
+        manageButtons();
     }
 
     /**
@@ -199,12 +248,10 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
      */
     public void showDetails(WifiP2pDevice device) {
         this.device = device;
-        this.getView().setVisibility(View.VISIBLE);
 //        TextView view = (TextView) mContentView.findViewById(R.id.device_address);
 //        view.setText(device.deviceAddress);
-        TextView view = (TextView) mContentView.findViewById(R.id.device_info);
-        view.setText(device.toString());
-
+        deviceInfoTextView.setText(device.toString());
+        manageButtons();
     }
 
     /**
@@ -214,103 +261,16 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 //        mContentView.findViewById(R.id.btn_connect).setVisibility(View.VISIBLE);
 //        TextView view = (TextView) mContentView.findViewById(R.id.device_address);
 //        view.setText(R.string.empty);
-    TextView view = (TextView) mContentView.findViewById(R.id.device_info);
-        view.setText(R.string.empty);
+        deviceInfoTextView.setText(R.string.empty);
 //        view = (TextView) mContentView.findViewById(R.id.group_owner);
 //        view.setText(R.string.empty);
-        view = (TextView) mContentView.findViewById(R.id.status_text);
-        view.setText(R.string.empty);
+        statusTextView.setText(R.string.empty);
 //        mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
 //        this.getView().setVisibility(View.GONE);
+        manageButtons();
     }
 
-    /**
-     * A simple server socket that accepts connection and writes some data on
-     * the stream.
-     */
-    public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
-
-        private Context context;
-        private TextView statusText;
-
-        /**
-         * @param context
-         * @param statusText
-         */
-        public FileServerAsyncTask(Context context, View statusText) {
-            this.context = context;
-            this.statusText = (TextView) statusText;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                ServerSocket serverSocket = new ServerSocket(8988);
-                Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
-                Socket client = serverSocket.accept();
-                Log.d(WiFiDirectActivity.TAG, "Server: connection done");
-                final File f = new File(Environment.getExternalStorageDirectory() + "/"
-                        + context.getPackageName() + "/wifip2pshared-" + System.currentTimeMillis()
-                        + ".jpg");
-
-                File dirs = new File(f.getParent());
-                if (!dirs.exists())
-                    dirs.mkdirs();
-                f.createNewFile();
-
-                Log.d(WiFiDirectActivity.TAG, "server: copying files " + f.toString());
-                InputStream inputstream = client.getInputStream();
-                copyFile(inputstream, new FileOutputStream(f));
-                serverSocket.close();
-                return f.getAbsolutePath();
-            } catch (IOException e) {
-                Log.e(WiFiDirectActivity.TAG, e.getMessage());
-                return null;
-            }
-        }
-
-        /*
-         * (non-Javadoc)
-         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-         */
-        @Override
-        protected void onPostExecute(String result) {
-            if (result != null) {
-                statusText.setText("File copied - " + result);
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse("file://" + result), "image/*");
-                context.startActivity(intent);
-            }
-
-        }
-
-        /*
-         * (non-Javadoc)
-         * @see android.os.AsyncTask#onPreExecute()
-         */
-        @Override
-        protected void onPreExecute() {
-            statusText.setText("Opening a server socket");
-        }
-
+    private boolean wifiIsOn() {
+        return ((WiFiDirectActivity) getActivity()).isWifiP2pEnabled();
     }
-
-    public static boolean copyFile(InputStream inputStream, OutputStream out) {
-        byte buf[] = new byte[1024];
-        int len;
-        try {
-            while ((len = inputStream.read(buf)) != -1) {
-                out.write(buf, 0, len);
-
-            }
-            out.close();
-            inputStream.close();
-        } catch (IOException e) {
-            Log.d(WiFiDirectActivity.TAG, e.toString());
-            return false;
-        }
-        return true;
-    }
-
 }

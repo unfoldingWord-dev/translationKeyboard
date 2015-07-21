@@ -212,35 +212,6 @@ public class SideSharer {
         Intent intent = new Intent(activity.getApplicationContext(), WiFiDirectActivity.class)
                 .setData(fileUri);
         activity.startActivity(intent);
-
-//       new AsyncTask<Void, Void, String>(){
-//           protected String doInBackground(Void... params) {
-//               try {
-//                   ServerSocket serverSocket = new ServerSocket(8988);
-//                   Log.d(TAG, "Server: Socket opened");
-//                   Socket client = serverSocket.accept();
-//                   Log.d(TAG, "Server: connection done");
-//                   String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-//                   File folder = new File(extStorageDirectory, "Download");
-//                   File file = new File(folder,"wifixyz-" + System.currentTimeMillis()+".apk");
-//                   try {
-//                       file.createNewFile();
-//                   } catch (IOException e1) {
-//                       e1.printStackTrace();
-//                   }
-//
-//                   Log.d(TAG, "server: copying files " + file.toString());
-//                   InputStream inputstream = client.getInputStream();
-////                   copyFile(inputstream, new FileOutputStream(file));
-//                   serverSocket.close();
-//                   return file.getAbsolutePath();
-//               } catch(IOException e) {
-//                   Log.e(TAG, e.getMessage());
-//                   e.printStackTrace();
-//                   return null;
-//               }
-//           }
-//       }.execute();
     }
 
     private void startStorageShareAction(){

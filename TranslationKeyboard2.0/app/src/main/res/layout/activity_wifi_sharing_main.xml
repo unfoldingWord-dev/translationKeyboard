@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/frag_detail"
-            tools:layout="@layout/device_list"
+            tools:layout="@layout/wifi_device_list"
             android:layout_alignParentTop="true">
         </fragment>
 
@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout="@layout/device_detail"
+
             >
         </fragment>
 

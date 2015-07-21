@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.ListView;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 
@@ -26,12 +27,15 @@ public class LoadActivity extends ActionBarActivity implements QRCodeReaderView.
         return decoderView;
     }
 
+    private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
 
-        loader = new SideLoader(this);
+        listView = (ListView) findViewById(R.id.side_load_list_view);
+        loader = new SideLoader(this, listView);
+
 
         Uri uri = getIntent().getData();
 
@@ -45,6 +49,7 @@ public class LoadActivity extends ActionBarActivity implements QRCodeReaderView.
             decoderView.setOnQRCodeReadListener(this);
             loader.startLoading();
         }
+
     }
 
     @Override

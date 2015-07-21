@@ -3,11 +3,20 @@
     android:layout_height="match_parent"
     tools:context="org.distantshoresmedia.activities.ShareActivity">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/side_load_list_view">
+
+    </ListView>
+
 
     <com.dlazaro66.qrcodereaderview.QRCodeReaderView
         android:id="@+id/qr_decoder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
+
+
 
 </RelativeLayout>

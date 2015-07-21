@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
@@ -18,6 +20,7 @@ import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.FileLoader;
 import org.distantshoresmedia.database.KeyboardDataHandler;
 import org.distantshoresmedia.translationkeyboard20.R;
+import org.distantshoresmedia.wifiDirect.WiFiDirectActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,9 +39,11 @@ public class SideLoader {
     private static final String TAG = "SideLoader";
 
     private Activity activity;
+    private ListView optionsListView;
 
-    public SideLoader(Activity activity) {
+    public SideLoader(Activity activity, ListView optionsListView) {
         this.activity = activity;
+        this.optionsListView = optionsListView;
 
     }
 
@@ -46,50 +51,115 @@ public class SideLoader {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = Arrays.asList("QR Code", "Auto-Find", "Choose Directory");
+        List<String> optionsList = Arrays.asList("QR Code", "Auto-Find", "Choose Directory", "WiFi Direct");
 
-        AlertDialog dialogue = new AlertDialog.Builder(activity)
-                .setCustomTitle(titleView)
-                .setAdapter(new ShareAdapter(activity.getApplicationContext(), optionsList),
-                        new DialogInterface.OnClickListener() {
+        optionsListView.setAdapter(new ShareAdapter(activity.getApplicationContext(), optionsList));
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                SideLoadType type;
-                                switch (which) {
-                                    case 0: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
-                                        break;
-                                    }
-                                    case 1: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
-                                        break;
-                                    }
-                                    case 2: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
-                                        break;
-                                    }
-//                                    case 3: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
+        optionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                SideLoadType type;
+                switch (position) {
+                    case 0: {
+                        type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
+                        break;
+                    }
+                    case 1: {
+                        type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
+                        break;
+                    }
+                    case 2: {
+                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
+                        break;
+                    }
+                    case 3: {
+                        type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
+                        break;
+                    }
+                    default: {
+                        type = SideLoadType.SIDE_LOAD_TYPE_NONE;
+                    }
+                }
+                if(type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
+                    startSideLoading(type);
+                }
+            }
+        });
+//                new DialogInterface.OnClickListener() {
+
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        SideLoadType type;
+//                        switch (which) {
+//                            case 0: {
+//                                type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
+//                                break;
+//                            }
+//                            case 1: {
+//                                type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
+//                                break;
+//                            }
+//                            case 2: {
+//                                type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
+//                                break;
+//                            }
+//                            case 3: {
+//                                type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
+//                                break;
+//                            }
+//                            default: {
+//                                type = SideLoadType.SIDE_LOAD_TYPE_NONE;
+//                                dialog.cancel();
+//                            }
+//                        }
+//                        if (type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
+//                            startSideLoading(type);
+//                        }
+//                    }
+//                });
+//        AlertDialog dialogue = new AlertDialog.Builder(activity)
+//                .setCustomTitle(titleView)
+//                .setAdapter(new ShareAdapter(activity.getApplicationContext(), optionsList),
+//                        new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                SideLoadType type;
+//                                switch (which) {
+//                                    case 0: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
 //                                        break;
 //                                    }
-                                    default: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_NONE;
-                                        dialog.cancel();
-                                    }
-                                }
-                                if(type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
-                                    startSideLoading(type);
-                                }
-                            }
-                        })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).create();
-        dialogue.show();
+//                                    case 1: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
+//                                        break;
+//                                    }
+//                                    case 2: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
+//                                        break;
+//                                    }
+//                                    case 3: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
+//                                        break;
+//                                    }
+//                                    default: {
+//                                        type = SideLoadType.SIDE_LOAD_TYPE_NONE;
+//                                        dialog.cancel();
+//                                    }
+//                                }
+//                                if(type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
+//                                    startSideLoading(type);
+//                                }
+//                            }
+//                        })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                }).create();
+//        dialogue.show();
     }
 
     private void startSideLoading(SideLoadType type){
@@ -142,6 +212,8 @@ public class SideLoader {
 
     private void startWIFILoadAction(){
 
+        Intent intent = new Intent(activity.getApplicationContext(), WiFiDirectActivity.class);
+        activity.startActivity(intent);
     }
 
     private void startQRCodeAction(){
