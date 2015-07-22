@@ -201,7 +201,7 @@ public class GithubReporter {
      */
     private String getLogBlock(String log) {
         StringBuffer logBuf = new StringBuffer();
-        if (log != null && !log.isEmpty()) {
+        if (log != null && log.length() > 0) {
             logBuf.append("Log history\n======\n");
             logBuf.append("```java\n");
             logBuf.append(log + "\n");
@@ -217,7 +217,7 @@ public class GithubReporter {
      */
     private static String getStacktraceBlock(String stacktrace) {
         StringBuffer stacktraceBuf = new StringBuffer();
-        if(stacktrace != null && !stacktrace.isEmpty()) {
+        if(stacktrace != null && stacktrace.length() > 0) {
             stacktraceBuf.append("Stack trace\n======\n");
             stacktraceBuf.append("```java\n");
             stacktraceBuf.append(stacktrace + "\n");
@@ -233,7 +233,7 @@ public class GithubReporter {
      */
     private static String getNotesBlock(String notes) {
         StringBuffer notesBuf = new StringBuffer();
-        if (!notes.isEmpty()) {
+        if (notes.length() > 0) {
             notesBuf.append("Notes\n======\n");
             notesBuf.append(notes + "\n");
         }
@@ -274,9 +274,9 @@ public class GithubReporter {
      */
     private static String getTitle(String notes, String defaultTitle) {
         String title = defaultTitle;
-        if (notes.length() < MAX_TITLE_LENGTH && !notes.isEmpty()) {
+        if (notes.length() < MAX_TITLE_LENGTH && notes.length() > 0) {
             title = notes;
-        } else if (!notes.isEmpty()) {
+        } else if (notes.length() > 0) {
             title = notes.substring(0, MAX_TITLE_LENGTH - 3) + "...";
         }
         return title;
