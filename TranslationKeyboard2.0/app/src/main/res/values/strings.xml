@@ -688,5 +688,6 @@
     <string name="group_owner_text">"Am I the Group Owner? "</string>
     <string name="label_me">Your Device</string>
     <string name="label_peers">Other Devices</string>
+    <string name="test_input_text">Test Input</string>
 
 </resources>
