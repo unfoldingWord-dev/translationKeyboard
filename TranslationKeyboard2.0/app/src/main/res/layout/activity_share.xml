@@ -10,8 +10,6 @@
         android:id="@+id/share_fragment_frame"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/share_activity_share_button">
-
-
     </FrameLayout>
 
     <ImageView

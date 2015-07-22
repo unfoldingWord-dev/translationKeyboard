@@ -139,37 +139,41 @@ public class SideSharer {
 
     private void startBluetoothShareAction(){
 
-//        Intent intent = new Intent(activity.getApplicationContext(), BluetoothSharingActivity.class)
-//                .putExtra(BluetoothSharingActivity.TEXT_PARAM, shareText);
-//
-//        activity.startActivityForResult(intent, 0);
+        View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
+        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Start Bluetooth Sharing");
+
+        AlertDialog dialogue = new AlertDialog.Builder(activity)
+                .setCustomTitle(titleView)
+                .setMessage("Before starting, make sure the device you're sharing with has bluetooth available by going to it's Settings app, selecting bluetooth and confirming it is on and available to pair.")
+                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        openBluetoothSharing();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).create();
+        dialogue.show();
+    }
+
+    private void openBluetoothSharing(){
 
         Uri fileUri = FileLoader.createTemporaryFile(activity.getApplicationContext(), getZippedText(), fileName);
 
-        int currentAPIVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            Intent sharingIntent = new Intent(
-                    android.content.Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            sharingIntent
-                    .setComponent(new ComponentName(
-                            "com.android.bluetooth",
-                            "com.android.bluetooth.opp.BluetoothOppLauncherActivity"));
-            sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-            activity.startActivity(sharingIntent);
-        } else {
-//            ContentValues values = new ContentValues();
-//            values.put(BluetoothShare.URI, uri.toString());
-//            Toast.makeText(getBaseContext(), "URi : " + uri,
-//                    Toast.LENGTH_LONG).show();
-//            values.put(BluetoothShare.DESTINATION, deviceAddress);
-//            values.put(BluetoothShare.DIRECTION,
-//                    BluetoothShare.DIRECTION_OUTBOUND);
-//            Long ts = System.currentTimeMillis();
-//            values.put(BluetoothShare.TIMESTAMP, ts);
-//            getContentResolver().insert(BluetoothShare.CONTENT_URI,
-//                    values);
-        }
+
+        Intent sharingIntent = new Intent(
+                android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent
+                .setComponent(new ComponentName(
+                        "com.android.bluetooth",
+                        "com.android.bluetooth.opp.BluetoothOppLauncherActivity"));
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        activity.startActivityForResult(sharingIntent, 0);
     }
 
     private void startNFCShareAction(){
@@ -258,7 +262,22 @@ public class SideSharer {
         }
     };
 
-    public static boolean sdCardIsPresent() {
-        return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+    public void showBluetoothDirectionsDialog(){
+
+        View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
+        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Next Steps");
+
+        AlertDialog dialogue = new AlertDialog.Builder(activity)
+                .setCustomTitle(titleView)
+                .setMessage(activity.getString(R.string.bluetooth_direction_text))
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
+                .create();
+        dialogue.show();
+
     }
 }

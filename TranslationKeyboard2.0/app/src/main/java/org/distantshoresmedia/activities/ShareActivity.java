@@ -2,8 +2,10 @@ package org.distantshoresmedia.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import org.distantshoresmedia.adapters.KeyboardsAdapter;
@@ -105,6 +107,14 @@ public class ShareActivity extends ActionBarActivity implements KeyboardsAdapter
                     }
                 })
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        new SideSharer(this, null).showBluetoothDirectionsDialog();
+        Log.i(TAG, "activity result");
     }
 
     @Override
