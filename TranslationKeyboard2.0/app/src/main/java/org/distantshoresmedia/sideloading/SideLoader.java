@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,115 +54,27 @@ public class SideLoader {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = Arrays.asList("QR Code", "Auto-Find", "Choose Directory", "WiFi Direct");
-
-        optionsListView.setAdapter(new ShareAdapter(activity.getApplicationContext(), optionsList));
+        optionsListView.setAdapter(new ShareAdapter(activity.getApplicationContext(),
+                SideLoaderTypeHandler.getListOfSideLoadTypes(activity, true)));
 
         optionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                SideLoadType type;
-                switch (position) {
-                    case 0: {
-                        type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
-                        break;
-                    }
-                    case 1: {
-                        type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
-                        break;
-                    }
-                    case 2: {
-                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
-                        break;
-                    }
-                    case 3: {
-                        type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
-                        break;
-                    }
-                    default: {
-                        type = SideLoadType.SIDE_LOAD_TYPE_NONE;
-                    }
-                }
-                if(type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
-                    startSideLoading(type);
-                }
+                startSideLoading(SideLoaderTypeHandler.getTypeForIndex(activity, position, true));
             }
         });
-//                new DialogInterface.OnClickListener() {
+    }
 
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        SideLoadType type;
-//                        switch (which) {
-//                            case 0: {
-//                                type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
-//                                break;
-//                            }
-//                            case 1: {
-//                                type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
-//                                break;
-//                            }
-//                            case 2: {
-//                                type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
-//                                break;
-//                            }
-//                            case 3: {
-//                                type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
-//                                break;
-//                            }
-//                            default: {
-//                                type = SideLoadType.SIDE_LOAD_TYPE_NONE;
-//                                dialog.cancel();
-//                            }
-//                        }
-//                        if (type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
-//                            startSideLoading(type);
-//                        }
-//                    }
-//                });
-//        AlertDialog dialogue = new AlertDialog.Builder(activity)
-//                .setCustomTitle(titleView)
-//                .setAdapter(new ShareAdapter(activity.getApplicationContext(), optionsList),
-//                        new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                SideLoadType type;
-//                                switch (which) {
-//                                    case 0: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
-//                                        break;
-//                                    }
-//                                    case 1: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_AUTO_FIND;
-//                                        break;
-//                                    }
-//                                    case 2: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
-//                                        break;
-//                                    }
-//                                    case 3: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
-//                                        break;
-//                                    }
-//                                    default: {
-//                                        type = SideLoadType.SIDE_LOAD_TYPE_NONE;
-//                                        dialog.cancel();
-//                                    }
-//                                }
-//                                if(type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
-//                                    startSideLoading(type);
-//                                }
-//                            }
-//                        })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                }).create();
-//        dialogue.show();
+    private void reset(){
+        QRCodeReaderView readerView = (QRCodeReaderView) activity.findViewById(R.id.qr_decoder_view);
+        if(readerView != null) {
+            readerView.setVisibility(View.GONE);
+
+            if (readerView.getCameraManager() != null && readerView.getCameraManager().isOpen()) {
+                readerView.getCameraManager().stopPreview();
+            }
+        }
     }
 
     private void startSideLoading(SideLoadType type){
@@ -193,9 +108,6 @@ public class SideLoader {
                 startAutoFindAction();
                 break;
             }
-            default: {
-
-            }
         }
     }
 
@@ -218,6 +130,7 @@ public class SideLoader {
 
     private void startQRCodeAction(){
 
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         QRCodeReaderView readerView = (QRCodeReaderView) activity.findViewById(R.id.qr_decoder_view);
         readerView.setVisibility(View.VISIBLE);
         readerView.getCameraManager().startPreview();
@@ -287,14 +200,15 @@ public class SideLoader {
 
     public void textWasFound(final String json){
 
-        int numberOfKeyboards = getNumberOfKeyboards(json);
-        String keyboardText = (numberOfKeyboards == 1)? "Keyboard" : "Keyboards";
+        List<String> names = getNamesOfKeyboards(json);
+        String keyboardText = (names.size() == 1)? "Keyboard" : "Keyboards";
 
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
-        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Import " + numberOfKeyboards + " " + keyboardText + "?");
+        ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Import " + names.size() + " " + keyboardText + "?");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
                 .setCustomTitle(titleView)
+                .setMessage(keyboardText + ":\n\n" + getNames(names))
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         saveKeyboards(json);
@@ -304,30 +218,55 @@ public class SideLoader {
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        startLoading();
+                        reset();
                     }
                 })
                 .show();
     }
 
-    private int getNumberOfKeyboards(String json){
+    private List<String> getNamesOfKeyboards(String json){
 
-        int numberOfKeyboards = 0;
+        List<String> names = new ArrayList<String>();
         try {
             JSONArray availableKeyboards = new JSONObject(json).getJSONArray("keyboards");
 
             for(int i = 0; i < availableKeyboards.length(); i++){
                 JSONObject available = availableKeyboards.getJSONObject(i);
                 JSONObject keyboards = available.getJSONObject("keyboards");
+
+                String keyboardText = keyboards.getString("keyboard_name") + ": ";
+
                 JSONArray variants = keyboards.getJSONArray("keyboard_variants");
-                numberOfKeyboards += variants.length();
+                for(int j = 0; j < variants.length(); j++){
+
+                    keyboardText += variants.getJSONObject(j).getString("name") + ", ";
+                }
+
+                names.add(keyboardText);
             }
         }
         catch (JSONException e){
             e.printStackTrace();
         }
 
-        return numberOfKeyboards;
+        return names;
+    }
+
+    private String getNames(List<String> names){
+
+        String finalString = "";
+
+        for(String name : names){
+            finalString += name + "\n";
+        }
+
+        if(finalString.length() > 0){
+            finalString = finalString.substring(0, finalString.length() - 2);
+            return finalString;
+        }
+        else{
+            return "";
+        }
     }
 
     private void saveKeyboards(String json){
@@ -339,5 +278,4 @@ public class SideLoader {
     public static boolean sdCardIsPresent() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
-
 }

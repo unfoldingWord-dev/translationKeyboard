@@ -130,6 +130,7 @@ public class FileLoader {
 
     public static Uri createTemporaryFile(Context context, CharSequence fileSequence, String fileName){
 
+        clearTemporaryFiles(context);
         Log.i(TAG, "Attempting to save temporary file named:" + fileName);
 
         try {
@@ -168,7 +169,9 @@ public class FileLoader {
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/" + context.getString(R.string.app_name) + "/temp");
         if(file.exists()){
-            boolean success = file.delete();
+            final File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
+            boolean success = file.renameTo(to);
+            success = file.delete();
         }
     }
 

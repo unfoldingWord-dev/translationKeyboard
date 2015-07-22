@@ -58,20 +58,23 @@ public class ShareAdapter extends ArrayAdapter<String> {
 
     private int getResourceForText(String text){
 
-        if(text.equalsIgnoreCase("QR Code")){
+        if(text.equalsIgnoreCase(getContext().getString(R.string.qr_code_title))){
             return R.drawable.qr_code;
         }
-        else if(text.equalsIgnoreCase("Bluetooth")){
+        else if(text.equalsIgnoreCase(getContext().getString(R.string.bluetooth_title))){
             return R.drawable.bluetooth_icon;
         }
-        else if(text.contains("SD Card")){
+        else if(text.contains(getContext().getString(R.string.external_storage_title))){
             return R.drawable.sd_card_icon;
         }
-        else if(text.contains("Choose Directory")){
+        else if(text.contains(getContext().getString(R.string.choose_directory_title)) || text.contains(getContext().getString(R.string.choose_file_title))){
             return R.drawable.folder_icon;
         }
-        else if(text.contains("Auto-Find")){
+        else if(text.contains(getContext().getString(R.string.auto_find_title))){
             return R.drawable.search_image;
+        }
+        else if(text.contains(getContext().getString(R.string.wi_fi_direct_title))){
+            return R.drawable.wifi_icon;
         }
         else{
             return -1;

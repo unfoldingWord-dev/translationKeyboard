@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+
+    <string name="qr_code_title">QR Code</string>
+    <string name="bluetooth_title">Bluetooth</string>
+    <string name="choose_directory_title">Choose Directory</string>
+    <string name="choose_file_title">Choose File</string>
+    <string name="external_storage_title">External Storage</string>
+    <string name="wi_fi_direct_title">WiFi-Direct</string>
+    <string name="other_title">Other</string>
+    <string name="auto_find_title">Auto-Find</string>
+
+</resources>

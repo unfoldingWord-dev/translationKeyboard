@@ -66,46 +66,17 @@ public class SideSharer {
         View titleView = View.inflate(activity.getApplicationContext(), R.layout.alert_title, null);
         ((TextView) titleView.findViewById(R.id.alert_title_text_view)).setText("Select Share Method");
 
-        List<String> optionsList = Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card", "WiFi Direct", "Other");
+//        List<String> optionsList = Arrays.asList("QR Code", "Bluetooth", "Choose Directory", "Save to SD Card", "WiFi Direct", "Other");
 
         AlertDialog dialogue = new AlertDialog.Builder(activity)
                 .setCustomTitle(titleView)
-                .setAdapter(new ShareAdapter(activity.getApplicationContext(), optionsList),
+                .setAdapter(new ShareAdapter(activity.getApplicationContext(), SideLoaderTypeHandler.getListOfSideLoadTypes(activity, false)),
                         new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SideLoadType type;
-                                switch (which) {
-                                    case 0: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_QR_CODE;
-                                        break;
-                                    }
-                                    case 1: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_BLUETOOTH;
-                                        break;
-                                    }
-                                    case 2: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_STORAGE;
-                                        break;
-                                    }
-                                    case 3: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_SD_CARD;
-                                        break;
-                                    }
-                                    case 4: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_WIFI;
-                                        break;
-                                    }
 
-                                    default: {
-                                        type = SideLoadType.SIDE_LOAD_TYPE_NONE;
-                                        dialog.cancel();
-                                    }
-                                }
-                                if(type != SideLoadType.SIDE_LOAD_TYPE_NONE) {
-                                    startSideLoading(type);
-                                }
+                                startSideLoading(SideLoaderTypeHandler.getTypeForIndex(activity, which, false));
                             }
                         })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -146,11 +117,24 @@ public class SideSharer {
                     startSDCardShareAction();
                     break;
                 }
+                case SIDE_LOAD_TYPE_OTHER:{
+                    startShareOtherAction();
+                }
                 default: {
 
                 }
             }
         }
+    }
+
+    private void startShareOtherAction(){
+
+        Uri fileUri = FileLoader.createTemporaryFile(activity.getApplicationContext(), getZippedText(), fileName);
+        Intent sharingIntent = new Intent(
+                android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        activity.startActivity(sharingIntent);
     }
 
     private void startBluetoothShareAction(){
@@ -277,5 +261,4 @@ public class SideSharer {
     public static boolean sdCardIsPresent() {
         return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
     }
-
 }
