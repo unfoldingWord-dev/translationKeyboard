@@ -1,2 +1,2 @@
-include ':app', ':FileDialog'
+include ':app', ':FileDialog', ':com.door43.tools.reporting'
 project(':FileDialog').projectDir = new File('app/libs/aFileDialog/FileDialog')

@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ar.com.daidalos.afiledialog.FileChooserDialog;
@@ -146,7 +144,7 @@ public class SideLoader {
     }
 
     private void startSDCardLoadAction(){
-        loadStorage("/" + activity.getString(R.string.english_ime_name));
+        loadStorage("/" + activity.getString(R.string.english_name));
     }
 
     private void loadStorage(String optionalDir){

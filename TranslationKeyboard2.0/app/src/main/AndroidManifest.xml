@@ -29,12 +29,13 @@
         android:required="false" />
 
     <application
+        android:name="org.distantshoresmedia.TKApplication"
         android:allowBackup="true"
         android:backupAgent="org.distantshoresmedia.keyboard.TKIMEBackupAgent"
         android:hardwareAccelerated="false"
         android:icon="@drawable/icon"
         android:killAfterRestore="false"
-        android:label="@string/english_ime_name"
+        android:label="@string/english_name"
         android:logo="@drawable/icon"
         android:restoreAnyVersion="true" >
 
@@ -43,7 +44,7 @@
         <service
             android:name="org.distantshoresmedia.keyboard.LatinIME"
             android:icon="@drawable/icon"
-            android:label="@string/english_ime_name"
+            android:label="@string/english_name"
             android:logo="@drawable/icon"
             android:permission="android.permission.BIND_INPUT_METHOD" >
             <intent-filter>
