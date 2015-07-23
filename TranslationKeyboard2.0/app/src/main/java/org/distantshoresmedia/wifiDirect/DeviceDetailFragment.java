@@ -270,6 +270,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         manageButtons();
     }
 
+    public void resetData(){
+        device = null;
+        info = null;
+    }
+
     private boolean wifiIsOn() {
         return ((WiFiDirectActivity) getActivity()).isWifiP2pEnabled();
     }

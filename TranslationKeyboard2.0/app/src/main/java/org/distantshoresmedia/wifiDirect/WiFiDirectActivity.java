@@ -259,9 +259,9 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
 
             @Override
             public void onSuccess() {
-                fragmentDetails.getView().setVisibility(View.GONE);
+                fragmentDetails.resetData();
+                fragmentDetails.resetViews();
             }
-
         });
     }
 
@@ -314,6 +314,11 @@ public class WiFiDirectActivity extends ActionBarActivity implements ChannelList
                 });
             }
         }
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        disconnect();
     }
 }
