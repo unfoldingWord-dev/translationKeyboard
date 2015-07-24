@@ -40,6 +40,11 @@
             <Button android:text="@string/main_setup_share_button_text" android:id="@+id/main_setup_btn_keyboard_sharing"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical">
+            </Button>
+
+            <Button android:text="@string/main_setup_report_bug_button_text" android:id="@+id/main_setup_btn_bug_reporting"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
 
             </Button>
 

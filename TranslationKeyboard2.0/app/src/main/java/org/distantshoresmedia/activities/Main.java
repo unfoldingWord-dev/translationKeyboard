@@ -35,6 +35,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.door43.tools.reporting.BugReporterActivity;
+
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.keyboard.InputLanguageSelection;
@@ -108,6 +110,12 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
         setup6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sharePressed();
+
+            }
+        }); final Button setup7 = (Button) findViewById(R.id.main_setup_btn_bug_reporting);
+        setup7.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                reportBugPressed();
             }
         });
     }
@@ -147,7 +155,11 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
                     }
                 }).create();
         dialogue.show();
+    }
 
+    private void reportBugPressed(){
+
+        startActivity(new Intent(context, BugReporterActivity.class));
     }
 
     private void updateKeyboards() {

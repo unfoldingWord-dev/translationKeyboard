@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
@@ -26,6 +27,8 @@ import java.util.List;
  * This class submits information to a github repository
  */
 public class GithubReporter {
+
+    private static final String TAG = "GithubReporter";
 
     private static final int MAX_TITLE_LENGTH = 50;
     private static final String DEFAULT_CRASH_TITLE = "crash report";
@@ -132,8 +135,9 @@ public class GithubReporter {
         bodyBuf.append(getLogBlock(log));
 
         String[] labels = new String[]{"bug report"};
-        String respose = submit(generatePayload(title, bodyBuf.toString(), labels));
-        // TODO: handle response
+        String response = submit(generatePayload(title, bodyBuf.toString(), labels));
+
+        Log.i(TAG, "bug Report Response: " + response);
     }
 
     /**
@@ -187,7 +191,7 @@ public class GithubReporter {
                 }
             }
             HttpResponse response = httpClient.execute(httpPost);
-            return response.toString();
+            return response.getStatusLine().toString();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
