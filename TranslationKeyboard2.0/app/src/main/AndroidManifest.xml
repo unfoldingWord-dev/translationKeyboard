@@ -106,7 +106,7 @@
             android:logo="@drawable/icon" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_ACTIONS" />
+                <action android:name="org.distantshoresmedia.keyboard.PREFS_ACTIONS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -118,7 +118,7 @@
             android:logo="@drawable/icon" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_VIEW" />
+                <action android:name="org.distantshoresmedia.keyboard.PREFS_VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -130,7 +130,7 @@
             android:logo="@drawable/icon" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="org.distantshoresmedia.translationkeyboard.PREFS_FEEDBACK" />
+                <action android:name="org.distantshoresmedia.keyboard.PREFS_FEEDBACK" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

@@ -25,7 +25,7 @@
             android:persistent="true"
             />
 
-    <org.distantshoresmedia.translationkeyboard.VibratePreference
+    <org.distantshoresmedia.keyboard.VibratePreference
             android:defaultValue="40"
             hk:minValue="5"
             hk:maxValue="200"
@@ -42,7 +42,7 @@
             android:persistent="true" 
             />
 
-    <org.distantshoresmedia.translationkeyboard.AutoSummaryListPreference
+    <org.distantshoresmedia.keyboard.AutoSummaryListPreference
             android:key="pref_click_method"
             android:title="@string/title_click_method"
             android:entryValues="@array/click_method_values"
@@ -51,7 +51,7 @@
             android:persistent="true"
             />
     
-    <org.distantshoresmedia.translationkeyboard.SeekBarPreferenceString
+    <org.distantshoresmedia.keyboard.SeekBarPreferenceString
             android:defaultValue="@string/default_click_volume"
             hk:minValue="0"
             hk:maxValue="1"
