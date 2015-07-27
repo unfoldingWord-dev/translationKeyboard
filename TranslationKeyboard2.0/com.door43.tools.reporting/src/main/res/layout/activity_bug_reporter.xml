@@ -7,9 +7,18 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
         android:layout_above="@+id/linearLayout4">
 
-
+        <!-- TODO: display an info icon that users can click to display this message -->
+        <!--<TextView android:text="@string/crash_reports" android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/dark_gray"-->
+            <!--android:textSize="@dimen/h5"-->
+            <!--android:paddingBottom="20dp"-->
+            <!--android:id="@+id/crashReportNoticeText" />-->
 
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
@@ -19,24 +28,7 @@
             <!--android:id="@+id/titleTextView"-->
             <!--android:textStyle="bold" />-->
 
-        <TextView
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="It Appears the app experienced a crash. If you would like to submit a crash report,
-tap submit to send the needed information. Optionally, you can also describe what you were doing when the crash occurred "
-            android:id="@+id/textView"
-            android:textColor="#000"
-            android:background="#2000"
-            android:paddingBottom="10dp"/>
-
         <EditText
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="top"

@@ -36,7 +36,10 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import com.door43.tools.reporting.BugReporterActivity;
+import com.door43.tools.reporting.CrashReporterActivity;
+import com.door43.tools.reporting.GlobalExceptionHandler;
 
+import org.distantshoresmedia.TKApplication;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.keyboard.InputLanguageSelection;
@@ -45,6 +48,7 @@ import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.distantshoresmedia.translationkeyboard20.UpdateService;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class Main extends FragmentActivity implements UpdateFragment.OnFragmentInteractionListener {
@@ -118,6 +122,17 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
                 reportBugPressed();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        File dir = new File(getExternalCacheDir(), TKApplication.STACKTRACE_DIR);
+        String[] files = GlobalExceptionHandler.getStacktraces(dir);
+        if (files.length > 0) {
+            Intent intent = new Intent(this, CrashReporterActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void sharePressed(){

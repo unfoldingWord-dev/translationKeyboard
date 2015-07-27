@@ -246,7 +246,17 @@
 
         <activity
             android:name="org.distantshoresmedia.activities.FileFinderActivity"
-            android:label="@string/title_activity_file_finder"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.distantshoresmedia.activities.Main" />
+        </activity>
+
+        <activity
+            android:name="com.door43.tools.reporting.CrashReporterActivity"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             >
@@ -258,7 +268,6 @@
 
         <activity
             android:name="com.door43.tools.reporting.BugReporterActivity"
-            android:label="@string/title_activity_file_finder"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             >
@@ -267,6 +276,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.distantshoresmedia.activities.Main" />
         </activity>
-    </application>
 
+    </application>
 </manifest>
