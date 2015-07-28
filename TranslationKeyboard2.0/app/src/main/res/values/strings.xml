@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
+
+    <string name="github_oauth2">STRING_REPLACED_BY_BUILD_SERVER</string>
+
+
     <string name="app_name">translationKeyboard</string>
     <string name="english_name">translationKeyboard</string>
     <string name="hello_world">Hello world!</string>

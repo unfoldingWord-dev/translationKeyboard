@@ -29,12 +29,12 @@ public class UploadCrashReportTask extends ManagedTask {
     public void start() {
         File stacktraceDir = new File(context.getExternalCacheDir(), STACKTRACE_DIR);
         File logFile = new File(context.getExternalCacheDir(), "log.txt");
-        int githubTokenIdentifier = context.getResources().getIdentifier("github_oauth2", "string", context.getPackageName());
+        String githubToken = context.getString(R.string.github_oauth2);
         String githubUrl = context.getResources().getString(R.string.github_bug_report_repo);
 
         // TRICKY: make sure the github_oauth2 token has been set
-        if(githubTokenIdentifier != 0) {
-            GithubReporter reporter = new GithubReporter(context, githubUrl, context.getResources().getString(githubTokenIdentifier));
+        if(!githubToken.equalsIgnoreCase("STRING_REPLACED_BY_BUILD_SERVER")) {
+            GithubReporter reporter = new GithubReporter(context, githubUrl, githubToken);
             String[] stacktraces = GlobalExceptionHandler.getStacktraces(stacktraceDir);
             if (stacktraces.length > 0) {
                 // upload most recent stacktrace
