@@ -10,7 +10,6 @@
 
     </ListView>
 
-
     <com.dlazaro66.qrcodereaderview.QRCodeReaderView
         android:id="@+id/qr_decoder_view"
         android:layout_width="match_parent"

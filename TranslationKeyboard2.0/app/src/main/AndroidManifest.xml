@@ -160,16 +160,16 @@
                     android:pathPattern=".*\\.tk"
                     android:scheme="content" />
             </intent-filter>
-            <intent-filter android:label="translationKeyboard" >
-                <action android:name="android.intent.action.VIEW" />
+            <!--<intent-filter android:label="translationKeyboard" >-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
 
-                <data
-                    android:mimeType="*/*"
-                    android:pathPattern=".*\\.tk"
-                    android:scheme="file" />
-            </intent-filter>
+                <!--<data-->
+                    <!--android:mimeType="*/*"-->
+                    <!--android:pathPattern=".*\\.tk"-->
+                    <!--android:scheme="file" />-->
+            <!--</intent-filter>-->
             <intent-filter android:label="translationKeyboard" >
                 <action android:name="android.intent.action.VIEW" />
 
