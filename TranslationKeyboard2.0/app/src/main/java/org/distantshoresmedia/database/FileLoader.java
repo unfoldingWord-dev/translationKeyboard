@@ -22,20 +22,22 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
- * Created by Fechner on 12/31/14.
+ * Created by PJ Fechner on 12/31/14.
+ * Class to load files.
  */
 public class FileLoader {
 
     private static final String TAG = "FileLoader";
 
     //region Out Methods
+
     /**
-     *
-     * @param fileSequence
-     * @param fileName
-     * @param context
+     * Saves file to the application files
+     * @param context context to use
+     * @param textSequence File text
+     * @param fileName File name to use
      */
-    protected static void saveFileToApplicationFiles(Context context, CharSequence fileSequence, String fileName){
+    protected static void saveFileToApplicationFiles(Context context, CharSequence textSequence, String fileName){
 
         Log.i(TAG, "Attempting to save file named:" + fileName);
 
@@ -43,9 +45,9 @@ public class FileLoader {
             File file = new File(context.getFilesDir(), fileName);
 
             if (!file.exists()) {
-                boolean success = file.createNewFile();
+                file.createNewFile();
             }
-            String fileString = fileSequence.toString();
+            String fileString = textSequence.toString();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(fileString);
@@ -65,7 +67,13 @@ public class FileLoader {
         Log.i(TAG, "File saving was successful.");
     }
 
-    public static void saveFile(CharSequence fileSequence, String dirName, String fileName){
+    /**
+     * Save file to the passed directory
+     * @param textSequence text of the file
+     * @param dirName directory to place the file
+     * @param fileName name of the file
+     */
+    public static void saveFile(CharSequence textSequence, String dirName, String fileName){
 
         Log.i(TAG, "Attempting to save file named:" + fileName);
 
@@ -75,7 +83,7 @@ public class FileLoader {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            String fileString = fileSequence.toString();
+            String fileString = textSequence.toString();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(fileString);
@@ -92,12 +100,12 @@ public class FileLoader {
     }
 
     /**
-     *
-     * @param fileSequence
-     * @param fileName
-     * @param context
+     * Save the passed file to the SD card
+     * @param textSequence Text of the file to create
+     * @param fileName name of the file
+     * @param context context to be used
      */
-    public static void saveFileToSDCard(Context context, CharSequence fileSequence, String fileName){
+    public static void saveFileToSDCard(Context context, CharSequence textSequence, String fileName){
 
         Log.i(TAG, "Attempting to save file named:" + fileName);
 
@@ -105,10 +113,10 @@ public class FileLoader {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name), fileName);
 
             if (!file.exists()) {
-                boolean madeDirs = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name)).mkdirs();
-                boolean madeFile = file.createNewFile();
+                new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name)).mkdirs();
+                file.createNewFile();
             }
-            String fileString = fileSequence.toString();
+            String fileString = textSequence.toString();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(fileString);
@@ -128,7 +136,14 @@ public class FileLoader {
         Log.i(TAG, "File saving was successful.");
     }
 
-    public static Uri createTemporaryFile(Context context, CharSequence fileSequence, String fileName){
+    /**
+     * Creates a temporary file in the directory/temp folder.
+     * @param context context ot use
+     * @param fileText text of the file
+     * @param fileName name of the file
+     * @return Uri of the created file.
+     */
+    public static Uri createTemporaryFile(Context context, CharSequence fileText, String fileName){
 
         clearTemporaryFiles(context);
         Log.i(TAG, "Attempting to save temporary file named:" + fileName);
@@ -138,11 +153,11 @@ public class FileLoader {
                     + "/" + context.getString(R.string.app_name) + "/temp", fileName);
 
             if (!file.exists()) {
-                boolean madeDirs = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                         + "/" + context.getString(R.string.app_name) + "/temp").mkdirs();
-                boolean madeFile = file.createNewFile();
+                file.createNewFile();
             }
-            String fileString = fileSequence.toString();
+            String fileString = fileText.toString();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(fileString);
@@ -164,14 +179,18 @@ public class FileLoader {
         return null;
     }
 
+    /**
+     * Clears out the temporary files folder
+     * @param context context to use
+     */
     public static void clearTemporaryFiles(Context context){
 
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/" + context.getString(R.string.app_name) + "/temp");
         if(file.exists()){
             final File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
-            boolean success = file.renameTo(to);
-            success = file.delete();
+            file.renameTo(to);
+            file.delete();
         }
     }
 
@@ -182,10 +201,9 @@ public class FileLoader {
 
 
     /**
-     *
-     * @param context
-     * @param fileName
-     * @return
+     * @param context context to use
+     * @param fileName name of the file
+     * @return Text of the file requested
      */
     protected static String getJSONStringFromApplicationFiles(Context context, String fileName){
 
@@ -196,8 +214,13 @@ public class FileLoader {
 
             InputStream fileStream = context.openFileInput(fileName);
 
-            String resultString =  getStringFromInputStream(fileStream, fileName).toString();
-            return resultString;
+            CharSequence sequence = getStringFromInputStream(fileStream, fileName);
+            if(sequence != null) {
+                return sequence.toString();
+            }
+            else{
+                return null;
+            }
         }
         catch (IOException e){
             Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
@@ -206,32 +229,22 @@ public class FileLoader {
     }
 
     /**
-     *
-     * @param context
-     * @param fileName
-     * @return
+     * @param context context to use
+     * @param fileName name of the file to be loaded
+     * @return String of the desired file or null if it doesn't exist
      */
     protected static String getJSONStringFromAssets(Context context, String fileName){
 
         try{
             InputStream fileStream = context.getAssets().open(fileName);
 
-            String resultString = getStringFromInputStream(fileStream, fileName).toString();
-            return resultString;
-        }
-        catch (IOException e){
-            Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
-            return null;
-        }
-    }
-
-    public static String getStringFromFile(File file){
-
-        try{
-            FileInputStream fileStream = new FileInputStream(file);
-
-            String resultString = getStringFromInputStream(fileStream, file.getName()).toString();
-            return resultString;
+            CharSequence sequence = getStringFromInputStream(fileStream, fileName);
+            if(sequence != null) {
+                return sequence.toString();
+            }
+            else{
+                return null;
+            }
         }
         catch (IOException e){
             Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
@@ -240,9 +253,31 @@ public class FileLoader {
     }
 
     /**
-     *
-     * @param fileStream
-     * @param fileName
+     * @param file file to be parsed
+     * @return String from the passed file.
+     */
+    public static String getStringFromFile(File file){
+
+        try{
+            FileInputStream fileStream = new FileInputStream(file);
+
+            CharSequence sequence = getStringFromInputStream(fileStream, file.getName());
+            if(sequence != null) {
+                return sequence.toString();
+            }
+            else{
+                return null;
+            }
+        }
+        catch (IOException e){
+            Log.e(TAG, "initializeKeyboards IOException: " + e.toString());
+            return null;
+        }
+    }
+
+    /**
+     * @param fileStream Stream from which to get a string
+     * @param fileName name of the file
      * @return The String from the Stream or null if there's an error.
      */
     private static CharSequence getStringFromInputStream(InputStream fileStream, String fileName){

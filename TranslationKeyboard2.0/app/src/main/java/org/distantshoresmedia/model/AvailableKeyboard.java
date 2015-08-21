@@ -79,19 +79,6 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         return new Locale(isoLanguage, isoRegion);
     }
 
-    @Override
-    public String toString() {
-        return "AvailableKeyboard{" +
-                "id=" + id +
-                ", isoLanguage='" + isoLanguage + '\'' +
-                ", isoRegion='" + isoRegion + '\'' +
-                ", language_name='" + languageName + '\'' +
-                ", updated=" + updated +
-                '}';
-
-
-    }
-
     static public String getKeyboardNameFromJSONString(String json) {
 
         try {
@@ -172,5 +159,15 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
             return null;
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "AvailableKeyboard{" +
+                "id=" + id +
+                ", isoLanguage='" + isoLanguage + '\'' +
+                ", isoRegion='" + isoRegion + '\'' +
+                ", languageName='" + languageName + '\'' +
+                '}';
     }
 }
