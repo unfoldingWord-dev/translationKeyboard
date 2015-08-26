@@ -20,6 +20,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile ('com.android.support:appcompat-v7:22.2.0'){
+        exclude module: 'commons-io:2.4'
+    }
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }

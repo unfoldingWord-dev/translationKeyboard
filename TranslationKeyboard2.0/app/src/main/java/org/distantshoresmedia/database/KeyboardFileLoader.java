@@ -5,6 +5,7 @@ import android.content.Context;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.model.BaseKeyboard;
 import org.distantshoresmedia.utilities.TKPreferenceManager;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -151,28 +152,30 @@ public class KeyboardFileLoader {
     protected static void saveKeyboards(Context context, AvailableKeyboard[] keyboards, String fileName){
 
         String json = createJSONStringForKeyboards(keyboards);
-
         FileLoader.saveFileToApplicationFiles(context, json, fileName);
     }
 
     /**
-     *
      * @param keyboards
      * @return
      */
     private static String createJSONStringForKeyboards(AvailableKeyboard[] keyboards){
 
-        String jsonString = "{\nkeyboards:[\n";
+        JSONObject allJson = new JSONObject();
+        JSONArray keyboardsJson = new JSONArray();
 
         for(AvailableKeyboard keyboard : keyboards){
-
-            jsonString += keyboard.getObjectAsJSONString();
+            keyboardsJson.put(keyboard.getObjectAsJSONObject());
         }
-
-        jsonString = jsonString.substring(0, jsonString.length() - 1);
-        jsonString += "\n]\n}";
-
-        return jsonString;
+        try {
+            allJson.put("keyboards", keyboardsJson);
+            String jsonString = allJson.toString();
+            return jsonString;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

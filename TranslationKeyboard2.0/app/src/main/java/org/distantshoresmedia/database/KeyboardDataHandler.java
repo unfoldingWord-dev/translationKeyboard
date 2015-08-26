@@ -22,9 +22,9 @@ public class KeyboardDataHandler {
 
     private static final String TAG = "KeyboardDataHandler";
 
-    private static Map<String, AvailableKeyboard> availableKeyboardsDictionary = null;
-    private static Map<String, AvailableKeyboard> downloadedKeyboardsDictionary = null;
-    private static Map<String, AvailableKeyboard> installedKeyboardDictionary = null;
+    private static Map<String, AvailableKeyboard> availableKeyboardsDictionary;
+    private static Map<String, AvailableKeyboard> downloadedKeyboardsDictionary;
+    private static Map<String, AvailableKeyboard> installedKeyboardDictionary;
 
 
     //region Dictionary Methods
@@ -80,6 +80,7 @@ public class KeyboardDataHandler {
 
         return installedKeyboardDictionary;
     }
+
     //endregion
 
     protected static void setKeyboardAvailabilityState(Context context, AvailableKeyboard keyboard, boolean installed){
@@ -212,8 +213,8 @@ public class KeyboardDataHandler {
                 downKeys.remove(key);
             }
         }
-        KeyboardFileLoader.saveDownloadedKeyboards(context, getKeyboardsArrayFromDictionary(context, downKeys));
 
+        KeyboardFileLoader.saveDownloadedKeyboards(context, getKeyboardsArrayFromDictionary(context, downKeys));
 
         keysList = new ArrayList<String>();
         for(String id : instKeys.keySet()){
@@ -266,7 +267,7 @@ public class KeyboardDataHandler {
 //            Log.i(TAG, "Desired locale: " + locale.toString() + " keyboardLocal: " + keyboardLocal.toString());
         }
 
-        return null;
+        return Long.toString(getInstalledKeyboardsArray(context)[0].getId());
     }
 
 
@@ -280,7 +281,6 @@ public class KeyboardDataHandler {
                                                                            Map<String, AvailableKeyboard> keyboardsDictionary){
 
         AvailableKeyboard[] keyboards = new AvailableKeyboard[keyboardsDictionary.size()];
-
 
         int i = 0;
         for(AvailableKeyboard keyboard : keyboardsDictionary.values()){

@@ -38,7 +38,6 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.distantshoresmedia.database.KeyboardDataHandler;
 import org.distantshoresmedia.model.AvailableKeyboard;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.model.BaseKeyboard;
@@ -46,7 +45,7 @@ import org.distantshoresmedia.translationkeyboard20.R;
 
 public class InputLanguageSelection extends PreferenceActivity {
     private static final String TAG = "InputLanguageSelection";
-    private ArrayList<Loc> mAvailableLanguages = new ArrayList<Loc>();
+    private List<AvailableKeyboard> mAvailableKeyboards = new ArrayList<AvailableKeyboard>();
     private static final String[] BLACKLIST_LANGUAGES = {
 
     };
@@ -122,14 +121,14 @@ public class InputLanguageSelection extends PreferenceActivity {
         Log.i(TAG, "selected languages: " + selectedLanguagePref);
         String[] languageList = selectedLanguagePref.split(",");
         
-        mAvailableLanguages = getUniqueLocales();
+        mAvailableKeyboards = getUniqueLocales();
 
         // Compatibility hack for v1.22 and older - if a selected language 5-code isn't
         // found in the current list of available languages, try adding the 2-letter
         // language code. For example, "en_US" is no longer listed, so use "en" instead.
         Set<String> availableLanguages = new HashSet<String>();
-        for (int i = 0; i < mAvailableLanguages.size(); i++) {
-            Locale locale = mAvailableLanguages.get(i).locale;
+        for (int i = 0; i < mAvailableKeyboards.size(); i++) {
+            Locale locale = getLocFromKeyboard(mAvailableKeyboards.get(i)).locale;
             availableLanguages.add(getCode(locale));
         }
 
@@ -143,18 +142,18 @@ public class InputLanguageSelection extends PreferenceActivity {
         }
 
         PreferenceGroup parent = getPreferenceScreen();
-        for (int i = 0; i < mAvailableLanguages.size(); i++) {
+        for (int i = 0; i < mAvailableKeyboards.size(); i++) {
             CheckBoxPreference pref = new CheckBoxPreference(this);
-            Locale locale = mAvailableLanguages.get(i).locale;
-            AvailableKeyboard availKey = keyboardsDictionary.get(locale.toString());
+            Locale locale = getLocFromKeyboard(mAvailableKeyboards.get(i)).locale;
+            AvailableKeyboard availKey = mAvailableKeyboards.get(i);
             BaseKeyboard keyboard = KeyboardDatabaseHandler.getKeyboardWithID(Integer.toString(availKey.id));
             CharSequence name = keyboard.getKeyboardVariants()[0].getName();
             pref.setTitle(name + " [" + locale.toString() + "]");
             String fiveCode = getCode(locale);
 //            String language = locale.getLanguage();
 //            boolean checked = languageSelections.contains(fivecode);
-            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(keyboardsDictionary.get(fiveCode));
-            boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(keyboardsDictionary.get(fiveCode));
+            boolean downloaded = KeyboardDatabaseHandler.hasDownloadedKeyboard(availKey);
+            boolean checked = KeyboardDatabaseHandler.hasInstalledKeyboard(availKey);
             pref.setChecked(checked);
 //            boolean has4Row = arrayContains(KBD_4_ROW, fivecode) || arrayContains(KBD_4_ROW, language);
 //            boolean has5Row = arrayContains(KBD_5_ROW, fivecode) || arrayContains(KBD_5_ROW, language);
@@ -232,7 +231,6 @@ public class InputLanguageSelection extends PreferenceActivity {
         super.onPause();
         AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getInstalledKeyboards();
 
-
         Map<String, AvailableKeyboard> keyboardsDictionary = new HashMap<String, AvailableKeyboard>();
 
         for(AvailableKeyboard keyboard : keyboards){
@@ -248,13 +246,13 @@ public class InputLanguageSelection extends PreferenceActivity {
         for (int i = 0; i < count; i++) {
             CheckBoxPreference pref = (CheckBoxPreference) parent.getPreference(i);
 
-            Locale locale = mAvailableLanguages.get(i).locale;
+            Locale locale = getLocFromKeyboard(mAvailableKeyboards.get(i)).locale;
             if (pref.isChecked()) {
                 checkedLanguages += getCode(locale) + ",";
             }
 
             String desiredKey = locale.getDisplayName();
-            AvailableKeyboard localKeyboard = keyboardsDictionary.get(desiredKey);
+            AvailableKeyboard localKeyboard = mAvailableKeyboards.get(i);
             KeyboardDatabaseHandler.installedKeyboardHasState(localKeyboard, pref.isChecked());
         }
         if (checkedLanguages.length() < 1) checkedLanguages = null; // Save null
@@ -262,6 +260,11 @@ public class InputLanguageSelection extends PreferenceActivity {
         Editor editor = sp.edit();
         editor.putString(LatinIME.PREF_SELECTED_LANGUAGES, checkedLanguages);
         SharedPreferencesCompat.apply(editor);
+    }
+
+    private Loc getLocFromKeyboard(AvailableKeyboard keyboard){
+
+        return new Loc(keyboard.getLanguageName(), keyboard.getKeyboardAsLocale());
     }
 
     private static String asString(Set<String> set) {
@@ -280,110 +283,21 @@ public class InputLanguageSelection extends PreferenceActivity {
 
 
 
-    ArrayList<Loc> getUniqueLocales() {
-        Set<String> localeSet = new HashSet<String>();
-        Set<String> langSet = new HashSet<String>();
-
-        ArrayList<Loc> uniqueLocales = new ArrayList<Loc>();
+    private List<AvailableKeyboard> getUniqueLocales() {
+//        Set<String> localeSet = new HashSet<String>();
+//        Set<String> langSet = new HashSet<String>();
+//
+//        ArrayList<Loc> uniqueLocales = new ArrayList<Loc>();
 
         AvailableKeyboard[] keyboards = KeyboardDatabaseHandler.getInstalledKeyboards();
 
-        for(AvailableKeyboard keyboard : keyboards){
+//        for(AvailableKeyboard keyboard : keyboards){
+//
+//            Loc newLoc = new Loc(keyboard.getLanguageName(), keyboard.getKeyboardAsLocale());
+//            uniqueLocales.add(newLoc);
+//        }
 
-            Loc newLoc = new Loc(keyboard.getLanguageName(), keyboard.getKeyboardAsLocale());
-            uniqueLocales.add(newLoc);
-        }
-
-        return uniqueLocales;
-
-        // Ignore the system (asset) locale list, it's inconsistent and incomplete
-//        String[] sysLocales = getAssets().getLocales();
-//        
-//        // First, add zz_ZZ style full language+country locales
-//        for (int i = 0; i < sysLocales.length; ++i) {
-//        	String sl = sysLocales[i];
-//        	if (sl.length() != 5) continue;
-//        	localeSet.add(sl);
-//        	langSet.add(sl.substring(0, 2));
-//        }
-//        
-//        // Add entries for system languages without country, but only if there's
-//        // no full locale for that language yet.
-//        for (int i = 0; i < sysLocales.length; ++i) {
-//        	String sl = sysLocales[i];
-//        	if (sl.length() != 2 || langSet.contains(sl)) continue;
-//        	localeSet.add(sl);
-//        }
-        
-        // Add entries for additional languages supported by the keyboard.
-//        for (int i = 0; i < KBD_LOCALIZATIONS.length; ++i) {
-//        	String kl = KBD_LOCALIZATIONS[i];
-//        	if (kl.length() == 2 && langSet.contains(kl)) continue;
-//        	// replace zz_rYY with zz_YY
-//        	if (kl.length() == 6) kl = kl.substring(0, 2) + "_" + kl.substring(4, 6);
-//        	localeSet.add(kl);
-//        }
-//        Log.i(TAG, "localeSet=" + asString(localeSet));
-//        Log.i(TAG, "langSet=" + asString(langSet));
-//
-//        // Now build the locale list for display
-//        String[] locales = new String[localeSet.size()];
-//        locales = localeSet.toArray(locales);
-//        Arrays.sort(locales);
-//
-//        ArrayList<Loc> uniqueLocales = new ArrayList<Loc>();
-//
-//        final int origSize = locales.length;
-//        Loc[] preprocess = new Loc[origSize];
-//        int finalSize = 0;
-//        for (int i = 0 ; i < origSize; i++ ) {
-//            String s = locales[i];
-//            int len = s.length();
-//            if (len == 2 || len == 5 || len == 6) {
-//                String language = s.substring(0, 2);
-//                Locale l;
-//                if (len == 5) {
-//                    // zz_YY
-//                    String country = s.substring(3, 5);
-//                    l = new Locale(language, country);
-//                } else if (len == 6) {
-//                    // zz_rYY
-//                    l = new Locale(language, s.substring(4, 6));
-//                } else {
-//                    l = new Locale(language);
-//                }
-//
-//                // Exclude languages that are not relevant to LatinIME
-//                if (arrayContains(BLACKLIST_LANGUAGES, language)) continue;
-//
-//                if (finalSize == 0) {
-//                    preprocess[finalSize++] =
-//                            new Loc(LanguageSwitcher.toTitleCase(l.getDisplayName(l)), l);
-//                } else {
-//                    // check previous entry:
-//                    //  same lang and a country -> upgrade to full name and
-//                    //    insert ours with full name
-//                    //  diff lang -> insert ours with lang-only name
-//                    if (preprocess[finalSize-1].locale.getLanguage().equals(
-//                            language)) {
-//                        preprocess[finalSize-1].label = getLocaleName(preprocess[finalSize-1].locale);
-//                        preprocess[finalSize++] =
-//                                new Loc(getLocaleName(l), l);
-//                    } else {
-//                        String displayName;
-//                        if (s.equals("zz_ZZ")) {
-//                        } else {
-//                            displayName = getLocaleName(l);
-//                            preprocess[finalSize++] = new Loc(displayName, l);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        for (int i = 0; i < finalSize ; i++) {
-//            uniqueLocales.add(preprocess[i]);
-//        }
-//        return uniqueLocales;
+        return Arrays.asList(keyboards);
     }
 
     private boolean arrayContains(String[] array, String value) {

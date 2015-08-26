@@ -64,9 +64,26 @@ public class AvailableKeyboard extends BaseDataClass implements Comparable<Avail
         this.id = id;
     }
 
+    public JSONObject getObjectAsJSONObject() {
+
+        try {
+            JSONObject object = new JSONObject();
+            object.put(kIdKey, this.id);
+            object.put(kIsoLanguageKey, this.isoLanguage);
+            object.put(kIsoRegionKey, this.isoRegion);
+            object.put(kLanguageNameKey, this.languageName);
+            object.put(kUpdatedKey, this.updated);
+            return object;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public String getObjectAsJSONString() {
 
-        String jsonString = "{\n" + kIdKey + ": " + this.id + ","
+        String jsonString = "{" + kIdKey + ": " + this.id + ","
                 + kIsoLanguageKey + ": \"" + this.isoLanguage + "\","
                 + kIsoRegionKey + ": \"" + this.isoRegion + "\","
                 + kLanguageNameKey + ": \"" + this.languageName + "\","
