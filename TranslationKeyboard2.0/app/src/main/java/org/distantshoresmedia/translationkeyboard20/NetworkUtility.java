@@ -10,7 +10,7 @@ import android.util.Log;
  *
  * @author Created by Acts Media Inc
  */
-public class NetworkUtil {
+public class NetworkUtility {
 
     private static String TAG = "NetWorkUtil";
     /**
@@ -32,7 +32,7 @@ public class NetworkUtil {
      */
     public static boolean isConnected(Context context) {
 
-        NetworkInfo info = NetworkUtil.getNetworkInfo(context);
+        NetworkInfo info = NetworkUtility.getNetworkInfo(context);
 
         boolean isConnected = (info != null && info.isConnected());
         Log.i(TAG, "is connected to web: " + isConnected);
@@ -50,7 +50,7 @@ public class NetworkUtil {
     public static boolean isConnectedWifi(Context context) {
 
         Log.i(TAG, "Connected to wifi");
-        NetworkInfo info = NetworkUtil.getNetworkInfo(context);
+        NetworkInfo info = NetworkUtility.getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
     }
 
@@ -63,7 +63,7 @@ public class NetworkUtil {
      */
     public static boolean isConnectedMobile(Context context) {
         Log.i(TAG, "Connected to mobile web");
-        NetworkInfo info = NetworkUtil.getNetworkInfo(context);
+        NetworkInfo info = NetworkUtility.getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);
     }
 

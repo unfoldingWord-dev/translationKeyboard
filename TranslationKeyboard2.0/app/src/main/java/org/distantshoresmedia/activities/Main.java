@@ -43,7 +43,7 @@ import org.distantshoresmedia.TKApplication;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.keyboard.InputLanguageSelection;
-import org.distantshoresmedia.translationkeyboard20.NetworkUtil;
+import org.distantshoresmedia.translationkeyboard20.NetworkUtility;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.distantshoresmedia.translationkeyboard20.UpdateService;
@@ -192,7 +192,7 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
                 transaction.commit();
                 updateFragment.setProgress(5, "Initializing");
             }
-        if (!NetworkUtil.isConnected(this)) {
+        if (!NetworkUtility.isConnected(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Alert");
             builder.setMessage("Unable to perform update at this time");
