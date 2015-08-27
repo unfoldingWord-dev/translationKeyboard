@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by Acts Media Inc on 3/12/14.
  */
-public class URLDownloadUtil {
+public class DownloadUtil {
 
     private static final String TAG = "URLDownloadUtil";
     static final int connectionTimeout = 20000;

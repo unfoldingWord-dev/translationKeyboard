@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     signingConfigs {
         release {
             keyAlias 'KEY_ALIAS'
@@ -9,12 +10,13 @@ android {
             storePassword 'KEYSTORE_PASSWORD'
         }
     }
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
+
     defaultConfig {
         applicationId 'org.distantshoresmedia.translationkeyboard'
         minSdkVersion 8
-        targetSdkVersion 21
+        targetSdkVersion 23
         versionCode 13
         versionName '2.0.0'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
@@ -31,10 +33,13 @@ android {
     }
     productFlavors {
     }
+
+
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile project(':FileDialog')
@@ -42,5 +47,5 @@ dependencies {
     compile 'com.google.zxing:android-integration:3.2.0'
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     compile project(':com.door43.tools.reporting')
-
+    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }

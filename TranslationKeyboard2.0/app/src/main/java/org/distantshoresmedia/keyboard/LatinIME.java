@@ -35,6 +35,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.graphics.BitmapFactory;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
 import android.os.Debug;
@@ -45,7 +46,8 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-        import android.text.ClipboardManager;
+import android.support.v4.app.NotificationCompat;
+import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -485,23 +487,39 @@ public class LatinIME extends InputMethodService implements
             int icon = R.drawable.icon;
             CharSequence text = "Keyboard notification enabled.";
             long when = System.currentTimeMillis();
-            Notification notification = new Notification(icon, text, when);
 
             // TODO: clean this up?
             mNotificationReceiver = new NotificationReceiver(this);
             final IntentFilter pFilter = new IntentFilter(ACTION);
             registerReceiver(mNotificationReceiver, pFilter);
-            
+
             Intent notificationIntent = new Intent(ACTION);
-            
+
             PendingIntent contentIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, notificationIntent, 0);
             //PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-            
-            String title = "Show Translation Keyboard Keyboard";
+
+            String title = "Show translationKeyboard Keyboard";
             String body = "Select this to open the keyboard. Disable in settings.";
-            
+
+//            Notification notification = new Notification(icon, text, when);
+//
+//            notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+//            notification.setLatestEventInfo(getApplicationContext(), title, body, contentIntent);
+
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+
+            builder.setContentIntent(contentIntent)
+                    .setSmallIcon(icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), icon))
+                    .setTicker(body)
+                    .setWhen(System.currentTimeMillis())
+                    .setAutoCancel(true)
+                    .setContentTitle(title)
+                    .setContentText(body);
+            Notification notification = builder.build();
             notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-            notification.setLatestEventInfo(getApplicationContext(), title, body, contentIntent);
+
             mNotificationManager.notify(ID, notification);
         } else if (mNotificationReceiver != null) {
             mNotificationManager.cancel(ID);

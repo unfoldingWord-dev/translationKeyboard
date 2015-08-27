@@ -98,7 +98,7 @@ public class UpdateService extends Service {
             // Get current list of languages
             try {
 
-                String json = URLDownloadUtil.downloadJson(UpdateService.getKeyboardUrl());
+                String json = DownloadUtil.downloadJson(UpdateService.getKeyboardUrl());
 
                 String failText = "Invalid update. Please try again";
                 try{
@@ -110,7 +110,7 @@ public class UpdateService extends Service {
                         ArrayList<String> ids = KeyboardDatabaseHandler.updateKeyboardsDatabaseWithJSON(Main.getAppContext(), json);
                         if(ids != null) {
                             for (String id : ids) {
-                                String newJson = URLDownloadUtil.downloadJson(UpdateService.getKeyboardUrl(id));
+                                String newJson = DownloadUtil.downloadJson(UpdateService.getKeyboardUrl(id));
                                 KeyboardDatabaseHandler.updateOrSaveKeyboard(Main.getAppContext(), newJson);
                             }
                         }
