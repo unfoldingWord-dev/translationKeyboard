@@ -41,7 +41,7 @@ public class KeyboardDatabaseHandler {
 
     /**
      *
-     * @param context
+     * @param context Context to use
      * @return boolean of whether or not it initialized
      */
     public static boolean initializeDatabaseIfNecessary(Context context){
@@ -57,8 +57,7 @@ public class KeyboardDatabaseHandler {
             KeyboardFileLoader.initializeKeyboards(context);
         }
 
-        boolean didInitialize = ! hasBeenSaved;
-        return didInitialize;
+        return !hasBeenSaved;
     }
     //endregion
 
@@ -72,17 +71,13 @@ public class KeyboardDatabaseHandler {
     public static boolean hasDownloadedKeyboard(AvailableKeyboard keyboard){
 
         String id = Long.toString(keyboard.getId());
-        boolean hasKeyboard = KeyboardDataHandler.getDownloadedKeyboardsDictionary(currentContext).containsKey(id);
-
-        return hasKeyboard;
+        return KeyboardDataHandler.getDownloadedKeyboardsDictionary(currentContext).containsKey(id);
     }
 
     public static boolean hasInstalledKeyboard(AvailableKeyboard keyboard){
 
         String id = Long.toString(keyboard.getId());
-        boolean hasKeyboard = KeyboardDataHandler.getInstalledKeyboardDictionary(currentContext).containsKey(id);
-
-        return hasKeyboard;
+        return KeyboardDataHandler.getInstalledKeyboardDictionary(currentContext).containsKey(id);
     }
 
     public static BaseKeyboard getKeyboardWithID(String id){
@@ -92,9 +87,7 @@ public class KeyboardDatabaseHandler {
         }
         String json = KeyboardFileLoader.loadKeyboardFromFiles(currentContext, id);
 
-        BaseKeyboard keyboard = BaseKeyboard.getKeyboardFromJsonString(json);
-
-        return keyboard;
+        return BaseKeyboard.getKeyboardFromJsonString(json);
     }
     public static String getKeyboardIdWithLocal(Locale locale){
 
@@ -191,7 +184,7 @@ private static ArrayList<String> updateKeyboards(Context context, String json){
         // these will be invalidated after a keyboard is deleted
         availableKeyboards = KeyboardDataHandler.getAvailableKeyboardsDictionary(context);
         downloadedKeyboards = KeyboardDataHandler.getDownloadedKeyboardsDictionary(context);
-        installedKeyboards = KeyboardDataHandler.getInstalledKeyboardDictionary(context);
+        KeyboardDataHandler.getInstalledKeyboardDictionary(context);
         }
 
         ArrayList<String> updateIds = new ArrayList<String>();

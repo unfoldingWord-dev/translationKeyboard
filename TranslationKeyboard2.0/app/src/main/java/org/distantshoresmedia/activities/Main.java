@@ -65,12 +65,12 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.main);
         Main.context = getApplicationContext();
 
         KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
 
-        setContentView(R.layout.main);
-        String html = getString(R.string.main_body);
+        String html = context.getString(R.string.main_body);
         //html += "<p><i>Version: " + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName + "</i></p>";
         Spanned content = Html.fromHtml(html);
         TextView description = (TextView) findViewById(R.id.main_description);
@@ -142,7 +142,7 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
 
         AlertDialog dialogue = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                 .setCustomTitle(titleView)
-                .setAdapter(new ShareAdapter(getApplicationContext(), Arrays.asList(new String[]{"Send/Save Keyboards", "Receive/Load Keyboards"})),
+                .setAdapter(new ShareAdapter(getApplicationContext(), Arrays.asList("Send/Save Keyboards", "Receive/Load Keyboards")),
                         new DialogInterface.OnClickListener() {
 
                             @Override

@@ -15,7 +15,6 @@ public class NetworkUtility {
     private static String TAG = "NetWorkUtil";
     /**
      * Get the network info
-     *
      * @param context
      * @return
      */
@@ -26,7 +25,6 @@ public class NetworkUtility {
 
     /**
      * Check if there is any connectivity
-     *
      * @param context
      * @return
      */

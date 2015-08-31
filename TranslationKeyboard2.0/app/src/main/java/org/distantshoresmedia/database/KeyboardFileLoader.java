@@ -67,8 +67,7 @@ public class KeyboardFileLoader {
 
         try {
             double preloadUpdated = (new JSONObject(preloadedJson)).getDouble("updated_at");
-            boolean hasBeenUpdated = (TKPreferenceManager.getLastUpdatedDate(context) < preloadUpdated);
-            return hasBeenUpdated;
+            return (TKPreferenceManager.getLastUpdatedDate(context) < preloadUpdated);
         }
         catch (JSONException e){
             e.printStackTrace();
@@ -119,9 +118,7 @@ public class KeyboardFileLoader {
         String fileName = FileNameHelper.getAvailableKeyboardsFileName();
         String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
 
-        double date = AvailableKeyboard.getUpdatedTimeFromJSONString(json);
-
-        return date;
+        return AvailableKeyboard.getUpdatedTimeFromJSONString(json);
     }
 
     protected static void saveAvailableKeyboards(Context context, String json){
@@ -169,8 +166,7 @@ public class KeyboardFileLoader {
         }
         try {
             allJson.put("keyboards", keyboardsJson);
-            String jsonString = allJson.toString();
-            return jsonString;
+            return allJson.toString();
         }
         catch (JSONException e){
             e.printStackTrace();
@@ -198,8 +194,7 @@ public class KeyboardFileLoader {
      */
     protected static boolean hasSavedKeyboards(Context context){
 
-        boolean hasLoadedKeyboards =  (getAvailableKeyboards(context) == null)? false : true;
-        return hasLoadedKeyboards;
+        return (getAvailableKeyboards(context) != null);
     }
     /**
      *
@@ -210,9 +205,7 @@ public class KeyboardFileLoader {
     protected static String loadKeyboardFromFiles(Context context, AvailableKeyboard keyboard){
 
         String id = Long.toString(keyboard.getId());
-        String json = getKeyboardForID(context, id);
-
-        return json;
+        return getKeyboardForID(context, id);
     }
 
     /**
@@ -223,8 +216,7 @@ public class KeyboardFileLoader {
      */
     protected static String loadKeyboardFromFiles(Context context, String id){
 
-        String json = getKeyboardForID(context, id);
-        return json;
+        return getKeyboardForID(context, id);
     }
 
     /**
@@ -236,9 +228,7 @@ public class KeyboardFileLoader {
     private static String getKeyboardForID(Context context, String id){
 
         String fileName = FileNameHelper.getKeyboardIDFileName(id);
-        String json = FileLoader.getJSONStringFromApplicationFiles(context, fileName);
-
-        return json;
+        return FileLoader.getJSONStringFromApplicationFiles(context, fileName);
     }
 
     /**
@@ -255,9 +245,7 @@ public class KeyboardFileLoader {
             return null;
         }
 
-        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
-
-        return keyboards;
+        return AvailableKeyboard.getKeyboardsFromJsonString(json);
     }
 
     /**
@@ -274,9 +262,7 @@ public class KeyboardFileLoader {
             return null;
         }
 
-        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
-
-        return keyboards;
+        return AvailableKeyboard.getKeyboardsFromJsonString(json);
     }
 
     /**
@@ -293,19 +279,12 @@ public class KeyboardFileLoader {
             return null;
         }
 
-        AvailableKeyboard[] keyboards = AvailableKeyboard.getKeyboardsFromJsonString(json);
-
-        return keyboards;
+        return AvailableKeyboard.getKeyboardsFromJsonString(json);
     }
 
     private static boolean jsonIsValid(String json){
 
-        if(json == null || json.length() < 1){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return !(json == null || json.length() < 1);
     }
     //endregion
 
