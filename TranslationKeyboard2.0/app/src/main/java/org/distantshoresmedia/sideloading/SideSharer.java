@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -164,16 +165,22 @@ public class SideSharer {
 
         Uri fileUri = FileLoader.createTemporaryFile(activity.getApplicationContext(), getZippedText(), fileName);
 
-
         Intent sharingIntent = new Intent(
                 android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        sharingIntent
-                .setComponent(new ComponentName(
-                        "com.android.bluetooth",
-                        "com.android.bluetooth.opp.BluetoothOppLauncherActivity"));
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-        activity.startActivityForResult(sharingIntent, 0);
+
+        if(Build.VERSION.SDK_INT > 10){
+
+            sharingIntent.setPackage("com.android.bluetooth");
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            activity.startActivity(Intent.createChooser(sharingIntent, "Share file"));
+        }
+        else {
+            sharingIntent.setComponent(new ComponentName("com.android.bluetooth",
+                    "com.android.bluetooth.opp.BluetoothOppLauncherActivity"));
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            activity.startActivityForResult(sharingIntent, 0);
+        }
     }
 
     private void startNFCShareAction(){

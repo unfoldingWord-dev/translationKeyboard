@@ -70,7 +70,7 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
 
         KeyboardDatabaseHandler.initializeDatabaseIfNecessary(this.getApplicationContext());
 
-        String html = context.getString(R.string.main_body);
+        String html = getResources().getString(R.string.main_body);
         //html += "<p><i>Version: " + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName + "</i></p>";
         Spanned content = Html.fromHtml(html);
         TextView description = (TextView) findViewById(R.id.main_description);

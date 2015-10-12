@@ -579,7 +579,7 @@ public class PointerTracker {
                 if (listener != null) {
 
                     CharSequence sequence = key.getPrimarySequence();
-                    if(sequence != null && sequence.length() > 1 && code > 0){
+                    if(sequence != null && sequence.length() > 1 && code > 0 && code != 10){
                         listener.onText(sequence);
                     }
                     else {

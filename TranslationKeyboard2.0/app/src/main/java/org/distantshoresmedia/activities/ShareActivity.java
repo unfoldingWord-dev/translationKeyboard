@@ -18,6 +18,8 @@ import org.distantshoresmedia.sideloading.SideSharer;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class ShareActivity extends ActionBarActivity implements KeyboardsAdapter.KeyboardAdapterListener {
 
     private static final String TAG = "ShareActivity";
@@ -92,7 +94,10 @@ public class ShareActivity extends ActionBarActivity implements KeyboardsAdapter
 
     private String getFileName(){
 
-        return selectionFragment.getSelectedKeyboards().get(0).getLanguageName() + ".tk";
+        List<AvailableKeyboard> keyboards = selectionFragment.getSelectedKeyboards();
+
+        String fileName = (keyboards.size() > 1)? "kb_pack" : keyboards.get(0).getLanguageName();
+        return fileName + ".tk";
     }
 
     private void showAmountAlert(){

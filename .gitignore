@@ -19,3 +19,4 @@
 *.DS_Store
 /Gemfile.lock
 strings_private.xml
+TranslationKeyboard2.0/app/libs/aFileDialog/FileDialog/build/intermediates
