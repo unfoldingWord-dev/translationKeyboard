@@ -34,7 +34,7 @@ public class BugReporterActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        final UploadReportsTask task = new UploadReportsTask();
+
 
         mOkButton = (Button)findViewById(R.id.okButton);
         mCancelButton = (Button)findViewById(R.id.cancelButton);
@@ -66,6 +66,7 @@ public class BugReporterActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 if(mCrashReportText.getText().toString().length() > 0) {
+                    final UploadReportsTask task = new UploadReportsTask(mCrashReportText.getText().toString().trim());
                     showLoading();
                     task.execute(true);
                 }
@@ -89,10 +90,15 @@ public class BugReporterActivity extends ActionBarActivity {
 
     private class UploadReportsTask extends AsyncTask<Boolean, String, Void> {
 
+        String notes;
+
+        public UploadReportsTask(String notes) {
+            this.notes = notes;
+        }
+
         @Override
         protected Void doInBackground(Boolean... bools) {
             Boolean upload = bools[0];
-            String notes = mCrashReportText.getText().toString().trim();
             Handler handle = new Handler(getMainLooper());
             if(upload) {
                 mDialog.setMessage(getResources().getString(R.string.uploading));
