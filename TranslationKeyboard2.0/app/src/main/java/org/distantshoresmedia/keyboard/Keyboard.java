@@ -522,12 +522,12 @@ public class Keyboard {
             ArrayList<Integer[]> valuesList = new ArrayList<Integer[]>();
 
             for(int i = 0; i < characters.length; i++){
-                valuesList.add(new Integer[]{-1});
+                valuesList.add(i, new Integer[]{-1});
             }
 
             try {
                 for (KeyCharacter character : characters) {
-                    valuesList.add(character.getModmask(), character.getUnicodeAsIntegerObjects());
+                    valuesList.set(character.getModmask(), character.getUnicodeAsIntegerObjects());
                 }
             }
             catch(IndexOutOfBoundsException e){
