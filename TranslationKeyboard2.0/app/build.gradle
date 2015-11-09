@@ -16,7 +16,7 @@ android {
         minSdkVersion 8
         targetSdkVersion 22
         versionCode 13
-        versionName '2.0.0'
+        versionName '2.1.0'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
         signingConfig signingConfigs.release
     }
