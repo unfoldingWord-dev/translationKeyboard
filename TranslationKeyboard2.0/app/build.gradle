@@ -9,12 +9,12 @@ android {
             storePassword 'KEYSTORE_PASSWORD'
         }
     }
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId 'org.distantshoresmedia.translationkeyboard'
         minSdkVersion 8
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 13
         versionName '2.1.0'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
@@ -31,10 +31,11 @@ android {
     }
     productFlavors {
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile project(':FileDialog')
@@ -42,5 +43,4 @@ dependencies {
     compile 'com.google.zxing:android-integration:3.2.0'
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     compile project(':com.door43.tools.reporting')
-
 }

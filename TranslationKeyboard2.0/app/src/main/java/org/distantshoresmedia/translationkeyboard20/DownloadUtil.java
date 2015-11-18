@@ -24,7 +24,6 @@ public class DownloadUtil {
 
     /**
      * Download JSON data from url
-     *
      * @param url
      * @return
      */
