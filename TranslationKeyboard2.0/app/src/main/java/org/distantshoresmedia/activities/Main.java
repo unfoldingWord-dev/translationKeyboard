@@ -43,7 +43,7 @@ import org.distantshoresmedia.TKApplication;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.keyboard.InputLanguageSelection;
-import org.distantshoresmedia.translationkeyboard20.NetworkUtility;
+import org.distantshoresmedia.utilities.NetworkUtility;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.distantshoresmedia.translationkeyboard20.UpdateService;

@@ -13,10 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by joel on 1/14/2015.
@@ -26,6 +23,7 @@ public class BugReporterActivity extends ActionBarActivity {
     private Button mCancelButton;
     private ProgressDialog mDialog;
     private EditText mCrashReportText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,8 @@ public class BugReporterActivity extends ActionBarActivity {
 
         mOkButton = (Button)findViewById(R.id.okButton);
         mCancelButton = (Button)findViewById(R.id.cancelButton);
-        mCrashReportText = (EditText)findViewById(R.id.crashDescriptioneditText);
+        mCrashReportText = (EditText)findViewById(R.id.crashDescriptionEditText);
+        mCrashReportText.setText("What happened?\n\n\nWhat were you doing?\n\n\nHow many times has this happened?\n\n\nWhat device are you using?\n\n\nAdditional Info:\n");
         mDialog = new ProgressDialog(BugReporterActivity.this);
 
         mCrashReportText.addTextChangedListener(new TextWatcher() {
@@ -122,12 +121,12 @@ public class BugReporterActivity extends ActionBarActivity {
             if(upload && githubTokenIdentifier != 0) {
                 GithubReporter reporter = new GithubReporter(getApplicationContext(), githubUrl, getString(githubTokenIdentifier));
                 reporter.reportBug(notes, logFile);
-                // empty the log
-                try {
-                    FileUtils.write(logFile, "");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                // delete the log
+//                try {
+                    logFile.delete();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 Logger.i(BugReporterActivity.class.getName(), "Submitted bug report");
             } else if(githubTokenIdentifier == 0) {
                 Logger.w(BugReporterActivity.class.getName(), "the github oauth2 token is missing");

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.distantshoresmedia.translationkeyboard20;
+package org.distantshoresmedia.utilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +35,7 @@ import android.text.InputType;
 import android.util.Log;
 
 import org.distantshoresmedia.keyboard.LatinIME;
+import org.distantshoresmedia.translationkeyboard20.R;
 
 public class TKIMESettings extends PreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener,

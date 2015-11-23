@@ -25,6 +25,10 @@ public class TKApplication extends Application {
 
         // configure logger
         int minLogLevel = 1;
-        Logger.configure(new File(getExternalCacheDir(), "log.txt"), Logger.Level.getLevel(minLogLevel));
+        File logFile = new File(getExternalCacheDir(), "log.txt");
+        if(!logFile.exists()){
+            logFile.mkdirs();
+        }
+        Logger.configure(logFile, Logger.Level.getLevel(minLogLevel));
     }
 }

@@ -35,7 +35,7 @@
             android:scrollbars="vertical"
             android:textColor="#777"
             android:inputType="text|textMultiLine"
-            android:id="@+id/crashDescriptioneditText"
+            android:id="@+id/crashDescriptionEditText"
             android:imeOptions="actionDone" />
     </LinearLayout>
 

@@ -1,7 +1,6 @@
 package com.door43.tools.reporting;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,7 +27,7 @@ public class CrashReporterActivity extends ActionBarActivity implements ManagedT
 
         mOkButton = (Button)findViewById(R.id.okButton);
         mCancelButton = (Button)findViewById(R.id.cancelButton);
-        mCrashReportText = (EditText)findViewById(R.id.crashDescriptioneditText);
+        mCrashReportText = (EditText)findViewById(R.id.crashDescriptionEditText);
 
         mLoadingDialog = new ProgressDialog(CrashReporterActivity.this);
         mLoadingDialog.setCancelable(false);

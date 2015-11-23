@@ -28,10 +28,9 @@ import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.model.BaseKeyboard;
 import org.distantshoresmedia.model.KeyboardVariant;
 import org.distantshoresmedia.translationkeyboard20.R;
-import org.distantshoresmedia.translationkeyboard20.TKIMESettings;
+import org.distantshoresmedia.utilities.TKIMESettings;
 
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;

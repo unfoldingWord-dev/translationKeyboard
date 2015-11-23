@@ -1,4 +1,4 @@
-package org.distantshoresmedia.translationkeyboard20;
+package org.distantshoresmedia.utilities;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

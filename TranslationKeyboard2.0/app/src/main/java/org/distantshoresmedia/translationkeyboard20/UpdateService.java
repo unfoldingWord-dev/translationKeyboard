@@ -8,18 +8,14 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.activities.Main;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.distantshoresmedia.utilities.DownloadUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 
