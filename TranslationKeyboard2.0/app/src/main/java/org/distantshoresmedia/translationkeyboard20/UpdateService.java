@@ -10,6 +10,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.activities.Main;
 import org.json.JSONArray;
@@ -96,35 +99,32 @@ public class UpdateService extends Service {
         public void handleMessage(Message msg) {
 
             // Get current list of languages
-            try {
 
-                String json = DownloadUtil.downloadJson(UpdateService.getKeyboardUrl());
+            JsonObject jObject = DownloadUtil.downloadJson(UpdateService.getKeyboardUrl());
 
                 String failText = "Invalid update. Please try again";
-                try{
-                    JSONObject jObject = new JSONObject(json);
-                    JSONArray keysArray = jObject.getJSONArray("keyboards");
+//                try{
+//                     = new JSONObject(json);
+                    JsonArray keysArray = jObject.getAsJsonArray("keyboards");
 
                     // this means it's the available keyboards json
                     if(keysArray != null){
-                        ArrayList<String> ids = KeyboardDatabaseHandler.updateKeyboardsDatabaseWithJSON(Main.getAppContext(), json);
+                        ArrayList<String> ids = KeyboardDatabaseHandler.updateKeyboardsDatabaseWithJSON(Main.getAppContext(), jObject.toString());
                         if(ids != null) {
                             for (String id : ids) {
-                                String newJson = DownloadUtil.downloadJson(UpdateService.getKeyboardUrl(id));
-                                KeyboardDatabaseHandler.updateOrSaveKeyboard(Main.getAppContext(), newJson);
+                                JsonObject newJsonObject = DownloadUtil.downloadJson(UpdateService.getKeyboardUrl(id));
+                                KeyboardDatabaseHandler.updateOrSaveKeyboard(Main.getAppContext(), newJsonObject.toString());
                             }
                         }
                     }
-                }
-                catch (JSONException e){
+//                }
+//                catch (JSONException e){
 
-                        Log.e(TAG, " Second JSONException UpdateService: " + e.toString());
-                            UpdateFragment.getSharedInstance().endProgress(false, failText);
-                }
+//                        Log.e(TAG, " Second JSONException UpdateService: " + e.toString());
+//                            UpdateFragment.getSharedInstance().endProgress(false, failText);
+//                }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
 
             if (onComplete)
                 getApplicationContext().sendBroadcast(new Intent(UpdateService.BROAD_CAST_DOWN_COMP));
