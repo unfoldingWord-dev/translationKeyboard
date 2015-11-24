@@ -42,6 +42,6 @@ dependencies {
     compile 'com.google.zxing:android-integration:3.2.0'
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     compile project(':com.door43.tools.reporting')
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.google.code.gson:gson:2.4'
 }

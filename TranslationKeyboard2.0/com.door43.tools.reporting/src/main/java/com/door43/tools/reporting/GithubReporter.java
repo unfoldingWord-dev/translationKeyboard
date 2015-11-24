@@ -152,8 +152,7 @@ public class GithubReporter {
      */
     private String submit(GitHubClient.IssueBody body) {
 
-        JsonObject response = GitHubClient.createClient().submitIssue("token " + sGithubOauth2Token, body);
-        return response.toString();
+        return GitHubClient.submitIssue("token " + sGithubOauth2Token, body);
 
         // headers
 //        List<NameValuePair> headers = new ArrayList<>();
