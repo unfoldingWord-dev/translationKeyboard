@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.distantshoresmedia.translationkeyboard20" >
+    package="org.distantshoresmedia.translationkeyboard20"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <uses-sdk tools:overrideLibrary="android.support.v4, android.support.v7.appcompat, android.support.fragment,
+    android.support.mediacompat, android.support.coreui, android.support.coreutils, android.support.graphics.drawable, android.support.compat" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />

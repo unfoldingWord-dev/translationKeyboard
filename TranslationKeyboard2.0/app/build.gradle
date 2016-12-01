@@ -9,16 +9,17 @@ android {
             storePassword 'KEYSTORE_PASSWORD'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.1'
     defaultConfig {
         applicationId 'org.distantshoresmedia.translationkeyboard'
         minSdkVersion 8
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 13
         versionName '2.1.1'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
         signingConfig signingConfigs.release
+
     }
     buildTypes {
         release {
@@ -34,7 +35,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
+
+    compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile project(':FileDialog')
