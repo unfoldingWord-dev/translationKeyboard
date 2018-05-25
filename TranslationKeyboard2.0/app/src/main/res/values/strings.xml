@@ -627,6 +627,7 @@
     <string name="main_setup_configure_imes">Enable keyboard</string>
     <string name="main_setup_set_ime">Set input method</string>
     <string name="main_setup_share_button_text">Keyboard Sharing</string>
+    <string name="main_setup_privacy_policy_button_text">Privacy Policy</string>
     <string name="main_setup_report_bug_button_text">Report Issue</string>
     <string name="main_setup_get_dicts">Get dictionaries</string>
     <string name="main_setup_input_lang">Input languages</string>

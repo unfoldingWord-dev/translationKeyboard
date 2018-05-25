@@ -18,13 +18,14 @@ package org.distantshoresmedia.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -43,10 +44,10 @@ import org.distantshoresmedia.TKApplication;
 import org.distantshoresmedia.adapters.ShareAdapter;
 import org.distantshoresmedia.database.KeyboardDatabaseHandler;
 import org.distantshoresmedia.keyboard.InputLanguageSelection;
-import org.distantshoresmedia.utilities.NetworkUtility;
 import org.distantshoresmedia.translationkeyboard20.R;
 import org.distantshoresmedia.translationkeyboard20.UpdateFragment;
 import org.distantshoresmedia.translationkeyboard20.UpdateService;
+import org.distantshoresmedia.utilities.NetworkUtility;
 
 import java.io.File;
 import java.util.Arrays;
@@ -116,10 +117,18 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
                 sharePressed();
 
             }
-        }); final Button setup7 = (Button) findViewById(R.id.main_setup_btn_bug_reporting);
+        });
+        final Button setup7 = (Button) findViewById(R.id.main_setup_btn_bug_reporting);
         setup7.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 reportBugPressed();
+            }
+        });
+
+        final Button privacyPolicyButton = (Button) findViewById(R.id.main_setup_btn_privacy_policy);
+        privacyPolicyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                privacyPolicyPressed();
             }
         });
     }
@@ -175,6 +184,12 @@ public class Main extends FragmentActivity implements UpdateFragment.OnFragmentI
     private void reportBugPressed(){
 
         startActivity(new Intent(context, BugReporterActivity.class));
+    }
+
+    private void privacyPolicyPressed(){
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://unfoldingword.org/tk/"));
+        startActivity(browserIntent);
     }
 
     private void updateKeyboards() {

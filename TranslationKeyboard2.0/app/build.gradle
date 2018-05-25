@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion '25.0.1'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'org.distantshoresmedia.translationkeyboard'
         minSdkVersion 8
@@ -19,7 +19,6 @@ android {
         versionName '2.1.1'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
         signingConfig signingConfigs.release
-
     }
     buildTypes {
         release {
@@ -35,15 +34,14 @@ android {
 }
 
 dependencies {
-
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
-    compile 'com.joanzapata.android:android-iconify:1.0.9'
-    compile project(':FileDialog')
-    compile 'com.google.zxing:android-core:3.2.0'
-    compile 'com.google.zxing:android-integration:3.2.0'
-    compile 'com.akexorcist:bluetoothspp:1.0.0'
-    compile project(':com.door43.tools.reporting')
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
-    compile 'com.google.code.gson:gson:2.4'
+    implementation 'com.android.support:appcompat-v7:25.0.1'
+    implementation 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
+    implementation 'com.joanzapata.android:android-iconify:1.0.9'
+    implementation 'com.google.zxing:android-core:3.2.0'
+    implementation 'com.google.zxing:android-integration:3.2.0'
+    implementation 'com.akexorcist:bluetoothspp:1.0.0'
+    implementation project(':com.door43.tools.reporting')
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
+    implementation 'com.google.code.gson:gson:2.4'
+    implementation project(':FileDialog')
 }

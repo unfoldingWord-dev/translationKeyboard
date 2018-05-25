@@ -1,0 +1,43 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:1-13:12
+	package
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:3:5-42
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+uses-sdk
+ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:5-43
+	android:targetSdkVersion
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:5-43
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:7:15-40
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+		INJECTED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml
+application
+ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:9:5-11:19
+activity#ar.com.daidalos.afiledialog.FileChooserActivity
+ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:10:9-84
+	android:name
+		ADDED from /Users/Fechner/ActsMedia/DistantShores/TranslationKeyboard/TranslationKeyboard2.0/FileDialog/src/main/AndroidManifest.xml:10:19-81

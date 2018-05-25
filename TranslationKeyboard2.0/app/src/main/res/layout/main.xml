@@ -50,6 +50,15 @@
 
         </TableRow>
 
+        <TableRow android:layout_width="match_parent">
+
+            <Button android:text="@string/main_setup_privacy_policy_button_text" android:id="@+id/main_setup_btn_privacy_policy"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+            </Button>
+
+        </TableRow>
+
     </TableLayout>
 
     <EditText
