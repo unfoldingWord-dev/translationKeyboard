@@ -15,8 +15,8 @@ android {
         applicationId 'org.distantshoresmedia.translationkeyboard'
         minSdkVersion 8
         targetSdkVersion 25
-        versionCode 13
-        versionName '2.1.1'
+        versionCode 113
+        versionName '2.2.0'
         testApplicationId 'org.distantshoresmedia.translationkeyboardtest'
         signingConfig signingConfigs.release
     }
@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:25.0.1'
+    implementation 'com.android.support:appcompat-v7:25.4.0'
     implementation 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     implementation 'com.joanzapata.android:android-iconify:1.0.9'
     implementation 'com.google.zxing:android-core:3.2.0'
@@ -42,6 +42,6 @@ dependencies {
     implementation 'com.akexorcist:bluetoothspp:1.0.0'
     implementation project(':com.door43.tools.reporting')
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
-    implementation 'com.google.code.gson:gson:2.4'
+    implementation 'com.google.code.gson:gson:2.8.2'
     implementation project(':FileDialog')
 }
